@@ -1,0 +1,22 @@
+<div class="table-view">
+  <fit-toolbar *ngIf="hasToolbar()" [model]="getToolbar()" [windowListener]="getWindowListener()"
+    [inputControlListener]="getInputControlListener()"></fit-toolbar>
+  <div class="scroller" fitTableScroller [tableScrollerListener]="getTableScrollerListener()">
+    <div class="table-container" [ngStyle]="{'width.px':getTableWidth(),'height.px':getTableHeight()}">
+      <fit-table-center [viewModel]="viewModel" [hostListeners]="hostListeners">
+      </fit-table-center>
+      <fit-table-left *ngIf="showRowHeader()" [viewModel]="viewModel" [hostListeners]="hostListeners">
+      </fit-table-left>
+      <fit-table-top *ngIf="showColumnHeader()" [viewModel]="viewModel" [hostListeners]="hostListeners">
+      </fit-table-top>
+      <fit-table-left-top-corner *ngIf="showRowHeader()" [viewModel]="viewModel"
+        [hostListeners]="hostListeners"></fit-table-left-top-corner>
+    </div>
+  </div>
+  <fit-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()"></fit-statusbar>
+  <fit-settings-menu *ngIf="hasSettingsBar()" [model]="getSettingsBar()"
+    [windowListener]="getWindowListener()"></fit-settings-menu>
+  <fit-context-menu *ngIf="hasContextMenu()" [window]="getContextMenu()" [windowListener]="getWindowListener()"
+    [inputControlListener]="getInputControlListener()">
+  </fit-context-menu>
+</div>

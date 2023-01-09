@@ -1,0 +1,26 @@
+<div class="color-picker">
+  <div class="button" (click)="showOptionsWindow()" [ngStyle]="{backgroundImage:getIcon()}">&nbsp;</div>
+  <hr class="picked-color" (click)="showOptionsWindow()" [ngStyle]="{backgroundColor:getSelectedValue()}" />
+  <div class="options" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+    (window:mousedown)="onGlobalMouseDown()">
+    <div class="color-none-panel" (click)="runOption(getColorNoneId())">
+      <div class="color-none-icon" [ngStyle]="{ backgroundImage: getColorNoneIcon() }"></div>
+      <div class="color-none-label">{{getColorNoneLabel()}}</div>
+    </div>
+    <div class="color-panel">
+      <div class="color" *ngFor="let id of getColorIds()" (click)="runOption(id)"
+        [ngStyle]="{ backgroundColor: getColorValue(id) }"></div>
+    </div>
+    <div class="custom-color-panel">
+      <div class="color" *ngFor="let id of getCustomColorIds()" (click)="runOption(id)"
+        [ngStyle]="{ backgroundColor: getColorValue(id) }"></div>
+    </div>
+    <div class="add-color-panel">
+      <div class="add-color-combo">
+        <input class="add-color-picker" #colorPicker [value]="getSelectedValue()" type="color" />
+        <div class='arrow-down'>▼</div>
+      </div>
+      <button class="add-btn" (click)="addCustomColor()">+</button>
+    </div>
+  </div>
+</div>

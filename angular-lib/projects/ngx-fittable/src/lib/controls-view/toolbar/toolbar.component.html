@@ -1,0 +1,40 @@
+<div class="toolbar">
+  <ng-container *ngFor="let id of getControlIDs()">
+    <ng-container [ngSwitch]="getControlType(id)">
+      <ng-container *ngSwitchCase="'push-button'">
+        <fit-button class="button" [model]="getControl(id)"></fit-button>
+      </ng-container>
+      <ng-container *ngSwitchCase="'combo'">
+        <fit-combo class="field" *ngIf="hasWindowListener()" [model]="getOptionsControl(id)"
+          [windowListener]="getWindowListener()" [isFontCombo]="true">
+        </fit-combo>
+      </ng-container>
+      <ng-container *ngSwitchCase="'input'">
+        <fit-input class="field" *ngIf="hasInputControlListener()" [model]="getInputControl(id)"
+          [inputControlListener]="getInputControlListener()">
+        </fit-input>
+      </ng-container>
+      <ng-container *ngSwitchCase="'color-picker'">
+        <fit-color-picker class="button" *ngIf="hasWindowListener()" [model]="getOptionsControl(id)"
+          [windowListener]="getWindowListener()">
+        </fit-color-picker>
+      </ng-container>
+      <ng-container *ngSwitchCase="'pop-up-button'">
+        <fit-pop-up-button class="button" *ngIf="hasWindowListener()" [model]="getOptionsControl(id)"
+          [windowListener]="getWindowListener()">
+        </fit-pop-up-button>
+      </ng-container>
+      <ng-container *ngSwitchCase="'border-pop-up-button'">
+        <fit-border-pop-up-button class="button" *ngIf="hasWindowListener()" [model]="getOptionsControl(id)"
+          [windowListener]="getWindowListener()">
+        </fit-border-pop-up-button>
+      </ng-container>
+      <ng-container *ngSwitchCase="'separator'">
+        <div class="separator">&nbsp;</div>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <div>Unknown control id: {{id}}</div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

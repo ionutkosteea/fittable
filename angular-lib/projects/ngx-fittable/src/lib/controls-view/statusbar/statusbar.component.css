@@ -1,0 +1,15 @@
+.statusbar {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  margin: 0px;
+  padding-right: 6px;
+  border-top: 1px solid var(--statusbar-border-color);
+  background-color: var(--statusbar-background-color);
+  color: var(--statusbar-color);
+  width: auto;
+  text-align: right;
+  font-size: 10px;
+  height: var(--statusbar-height);
+}

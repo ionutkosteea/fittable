@@ -1,0 +1,55 @@
+.combo {
+  position: relative;
+  background-color: var(--toolbar-background-color);
+}
+
+.input {
+  border: none;
+  padding-right: 10px;
+  width: 100px;
+  height: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--toolbar-color);
+  background-color: var(--toolbar-background-color);
+  font-size: 14px;
+}
+
+.arrow {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.options {
+  -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  position: absolute;
+  top: 32px;
+  background-color: var(--toolbar-background-color);
+  border-left: 1px solid var(--toolbar-border-color);
+  z-index: 2;
+  overflow-x: scroll;
+  width: 158px;
+  max-height: 70vh;
+}
+
+.option {
+  cursor: pointer;
+  margin: 0px;
+  padding: 6px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.option:hover {
+  background-color: var(--toolbar-background-hover-color);
+}

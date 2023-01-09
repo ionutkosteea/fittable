@@ -1,0 +1,28 @@
+.cell-editor {
+  position: absolute;
+  margin: 0px;
+  padding: 0px;
+}
+
+.cell-editor-input {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  font-size: var(--font-size);
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--cell-editor-background-color);
+  color: var(--cell-editor-color);
+  overflow: scroll;
+  white-space: pre-line;
+  box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -webkit-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -moz-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  resize: none;
+  border: none;
+}
+
+.cell-editor-input:focus {
+  outline: none;
+}

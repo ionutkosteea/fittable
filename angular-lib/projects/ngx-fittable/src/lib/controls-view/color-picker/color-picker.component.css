@@ -1,0 +1,146 @@
+.color-picker {
+  position: relative;
+  margin: 0px;
+  padding: 0px;
+  cursor: auto;
+}
+
+.button {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background-repeat: "no-repeat";
+}
+
+.picked-color {
+  position: absolute;
+  top: 5px;
+  left: 0px;
+  width: 16px;
+  height: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.options {
+  -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  position: absolute;
+  top: 26px;
+  left: -6px;
+  background-color: var(--toolbar-background-color);
+  border-left: 1px solid var(--toolbar-border-color);
+  z-index: 2;
+  padding: 5px;
+  width: 132px;
+  overflow-x: scroll;
+  max-height: 80vh;
+}
+
+.color-none-panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px auto;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+
+.color-none-panel:hover {
+  background-color: var(--toolbar-background-hover-color);
+}
+
+.color-none-icon {
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 18px;
+  height: 18px;
+  padding: 0px;
+}
+
+.color-none-label {
+  font-size: 12px;
+  line-height: 18px;
+  padding-left: 10px;
+  color: var(--toolbar-color);
+}
+
+.color-panel, .custom-color-panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px 22px 22px 22px 22px 22px;
+}
+
+.custom-color-panel {
+  margin-top: 6px;
+  padding-top: 2px;
+  border-top: 1px solid var(--toolbar-border-color);
+}
+
+.color {
+  position: relative;
+  border: 1px solid var(--toolbar-border-color);;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  padding: 0px;
+  margin: 1px;
+  border-radius: 2px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.add-color-panel {
+  cursor: pointer;
+  margin-top: 12px;
+  margin-bottom: 2px;
+  padding-top: 2px;
+  width: 100%;
+  float: left;
+  position: relative;
+}
+
+.add-color-combo {
+  float: left;
+  border: 1px solid var(--toolbar-border-color);
+  border-radius: 2px;
+  margin-right: 2px;
+}
+
+.add-color-picker {
+  float: left;
+  width: 104px;
+  height: 14px;
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+  background-color: var(--toolbar-background-color);
+}
+
+.arrow-down {
+  float: left;
+  margin-top: 3px;
+  font-size: 8px;
+  vertical-align: middle;
+  text-align: center;
+  color: var(--toolbar-color);
+}
+
+.add-btn {
+  -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  border: none;
+  float: left;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  background-color: var(--highlight-color);
+  color: white;
+  cursor: pointer;
+  padding: 0px;
+}

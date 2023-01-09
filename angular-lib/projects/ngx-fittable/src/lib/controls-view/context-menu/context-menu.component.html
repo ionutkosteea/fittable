@@ -1,0 +1,8 @@
+<div class="context-menu" #main [ngStyle]="getMenuStyle()">
+  <ng-container *ngFor="let id of getMenuItemIds()">
+    <fit-menu-item class="menu-item" *ngIf="getMenuItemType(id)==='menu-item'" [model]="getMenuItem(id)"
+      [hideMenu]="hideMenu" [inputControlListener]="inputControlListener">
+    </fit-menu-item>
+    <hr class="separator" *ngIf="getMenuItemType(id)==='separator'" />
+  </ng-container>
+</div>

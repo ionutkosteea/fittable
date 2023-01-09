@@ -1,0 +1,38 @@
+.menu-item {
+  display: grid;
+  grid-template-columns: 18px 160px 40px;
+  place-items: center normal;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 26px;
+}
+
+.menu-item:hover {
+  background-color: var(--context-menu-background-hover-color);
+}
+
+.icon {
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.label {
+  padding-left: 10px;
+  color: var(--toolbar-color);
+}
+
+.label-disabled {
+  color: var(--disabled-color);
+}
+
+.input {
+  margin: 0px;
+  padding: 0px;
+  border: 1px solid var(--context-menu-border-color);
+  background-color: var(--context-menu-background-color);
+  color: var(--context-menu-color);
+  font-size: 12px;
+  height: 16px;
+}

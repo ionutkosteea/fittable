@@ -1,0 +1,24 @@
+.context-menu {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background-color: var(--context-menu-background-color);
+  border-left: 1px solid var(--context-menu-border-color);
+  border-top: 1px solid var(--context-menu-border-color);
+  border-radius: 4px;
+  -webkit-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  max-height: 90vh;
+  overflow: scroll;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.separator {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-top: 1px solid var(--context-menu-border-color);
+  border-bottom: none;
+  position: relative;
+}

@@ -1,0 +1,33 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": []
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ],
+  "paths": {
+    "@angular/*": ["./node_modules/@angular/*"],
+    "fit-core/*": [
+      "./node_modules/fit-core/*",
+      "./node_modules/fit-core/*/index"
+    ],
+    "fit-model": [
+      "./node_modules/fit-model",
+      "./node_modules/fit-model/index"
+    ],
+    "ngx-fittable": [
+      "./node_modules/ngx-fittable/ngx-fittable",
+      "./node_modules/ngx-fittable"
+    ]
+  },
+  "angularCompilerOptions": {
+    "preserveSymlinks": true
+  }
+}

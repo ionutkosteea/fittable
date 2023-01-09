@@ -1,0 +1,10 @@
+<div class="combo">
+  <input class="input" [value]="getSelectedLabel()" (click)="showOptionsWindow()" readonly type="text" />
+  <div class="arrow" (click)="showOptionsWindow()" [ngStyle]="{backgroundImage: getIcon()}">&nbsp;</div>
+  <div class="options" #optionsWindow [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+    (window:mousedown)="onGlobalMouseDown()">
+    <div class="option" *ngFor="let id of getOptionIds()" (click)="runOption(id)" [ngStyle]="getOptionStyle(id)">
+      {{getOptionLabel(id)}}
+    </div>
+  </div>
+</div>

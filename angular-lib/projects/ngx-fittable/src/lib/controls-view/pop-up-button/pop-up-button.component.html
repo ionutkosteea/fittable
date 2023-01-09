@@ -1,0 +1,10 @@
+<div class="pop-up-button">
+  <div class="button" #button (click)="showOptionsWindow()" [ngStyle]="{backgroundImage:getSelectedIcon()}">&nbsp;</div>
+  <div class="options" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+    (window:mousedown)="onGlobalMouseDown()">
+    <div class="option" *ngFor="let id of getOptionIds()" (click)="runOption(id)">
+      <div [ngStyle]="{width:'18px',height:'18px',backgroundImage:getOptionIcon(id),backgroundRepeat: 'no-repeat'}">
+        &nbsp;</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="table-left-top" *ngIf="hasRowHeader() && hasColumnHeader()" [ngStyle]="getContainerPosition()">
+  <table class="table">
+    <colgroup>
+      <col *ngFor="let colId of getRowHeaderColumnIds()" [ngStyle]="{'width.px':getRowHeaderColumnWidth(colId)}" />
+    </colgroup>
+    <thead fitCellSelection [cellSelectionListener]="getCellSelectionListener()"
+      [cellSelectionRanges]="getCellSelectionRanges()">
+      <tr class="header-row" *ngFor="let rowId of getColumnHeaderRowIds()"
+        [ngStyle]="{'height.px':getColumnHeaderRowHeight(rowId)}">
+        <th class="header-cell" *ngFor="let colId of getRowHeaderColumnIds()" [attr.rowId]="rowId" [attr.colId]="colId">
+          &nbsp;</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+<div class="header-selection" *ngFor="let rect of getCellSelectionStyle()" [ngStyle]="rect"></div>
