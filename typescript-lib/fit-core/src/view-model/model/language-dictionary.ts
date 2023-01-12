@@ -1,29 +1,24 @@
 import { getViewModelConfig } from '../view-model-config.js';
 
-export type Dictionary<TextKey extends string> = { [key in TextKey]?: string };
+export type Dictionary = { [key in string]?: string };
 
-export interface LanguageDictionary<
-  LanguageCode extends string,
-  TextKey extends string
-> {
-  registerLanguage(code: LanguageCode, dictionary: Dictionary<TextKey>): this;
-  getRegisteredLanguages(): LanguageCode[];
-  unregisterLanguage(code: LanguageCode): this;
-  setCurrentLanguage(code: LanguageCode): this;
-  getCurrentLanguage(): LanguageCode | undefined;
-  setText(key: TextKey, value?: string): this;
-  getText(key: TextKey): string;
+export interface LanguageDictionary {
+  registerLanguage(code: string, dictionary: Dictionary): this;
+  getRegisteredLanguages(): string[];
+  unregisterLanguage(code: string): this;
+  setCurrentLanguage(code: string): this;
+  getCurrentLanguage(): string | undefined;
+  setText(key: string, value?: string): this;
+  getText(key: string): string;
 }
 
 export interface LanguageDictionaryFactory {
-  createDictionary(): LanguageDictionary<string, string>;
+  createDictionary(): LanguageDictionary;
 }
 
 export function createLanguageDictionary<
   LanguageCode extends string,
   TextKey extends string
->(): LanguageDictionary<LanguageCode, TextKey> {
-  const dictionary: LanguageDictionary<string, string> =
-    getViewModelConfig().languageDictionaryFactory.createDictionary();
-  return dictionary as LanguageDictionary<LanguageCode, TextKey>;
+>(): LanguageDictionary {
+  return getViewModelConfig().languageDictionaryFactory.createDictionary();
 }

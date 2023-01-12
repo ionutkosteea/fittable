@@ -27,14 +27,19 @@ import {
   FitCellRange,
   FitLineRange,
   FitStyle,
-  fitModelConfig,
+  FIT_MODEL_CONFIG,
   FitRow,
   FitRowHeader,
   FitColumnHeader,
+  FitRowsDto,
+  FitColumnsDto,
+  FitCellRangeDto,
+  FitStylesDto,
+  FitCellsDto,
 } from '../../dist/index.js';
 
 describe('Test FitTable', () => {
-  beforeAll(() => registerModelConfig(fitModelConfig));
+  beforeAll(() => registerModelConfig(FIT_MODEL_CONFIG));
   afterAll(() => unregisterModelConfig());
 
   it('Create table via dto.', () => {
@@ -68,7 +73,7 @@ describe('Test FitTable', () => {
     expect(table.getNumberOfRows() === 10).toBeTruthy();
     expect(table.getNumberOfColumns() === 5).toBeTruthy();
     expect(table.getStyle('s0')?.get('color') === 'blue').toBeTruthy();
-    expect(table.getRowHeader().getNumberOfColumns() === 1).toBeTruthy();
+    expect(table.getRowHeader()?.getNumberOfColumns() === 1).toBeTruthy();
     expect(table.getColumnHeader().getNumberOfRows() === 1).toBeTruthy();
     expect(table.getColumn(0)?.getWidth() === 300).toBeTruthy();
     expect(table.getColumn(0)?.hasProperties()).toBeTruthy();
@@ -80,8 +85,9 @@ describe('Test FitTable', () => {
     expect(table.getCell(0, 0)?.getStyleName() === 's0').toBeTruthy();
     expect(table.getCell(0, 1)?.getValue() === 'text').toBeTruthy();
     expect(table.getCell(0, 1)?.getStyleName()).toBeFalsy();
-    const mergedRegions: FitMergedRegions = table.getMergedRegions();
-    mergedRegions.forEachRegion((region: FitMergedRegion) => {
+    const mergedRegions: FitMergedRegions | undefined =
+      table.getMergedRegions();
+    mergedRegions?.forEachRegion((region: FitMergedRegion): void => {
       expect(region.getRowSpan() === 1).toBeTruthy();
       expect(region.getColSpan() === 2).toBeTruthy();
     });
@@ -110,19 +116,25 @@ describe('Test FitTable', () => {
 
     expect(table.getDto().numberOfRows === 10).toBeTruthy();
     expect(table.getDto().numberOfColumns === 5).toBeTruthy();
-    expect(table.getDto().styles['s0']?.color === 'blue').toBeTruthy();
-    expect(table.getDto().columnHeader.numberOfRows === 1).toBeTruthy();
-    expect(table.getDto().rowHeader.numberOfColumns === 1).toBeTruthy();
-    expect(table.getDto().rows[0]?.height === 42).toBeTruthy();
-    expect(table.getDto().columns[0]?.width === 50).toBeTruthy();
-    expect(table.getDto().rows[0]?.cells[0]?.value === 1000).toBeTruthy();
-    expect(table.getDto().rows[0]?.cells[0]?.styleName === 's0').toBeTruthy();
-    expect(table.getDto().rows[0]?.cells[1]?.value === 'text').toBeTruthy();
-    expect(table.getDto().rows[0]?.cells[1]?.styleName).toBeFalsy();
-    expect(table.getDto().mergedRegions[0]?.from.rowId === 0).toBeTruthy();
-    expect(table.getDto().mergedRegions[0]?.from.colId === 0).toBeTruthy();
-    expect(table.getDto().mergedRegions[0]?.to?.rowId === 0).toBeTruthy();
-    expect(table.getDto().mergedRegions[0]?.to?.colId === 1).toBeTruthy();
+    const styles: FitStylesDto | undefined = table.getDto().styles;
+    expect(styles && styles['s0']?.color === 'blue').toBeTruthy();
+    expect(table.getDto().columnHeader?.numberOfRows === 1).toBeTruthy();
+    expect(table.getDto().rowHeader?.numberOfColumns === 1).toBeTruthy();
+    const rows: FitRowsDto | undefined = table.getDto().rows;
+    expect(rows && rows[0]?.height === 42).toBeTruthy();
+    const columns: FitColumnsDto | undefined = table.getDto().columns;
+    expect(columns && columns[0]?.width === 50).toBeTruthy();
+    const cells: FitCellsDto | undefined = rows && rows[0].cells;
+    expect(cells && cells[0]?.value === 1000).toBeTruthy();
+    expect(cells && cells[0]?.styleName === 's0').toBeTruthy();
+    expect(cells && cells[1]?.value === 'text').toBeTruthy();
+    expect(cells && cells[1]?.styleName).toBeFalsy();
+    const mergedRegions: FitCellRangeDto[] | undefined =
+      table.getDto().mergedRegions;
+    expect(mergedRegions && mergedRegions[0]?.from.rowId === 0).toBeTruthy();
+    expect(mergedRegions && mergedRegions[0]?.from.colId === 0).toBeTruthy();
+    expect(mergedRegions && mergedRegions[0]?.to?.rowId === 0).toBeTruthy();
+    expect(mergedRegions && mergedRegions[0]?.to?.colId === 1).toBeTruthy();
   });
 
   it('Test remove methods', () => {

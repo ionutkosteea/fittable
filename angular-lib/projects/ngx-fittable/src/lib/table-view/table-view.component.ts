@@ -3,78 +3,83 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import {
   Container,
   TableViewer,
-  ViewModel,
-  HostListeners,
   TableScrollerListener,
   InputControlListener,
   Window,
   WindowListener,
   Statusbar,
   getViewModelConfig,
+  ViewModel,
+  HostListeners,
+  FittableViewer,
 } from 'fit-core/view-model';
 
 @Component({
-  selector: 'fit-table-view',
+  selector: 'fittable',
   templateUrl: './table-view.component.html',
   styleUrls: ['./table-view.component.css'],
 })
 export class TableViewComponent implements OnDestroy {
-  @Input() viewModel!: ViewModel;
-  @Input() hostListeners!: HostListeners;
+  @Input() viewer!: FittableViewer;
+
+  public readonly getViewModel = (): ViewModel => this.viewer.viewModel;
+
+  public readonly getHostListeners = (): HostListeners =>
+    this.viewer.hostListeners;
 
   public hasToolbar(): boolean {
-    return this.viewModel.toolbar !== undefined;
+    return this.viewer.viewModel.toolbar !== undefined;
   }
 
   public readonly getToolbar = (): Container =>
-    this.viewModel.toolbar as Container;
+    this.viewer.viewModel.toolbar as Container;
 
   public readonly getInputControlListener = ():
     | InputControlListener
-    | undefined => this.hostListeners.inputControlListener;
+    | undefined => this.viewer.hostListeners.inputControlListener;
 
   public readonly getTableScrollerListener = (): TableScrollerListener =>
-    this.hostListeners.tableScrollerListener;
+    this.viewer.hostListeners.tableScrollerListener;
 
   public getTableWidth(): number {
-    const tableViewer: TableViewer = this.viewModel.tableViewer;
+    const tableViewer: TableViewer = this.viewer.viewModel.tableViewer;
     return tableViewer.getRowHeaderWidth() + tableViewer.getBodyWidth();
   }
 
   public getTableHeight(): number {
-    const tableViewer: TableViewer = this.viewModel.tableViewer;
+    const tableViewer: TableViewer = this.viewer.viewModel.tableViewer;
     return tableViewer.getColumnHeaderHeight() + tableViewer.getBodyHeight();
   }
 
   public hasContextMenu(): boolean {
     return (
-      this.viewModel.contextMenu !== undefined &&
-      this.hostListeners.windowListener !== undefined
+      this.viewer.viewModel.contextMenu !== undefined &&
+      this.viewer.hostListeners.windowListener !== undefined
     );
   }
 
   public readonly getContextMenu = (): Window =>
-    this.viewModel.contextMenu as Window;
+    this.viewer.viewModel.contextMenu as Window;
 
   public readonly getWindowListener = (): WindowListener =>
-    this.hostListeners.windowListener as WindowListener;
+    this.viewer.hostListeners.windowListener as WindowListener;
 
   public hasStatusbar(): boolean {
-    return this.viewModel.statusbar !== undefined;
+    return this.viewer.viewModel.statusbar !== undefined;
   }
 
   public readonly getStatusbar = (): Statusbar =>
-    this.viewModel.statusbar as Statusbar;
+    this.viewer.viewModel.statusbar as Statusbar;
 
   public hasSettingsBar(): boolean {
     return (
-      this.viewModel.settingsBar !== undefined &&
-      this.hostListeners.windowListener !== undefined
+      this.viewer.viewModel.settingsBar !== undefined &&
+      this.viewer.hostListeners.windowListener !== undefined
     );
   }
 
   public readonly getSettingsBar = (): Container =>
-    this.viewModel.settingsBar as Container;
+    this.viewer.viewModel.settingsBar as Container;
 
   public readonly showRowHeader = (): boolean =>
     getViewModelConfig().showRowHeader ?? false;
@@ -83,6 +88,6 @@ export class TableViewComponent implements OnDestroy {
     getViewModelConfig().showColumnHeader ?? false;
 
   public ngOnDestroy(): void {
-    this.viewModel.destroy();
+    this.viewer.viewModel.destroy();
   }
 }

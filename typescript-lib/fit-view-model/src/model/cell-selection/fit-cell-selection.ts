@@ -54,12 +54,12 @@ export class FitCellSelection implements CellSelection {
   }
 
   private selectHeadersByBody(): void {
-    const table: Table = this.tableViewer.table;
+    const table: Table = this.tableViewer.getTable();
     let numberOfRows: number =
-      asTableColumnHeader(table)?.getColumnHeader().getNumberOfRows() ?? 0;
+      asTableColumnHeader(table)?.getColumnHeader()?.getNumberOfRows() ?? 0;
     if (numberOfRows > 0) numberOfRows--;
     let numberOfColumns: number =
-      asTableRowHeader(table)?.getRowHeader().getNumberOfColumns() ?? 0;
+      asTableRowHeader(table)?.getRowHeader()?.getNumberOfColumns() ?? 0;
     if (numberOfColumns > 0) numberOfColumns--;
     this.selectHeaderByBody(this.rowHeader, undefined, numberOfColumns);
     this.selectHeaderByBody(this.columnHeader, numberOfRows, undefined);
@@ -117,14 +117,14 @@ export class FitCellSelection implements CellSelection {
   }
 
   private get lastColId(): number {
-    return this.tableViewer.table.getNumberOfColumns() - 1;
+    return this.tableViewer.getTable().getNumberOfColumns() - 1;
   }
 
   private selectColumnHeaderByBody(): void {
     this.columnHeader.setDisableAfterAddCell(true);
-    const table: Table = this.tableViewer.table;
+    const table: Table = this.tableViewer.getTable();
     const numberOfRows: number =
-      asTableColumnHeader(table)?.getColumnHeader().getNumberOfRows() ?? 0;
+      asTableColumnHeader(table)?.getColumnHeader()?.getNumberOfRows() ?? 0;
     const numberOfColumns: number = table.getNumberOfColumns() - 1;
     this.columnHeader
       .removeRanges()
@@ -169,15 +169,15 @@ export class FitCellSelection implements CellSelection {
   }
 
   private get lastRowId(): number {
-    return this.tableViewer.table.getNumberOfRows() - 1;
+    return this.tableViewer.getTable().getNumberOfRows() - 1;
   }
 
   private selectRowHeaderByBody(): void {
     this.rowHeader.setDisableAfterAddCell(true);
-    const table: Table = this.tableViewer.table;
+    const table: Table = this.tableViewer.getTable();
     const numberOfRows: number = table.getNumberOfRows() - 1;
     const numberOfColumns: number | undefined =
-      asTableRowHeader(table)?.getRowHeader().getNumberOfColumns() ?? 0;
+      asTableRowHeader(table)?.getRowHeader()?.getNumberOfColumns() ?? 0;
     this.rowHeader
       .removeRanges()
       .createRange()
@@ -206,8 +206,10 @@ export class FitCellSelection implements CellSelection {
   }
 
   private tableHasNoRowsOrColumns(): boolean {
-    const numberOfRows: number = this.tableViewer.table.getNumberOfRows();
-    const numberOfColumns: number = this.tableViewer.table.getNumberOfColumns();
+    const numberOfRows: number = this.tableViewer.getTable().getNumberOfRows();
+    const numberOfColumns: number = this.tableViewer
+      .getTable()
+      .getNumberOfColumns();
     return numberOfRows <= 0 || numberOfColumns <= 0;
   }
 

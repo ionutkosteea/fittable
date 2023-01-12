@@ -1,4 +1,4 @@
-import { incrementNumber, implementsTKeys } from 'fit-core/common/index.js';
+import { incrementNumber } from 'fit-core/common/index.js';
 import { RowHeader, RowHeaderFactory, Value } from 'fit-core/model/index.js';
 
 import { FitRowHeaderDto } from './dto/fit-table-dto.js';
@@ -15,7 +15,7 @@ export class FitRowHeader implements RowHeader {
   }
 
   public getNumberOfColumns(): number {
-    return this.dto.numberOfColumns;
+    return this.dto.numberOfColumns ?? 0;
   }
 
   public setNumberOfColumns(numberOfColumns: number): this {
@@ -25,6 +25,10 @@ export class FitRowHeader implements RowHeader {
 
   public getCellValue(rowId: number, colId: number): Value {
     return incrementNumber(rowId);
+  }
+
+  public hasProperties(): boolean {
+    return this.dto['numberOfColumns'] > 0;
   }
 
   public equals(other?: FitRowHeader): boolean {
@@ -42,10 +46,6 @@ export class FitRowHeaderFactory implements RowHeaderFactory {
   }
 
   public createRowHeader4Dto(dto: FitRowHeaderDto): FitRowHeader {
-    if (implementsTKeys<FitRowHeaderDto>(dto, ['numberOfColumns'])) {
-      return new FitRowHeader(dto);
-    } else {
-      throw new Error('Invalid row header DTO.');
-    }
+    return new FitRowHeader(dto);
   }
 }

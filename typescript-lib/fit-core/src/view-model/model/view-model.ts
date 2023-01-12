@@ -1,4 +1,4 @@
-import { OperationExecutor, Id } from '../../operations/operation-core.js';
+import { OperationExecutor } from '../../operations/operation-core.js';
 
 import { LanguageDictionary } from './language-dictionary.js';
 import { ImageRegistry } from './image-registry.js';
@@ -14,27 +14,37 @@ import { ThemeSwitcher } from './theme-switcher.js';
 
 export interface ViewModel {
   table: Table;
-  executor?: OperationExecutor<Id<string>, string>;
-  dictionary: LanguageDictionary<string, string>;
-  imageRegistry: ImageRegistry<string>;
+  operationExecutor?: OperationExecutor;
+  dictionary: LanguageDictionary;
+  imageRegistry: ImageRegistry;
   tableViewer: TableViewer;
   tableScroller: TableScroller;
   cellSelection?: CellSelection;
   cellSelectionPainter?: CellSelectionPainter;
   cellSelectionScroller?: CellSelectionScroller;
   cellEditor?: CellEditor;
-  themeSwitcher?: ThemeSwitcher<string>;
+  themeSwitcher?: ThemeSwitcher;
   contextMenu?: Window;
   settingsBar?: Container;
   toolbar?: Container;
   statusbar?: Statusbar;
+  loadTable(table: Table): void;
   destroy(): void;
 }
 
 export interface ViewModelFactory {
-  createViewModel(table: Table): ViewModel;
+  createViewModel(
+    table: Table,
+    operationExecutor?: OperationExecutor
+  ): ViewModel;
 }
 
-export function createViewModel<T extends ViewModel>(table: Table): T {
-  return getViewModelConfig().viewModelFactory.createViewModel(table) as T;
+export function createViewModel<T extends ViewModel>(
+  table: Table,
+  operationExecutor?: OperationExecutor
+): T {
+  return getViewModelConfig().viewModelFactory.createViewModel(
+    table,
+    operationExecutor
+  ) as T;
 }

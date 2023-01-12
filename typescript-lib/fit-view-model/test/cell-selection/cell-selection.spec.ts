@@ -16,8 +16,8 @@ import {
   unregisterViewModelConfig,
 } from 'fit-core/view-model/index.js';
 
-import { fitModelConfig, FitTable } from '../../../fit-model/dist/index.js';
-import { fitViewModelConfig } from '../../dist/index.js';
+import { FIT_MODEL_CONFIG, FitTable } from '../../../fit-model/dist/index.js';
+import { FIT_VIEW_MODEL_CONFIG } from '../../dist/index.js';
 
 const table: Table = new FitTable({
   numberOfRows: 2,
@@ -34,8 +34,8 @@ let cellSelection: CellSelection;
 
 describe('Test CellSelection', () => {
   beforeAll(() => {
-    registerModelConfig(fitModelConfig);
-    registerViewModelConfig(fitViewModelConfig);
+    registerModelConfig(FIT_MODEL_CONFIG);
+    registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
     const tableViewer = createTableViewer(table);
     cellSelection = createCellSelection(tableViewer);
   });

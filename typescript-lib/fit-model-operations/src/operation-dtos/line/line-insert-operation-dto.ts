@@ -155,7 +155,7 @@ abstract class LineInsertOperationDtoBuilder {
   protected updateMergedRegions(): void {
     asTableMergedRegions(this.table)
       ?.getMergedRegions()
-      .forEachRegion((region: MergedRegion) => {
+      ?.forEachRegion((region: MergedRegion) => {
         for (const lineRange of this.selectedLines) {
           const selectedFrom: number = lineRange.getFrom() - 1;
           const regionFrom: number = this.getFromLineId(region);

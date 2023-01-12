@@ -14,12 +14,12 @@ import { FitHostListenersFactory } from '../../dist/host-listeners/fit-host-list
 import { FitTableScrollerListenerFactory } from '../../dist/host-listeners/fit-table-scroller-listener.js';
 
 class TstImageRegistryFactory implements ImageRegistryFactory {
-  public createImageRegistry(): ImageRegistry<string> {
+  public createImageRegistry(): ImageRegistry {
     throw new Error('Method not implemented.');
   }
 }
 
-export const tstViewModelConfig: ViewModelConfig = {
+export const TST_VIEW_MODEL_CONFIG: ViewModelConfig = {
   rowHeight: 21,
   columnWidth: 100,
   rowHeaderColumnWidth: 40,

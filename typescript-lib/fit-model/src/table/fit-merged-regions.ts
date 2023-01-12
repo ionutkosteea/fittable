@@ -118,10 +118,6 @@ export class FitMergedRegionsFactory implements MergedRegionsFactory {
   }
 
   public createMergedRegions4Dto(dto: FitCellRangeDto[]): FitMergedRegions {
-    if (Array.isArray(dto)) {
-      return new FitMergedRegions(dto);
-    } else {
-      throw new Error('Invalid merged regions DTO.');
-    }
+    return new FitMergedRegions(dto);
   }
 }

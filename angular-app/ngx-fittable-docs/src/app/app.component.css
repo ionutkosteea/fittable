@@ -1,4 +1,36 @@
 .main {
   position: relative;
   height: 100%;
+  max-width: 1680px;
+}
+
+.top {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  z-index: 2;
+  border-bottom: 2px solid rgba(96, 96, 96, 0.1);
+}
+
+.navigation {
+  position: fixed;
+  left: 0px;
+  top: 52px;
+  width: 240px;
+  height: calc(100% - 60px);
+  overflow: scroll;
+  scroll-behavior: smooth;
+  border-right: 2px solid rgba(96, 96, 96, 0.1);
+  padding-top: 10px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.content {
+  margin-top: 52px;
+  padding-top: 10px;
+  margin-left: 240px;
 }

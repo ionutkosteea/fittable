@@ -319,7 +319,7 @@ abstract class LineRemoveOperationDtoBuilder {
   protected updateMergedRegions(): void {
     asTableMergedRegions(this.table)
       ?.getMergedRegions()
-      .forEachRegion((region: MergedRegion): void => {
+      ?.forEachRegion((region: MergedRegion): void => {
         const regionFrom: number = this.getFromLineId(region);
         const regionTo: number = this.getToLineId(region);
         let newRegion: MergedRegion = region.clone() as MergedRegion;

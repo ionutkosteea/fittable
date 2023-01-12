@@ -3,14 +3,14 @@
     [inputControlListener]="getInputControlListener()"></fit-toolbar>
   <div class="scroller" fitTableScroller [tableScrollerListener]="getTableScrollerListener()">
     <div class="table-container" [ngStyle]="{'width.px':getTableWidth(),'height.px':getTableHeight()}">
-      <fit-table-center [viewModel]="viewModel" [hostListeners]="hostListeners">
+      <fit-table-center [viewModel]="getViewModel()" [hostListeners]="getHostListeners()">
       </fit-table-center>
-      <fit-table-left *ngIf="showRowHeader()" [viewModel]="viewModel" [hostListeners]="hostListeners">
+      <fit-table-left *ngIf="showRowHeader()" [viewModel]="getViewModel()" [hostListeners]="getHostListeners()">
       </fit-table-left>
-      <fit-table-top *ngIf="showColumnHeader()" [viewModel]="viewModel" [hostListeners]="hostListeners">
+      <fit-table-top *ngIf="showColumnHeader()" [viewModel]="getViewModel()" [hostListeners]="getHostListeners()">
       </fit-table-top>
-      <fit-table-left-top-corner *ngIf="showRowHeader()" [viewModel]="viewModel"
-        [hostListeners]="hostListeners"></fit-table-left-top-corner>
+      <fit-table-left-top-corner *ngIf="showRowHeader()" [viewModel]="getViewModel()"
+        [hostListeners]="getHostListeners()"></fit-table-left-top-corner>
     </div>
   </div>
   <fit-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()"></fit-statusbar>

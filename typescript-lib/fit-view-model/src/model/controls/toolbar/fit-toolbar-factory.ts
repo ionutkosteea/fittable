@@ -47,7 +47,7 @@ export class FitToolbarFactory implements ToolbarFactory {
       .addControl('redo', new RedoButton(args))
       .addControl('separator1', createSeparator());
     const isStyledTable: boolean =
-      asTableStyles(args.executor.getTable()) !== undefined;
+      asTableStyles(args.operationExecutor.getTable()) !== undefined;
     const hasCellSelection: boolean = args.getSelectedCells().length > 0;
     if (isStyledTable && hasCellSelection) {
       this.addCellSelectionDependentControls(toolbar, args);

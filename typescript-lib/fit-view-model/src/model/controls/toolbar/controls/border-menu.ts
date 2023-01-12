@@ -133,7 +133,7 @@ export class BorderMenuBuilder {
           selectedCells: this.args.getSelectedCells(),
           borderStyle: this.borderStyle,
         };
-        this.args.executor.run(args);
+        this.args.operationExecutor.run(args);
       });
   }
 

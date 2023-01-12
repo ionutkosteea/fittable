@@ -4,7 +4,7 @@ import { implementsTKeys } from '../../common/core-functions.js';
 import { Value } from '../../model/cell.js';
 import { CellRange } from '../../model/cell-range.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { OperationExecutor, Id } from '../../operations/operation-core.js';
+import { OperationExecutor } from '../../operations/operation-core.js';
 import { LanguageDictionary } from './language-dictionary.js';
 import { ImageRegistry } from './image-registry.js';
 import { TableScroller } from './table-scroller.js';
@@ -94,9 +94,9 @@ export function asOptionsControl(
 }
 
 export interface ControlArgs {
-  executor: OperationExecutor<Id<string>, string>;
-  dictionary: LanguageDictionary<string, string>;
-  imageRegistry: ImageRegistry<string>;
+  operationExecutor: OperationExecutor;
+  dictionary: LanguageDictionary;
+  imageRegistry: ImageRegistry;
   getSelectedCells(): CellRange[];
 }
 
@@ -127,7 +127,7 @@ export interface Statusbar extends FocusableObject {
 }
 
 export type StatusbarArgs = {
-  dictionary: LanguageDictionary<string, string>;
+  dictionary: LanguageDictionary;
   tableViewer: TableViewer;
   tableScroller: TableScroller;
 };
@@ -144,9 +144,9 @@ export function createStatusbar(args: StatusbarArgs): Statusbar {
 }
 
 export type SettingsBarArgs = {
-  dictionary: LanguageDictionary<string, string>;
-  imageRegistry: ImageRegistry<string>;
-  themeSwitcher?: ThemeSwitcher<string>;
+  dictionary: LanguageDictionary;
+  imageRegistry: ImageRegistry;
+  themeSwitcher?: ThemeSwitcher;
 };
 
 export interface SettingsBarFactory {

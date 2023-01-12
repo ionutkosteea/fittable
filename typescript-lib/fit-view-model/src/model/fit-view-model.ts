@@ -1,8 +1,5 @@
 import { CellRange, createCellCoord, Table } from 'fit-core/model/index.js';
-import {
-  createOperationExecutor,
-  OperationExecutor,
-} from 'fit-core/operations/index.js';
+import { OperationExecutor } from 'fit-core/operations/index.js';
 import {
   ViewModel,
   Window,
@@ -41,14 +38,12 @@ import {
   setCssVariable,
   setCssVariables,
 } from './common/css-variables.js';
-import { FitOperationArgs } from './operation-executor/operation-args.js';
 import { OperationSubscriptions } from './view-model-subscriptions/operation-subscriptions.js';
 import { ViewModelSubscriptions } from './view-model-subscriptions/view-model-subscriptions.js';
 
 export class FitViewModel implements ViewModel {
-  public readonly executor?: OperationExecutor<FitOperationArgs, string>;
-  public readonly dictionary: LanguageDictionary<string, string>;
-  public readonly imageRegistry: ImageRegistry<string>;
+  public readonly dictionary: LanguageDictionary;
+  public readonly imageRegistry: ImageRegistry;
   public readonly tableViewer: TableViewer;
   public readonly tableScroller: TableScroller;
   public readonly cellSelection?: CellSelection;
@@ -58,17 +53,18 @@ export class FitViewModel implements ViewModel {
   public readonly contextMenu?: Window;
   public readonly toolbar?: Container;
   public readonly statusbar?: Statusbar;
-  public readonly themeSwitcher?: ThemeSwitcher<string> | undefined;
+  public readonly themeSwitcher?: ThemeSwitcher;
   public readonly settingsBar?: Container;
 
   private config: ViewModelConfig = getViewModelConfig();
   private viewModelSubscriptions!: ViewModelSubscriptions;
   private operationSubscriptions?: OperationSubscriptions;
 
-  constructor(public readonly table: Table) {
-    if (!this.config.readOnly) {
-      this.executor = createOperationExecutor().setTable(table);
-    }
+  constructor(
+    public table: Table,
+    public readonly operationExecutor?: OperationExecutor
+  ) {
+    this.loadTable(table);
     this.dictionary = createLanguageDictionary();
     this.imageRegistry = createImageRegistry();
     this.tableViewer = this.createTableViewer();
@@ -108,7 +104,10 @@ export class FitViewModel implements ViewModel {
 
   private createCellEditor(): CellEditor | undefined {
     try {
-      return this.executor && createCellEditor(this.executor, this.tableViewer);
+      return (
+        this.operationExecutor &&
+        createCellEditor(this.operationExecutor, this.tableViewer)
+      );
     } catch {
       return undefined;
     }
@@ -136,10 +135,10 @@ export class FitViewModel implements ViewModel {
   private createContextMenu(): Window | undefined {
     try {
       return (
-        this.executor &&
+        this.operationExecutor &&
         this.cellSelection &&
         createContextMenu({
-          executor: this.executor,
+          operationExecutor: this.operationExecutor,
           dictionary: this.dictionary,
           imageRegistry: this.imageRegistry,
           getSelectedCells: this.getSelectedCells,
@@ -157,9 +156,9 @@ export class FitViewModel implements ViewModel {
     let toolbar: Container | undefined;
     try {
       toolbar =
-        this.executor &&
+        this.operationExecutor &&
         createToolbar({
-          executor: this.executor,
+          operationExecutor: this.operationExecutor,
           dictionary: this.dictionary,
           imageRegistry: this.imageRegistry,
           getSelectedCells: this.getSelectedCells,
@@ -193,7 +192,7 @@ export class FitViewModel implements ViewModel {
     return statusbar;
   }
 
-  private createThemeSwitcher(): ThemeSwitcher<string> | undefined {
+  private createThemeSwitcher(): ThemeSwitcher | undefined {
     try {
       return createThemeSwitcher(this.imageRegistry);
     } catch {
@@ -221,9 +220,9 @@ export class FitViewModel implements ViewModel {
   private addSubscriptions(): void {
     this.viewModelSubscriptions = new ViewModelSubscriptions(this);
     this.viewModelSubscriptions.init();
-    if (this.executor) {
+    if (this.operationExecutor) {
       this.operationSubscriptions = new OperationSubscriptions({
-        executor: this.executor,
+        operationExecutor: this.operationExecutor,
         tableViewer: this.tableViewer,
         tableScroller: this.tableScroller,
         cellEditor: this.cellEditor,
@@ -232,6 +231,17 @@ export class FitViewModel implements ViewModel {
       });
       this.operationSubscriptions.init();
     }
+  }
+
+  public loadTable(table: Table): void {
+    this.operationExecutor?.setTable(table);
+    this.tableViewer?.setTable(table);
+    this.tableScroller
+      ?.resizeViewportWidth()
+      .resizeViewportHeight()
+      .renderTable();
+    this.table = table;
+    this.cellEditor?.setCell(this.cellEditor.getCell());
   }
 
   public destroy(): void {
@@ -243,7 +253,10 @@ export class FitViewModel implements ViewModel {
 }
 
 export class FitViewModelFactory implements ViewModelFactory {
-  public createViewModel(table: Table): FitViewModel {
-    return new FitViewModel(table);
+  public createViewModel(
+    table: Table,
+    operationExecutor?: OperationExecutor
+  ): FitViewModel {
+    return new FitViewModel(table, operationExecutor);
   }
 }

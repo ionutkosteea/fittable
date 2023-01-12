@@ -1,8 +1,6 @@
-import { Dictionary } from 'fit-core/view-model/index.js';
+import { FitDictionary } from '../language-dictionary-keys.js';
 
-import { FitTextKey } from '../language-dictionary-keys.js';
-
-export const enUS: Dictionary<FitTextKey> = {
+export const enUS: FitDictionary = {
   'en-US': 'English',
   'de-DE': 'German',
 };

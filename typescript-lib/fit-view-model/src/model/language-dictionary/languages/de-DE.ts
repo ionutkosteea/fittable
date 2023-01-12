@@ -1,8 +1,6 @@
-import { Dictionary } from 'fit-core/view-model/index.js';
+import { FitDictionary } from '../language-dictionary-keys.js';
 
-import { FitTextKey } from '../language-dictionary-keys.js';
-
-export const deDE: Dictionary<FitTextKey> = {
+export const deDE: FitDictionary = {
   'Clear cells': 'Zellen löschen',
   'Remove cells': 'Zellen entfernen',
   'Cut cells': 'Zellen schneiden',

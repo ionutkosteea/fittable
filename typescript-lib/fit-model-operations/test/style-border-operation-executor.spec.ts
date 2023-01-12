@@ -296,7 +296,7 @@ describe('Style Border Operation Executor', () => {
 
   it('border all', () => {
     executor //
-      .createTable(1, 1)
+      .createTable(2, 2)
       .selectCell(0, 0)
       .selectCell(0, 1)
       .selectCell(1, 0)
@@ -320,7 +320,7 @@ describe('Style Border Operation Executor', () => {
 
   it('undo border all', () => {
     executor //
-      .createTable(1, 1)
+      .createTable(2, 2)
       .selectCell(0, 0)
       .selectCell(0, 1)
       .selectCell(1, 0)

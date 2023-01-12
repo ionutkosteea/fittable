@@ -27,15 +27,18 @@ export class FitStatusbar implements Statusbar {
   }
 
   public getRenderedRows(): string {
-    const numberOfRows: number = this.args.tableViewer.table.getNumberOfRows();
+    const numberOfRows: number = this.args.tableViewer
+      .getTable()
+      .getNumberOfRows();
     const firstRow: number = this.getFirstRenderableRow();
     const lastRow: number = this.getLastRenderableRow();
     return numberOfRows + ' [' + firstRow + ',' + lastRow + ']';
   }
 
   public getRederedColumns(): string {
-    const numberOfColumns: number =
-      this.args.tableViewer.table.getNumberOfColumns();
+    const numberOfColumns: number = this.args.tableViewer
+      .getTable()
+      .getNumberOfColumns();
     const firstCol: number = this.getFirstRenderableColumn();
     const lastCol: number = this.getLastRenderableColumn();
     return numberOfColumns + ' [' + firstCol + ',' + lastCol + ']';
@@ -54,8 +57,9 @@ export class FitStatusbar implements Statusbar {
       this.args.tableScroller
         .getHorizontalScrollbar()
         ?.getLastRenderableLine() ?? 0;
-    const numberOfColumns: number =
-      this.args.tableViewer.table.getNumberOfColumns();
+    const numberOfColumns: number = this.args.tableViewer
+      .getTable()
+      .getNumberOfColumns();
     return colId > 0 ? colId : numberOfColumns > 0 ? numberOfColumns - 1 : 0;
   }
 
@@ -71,7 +75,9 @@ export class FitStatusbar implements Statusbar {
     const rowId: number =
       this.args.tableScroller.getVerticalScrollbar()?.getLastRenderableLine() ??
       0;
-    const numberOfRows: number = this.args.tableViewer.table.getNumberOfRows();
+    const numberOfRows: number = this.args.tableViewer
+      .getTable()
+      .getNumberOfRows();
     return rowId > 0 ? rowId : numberOfRows > 0 ? numberOfRows - 1 : 0;
   }
 

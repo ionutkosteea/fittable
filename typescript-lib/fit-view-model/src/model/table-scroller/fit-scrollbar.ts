@@ -133,7 +133,7 @@ export class VerticalScrollbar extends VirtualScroller {
     super();
   }
   protected getTableNumberOfLines(): number {
-    return this.tableViewer.table.getNumberOfRows();
+    return this.tableViewer.getTable().getNumberOfRows();
   }
   protected getTableDimension(): number {
     const headerHeight: number = this.tableViewer.getColumnHeaderHeight();
@@ -156,7 +156,7 @@ export class HorizontalScrollbar extends VirtualScroller {
     super();
   }
   protected getTableNumberOfLines(): number {
-    return this.tableViewer.table.getNumberOfColumns();
+    return this.tableViewer.getTable().getNumberOfColumns();
   }
   protected getTableDimension(): number {
     const headerWidth: number = this.tableViewer.getRowHeaderWidth();

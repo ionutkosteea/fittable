@@ -30,7 +30,7 @@ export class FitCellEditor implements CellEditor {
   private readonly afterSetFocus$: Subject<boolean> = new Subject();
 
   constructor(
-    private readonly executor: OperationExecutor<FitOperationArgs, string>,
+    private readonly operationExecutor: OperationExecutor,
     private readonly tableViewer: TableViewer
   ) {
     this.cellControl = this.createCellControl();
@@ -42,11 +42,12 @@ export class FitCellEditor implements CellEditor {
     input //
       .setLabel(() => 'Cell Editor')
       .setRun((): void => {
-        this.executor.run({
+        const args: FitOperationArgs = {
           id: 'cell-value',
           selectedCells: [createCellRange(this.cellCoord)],
           value: input.getValue(),
-        });
+        };
+        this.operationExecutor.run(args);
       });
     return input;
   }
@@ -81,14 +82,15 @@ export class FitCellEditor implements CellEditor {
   }
 
   private tableHasRowsAndColumns(): boolean {
-    const rowNum: number = this.tableViewer.table.getNumberOfRows();
-    const colNum: number = this.tableViewer.table.getNumberOfColumns();
+    const rowNum: number = this.tableViewer.getTable().getNumberOfRows();
+    const colNum: number = this.tableViewer.getTable().getNumberOfColumns();
     return rowNum > 0 && colNum > 0;
   }
 
   private getTableCellValue(cellCoord: CellCoord): Value {
     return (
-      this.tableViewer.table
+      this.tableViewer
+        .getTable()
         .getCell(cellCoord.getRowId(), cellCoord.getColId())
         ?.getValue() ?? ''
     );
@@ -126,7 +128,7 @@ export class FitCellEditor implements CellEditor {
 
   public getNeighborCells(): NeighborCells {
     return new FitNeighborCells()
-      .setTable(this.tableViewer.table)
+      .setTable(this.tableViewer.getTable())
       .setCell(this.cellCoord);
   }
 
@@ -156,7 +158,7 @@ export class FitCellEditor implements CellEditor {
 
 export class FitCellEditorFactory implements CellEditorFactory {
   public createCellEditor(
-    executor: OperationExecutor<FitOperationArgs, string>,
+    executor: OperationExecutor,
     tableViewer: TableViewer
   ): CellEditor {
     return new FitCellEditor(executor, tableViewer);

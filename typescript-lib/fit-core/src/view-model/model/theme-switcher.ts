@@ -8,28 +8,24 @@ export interface Theme {
   images: Images;
 }
 
-export interface ThemeSwitcher<ThemeName extends string> {
-  registerTheme(name: ThemeName, theme: Theme): this;
-  getThemeNames(): ThemeName[];
-  switch(name: ThemeName): this;
-  getCurrentThemeName(): ThemeName | undefined;
+export interface ThemeSwitcher {
+  registerTheme(name: string, theme: Theme): this;
+  getThemeNames(): string[];
+  switch(name: string): this;
+  getCurrentThemeName(): string | undefined;
 }
 
 export interface ThemeSwitcherFactory {
-  createThemeSwitcher(
-    imageRegistry: ImageRegistry<string>
-  ): ThemeSwitcher<string>;
+  createThemeSwitcher(imageRegistry: ImageRegistry): ThemeSwitcher;
 }
 
-export function createThemeSwitcher<ThemeName extends string>(
-  imageRegistry: ImageRegistry<string>
-): ThemeSwitcher<ThemeName> {
+export function createThemeSwitcher(
+  imageRegistry: ImageRegistry
+): ThemeSwitcher {
   const factory: ThemeSwitcherFactory | undefined =
     getViewModelConfig().themeSwitcherFactory;
   if (factory) {
-    return factory.createThemeSwitcher(
-      imageRegistry
-    ) as ThemeSwitcher<ThemeName>;
+    return factory.createThemeSwitcher(imageRegistry);
   } else {
     throw new Error('ThemeSwitcherFactory is not defined!');
   }

@@ -101,6 +101,6 @@ export class FitNeighborCells implements NeighborCells {
   ): MergedRegion | undefined {
     return asTableMergedRegions(table)
       ?.getMergedRegions()
-      .getRegion(rowId, colId);
+      ?.getRegion(rowId, colId);
   }
 }

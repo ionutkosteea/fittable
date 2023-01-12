@@ -4,6 +4,7 @@ import { getModelConfig } from './model-config.js';
 interface Header {
   getDto(): unknown;
   getCellValue(rowId: number, colId: number): Value;
+  hasProperties(): boolean;
   equals(other?: Header): boolean;
   clone(): Header;
 }

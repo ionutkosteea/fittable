@@ -11,19 +11,19 @@ import {
   ViewModelConfig,
 } from 'fit-core/view-model/index.js';
 
-import { fitModelConfig } from '../../../fit-model/dist/index.js';
+import { FIT_MODEL_CONFIG } from '../../../fit-model/dist/index.js';
 
 import { VirtualScroller } from '../../dist/model/table-scroller/fit-scrollbar.js';
 
-import { tstViewModelConfig } from '../model/tst-view-model-config.js';
+import { TST_VIEW_MODEL_CONFIG } from '../model/tst-view-model-config.js';
 import { ScrollbarBuilder } from '../model/scrollbar-builder.js';
 
 let config: ViewModelConfig;
 
 describe('Test Scrollbars', () => {
   beforeAll((): void => {
-    registerModelConfig(fitModelConfig);
-    registerViewModelConfig(tstViewModelConfig);
+    registerModelConfig(FIT_MODEL_CONFIG);
+    registerViewModelConfig(TST_VIEW_MODEL_CONFIG);
     config = getViewModelConfig();
   });
   afterAll(() => {

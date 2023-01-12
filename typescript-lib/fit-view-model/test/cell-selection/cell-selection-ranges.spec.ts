@@ -14,16 +14,16 @@ import {
   registerViewModelConfig,
   unregisterViewModelConfig,
 } from 'fit-core/view-model/index.js';
-import { fitModelConfig } from '../../../fit-model/dist/index.js';
-import { fitViewModelConfig } from '../../../fit-view-model/dist/index.js';
+import { FIT_MODEL_CONFIG } from '../../../fit-model/dist/index.js';
+import { FIT_VIEW_MODEL_CONFIG } from '../../../fit-view-model/dist/index.js';
 
 import { FitTableViewer } from '../../dist/model/table-viewer/fit-table-viewer.js';
 import { FitCellSelection } from '../../dist/model/cell-selection/fit-cell-selection.js';
 
 describe('Test CellSelectionRanges', () => {
   beforeAll((): void => {
-    registerModelConfig(fitModelConfig);
-    registerViewModelConfig(fitViewModelConfig);
+    registerModelConfig(FIT_MODEL_CONFIG);
+    registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
   });
   afterAll((): void => {
     unregisterModelConfig();

@@ -16,10 +16,7 @@ import {
   asInputControl,
 } from 'fit-core/view-model/index.js';
 
-import {
-  FitOperationArgs,
-  FitOperationId,
-} from '../operation-executor/operation-args.js';
+import { FitOperationId } from '../operation-executor/operation-args.js';
 
 enum OperationProperties {
   SelectedCells = 1,
@@ -36,7 +33,7 @@ type LastLines = {
 };
 
 export type OperationSubscriptionArgs = {
-  executor: OperationExecutor<FitOperationArgs, string>;
+  operationExecutor: OperationExecutor;
   tableScroller: TableScroller;
   tableViewer: TableViewer;
   cellEditor?: CellEditor;
@@ -66,7 +63,7 @@ export class OperationSubscriptions {
   }
 
   private createCommonSubscriptions(): void {
-    this.args.executor.addListener({
+    this.args.operationExecutor.addListener({
       onAfterRun$: this.afterCommonUpdate$,
       onAfterUndo$: this.afterUndoRedo$,
       onAfterRedo$: this.afterUndoRedo$,
@@ -162,7 +159,7 @@ export class OperationSubscriptions {
   };
 
   private createCustomSubscriptions(): void {
-    this.args.executor.addListener({
+    this.args.operationExecutor.addListener({
       onAfterRun$: this.afterCustomUpdate$,
       onAfterUndo$: this.afterCustomUpdate$,
       onAfterRedo$: this.afterCustomUpdate$,
@@ -251,15 +248,17 @@ export class OperationSubscriptions {
       if (lastSelectedCol < toCol) lastSelectedCol = toCol;
     }
     if (lastSelectedRow === 0 || lastSelectedCol === 0) return undefined;
-    const table: Table = this.args.tableViewer.table;
+    const table: Table = this.args.tableViewer.getTable();
     const lastRow: number = table.getNumberOfRows() - 1;
     const lastCol: number = table.getNumberOfColumns() - 1;
     return { lastRow, lastCol, lastSelectedRow, lastSelectedCol };
   }
 
   private whenAllLinesRemoved(): void {
-    const rowNum: number = this.args.tableViewer.table.getNumberOfRows();
-    const colNum: number = this.args.tableViewer.table.getNumberOfColumns();
+    const rowNum: number = this.args.tableViewer.getTable().getNumberOfRows();
+    const colNum: number = this.args.tableViewer
+      .getTable()
+      .getNumberOfColumns();
     if (rowNum > 0 && colNum > 0) return;
     this.args.cellSelection?.clear();
     this.args.cellEditor?.setVisible(false);

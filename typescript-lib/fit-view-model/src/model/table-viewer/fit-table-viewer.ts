@@ -42,7 +42,6 @@ export class FitTableViewer implements TableViewer {
   private rowSpans?: DoubleKeyMap<number>;
   private colSpans?: DoubleKeyMap<number>;
   private hiddenCells?: DoubleKeyMap<boolean>;
-
   private config: ViewModelConfig;
   private rowTable?: TableRows;
   private columnTable?: TableColumns;
@@ -50,13 +49,26 @@ export class FitTableViewer implements TableViewer {
   private columnHeaderTable?: TableColumnHeader;
   private mergedRegionsTable?: TableMergedRegions;
 
-  constructor(public readonly table: Table) {
+  constructor(private table: Table) {
     this.config = getViewModelConfig();
+    this.setTable(table);
+  }
+
+  public setTable(table: Table): this {
+    this.table = table;
     this.rowTable = asTableRows(table);
     this.columnTable = asTableColumns(table);
     this.rowHeaderTable = asTableRowHeader(table);
     this.columnHeaderTable = asTableColumnHeader(table);
     this.mergedRegionsTable = asTableMergedRegions(table);
+    this.resetRowProperties();
+    this.resetColumnProperties();
+    this.resetMergedRegions();
+    return this;
+  }
+
+  public getTable(): Table {
+    return this.table;
   }
 
   public getColumnWidth(colId: number): number {
@@ -68,7 +80,7 @@ export class FitTableViewer implements TableViewer {
     let width = 0;
     if (this.config.showRowHeader) {
       const numberOfColumns: number =
-        this.rowHeaderTable?.getRowHeader().getNumberOfColumns() ?? 0;
+        this.rowHeaderTable?.getRowHeader()?.getNumberOfColumns() ?? 0;
       for (let colId = 0; colId < numberOfColumns; colId++) {
         width += this.getRowHeaderColumnWidth(colId);
       }
@@ -108,7 +120,7 @@ export class FitTableViewer implements TableViewer {
     let height = 0;
     if (this.config.showColumnHeader) {
       const numberOfRows: number =
-        this.columnHeaderTable?.getColumnHeader().getNumberOfRows() ?? 0;
+        this.columnHeaderTable?.getColumnHeader()?.getNumberOfRows() ?? 0;
       for (let rowId = 0; rowId < numberOfRows; rowId++) {
         height += this.getColumnHeaderRowHeight(rowId);
       }
@@ -217,7 +229,7 @@ export class FitTableViewer implements TableViewer {
     this.hiddenCells = new DoubleKeyMap();
     this.mergedRegionsTable
       ?.getMergedRegions()
-      .forEachRegion((region: MergedRegion): void => {
+      ?.forEachRegion((region: MergedRegion): void => {
         const rowSpan: number = region.getRowSpan();
         const colSpan: number = region.getColSpan();
         const rowId: number = region.getFrom().getRowId();
@@ -261,7 +273,7 @@ export class FitTableViewer implements TableViewer {
 
   private getColumnHeaderRowNumber(): number {
     return (
-      asTableColumnHeader(this.table)?.getColumnHeader().getNumberOfRows() ?? 0
+      asTableColumnHeader(this.table)?.getColumnHeader()?.getNumberOfRows() ?? 0
     );
   }
 
@@ -282,7 +294,7 @@ export class FitTableViewer implements TableViewer {
 
   private getRowHeaderColumnNumber(): number {
     return (
-      asTableRowHeader(this.table)?.getRowHeader().getNumberOfColumns() ?? 0
+      asTableRowHeader(this.table)?.getRowHeader()?.getNumberOfColumns() ?? 0
     );
   }
 

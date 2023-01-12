@@ -8,7 +8,7 @@ export class CellClearMenuItem extends MenuItem {
   protected iconId: FitImageId = 'clear';
 
   public run(): void {
-    this.args.executor.run(this.getArgs());
+    this.args.operationExecutor.run(this.getArgs());
   }
 
   private getArgs(): FitOperationArgs {
@@ -24,7 +24,7 @@ export class CellRemoveMenuItem extends MenuItem {
   protected iconId: FitImageId = 'remove';
 
   public run(): void {
-    this.args.executor.run(this.getArgs());
+    this.args.operationExecutor.run(this.getArgs());
   }
 
   private getArgs(): FitOperationArgs {
@@ -40,7 +40,7 @@ export class CellCutMenuItem extends MenuItem {
   protected iconId: FitImageId = 'cut';
 
   public run(): void {
-    this.args.executor.run(this.getArgs());
+    this.args.operationExecutor.run(this.getArgs());
   }
 
   private getArgs(): FitOperationArgs {
@@ -56,7 +56,7 @@ export class CellCopyMenuItem extends MenuItem {
   protected iconId: FitImageId = 'copy';
 
   public run(): void {
-    this.args.executor.run(this.getArgs());
+    this.args.operationExecutor.run(this.getArgs());
   }
 
   private getArgs(): FitOperationArgs {
@@ -72,7 +72,7 @@ export class CellPasteMenuItem extends MenuItem {
   protected iconId: FitImageId = 'paste';
 
   public run(): void {
-    this.args.executor.run(this.getArgs());
+    this.args.operationExecutor.run(this.getArgs());
   }
 
   private getArgs(): FitOperationArgs {
@@ -88,7 +88,7 @@ export class CellMergeMenuItem extends MenuItem {
   protected iconId: FitImageId = 'merge';
 
   public run(): void {
-    this.args.executor.run(this.getArgs());
+    this.args.operationExecutor.run(this.getArgs());
   }
 
   private getArgs(): FitOperationArgs {
@@ -104,7 +104,7 @@ export class CellUnmergeMenuItem extends MenuItem {
   protected iconId: FitImageId = 'unmerge';
 
   public run(): void {
-    this.args.executor.run(this.getArgs());
+    this.args.operationExecutor.run(this.getArgs());
   }
 
   private getArgs(): FitOperationArgs {

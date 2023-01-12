@@ -5,7 +5,8 @@ import { Table } from '../../model/table.js';
 import { getViewModelConfig } from '../view-model-config.js';
 
 export interface TableViewer {
-  table: Table;
+  setTable(table: Table): this;
+  getTable(): Table;
   hasRowHeader(): boolean;
   getRowHeaderColIds(): RangeIterator;
   getRowHeaderCellValue(rowId: number, colId: number): Value | undefined;

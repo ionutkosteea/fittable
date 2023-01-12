@@ -53,7 +53,7 @@ export abstract class StyleCombo implements OptionsControl {
   }
 
   public updateByCellSelection(): void {
-    const table: Table | undefined = this.args.executor.getTable();
+    const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
     const selectedCells: CellRange[] = this.args.getSelectedCells();
     const style: Style | undefined = getFirstCellStyle(table, selectedCells);
@@ -89,7 +89,7 @@ export abstract class StyleCombo implements OptionsControl {
     const style: Style = createStyle() //
       .set(this.styleAttName, selectedOption.getValue());
     const args: FitOperationArgs = { id: 'style-update', selectedCells, style };
-    this.args.executor.run(args);
+    this.args.operationExecutor.run(args);
   }
 
   private getValueControl(id: string): ValueControl {

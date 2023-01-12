@@ -46,3 +46,5 @@ export type FitTextKey =
   | 'Dark mode'
   | 'Rows'
   | 'Columns';
+
+export type FitDictionary = { [key in FitTextKey]?: string };

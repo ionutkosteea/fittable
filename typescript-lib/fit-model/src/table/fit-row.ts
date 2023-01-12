@@ -1,11 +1,10 @@
-import { implementsTKeys } from 'fit-core/common/index.js';
 import { createCell4Dto, RowFactory, RowHeight } from 'fit-core/model/index.js';
 
 import { FitRowDto, FitCellDto } from './dto/fit-table-dto.js';
 import { FitCell } from './fit-cell.js';
 
 export class FitRow implements RowHeight {
-  private readonly dto: FitRowDto = { cells: {} };
+  private readonly dto: FitRowDto = {};
 
   constructor(dto?: FitRowDto) {
     if (dto) this.dto = dto;
@@ -16,12 +15,13 @@ export class FitRow implements RowHeight {
   }
 
   public addCell(colId: number, cell: FitCell): this {
+    if (!this.dto.cells) this.dto.cells = {};
     this.dto.cells[colId] = cell.getDto();
     return this;
   }
 
   public removeCell(colId: number): this {
-    if (Reflect.has(this.dto.cells, colId)) {
+    if (this.dto.cells && Reflect.has(this.dto.cells, colId)) {
       Reflect.deleteProperty(this.dto.cells, colId);
     }
     return this;
@@ -51,12 +51,12 @@ export class FitRow implements RowHeight {
   }
 
   public getNumberOfCells(): number {
-    const cells: string[] = Object.keys(this.dto.cells);
-    return cells.length;
+    return this.dto.cells ? Object.keys(this.dto.cells).length : 0;
   }
 
   public getCell(colId: number): FitCell | undefined {
-    const cellDto: FitCellDto = Reflect.get(this.dto.cells, colId);
+    const cellDto: FitCellDto | undefined =
+      this.dto.cells && Reflect.get(this.dto.cells, colId);
     return cellDto ? createCell4Dto<FitCell>(cellDto) : undefined;
   }
 
@@ -91,10 +91,6 @@ export class FitRowFactory implements RowFactory {
   }
 
   public createRow4Dto(dto: FitRowDto): FitRow {
-    if (implementsTKeys<FitRowDto>(dto, ['cells'])) {
-      return new FitRow(dto);
-    } else {
-      throw new Error('Invalid row DTO.');
-    }
+    return new FitRow(dto);
   }
 }

@@ -30,7 +30,7 @@ export class PaintFormatButton extends PushButton {
       selectedCells: this.args.getSelectedCells(),
       styleName: this.styleName,
     };
-    this.args.executor.run(args);
+    this.args.operationExecutor.run(args);
   }
 
   public getType(): ControlType | undefined {
@@ -48,7 +48,7 @@ export class PaintFormatButton extends PushButton {
 
   private copyStyleName(): void {
     const cellCoord: CellCoord = this.args.getSelectedCells()[0].getFrom();
-    const table: Table | undefined = this.args.executor.getTable();
+    const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
     const cell: Cell | undefined = table.getCell(
       cellCoord.getRowId(),

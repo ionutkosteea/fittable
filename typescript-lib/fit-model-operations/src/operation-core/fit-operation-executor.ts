@@ -11,44 +11,45 @@ import {
 
 import { OperationStackExecutor } from './operation-stack-executor.js';
 import { FitOperationFactory, FitOperation } from './fit-operation.js';
+import {
+  FitOperationDtoId,
+  FitOperationStepId,
+  FitOperationDtoArgs,
+} from './fit-operation-executor-args.js';
 
-export class FitOperationExecutor<
-  Args extends Id<string>,
-  StepId extends string
-> implements OperationExecutor<Args, StepId>
-{
+export class FitOperationExecutor implements OperationExecutor {
   private readonly executor: OperationStackExecutor =
     new OperationStackExecutor();
   private operationDtoFactories: {
-    [operationId in Args['id']]?: OperationDtoFactoryClass;
+    [operationId in FitOperationDtoId]?: OperationDtoFactoryClass;
   } = {};
   private operationStepFactories: {
-    [stepId in StepId]?: OperationStepFactoryClass;
+    [stepId in FitOperationStepId]?: OperationStepFactoryClass;
   } = {};
   private table?: Table;
 
   public bindOperationDtoFactory(
-    operationId: Args['id'],
+    operationId: FitOperationDtoId,
     clazz: OperationDtoFactoryClass
   ): this {
     this.operationDtoFactories[operationId] = clazz;
     return this;
   }
 
-  public unbindOperationDtoFactory(operationId: Args['id']): this {
+  public unbindOperationDtoFactory(operationId: FitOperationDtoId): this {
     Reflect.getOwnPropertyDescriptor(this.operationDtoFactories, operationId);
     return this;
   }
 
   public bindOperationStepFactory(
-    stepId: StepId,
+    stepId: FitOperationStepId,
     clazz: OperationStepFactoryClass
   ): this {
     this.operationStepFactories[stepId] = clazz;
     return this;
   }
 
-  public unbindOperationStepFactory(stepId: StepId): this {
+  public unbindOperationStepFactory(stepId: FitOperationStepId): this {
     Reflect.getOwnPropertyDescriptor(this.operationStepFactories, stepId);
     return this;
   }
@@ -60,6 +61,7 @@ export class FitOperationExecutor<
   }
 
   public setTable(table: Table): this {
+    this.executor.reset();
     this.table = table;
     return this;
   }
@@ -78,9 +80,11 @@ export class FitOperationExecutor<
     return this;
   }
 
-  public createOperationDto(args: Args): OperationDto | Promise<OperationDto> {
+  public createOperationDto(
+    args: FitOperationDtoArgs
+  ): OperationDto | Promise<OperationDto> {
     const Factory: OperationDtoFactoryClass | undefined =
-      this.operationDtoFactories[args.id as Args['id']];
+      this.operationDtoFactories[args.id as FitOperationDtoId];
     if (Factory) {
       if (!this.table) throw new Error('Table property hast to be set!');
       return new Factory().createOperationDto(this.table, args);
@@ -119,7 +123,7 @@ export class FitOperationExecutor<
     return this;
   }
 
-  public run(args: Args): this {
+  public run(args: FitOperationDtoArgs): this {
     const operationDto: OperationDto | Promise<OperationDto> =
       this.createOperationDto(args);
     this.runOperationDto(operationDto);
@@ -130,7 +134,7 @@ export class FitOperationExecutor<
     stepDto: Id<string>
   ): OperationStep => {
     const Factory: OperationStepFactoryClass | undefined =
-      this.operationStepFactories[stepDto.id as StepId];
+      this.operationStepFactories[stepDto.id as FitOperationStepId];
     if (Factory) {
       if (!this.table) throw new Error('Table property hast to be set!');
       return new Factory().createStep(this.table, stepDto);
@@ -154,6 +158,11 @@ export class FitOperationExecutor<
 
   public redo(): this {
     this.executor.redo();
+    return this;
+  }
+
+  public reset(): this {
+    this.executor.reset();
     return this;
   }
 }

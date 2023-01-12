@@ -29,7 +29,6 @@ export interface ViewModelConfig {
   rowHeight: number;
   columnWidth: number;
   fontSize: number;
-  readOnly?: boolean;
   colorPalette?: Option[];
   fontFamily?: Option[];
   showRowHeader?: boolean;

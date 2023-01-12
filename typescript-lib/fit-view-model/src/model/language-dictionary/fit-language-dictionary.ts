@@ -1,62 +1,61 @@
 import {
   LanguageDictionary,
   LanguageDictionaryFactory,
-  Dictionary,
 } from 'fit-core/view-model/index.js';
 
-import { FitLanguageCode, FitTextKey } from './language-dictionary-keys.js';
+import {
+  FitDictionary,
+  FitLanguageCode,
+  FitTextKey,
+} from './language-dictionary-keys.js';
 import { enUS } from './languages/en-US.js';
 import { deDE } from './languages/de-DE.js';
 
-export class FitLanguageDictionary<
-  LanguageCode extends string,
-  TextKey extends string
-> implements LanguageDictionary<LanguageCode, TextKey>
-{
-  private dictionaries: { [code in LanguageCode]?: Dictionary<TextKey> } = {};
-  private currentCode?: LanguageCode;
+export class FitLanguageDictionary implements LanguageDictionary {
+  private dictionaries: { [FitLanguageCode in string]?: FitDictionary } = {};
+  private currentCode?: FitLanguageCode;
 
   public registerLanguage(
-    code: LanguageCode,
-    dictionary: Dictionary<TextKey>
+    code: FitLanguageCode,
+    dictionary: FitDictionary
   ): this {
     this.dictionaries[code] = dictionary;
     return this;
   }
 
-  public getRegisteredLanguages(): LanguageCode[] {
-    return Reflect.ownKeys(this.dictionaries) as LanguageCode[];
+  public getRegisteredLanguages(): FitLanguageCode[] {
+    return Reflect.ownKeys(this.dictionaries) as FitLanguageCode[];
   }
 
-  public unregisterLanguage(code: LanguageCode): this {
+  public unregisterLanguage(code: FitLanguageCode): this {
     Reflect.deleteProperty(this.dictionaries, code);
     return this;
   }
 
-  public setCurrentLanguage(code: LanguageCode): this {
+  public setCurrentLanguage(code: FitLanguageCode): this {
     this.currentCode = code;
     return this;
   }
 
-  public getCurrentLanguage(): LanguageCode | undefined {
+  public getCurrentLanguage(): FitLanguageCode | undefined {
     return this.currentCode;
   }
 
-  public setText(key: TextKey, value?: string): this {
-    const dictionary: Dictionary<TextKey> = this.getDictionary();
+  public setText(key: FitTextKey, value?: string): this {
+    const dictionary: FitDictionary = this.getDictionary();
     if (value) Reflect.set(dictionary, key, value);
     else Reflect.deleteProperty(dictionary, key);
     return this;
   }
 
-  public getText(key: TextKey): string {
-    const dictionary: Dictionary<TextKey> = this.getDictionary();
+  public getText(key: FitTextKey): string {
+    const dictionary: FitDictionary = this.getDictionary();
     return dictionary[key] ?? key;
   }
 
-  private getDictionary(): Dictionary<TextKey> {
+  private getDictionary(): FitDictionary {
     if (this.currentCode) {
-      const dictionary: Dictionary<TextKey> | undefined =
+      const dictionary: FitDictionary | undefined =
         this.dictionaries[this.currentCode];
       if (dictionary) return dictionary;
       else throw new Error('Current language is not registered!');
@@ -67,8 +66,8 @@ export class FitLanguageDictionary<
 }
 
 export class FitLanguageDictionaryFactory implements LanguageDictionaryFactory {
-  public createDictionary(): LanguageDictionary<FitLanguageCode, FitTextKey> {
-    return new FitLanguageDictionary<FitLanguageCode, FitTextKey>()
+  public createDictionary(): LanguageDictionary {
+    return new FitLanguageDictionary()
       .registerLanguage('en-US', enUS)
       .registerLanguage('de-DE', deDE)
       .setCurrentLanguage('en-US');

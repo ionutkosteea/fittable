@@ -14,17 +14,17 @@ import {
   ViewModelConfig,
 } from 'fit-core/view-model/index.js';
 
-import { fitModelConfig } from '../../../fit-model/dist/index.js';
+import { FIT_MODEL_CONFIG } from '../../../fit-model/dist/index.js';
 
-import { tstViewModelConfig } from '../model/tst-view-model-config.js';
+import { TST_VIEW_MODEL_CONFIG } from '../model/tst-view-model-config.js';
 import { CellSelectionPainterBuilder } from '../model/cell-selection-painter-builder.js';
 
 let config: ViewModelConfig | undefined;
 
 describe('Test CellSelectionPainter', (): void => {
   beforeAll((): void => {
-    registerModelConfig(fitModelConfig);
-    registerViewModelConfig(tstViewModelConfig);
+    registerModelConfig(FIT_MODEL_CONFIG);
+    registerViewModelConfig(TST_VIEW_MODEL_CONFIG);
     config = getViewModelConfig();
   });
   afterAll(() => {

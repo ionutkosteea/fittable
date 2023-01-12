@@ -55,7 +55,7 @@ export type FitContextMenuControlId =
 export class FitContextMenuFactory implements ContextMenuFactory {
   public createContextMenu(args: ControlArgs): Window {
     const window: FitWindow<FitContextMenuControlId> = new FitWindow();
-    if (asTableRows(args.executor.getTable()) !== undefined) {
+    if (asTableRows(args.operationExecutor.getTable()) !== undefined) {
       window
         .addControl('row-width', new RowResizeMenuItem(args))
         .addControl('row-insert-before', new RowInsertAboveMenuItem(args))
@@ -63,7 +63,7 @@ export class FitContextMenuFactory implements ContextMenuFactory {
         .addControl('row-remove', new RowRemoveMenuItem(args))
         .addControl('separator1', createSeparator());
     }
-    if (asTableColumns(args.executor.getTable()) !== undefined) {
+    if (asTableColumns(args.operationExecutor.getTable()) !== undefined) {
       window
         .addControl('column-height', new ColumnResizeMenuItem(args))
         .addControl('column-insert-before', new ColumnInsertLeftMenuItem(args))
@@ -77,7 +77,7 @@ export class FitContextMenuFactory implements ContextMenuFactory {
       .addControl('cut', new CellCutMenuItem(args))
       .addControl('copy', new CellCopyMenuItem(args))
       .addControl('paste', new CellPasteMenuItem(args));
-    if (asTableMergedRegions(args.executor.getTable()) !== undefined) {
+    if (asTableMergedRegions(args.operationExecutor.getTable()) !== undefined) {
       window
         .addControl('merge', new CellMergeMenuItem(args))
         .addControl('unmerge', new CellUnmergeMenuItem(args));

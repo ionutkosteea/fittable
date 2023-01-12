@@ -1,0 +1,36 @@
+.preview {
+  float: left;
+}
+
+.left-navigation {
+  float: left;
+  width: 140px;
+  border: 2px solid rgba(96, 96, 96, 0.1);
+  border-radius: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.control {
+  font-size: 14px;
+  line-height: 26px;
+  color: #606060;
+  background-position: center right;
+  background-repeat: no-repeat;
+}
+
+.control:hover {
+  cursor: pointer;
+  background-color: rgba(96, 96, 96, 0.1);
+}
+
+.fittable {
+  float: left;
+  margin-left: 4px;
+  width: calc(800px - 140px - 8px - 4px - 4px - 8px);
+  height: 470px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}

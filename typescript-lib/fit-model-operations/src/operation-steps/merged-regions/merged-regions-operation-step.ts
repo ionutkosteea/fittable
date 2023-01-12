@@ -3,6 +3,7 @@ import {
   CellRange,
   createCellCoord4Dto,
   createCellRange4Dto,
+  createMergedRegions,
   MergedRegions,
   Table,
   TableMergedRegions,
@@ -19,7 +20,7 @@ export type MergedRegionsOperationStepDto = Id<'merged-regions'> & {
 };
 
 export class MergedRegionsOperationStep implements OperationStep {
-  private mergedRegions: MergedRegions;
+  private mergedRegions?: MergedRegions;
 
   constructor(
     private readonly table: Table & TableMergedRegions,
@@ -36,14 +37,24 @@ export class MergedRegionsOperationStep implements OperationStep {
   private removeRegions(): void {
     for (const cellCoordDto of this.stepDto.remove4CellCoords) {
       const cellCoord: CellCoord = createCellCoord4Dto(cellCoordDto);
-      this.mergedRegions.removeRegion(cellCoord);
+      this.mergedRegions?.removeRegion(cellCoord);
     }
+    !this.mergedRegions?.hasProperties() && this.table.setMergedRegions();
   }
 
   private createRegions(): void {
     for (const cellRangeDto of this.stepDto.create4CellRanges) {
       const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
-      this.mergedRegions.addRegion(cellRange.getFrom(), cellRange.getTo());
+      if (this.mergedRegions) {
+        this.mergedRegions.addRegion(cellRange.getFrom(), cellRange.getTo());
+      } else {
+        this.table.setMergedRegions(
+          createMergedRegions().addRegion(
+            cellRange.getFrom(),
+            cellRange.getTo()
+          )
+        );
+      }
     }
   }
 }

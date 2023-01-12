@@ -3,12 +3,12 @@ import { Value } from 'fit-core/model/index.js';
 export type FitTableDto = {
   numberOfRows: number;
   numberOfColumns: number;
-  rows: FitRowsDto;
-  columns: FitColumnsDto;
-  styles: FitStylesDto;
-  mergedRegions: FitCellRangeDto[];
-  rowHeader: FitRowHeaderDto;
-  columnHeader: FitColumnHeaderDto;
+  rows?: FitRowsDto;
+  columns?: FitColumnsDto;
+  styles?: FitStylesDto;
+  mergedRegions?: FitCellRangeDto[];
+  rowHeader?: FitRowHeaderDto;
+  columnHeader?: FitColumnHeaderDto;
 };
 
 export type FitRowsDto = {
@@ -16,7 +16,7 @@ export type FitRowsDto = {
 };
 
 export type FitRowDto = {
-  cells: FitCellsDto;
+  cells?: FitCellsDto;
   height?: number;
 };
 

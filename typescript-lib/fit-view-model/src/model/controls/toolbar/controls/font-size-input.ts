@@ -64,7 +64,7 @@ export class FontSizeInput implements InputControl {
         selectedCells,
         style,
       };
-      this.args.executor.run(args);
+      this.args.operationExecutor.run(args);
     } else {
       const oldValue: number = this.getStyleFontSize();
       console.warn(
@@ -80,7 +80,7 @@ export class FontSizeInput implements InputControl {
   }
 
   private getStyleFontSize(): number {
-    const table: Table | undefined = this.args.executor.getTable();
+    const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
     const selectedCells: CellRange[] = this.args.getSelectedCells();
     const style: Style | undefined = getFirstCellStyle(table, selectedCells);

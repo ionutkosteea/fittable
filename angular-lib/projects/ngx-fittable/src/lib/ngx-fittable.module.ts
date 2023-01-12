@@ -23,7 +23,6 @@ import { CellEditorOpenDirective } from './controls-view/cell-editor/cell-editor
 import { CellEditorComponent } from './controls-view/cell-editor/cell-editor.component';
 import { SettingsBarComponent } from './controls-view/settings-bar/settings-bar.component';
 import { SettingsButtonComponent } from './controls-view/settings-bar/settings-button/settings-button.component';
-import { NgxFittableComponent } from './ngx-fittable.component';
 
 @NgModule({
   declarations: [
@@ -49,11 +48,10 @@ import { NgxFittableComponent } from './ngx-fittable.component';
     CellEditorComponent,
     SettingsBarComponent,
     SettingsButtonComponent,
-    NgxFittableComponent,
   ],
   imports: [CommonModule],
   providers: [],
   bootstrap: [],
-  exports: [NgxFittableComponent],
+  exports: [TableViewComponent],
 })
 export class NgxFittableModule {}

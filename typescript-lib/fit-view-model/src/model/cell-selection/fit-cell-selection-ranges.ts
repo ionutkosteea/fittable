@@ -125,7 +125,7 @@ export class FitCellSelectionRanges implements CellSelectionRanges {
 
   public getNeighborCells(): NeighborCells {
     return new FitNeighborCells()
-      .setTable(this.tableViewer.table)
+      .setTable(this.tableViewer.getTable())
       .setCell(this.getFirstCell()!);
   }
 

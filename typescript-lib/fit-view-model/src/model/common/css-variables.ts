@@ -1,4 +1,4 @@
-import { CssVariables, getViewModelConfig } from 'fit-core/view-model/index.js';
+import { CssVariables } from 'fit-core/view-model/index.js';
 
 export const cssColorVariables = {
   '--highlight-color': '#2987d6',

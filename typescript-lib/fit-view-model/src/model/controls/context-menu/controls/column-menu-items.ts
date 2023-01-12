@@ -29,7 +29,7 @@ export class ColumnResizeMenuItem extends InputMenuItem {
     const cellRange: CellRange | undefined = this.args.getSelectedCells()[0];
     if (!cellRange) return undefined;
     const colId: number = cellRange.getFrom().getColId();
-    const table: Table | undefined = this.args.executor.getTable();
+    const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
     const cTable: TableColumns | undefined = asTableColumns(table);
     const column: Column | undefined = cTable?.getColumn(colId);
@@ -43,7 +43,7 @@ export class ColumnResizeMenuItem extends InputMenuItem {
 
   public run(): void {
     if (this.isValid()) {
-      this.args.executor.run(this.getArgs());
+      this.args.operationExecutor.run(this.getArgs());
       this.value = undefined;
     } else {
       const oldValue: number | undefined = this.value;
@@ -73,7 +73,7 @@ export class ColumnInsertLeftMenuItem extends InputMenuItem {
 
   public run(): void {
     if (this.isValid()) {
-      this.args.executor.run(this.getArgs());
+      this.args.operationExecutor.run(this.getArgs());
       this.value = 1;
     } else {
       const oldValue: number | undefined = this.value;
@@ -102,7 +102,7 @@ export class ColumnInsertRightMenuItem extends InputMenuItem {
 
   public run(): void {
     if (this.isValid()) {
-      this.args.executor.run(this.getArgs());
+      this.args.operationExecutor.run(this.getArgs());
       this.value = 1;
     } else {
       const oldValue: number | undefined = this.value;
@@ -126,7 +126,7 @@ export class ColumnRemoveMenuItem extends MenuItem {
   protected iconId: FitImageId = 'remove';
 
   public run(): void {
-    this.args.executor.run(this.getArgs());
+    this.args.operationExecutor.run(this.getArgs());
   }
 
   private getArgs(): FitOperationArgs {

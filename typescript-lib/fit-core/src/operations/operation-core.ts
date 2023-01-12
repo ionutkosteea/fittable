@@ -52,44 +52,39 @@ export interface OperationExecutorListener {
   onAfterRedo$?(): Subject<Operation>;
 }
 
-export interface OperationExecutor<
-  Args extends Id<string>,
-  StepId extends string
-> {
+export interface OperationExecutor {
   bindOperationDtoFactory(
-    operationId: Args['id'],
+    operationId: string,
     clazz: OperationDtoFactoryClass
   ): this;
-  unbindOperationDtoFactory(operationId: Args['id']): this;
+  unbindOperationDtoFactory(operationId: string): this;
   bindOperationStepFactory(
-    stepId: StepId,
+    stepId: string,
     clazz: OperationStepFactoryClass
   ): this;
-  unbindOperationStepFactory(stepId: StepId): this;
+  unbindOperationStepFactory(stepId: string): this;
   unbindFactories(): this;
   addListener(listener: OperationExecutorListener): this;
   clearListeners(): this;
   setTable(table: Table): this;
   getTable(): Table | undefined;
-  createOperationDto(args: Args): OperationDto | Promise<OperationDto>;
+  createOperationDto(args: Id<string>): OperationDto | Promise<OperationDto>;
   runOperationDto(operationDto: OperationDto | Promise<OperationDto>): this;
   createOperation(operationDto: OperationDto): Operation;
   runOperation(operation: Operation): this;
-  run(args: Args): this;
+  run(args: Id<string>): this;
   canUndo(): boolean;
   undo(): this;
   canRedo(): boolean;
   redo(): this;
+  reset(): this;
 }
 
 export interface OperationExecutorFactory {
-  createOperationExecutor(): OperationExecutor<Id<string>, string>;
+  createOperationExecutor(): OperationExecutor;
 }
 
-export function createOperationExecutor<
-  Args extends Id<string>,
-  StepId extends string
->(): OperationExecutor<Args, StepId> {
+export function createOperationExecutor(): OperationExecutor {
   const factory: OperationExecutorFactory | undefined =
     getOperationConfig().operationExecutorFactory;
   if (factory) return factory.createOperationExecutor();

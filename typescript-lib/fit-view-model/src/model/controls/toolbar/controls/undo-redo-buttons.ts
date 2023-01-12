@@ -13,11 +13,11 @@ export class UndoButton extends PushButton {
   }
 
   public run(): void {
-    this.args.executor.undo();
+    this.args.operationExecutor.undo();
   }
 
   protected isPushed(): boolean {
-    return this.args.executor.canUndo();
+    return this.args.operationExecutor.canUndo();
   }
 }
 
@@ -31,10 +31,10 @@ export class RedoButton extends PushButton {
   }
 
   public run(): void {
-    this.args.executor.redo();
+    this.args.operationExecutor.redo();
   }
 
   protected isPushed(): boolean {
-    return this.args.executor.canRedo();
+    return this.args.operationExecutor.canRedo();
   }
 }

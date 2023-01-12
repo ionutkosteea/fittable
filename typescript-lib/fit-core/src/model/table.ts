@@ -43,18 +43,18 @@ export interface TableColumns {
 }
 
 export interface TableMergedRegions {
-  getMergedRegions(): MergedRegions;
-  setMergedRegions(regions: MergedRegions): this;
+  getMergedRegions(): MergedRegions | undefined;
+  setMergedRegions(regions?: MergedRegions): this;
 }
 
 export interface TableRowHeader {
-  getRowHeader(): RowHeader;
-  setRowHeader(header: RowHeader): this;
+  getRowHeader(): RowHeader | undefined;
+  setRowHeader(header?: RowHeader): this;
 }
 
 export interface TableColumnHeader {
-  getColumnHeader(): ColumnHeader;
-  setColumnHeader(header: ColumnHeader): this;
+  getColumnHeader(): ColumnHeader | undefined;
+  setColumnHeader(header?: ColumnHeader): this;
 }
 
 export type Table = TableBasics &

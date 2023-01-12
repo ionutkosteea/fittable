@@ -5,9 +5,7 @@ import {
 } from 'fit-core/view-model/index.js';
 import { defaultImages, FitImages, toSvgUrl } from './fit-images.js';
 
-export class FitImageRegistry<ImageId extends string>
-  implements ImageRegistry<ImageId>
-{
+export class FitImageRegistry implements ImageRegistry {
   private images: Images = {};
 
   public setImages(images: Images): this {
@@ -15,12 +13,12 @@ export class FitImageRegistry<ImageId extends string>
     return this;
   }
 
-  public setImage(imgId: ImageId, imgUrl: string): this {
+  public setImage(imgId: FitImageId, imgUrl: string): this {
     this.images[imgId] = imgUrl;
     return this;
   }
 
-  public removeImage(imgId: ImageId): this {
+  public removeImage(imgId: FitImageId): this {
     Reflect.deleteProperty(this.images, imgId);
     return this;
   }
@@ -30,11 +28,11 @@ export class FitImageRegistry<ImageId extends string>
     return this;
   }
 
-  public getImageIds(): ImageId[] {
-    return Reflect.ownKeys(this.images) as ImageId[];
+  public getImageIds(): FitImageId[] {
+    return Reflect.ownKeys(this.images) as FitImageId[];
   }
 
-  public getImageUrl(imgId: ImageId): string | undefined {
+  public getImageUrl(imgId: FitImageId): string | undefined {
     const imgUrl: string | undefined = this.images[imgId];
     !imgUrl && console.error('No image found for ID ' + imgId);
     return imgUrl;
@@ -44,8 +42,7 @@ export class FitImageRegistry<ImageId extends string>
 export type FitImageId = keyof FitImages;
 
 export class FitImageRegistryFactory implements ImageRegistryFactory {
-  public createImageRegistry(): ImageRegistry<FitImageId> {
-    return new FitImageRegistry<FitImageId>() //
-      .setImages(toSvgUrl(defaultImages));
+  public createImageRegistry(): ImageRegistry {
+    return new FitImageRegistry().setImages(toSvgUrl(defaultImages));
   }
 }

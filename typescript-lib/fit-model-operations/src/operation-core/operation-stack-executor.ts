@@ -84,4 +84,10 @@ export class OperationStackExecutor {
     if (operation) return operation;
     else throw new Error('No active operation is defined!');
   }
+
+  public reset(): this {
+    while (this.operationStack.length > 0) this.operationStack.pop();
+    this.activeOperationIndex = -1;
+    return this;
+  }
 }

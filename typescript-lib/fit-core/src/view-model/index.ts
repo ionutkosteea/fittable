@@ -18,3 +18,4 @@ export * from './host-listeners/table-scroller-listener.js';
 export * from './host-listeners/input-control-listener.js';
 export * from './host-listeners/host-listeners.js';
 export * from './view-model-config.js';
+export * from './fittable-viewer.js';

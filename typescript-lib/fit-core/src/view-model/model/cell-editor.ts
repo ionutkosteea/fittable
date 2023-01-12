@@ -1,5 +1,5 @@
 import { CellCoord } from '../../model/cell-coord.js';
-import { OperationExecutor, Id } from '../../operations/operation-core.js';
+import { OperationExecutor } from '../../operations/operation-core.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { NeighborCells } from './common/neighbor-cells.js';
 import { Rectangle } from './common/rectangle.js';
@@ -20,17 +20,17 @@ export interface CellEditor extends FocusableObject {
 
 export interface CellEditorFactory {
   createCellEditor(
-    executor: OperationExecutor<Id<string>, string>,
+    operationExecutor: OperationExecutor,
     tableViewer: TableViewer
   ): CellEditor;
 }
 
 export function createCellEditor(
-  executor: OperationExecutor<Id<string>, string>,
+  operationExecutor: OperationExecutor,
   tableViewer: TableViewer
 ): CellEditor {
   const factory: CellEditorFactory | undefined =
     getViewModelConfig().cellEditorFactory;
-  if (factory) return factory.createCellEditor(executor, tableViewer);
+  if (factory) return factory.createCellEditor(operationExecutor, tableViewer);
   else throw new Error('CellEditorFactory is not defined!');
 }

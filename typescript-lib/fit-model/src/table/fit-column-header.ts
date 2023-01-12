@@ -19,7 +19,7 @@ export class FitColumnHeader implements ColumnHeader {
   }
 
   public getNumberOfRows(): number {
-    return this.dto.numberOfRows;
+    return this.dto.numberOfRows ?? 0;
   }
 
   public setNumberOfRows(numberOfRows: number): this {
@@ -29,6 +29,10 @@ export class FitColumnHeader implements ColumnHeader {
 
   public getCellValue(rowId: number, colId: number): Value {
     return incrementLetter(colId);
+  }
+
+  public hasProperties(): boolean {
+    return this.dto['numberOfRows'] > 0;
   }
 
   public equals(other?: FitColumnHeader): boolean {
@@ -46,10 +50,6 @@ export class FitColumnHeaderFactory implements ColumnHeaderFactory {
   }
 
   public createColumnHeader4Dto(dto: FitColumnHeaderDto): FitColumnHeader {
-    if (implementsTKeys<FitColumnHeaderDto>(dto, ['numberOfRows'])) {
-      return new FitColumnHeader(dto);
-    } else {
-      throw new Error('Invalid column header DTO.');
-    }
+    return new FitColumnHeader(dto);
   }
 }

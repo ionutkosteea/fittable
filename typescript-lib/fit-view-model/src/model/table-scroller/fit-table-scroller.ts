@@ -85,7 +85,7 @@ export class FitTableScroller implements TableScroller {
   private getLastRenderableRow(): number {
     const scrollbar: Scrollbar | undefined = this.verticalScrollbar;
     if (scrollbar) return scrollbar.getLastRenderableLine() + 1;
-    else return this.tableViewer.table.getNumberOfRows();
+    else return this.tableViewer.getTable().getNumberOfRows();
   }
 
   public getTableColIds(): RangeIterator {
@@ -102,7 +102,7 @@ export class FitTableScroller implements TableScroller {
   private getLastRenderableColumn(): number {
     const scrollbar: Scrollbar | undefined = this.horizontalScrollbar;
     if (scrollbar) return scrollbar.getLastRenderableLine() + 1;
-    else return this.tableViewer.table.getNumberOfColumns();
+    else return this.tableViewer.getTable().getNumberOfColumns();
   }
 
   public renderTable(): this {

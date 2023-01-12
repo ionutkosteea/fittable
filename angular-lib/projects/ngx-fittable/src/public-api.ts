@@ -3,5 +3,4 @@
  */
 
 export * from './lib/ngx-fittable.module';
-export * from './lib/ngx-fittable.component';
-export * from './lib/fittable-builder';
+export * from './lib/table-view/table-view.component';
