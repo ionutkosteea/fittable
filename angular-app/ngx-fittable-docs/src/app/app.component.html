@@ -1,10 +1,13 @@
 <div class="main">
-  <div class="top">&nbsp;</div>
+  <div class="top">
+    <div class="logo">#Fittable</div>
+  </div>
   <div class="navigation">
     <navigation-tree [clickedLeaf$]="activeContent$"></navigation-tree>
   </div>
   <div class="content">
     <introduction *ngIf="activeContent==='Introduction'"></introduction>
+    <architecture *ngIf="activeContent==='Architecture'"></architecture>
     <row-header *ngIf="activeContent==='Row header'"></row-header>
     <row-height *ngIf="activeContent==='Row height'"></row-height>
     <column-header *ngIf="activeContent==='Column header'"></column-header>
@@ -13,5 +16,36 @@
     <cell-style *ngIf="activeContent==='Cell style'"></cell-style>
     <cell-merge *ngIf="activeContent==='Cell merge'"></cell-merge>
     <table-dto *ngIf="activeContent==='Table DTO'"></table-dto>
+    <custom-table *ngIf="activeContent==='Custom table'"></custom-table>
+    <update-style *ngIf="activeContent==='Update style'"></update-style>
+    <paint-format *ngIf="activeContent==='Paint format'"></paint-format>
+    <resize-rows *ngIf="activeContent==='Resize rows'"></resize-rows>
+    <insert-rows-above *ngIf="activeContent==='Insert rows above'"></insert-rows-above>
+    <insert-rows-below *ngIf="activeContent==='Insert rows below'"></insert-rows-below>
+    <remove-rows *ngIf="activeContent==='Remove rows'"></remove-rows>
+    <resize-columns *ngIf="activeContent==='Resize columns'"></resize-columns>
+    <insert-columns-left *ngIf="activeContent==='Insert columns left'"></insert-columns-left>
+    <insert-columns-right *ngIf="activeContent==='Insert columns right'"></insert-columns-right>
+    <remove-columns *ngIf="activeContent==='Remove columns'"></remove-columns>
+    <clear-cells *ngIf="activeContent==='Clear cells'"></clear-cells>
+    <cell-values *ngIf="activeContent==='Cell values'"></cell-values>
+    <remove-cells *ngIf="activeContent==='Remove cells'"></remove-cells>
+    <cut-paste-cells *ngIf="activeContent==='Cut / Paste cells'"></cut-paste-cells>
+    <copy-paste-cells *ngIf="activeContent==='Copy / Paste cells'"></copy-paste-cells>
+    <merge-cells *ngIf="activeContent==='Merge cells'"></merge-cells>
+    <unmerge-cells *ngIf="activeContent==='Unmerge cells'"></unmerge-cells>
+    <operation-dto *ngIf="activeContent==='Operation DTO'"></operation-dto>
+    <custom-operation *ngIf="activeContent==='Custom operation'"></custom-operation>
+    <table-scroller *ngIf="activeContent==='Table scroller'"></table-scroller>
+    <cell-selection *ngIf="activeContent==='Cell selection'"></cell-selection>
+    <cell-editor *ngIf="activeContent==='Cell editor'"></cell-editor>
+    <language-dictionary *ngIf="activeContent==='Language dictionary'"></language-dictionary>
+    <image-registry *ngIf="activeContent==='Image registry'"></image-registry>
+    <theme-switcher *ngIf="activeContent==='Theme switcher'"></theme-switcher>
+    <settings-bar *ngIf="activeContent==='Settings bar'"></settings-bar>
+    <toolbar *ngIf="activeContent==='Toolbar'"></toolbar>
+    <context-menu *ngIf="activeContent==='Context menu'"></context-menu>
+    <statusbar *ngIf="activeContent==='Statusbar'"></statusbar>
+    <custom-view-model *ngIf="activeContent==='Custom view model'"></custom-view-model>
   </div>
 </div>

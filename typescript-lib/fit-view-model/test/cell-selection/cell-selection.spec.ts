@@ -22,8 +22,6 @@ import { FIT_VIEW_MODEL_CONFIG } from '../../dist/index.js';
 const table: Table = new FitTable({
   numberOfRows: 2,
   numberOfColumns: 2,
-  rowHeader: { numberOfColumns: 1 },
-  columnHeader: { numberOfRows: 1 },
   styles: {},
   rows: [],
   columns: [],

@@ -2,14 +2,10 @@ import { implementsTKeys } from 'fit-core/common/index.js';
 import {
   TableBasics,
   TableMergedRegions,
-  TableRowHeader,
-  TableColumnHeader,
   TableStyles,
   TableRows,
   TableColumns,
   TableFactory,
-  createColumnHeader4Dto,
-  createRowHeader4Dto,
   createStyle4Dto,
   createRow4Dto,
   createMergedRegions4Dto,
@@ -20,7 +16,6 @@ import {
   FitTableDto,
   FitRowDto,
   FitColumnDto,
-  FitCellDto,
   FitStyleDto,
 } from './dto/fit-table-dto.js';
 import { FitRow } from './fit-row.js';
@@ -28,8 +23,6 @@ import { FitColumn } from './fit-column.js';
 import { FitCell } from './fit-cell.js';
 import { FitMergedRegions } from './fit-merged-regions.js';
 import { FitStyle } from './fit-style.js';
-import { FitColumnHeader } from './fit-column-header.js';
-import { FitRowHeader } from './fit-row-header.js';
 
 export class FitTable
   implements
@@ -37,9 +30,7 @@ export class FitTable
     TableStyles,
     TableRows,
     TableColumns,
-    TableMergedRegions,
-    TableRowHeader,
-    TableColumnHeader
+    TableMergedRegions
 {
   private readonly dto: FitTableDto = {
     numberOfRows: 0,
@@ -52,31 +43,6 @@ export class FitTable
 
   public getDto(): FitTableDto {
     return this.dto;
-  }
-
-  public getColumnHeader(): FitColumnHeader {
-    return createColumnHeader4Dto(this.dto.columnHeader);
-  }
-
-  public setColumnHeader(header: FitColumnHeader): this {
-    this.dto.columnHeader = header.getDto();
-    if (!header?.hasProperties()) {
-      Reflect.deleteProperty(this.dto, 'columnHeader');
-    }
-    return this;
-  }
-
-  public getRowHeader(): FitRowHeader | undefined {
-    return (
-      this.dto.rowHeader &&
-      createRowHeader4Dto<FitRowHeader>(this.dto.rowHeader)
-    );
-  }
-
-  public setRowHeader(header?: FitRowHeader): this {
-    this.dto.rowHeader = header?.getDto();
-    if (!header?.hasProperties()) Reflect.deleteProperty(this.dto, 'rowHeader');
-    return this;
   }
 
   public addStyle(name: string, style: FitStyle): this {

@@ -54,8 +54,8 @@ export function createDto4CellRangeList(rangeList: CellRange[]): unknown[] {
 
 export function asCellRangeUpdater(
   cellRange?: CellRange
-): CellRangeUpdater | undefined {
+): (CellRangeBasics & CellRangeUpdater) | undefined {
   return implementsTKeys<CellRangeUpdater>(cellRange, ['move'])
-    ? (cellRange as CellRangeUpdater)
+    ? (cellRange as CellRangeBasics & CellRangeUpdater)
     : undefined;
 }

@@ -3,7 +3,6 @@ import { implementsTKeys } from '../common/core-functions.js';
 import { Row, Column } from './line.js';
 import { Cell } from './cell.js';
 import { MergedRegions } from './merged-regions.js';
-import { RowHeader, ColumnHeader } from './header.js';
 import { Style } from './style.js';
 import { getModelConfig } from './model-config.js';
 
@@ -47,26 +46,8 @@ export interface TableMergedRegions {
   setMergedRegions(regions?: MergedRegions): this;
 }
 
-export interface TableRowHeader {
-  getRowHeader(): RowHeader | undefined;
-  setRowHeader(header?: RowHeader): this;
-}
-
-export interface TableColumnHeader {
-  getColumnHeader(): ColumnHeader | undefined;
-  setColumnHeader(header?: ColumnHeader): this;
-}
-
 export type Table = TableBasics &
-  (
-    | TableStyles
-    | TableRows
-    | TableColumns
-    | TableMergedRegions
-    | TableRowHeader
-    | TableColumnHeader
-    | {}
-  );
+  (TableStyles | TableRows | TableColumns | TableMergedRegions | {});
 
 export interface TableFactory {
   createTable(numberOfRows: number, numberOfColumns: number): Table;
@@ -87,42 +68,34 @@ export function createTable4Dto<T extends Table>(dto: unknown): T {
   else throw new Error('TableFactory.createTable4Dto is not defined!');
 }
 
-export function asTableStyles(table?: Table): TableStyles | undefined {
+export function asTableStyles(
+  table?: Table
+): (TableBasics & TableStyles) | undefined {
   return implementsTKeys<TableStyles>(table, ['getStyle'])
-    ? (table as TableStyles)
+    ? (table as TableBasics & TableStyles)
     : undefined;
 }
 
-export function asTableRows(table?: Table): TableRows | undefined {
+export function asTableRows(
+  table?: Table
+): (TableBasics & TableRows) | undefined {
   return implementsTKeys<TableRows>(table, ['getRow'])
-    ? (table as TableRows)
+    ? (table as TableBasics & TableRows)
     : undefined;
 }
 
-export function asTableColumns(table?: Table): TableColumns | undefined {
+export function asTableColumns(
+  table?: Table
+): (TableBasics & TableColumns) | undefined {
   return implementsTKeys<TableColumns>(table, ['getColumn'])
-    ? (table as TableColumns)
+    ? (table as TableBasics & TableColumns)
     : undefined;
 }
 
 export function asTableMergedRegions(
   table?: Table
-): TableMergedRegions | undefined {
+): (TableBasics & TableMergedRegions) | undefined {
   return implementsTKeys<TableMergedRegions>(table, ['getMergedRegions'])
-    ? (table as TableMergedRegions)
-    : undefined;
-}
-
-export function asTableRowHeader(table?: Table): TableRowHeader | undefined {
-  return implementsTKeys<TableRowHeader>(table, ['getRowHeader'])
-    ? (table as TableRowHeader)
-    : undefined;
-}
-
-export function asTableColumnHeader(
-  table?: Table
-): TableColumnHeader | undefined {
-  return implementsTKeys<TableColumnHeader>(table, ['getColumnHeader'])
-    ? (table as TableColumnHeader)
+    ? (table as TableBasics & TableMergedRegions)
     : undefined;
 }

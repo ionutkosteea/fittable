@@ -1,4 +1,3 @@
-import { RangeIterator } from '../../common/range-iterator.js';
 import { Value } from '../../model/cell.js';
 import { Style } from '../../model/style.js';
 import { Table } from '../../model/table.js';
@@ -8,14 +7,8 @@ export interface TableViewer {
   setTable(table: Table): this;
   getTable(): Table;
   hasRowHeader(): boolean;
-  getRowHeaderColIds(): RangeIterator;
-  getRowHeaderCellValue(rowId: number, colId: number): Value | undefined;
-  getRowHeaderColumnWidth(colId: number): number;
   getRowHeaderWidth(): number;
   hasColumnHeader(): boolean;
-  getColumnHeaderRowIds(): RangeIterator;
-  getColumnHeaderCellValue(rowId: number, colId: number): Value | undefined;
-  getColumnHeaderRowHeight(rowId: number): number;
   getColumnHeaderHeight(): number;
   getBodyWidth(): number;
   getBodyHeight(): number;

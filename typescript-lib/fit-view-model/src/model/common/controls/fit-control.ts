@@ -1,11 +1,11 @@
 import { Control } from 'fit-core/view-model/index.js';
 
-import { ControlType } from '../view-model-utils.js';
+import { FitControlType } from './fit-control-type.js';
 
 export class FitControl implements Control {
   private labelFn!: () => string;
   private iconFn?: () => string | undefined;
-  private type?: ControlType;
+  private type?: FitControlType;
   private isValidFn?: () => boolean;
   private runFn?: () => void;
 
@@ -27,11 +27,11 @@ export class FitControl implements Control {
     return this;
   }
 
-  public getType(): ControlType | undefined {
+  public getType(): FitControlType | undefined {
     return this.type;
   }
 
-  public setType(type?: ControlType): this {
+  public setType(type?: FitControlType): this {
     this.type = type;
     return this;
   }

@@ -11,7 +11,7 @@ import {
   getViewModelConfig,
 } from 'fit-core/view-model/index.js';
 
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
 import { FitOperationArgs } from '../../../operation-executor/operation-args.js';
 import { InputMenuItem, MenuItem } from './menu-item.js';

@@ -5,11 +5,9 @@ import {
   createCellCoord,
   createCellRange,
   createColumn,
-  createColumnHeader,
   createLineRange,
   createMergedRegions,
   createRow,
-  createRowHeader,
   createStyle,
   createTable,
   createTable4Dto,
@@ -29,8 +27,6 @@ import {
   FitStyle,
   FIT_MODEL_CONFIG,
   FitRow,
-  FitRowHeader,
-  FitColumnHeader,
   FitRowsDto,
   FitColumnsDto,
   FitCellRangeDto,
@@ -73,8 +69,6 @@ describe('Test FitTable', () => {
     expect(table.getNumberOfRows() === 10).toBeTruthy();
     expect(table.getNumberOfColumns() === 5).toBeTruthy();
     expect(table.getStyle('s0')?.get('color') === 'blue').toBeTruthy();
-    expect(table.getRowHeader()?.getNumberOfColumns() === 1).toBeTruthy();
-    expect(table.getColumnHeader().getNumberOfRows() === 1).toBeTruthy();
     expect(table.getColumn(0)?.getWidth() === 300).toBeTruthy();
     expect(table.getColumn(0)?.hasProperties()).toBeTruthy();
     expect(table.getRow(0)?.getHeight() === 40).toBeTruthy();
@@ -96,8 +90,6 @@ describe('Test FitTable', () => {
   it('Create table via API.', () => {
     const table: FitTable = createTable<FitTable>(10, 5)
       .addStyle('s0', createStyle<FitStyle>().set('color', 'blue'))
-      .setColumnHeader(createColumnHeader<FitColumnHeader>(1))
-      .setRowHeader(createRowHeader<FitRowHeader>(1))
       .addRow(0, createRow<FitRow>().setHeight(42).clone())
       .addColumn(0, createColumn<FitColumn>().setWidth(50).clone())
       .addCell(
@@ -118,8 +110,6 @@ describe('Test FitTable', () => {
     expect(table.getDto().numberOfColumns === 5).toBeTruthy();
     const styles: FitStylesDto | undefined = table.getDto().styles;
     expect(styles && styles['s0']?.color === 'blue').toBeTruthy();
-    expect(table.getDto().columnHeader?.numberOfRows === 1).toBeTruthy();
-    expect(table.getDto().rowHeader?.numberOfColumns === 1).toBeTruthy();
     const rows: FitRowsDto | undefined = table.getDto().rows;
     expect(rows && rows[0]?.height === 42).toBeTruthy();
     const columns: FitColumnsDto | undefined = table.getDto().columns;

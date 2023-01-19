@@ -31,10 +31,10 @@ export interface ViewModelConfig {
   fontSize: number;
   colorPalette?: Option[];
   fontFamily?: Option[];
-  showRowHeader?: boolean;
-  showColumnHeader?: boolean;
-  rowHeaderColumnWidth?: number;
-  columnHeaderRowHeight?: number;
+  getRowHeaderText?: (rowId: number) => string | number;
+  getColumnHeaderText?: (colId: number) => string | number;
+  rowHeaderWidth?: number;
+  columnHeaderHeight?: number;
   disableVirtualRows?: boolean;
   disableVirtualColumns?: boolean;
   viewModelFactory: ViewModelFactory;

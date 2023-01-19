@@ -11,6 +11,7 @@ export interface Theme {
 export interface ThemeSwitcher {
   registerTheme(name: string, theme: Theme): this;
   getThemeNames(): string[];
+  getTheme(name: string): Theme | undefined;
   switch(name: string): this;
   getCurrentThemeName(): string | undefined;
 }

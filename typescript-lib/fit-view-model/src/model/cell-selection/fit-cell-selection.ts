@@ -1,19 +1,11 @@
 import { Subscription } from 'rxjs';
 
-import {
-  Table,
-  createCellCoord,
-  asTableColumnHeader,
-  asTableRowHeader,
-  CellRangeList,
-  CellRange,
-  CellCoord,
-} from 'fit-core/model/index.js';
+import { Table, createCellCoord, CellCoord } from 'fit-core/model/index.js';
 import {
   CellSelection,
   CellSelectionFactory,
   TableViewer,
-  CellSelectionRanges,
+  getViewModelConfig,
 } from 'fit-core/view-model/index.js';
 
 import {
@@ -44,43 +36,30 @@ export class FitCellSelection implements CellSelection {
   protected handleBody(): void {
     this.subscriptions.push(
       this.body.onAfterAddCell$().subscribe((): void => {
-        this.rowHeader.setDisableAfterAddCell(true);
-        this.columnHeader.setDisableAfterAddCell(true);
         this.selectHeadersByBody();
-        this.rowHeader.setDisableAfterAddCell(false);
-        this.columnHeader.setDisableAfterAddCell(false);
       })
     );
   }
 
   private selectHeadersByBody(): void {
-    const table: Table = this.tableViewer.getTable();
-    let numberOfRows: number =
-      asTableColumnHeader(table)?.getColumnHeader()?.getNumberOfRows() ?? 0;
-    if (numberOfRows > 0) numberOfRows--;
-    let numberOfColumns: number =
-      asTableRowHeader(table)?.getRowHeader()?.getNumberOfColumns() ?? 0;
-    if (numberOfColumns > 0) numberOfColumns--;
-    this.selectHeaderByBody(this.rowHeader, undefined, numberOfColumns);
-    this.selectHeaderByBody(this.columnHeader, numberOfRows, undefined);
-  }
-
-  private selectHeaderByBody(
-    headerRanges: CellSelectionRanges,
-    numberOfRows?: number,
-    numberOfColumns?: number
-  ): void {
-    const cellRangeList: CellRangeList = new CellRangeList();
-    for (const cellRange of this.body.getRanges()) {
-      cellRange.forEachCell((rowId: number, colId: number): void => {
-        cellRangeList.addCell(numberOfRows ?? rowId, numberOfColumns ?? colId);
-      });
+    if (getViewModelConfig().rowHeaderWidth) {
+      this.rowHeader.removeRanges();
+      for (const cellRange of this.body.getRanges()) {
+        this.rowHeader.addRange(
+          createCellCoord(cellRange.getFrom().getRowId(), 0),
+          createCellCoord(cellRange.getTo().getRowId(), 0)
+        );
+      }
     }
-
-    headerRanges.removeRanges();
-    cellRangeList.getRanges().forEach((cellRange: CellRange): void => {
-      headerRanges.addRange(cellRange.getFrom(), cellRange.getTo());
-    });
+    if (getViewModelConfig().columnHeaderHeight) {
+      this.columnHeader.removeRanges();
+      for (const cellRange of this.body.getRanges()) {
+        this.columnHeader.addRange(
+          createCellCoord(0, cellRange.getFrom().getColId()),
+          createCellCoord(0, cellRange.getTo().getColId())
+        );
+      }
+    }
   }
 
   protected handleRowHeader(): void {
@@ -123,8 +102,7 @@ export class FitCellSelection implements CellSelection {
   private selectColumnHeaderByBody(): void {
     this.columnHeader.setDisableAfterAddCell(true);
     const table: Table = this.tableViewer.getTable();
-    const numberOfRows: number =
-      asTableColumnHeader(table)?.getColumnHeader()?.getNumberOfRows() ?? 0;
+    const numberOfRows: number = getViewModelConfig().rowHeaderWidth ? 1 : 0;
     const numberOfColumns: number = table.getNumberOfColumns() - 1;
     this.columnHeader
       .removeRanges()
@@ -176,8 +154,9 @@ export class FitCellSelection implements CellSelection {
     this.rowHeader.setDisableAfterAddCell(true);
     const table: Table = this.tableViewer.getTable();
     const numberOfRows: number = table.getNumberOfRows() - 1;
-    const numberOfColumns: number | undefined =
-      asTableRowHeader(table)?.getRowHeader()?.getNumberOfColumns() ?? 0;
+    const numberOfColumns: number = getViewModelConfig().columnHeaderHeight
+      ? 1
+      : 0;
     this.rowHeader
       .removeRanges()
       .createRange()

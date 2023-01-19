@@ -11,7 +11,7 @@ import {
   getViewModelConfig,
   ViewModel,
   HostListeners,
-  FittableViewer,
+  FittableDesigner,
 } from 'fit-core/view-model';
 
 @Component({
@@ -20,74 +20,74 @@ import {
   styleUrls: ['./table-view.component.css'],
 })
 export class TableViewComponent implements OnDestroy {
-  @Input() viewer!: FittableViewer;
+  @Input() designer!: FittableDesigner;
 
-  public readonly getViewModel = (): ViewModel => this.viewer.viewModel;
+  public readonly getViewModel = (): ViewModel => this.designer.viewModel;
 
   public readonly getHostListeners = (): HostListeners =>
-    this.viewer.hostListeners;
+    this.designer.hostListeners;
 
   public hasToolbar(): boolean {
-    return this.viewer.viewModel.toolbar !== undefined;
+    return this.designer.viewModel.toolbar !== undefined;
   }
 
   public readonly getToolbar = (): Container =>
-    this.viewer.viewModel.toolbar as Container;
+    this.designer.viewModel.toolbar as Container;
 
   public readonly getInputControlListener = ():
     | InputControlListener
-    | undefined => this.viewer.hostListeners.inputControlListener;
+    | undefined => this.designer.hostListeners.inputControlListener;
 
   public readonly getTableScrollerListener = (): TableScrollerListener =>
-    this.viewer.hostListeners.tableScrollerListener;
+    this.designer.hostListeners.tableScrollerListener;
 
   public getTableWidth(): number {
-    const tableViewer: TableViewer = this.viewer.viewModel.tableViewer;
+    const tableViewer: TableViewer = this.designer.viewModel.tableViewer;
     return tableViewer.getRowHeaderWidth() + tableViewer.getBodyWidth();
   }
 
   public getTableHeight(): number {
-    const tableViewer: TableViewer = this.viewer.viewModel.tableViewer;
+    const tableViewer: TableViewer = this.designer.viewModel.tableViewer;
     return tableViewer.getColumnHeaderHeight() + tableViewer.getBodyHeight();
   }
 
   public hasContextMenu(): boolean {
     return (
-      this.viewer.viewModel.contextMenu !== undefined &&
-      this.viewer.hostListeners.windowListener !== undefined
+      this.designer.viewModel.contextMenu !== undefined &&
+      this.designer.hostListeners.windowListener !== undefined
     );
   }
 
   public readonly getContextMenu = (): Window =>
-    this.viewer.viewModel.contextMenu as Window;
+    this.designer.viewModel.contextMenu as Window;
 
   public readonly getWindowListener = (): WindowListener =>
-    this.viewer.hostListeners.windowListener as WindowListener;
+    this.designer.hostListeners.windowListener as WindowListener;
 
   public hasStatusbar(): boolean {
-    return this.viewer.viewModel.statusbar !== undefined;
+    return this.designer.viewModel.statusbar !== undefined;
   }
 
   public readonly getStatusbar = (): Statusbar =>
-    this.viewer.viewModel.statusbar as Statusbar;
+    this.designer.viewModel.statusbar as Statusbar;
 
   public hasSettingsBar(): boolean {
     return (
-      this.viewer.viewModel.settingsBar !== undefined &&
-      this.viewer.hostListeners.windowListener !== undefined
+      this.designer.viewModel.settingsBar !== undefined &&
+      this.designer.hostListeners.windowListener !== undefined
     );
   }
 
   public readonly getSettingsBar = (): Container =>
-    this.viewer.viewModel.settingsBar as Container;
+    this.designer.viewModel.settingsBar as Container;
 
   public readonly showRowHeader = (): boolean =>
-    getViewModelConfig().showRowHeader ?? false;
+    getViewModelConfig().rowHeaderWidth ? true : false;
 
   public readonly showColumnHeader = (): boolean =>
-    getViewModelConfig().showColumnHeader ?? false;
+    getViewModelConfig().columnHeaderHeight ? true : false;
 
   public ngOnDestroy(): void {
-    this.viewer.viewModel.destroy();
+    this.designer.viewModel.destroy();
   }
 }

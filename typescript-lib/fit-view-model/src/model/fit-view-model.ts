@@ -33,8 +33,8 @@ import {
 } from 'fit-core/view-model/index.js';
 
 import {
-  cssColorVariables,
-  cssUnitVariables,
+  FIT_CSS_COLOR_VARIABLES,
+  FIT_CSS_UNIT_VARIABLES,
   setCssVariable,
   setCssVariables,
 } from './common/css-variables.js';
@@ -165,7 +165,7 @@ export class FitViewModel implements ViewModel {
         });
     } catch {}
     if (toolbar) {
-      const defaultHeight: string = cssUnitVariables['--toolbar-height'];
+      const defaultHeight: string = FIT_CSS_UNIT_VARIABLES['--toolbar-height'];
       setCssVariable('--toolbar-height', defaultHeight);
     } else {
       setCssVariable('--toolbar-height', '0px');
@@ -184,7 +184,8 @@ export class FitViewModel implements ViewModel {
       });
     } catch {}
     if (statusbar) {
-      const defaultHeight: string = cssUnitVariables['--statusbar-height'];
+      const defaultHeight: string =
+        FIT_CSS_UNIT_VARIABLES['--statusbar-height'];
       setCssVariable('--statusbar-height', defaultHeight);
     } else {
       setCssVariable('--statusbar-height', '0px');
@@ -196,7 +197,7 @@ export class FitViewModel implements ViewModel {
     try {
       return createThemeSwitcher(this.imageRegistry);
     } catch {
-      setCssVariables(cssColorVariables);
+      setCssVariables(FIT_CSS_COLOR_VARIABLES);
       return undefined;
     }
   }

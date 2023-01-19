@@ -94,7 +94,10 @@ export class MenuItemComponent implements OnInit, OnDestroy {
     this.inputControl?.setValue(Number(this.inputRef.nativeElement.value));
 
   public onInputKeyDown(event: KeyboardEvent): void {
-    this.inputControlListener?.onKeyDown(event);
+    if (!this.inputControl) return;
+    this.inputControlListener
+      ?.setInputControl(this.inputControl)
+      .onKeyDown(event);
     setTimeout(() => event.key === 'Enter' && this.hideMenu(), 50);
   }
 

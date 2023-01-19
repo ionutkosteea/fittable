@@ -1,6 +1,7 @@
 import { Images } from 'fit-core/view-model/index.js';
+import { FitImages } from './fit-image-ids.js';
 
-export const defaultImages = {
+export const FIT_IMAGES: FitImages = {
   alignBottom:
     "%3Csvg width='17' height='16' viewBox='0 0 17 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.3698 14.2326H0.188372C0.0837211 14.2326 0 14.3163 0 14.4186V15.814C0 15.9163 0.0837211 16 0.188372 16H16.3698C16.4744 16 16.5581 15.9163 16.5581 15.814V14.4186C16.5581 14.3163 16.4744 14.2326 16.3698 14.2326ZM8.13256 11.6512C8.14996 11.6734 8.1722 11.6914 8.19758 11.7038C8.22297 11.7161 8.25083 11.7225 8.27907 11.7225C8.30731 11.7225 8.33517 11.7161 8.36056 11.7038C8.38594 11.6914 8.40818 11.6734 8.42558 11.6512L11.0302 8.35581C11.1256 8.23488 11.0395 8.05581 10.8837 8.05581H9.16047V0.186047C9.16047 0.0837209 9.07675 0 8.97442 0H7.57907C7.47674 0 7.39302 0.0837209 7.39302 0.186047V8.05349H5.67442C5.5186 8.05349 5.43256 8.23256 5.52791 8.35349L8.13256 11.6512Z' fill='%23606060'/%3E%3C/svg%3E",
   alignCenter:
@@ -99,8 +100,6 @@ export const defaultImages = {
   check:
     "%3Csvg width='16' height='14' viewBox='0 0 16 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.25159 13.1417L0 7.89006L2.39323 5.49683L5.25159 8.36364L13.6068 0L16 2.39323L5.25159 13.1417Z' fill='%23B7B7B7'/%3E%3C/svg%3E%0A",
 };
-
-export type FitImages = typeof defaultImages;
 
 export function toSvgUrl(images: Images): Images {
   const urlImages: Images = {};

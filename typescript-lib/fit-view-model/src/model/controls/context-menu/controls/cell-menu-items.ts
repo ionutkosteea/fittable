@@ -1,4 +1,4 @@
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
 import { FitOperationArgs } from '../../../operation-executor/operation-args.js';
 import { MenuItem } from './menu-item.js';

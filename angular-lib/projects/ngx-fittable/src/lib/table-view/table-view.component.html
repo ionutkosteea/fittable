@@ -14,8 +14,8 @@
     </div>
   </div>
   <fit-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()"></fit-statusbar>
-  <fit-settings-menu *ngIf="hasSettingsBar()" [model]="getSettingsBar()"
-    [windowListener]="getWindowListener()"></fit-settings-menu>
+  <fit-settings-bar *ngIf="hasSettingsBar()" [model]="getSettingsBar()"
+    [windowListener]="getWindowListener()"></fit-settings-bar>
   <fit-context-menu *ngIf="hasContextMenu()" [window]="getContextMenu()" [windowListener]="getWindowListener()"
     [inputControlListener]="getInputControlListener()">
   </fit-context-menu>

@@ -1,6 +1,40 @@
 import { CssVariables } from 'fit-core/view-model/index.js';
 
-export const cssColorVariables = {
+export type FitCssColorVariable =
+  | '--highlight-color'
+  | '--disabled-color'
+  | '--toolbar-background-color'
+  | '--toolbar-background-hover-color'
+  | '--toolbar-color'
+  | '--toolbar-border-color'
+  | '--toolbar-box-shadow-color'
+  | '--scrollbar-background-color'
+  | '--scrollbar-color'
+  | '--scrollbar-border-color'
+  | '--table-header-background-color'
+  | '--table-header-background-hover-color'
+  | '--table-header-color'
+  | '--table-header-border-color'
+  | '--table-body-background-color'
+  | '--table-body-color'
+  | '--table-body-border-color'
+  | '--cell-editor-background-color'
+  | '--cell-editor-color'
+  | '--cell-editor-box-shadow-color'
+  | '--cell-selection-background-color'
+  | '--cell-selection-border-color'
+  | '--context-menu-background-color'
+  | '--context-menu-background-hover-color'
+  | '--context-menu-color'
+  | '--context-menu-border-color'
+  | '--context-menu-box-shadow-color'
+  | '--statusbar-background-color'
+  | '--statusbar-color'
+  | '--statusbar-border-color';
+
+export type FitCssColorVariables = { [name in FitCssColorVariable]: string };
+
+export const FIT_CSS_COLOR_VARIABLES: FitCssColorVariables = {
   '--highlight-color': '#2987d6',
   '--disabled-color': '#b7b7b7',
   '--toolbar-background-color': '#ffffff',
@@ -33,18 +67,21 @@ export const cssColorVariables = {
   '--statusbar-border-color': '#b7b7b7',
 };
 
-export type CssColorVariables = typeof cssColorVariables;
+export type FitCssUnitVariable =
+  | '--toolbar-height'
+  | '--statusbar-height'
+  | '--font-size';
 
-export const cssUnitVariables = {
+export type FitCssUnitVariables = { [name in FitCssUnitVariable]: string };
+
+export const FIT_CSS_UNIT_VARIABLES: FitCssUnitVariables = {
   '--toolbar-height': '36px',
   '--statusbar-height': '20px',
   '--font-size': '0px',
 };
 
-export type CssUnitVariables = typeof cssUnitVariables;
-
 export function setCssVariable(
-  name: keyof CssColorVariables | keyof CssUnitVariables,
+  name: keyof FitCssColorVariables | keyof FitCssUnitVariables,
   value: string
 ): void {
   document.body.style.setProperty(name, value);

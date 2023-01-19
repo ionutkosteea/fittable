@@ -13,7 +13,7 @@ export interface MergedRegions {
   getRowSpan(rowId: number, colId: number): number;
   getColSpan(rowId: number, colId: number): number;
   addRegion(from: CellCoord, to: CellCoord): this;
-  removeRegion(from: CellCoord): this;
+  removeRegion(rowId: number, colId: number): this;
   forEachRegion(regionFn: (region: MergedRegion) => void): void;
   hasProperties(): boolean;
   clone(): MergedRegions;

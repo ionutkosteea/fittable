@@ -1,4 +1,4 @@
-import { FitImages } from '../../image-registry/fit-images.js';
+import { FitImages } from '../../image-registry/fit-image-ids.js';
 
 export const images: FitImages = {
   alignBottom:

@@ -1,0 +1,28 @@
+<div class="topic">
+  <h1 class="title">{{title}}</h1>
+  <p class="description">
+    Fittable is an Angular / Typescript component, designed to handle custom table structures, with spreadsheet
+    capabilities. It comes equiped with a dynamic table model representation, an operation execution mechanism and
+    corresponding UI functionalities, all of which are highly adaptable.
+  </p>
+  <p class="description">
+    Fittable's main module was developd in Angular, representing strictly the view of the application, while the view
+    model and all other modules were written in Typescript, without any dependency to a GUI framework, making it
+    possible to be utilized on the server side as well if required.
+  </p>
+  <p class="description">
+    The main functionalities of Fittable can be approached below.
+  </p>
+  <div class="preview">
+    <div class="left-navigation">
+      <div *ngFor="let item of navigation" class="control"
+        [ngStyle]="{backgroundImage:item.isChecked()?'url(../../../assets/icons/outline-check-circle.svg)':undefined}"
+        (click)="item.run()">
+        {{item.label}}
+      </div>
+    </div>
+    <div class="fittable">
+      <ng-template #content></ng-template>
+    </div>
+  </div>
+</div>

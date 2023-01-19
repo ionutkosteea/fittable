@@ -4,7 +4,6 @@ export * from './table.js';
 export * from './style.js';
 export * from './line.js';
 export * from './line-range.js';
-export * from './header.js';
 export * from './cell.js';
 export * from './merged-regions.js';
 export * from './model-config.js';

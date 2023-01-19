@@ -2,7 +2,7 @@ import { Style, CellRange, createStyle, Table } from 'fit-core/model/index.js';
 import { ControlArgs } from 'fit-core/view-model/index.js';
 
 import { FitOperationArgs } from '../../../../operation-executor/operation-args.js';
-import { getFirstCellStyle } from '../../../../common/view-model-utils.js';
+import { getFirstCellStyle } from '../../../../common/style-functions.js';
 import { PushButton } from './push-button.js';
 
 export abstract class StylePushButton extends PushButton {

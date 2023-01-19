@@ -5,17 +5,17 @@ import {
 } from 'fit-core/view-model/index.js';
 
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
-import { ControlType } from '../../../common/view-model-utils.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
 import { StyleCombo } from './common/style-combo.js';
 import { FitValueControl } from '../../../common/controls/fit-value-control.js';
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
 
 export class FontFamilyCombo extends StyleCombo {
   protected readonly labelKey: FitTextKey = 'Font family';
   protected readonly imageId: FitImageId = 'arrowDown';
   protected readonly styleAttName = 'font-family';
 
-  public getType(): ControlType | undefined {
+  public getType(): FitControlType {
     return 'combo';
   }
 

@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { CssStyle, Style, createStyle, Value } from 'fit-core/model';
+import { CssStyle, Style, Value } from 'fit-core/model';
 import {
   CellEditor,
   CellEditorListener,
@@ -92,34 +92,33 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   public getStyle(): CssStyle {
     const cellEditor: CellEditor = this.cellEditorListener.getCellEditor();
     const display: string = cellEditor.isVisible() ? 'block' : 'none';
-    const hasPointer: string = cellEditor.hasPointerEvents() ? 'auto' : 'none';
-    let style: Style = createStyle()
-      .set('display', display)
-      .set('pointerEvents', hasPointer);
-    style = style.append(this.createCellRectangleStyle());
-    return style.toCss();
-  }
-
-  private createCellRectangleStyle(): Style {
-    const style: Style = createStyle();
-    const cellEditor: CellEditor = this.cellEditorListener.getCellEditor();
+    const pointerEvents: string = cellEditor.hasPointerEvents()
+      ? 'auto'
+      : 'none';
+    const style: CssStyle = { display, pointerEvents };
     const rect: Rectangle | undefined = cellEditor.getCellRectangle();
-    rect &&
-      style
-        .set('left.px', rect.left)
-        .set('top.px', rect.top)
-        .set('width.px', rect.width)
-        .set('height.px', rect.height);
+    if (rect) {
+      style['left.px'] = rect.left;
+      style['top.px'] = rect.top;
+      style['width.px'] = rect.width;
+      style['height.px'] = rect.height;
+    }
     return style;
   }
 
   public getTextAreaStyle(): CssStyle {
-    const hasTextCursor: string = this.getInputControl().hasTextCursor()
+    const caretColor: string = this.getInputControl().hasTextCursor()
       ? 'auto'
       : 'transparent';
-    let style: Style = createStyle().set('caretColor', hasTextCursor);
-    if (this.cellStyle) style = style.append(this.cellStyle);
-    return style.toCss();
+    const style: CssStyle = { caretColor };
+    if (this.cellStyle)
+      this.cellStyle.forEach(
+        (name: string, value?: string | number): boolean => {
+          style[name] = value;
+          return true;
+        }
+      );
+    return style;
   }
 
   public getTextAreaValue(): string {

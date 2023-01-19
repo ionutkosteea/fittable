@@ -5,6 +5,7 @@ import {
   createDto4CellRangeList,
   CellRangeList,
   CellRange,
+  createStyle4Dto,
 } from 'fit-core/model/index.js';
 import {
   OperationDto,
@@ -73,7 +74,7 @@ export class StyleUpdateOperationDtoBuilder {
 
   private runStyleAction(
     createFn: (oldStyleName?: string) => void,
-    updateFn: (oldStyleName: string) => void
+    updateFn: (oldStyleName: string, isOldStyleOnSingleCell: boolean) => void
   ): void {
     const allCellsCnt: Map<string, number> = countAllCellStyleNames(this.table);
     const selectedCellsCnt: Map<string, number> = countSelectedCellStyleNames(
@@ -86,7 +87,7 @@ export class StyleUpdateOperationDtoBuilder {
         const numOfSelectedCells: number =
           selectedCellsCnt.get(oldStyleName) ?? 0;
         if (numOfAllCells > numOfSelectedCells) createFn(oldStyleName);
-        else updateFn(oldStyleName);
+        else updateFn(oldStyleName, numOfAllCells === 1);
       } else {
         createFn();
       }
@@ -105,23 +106,6 @@ export class StyleUpdateOperationDtoBuilder {
       this.attachNewStyle(oldStyleName);
     }
   };
-
-  private attachExistingStyle(
-    existingStyleName: string,
-    oldStyleName?: string
-  ): void {
-    const updatableCellRanges: unknown[] = createDto4CellRangeList(
-      this.updatableCellStyles.get(oldStyleName)?.getRanges() ?? []
-    );
-    this.styleStepDto.cellStyleNames.push({
-      updatableCellRanges,
-      styleName: existingStyleName,
-    });
-    this.undoStyleStepDto.cellStyleNames.push({
-      updatableCellRanges,
-      styleName: oldStyleName,
-    });
-  }
 
   private attachNewStyle(oldStyleName?: string): void {
     const updatableCellRanges: unknown[] = createDto4CellRangeList(
@@ -169,6 +153,10 @@ export class StyleUpdateOperationDtoBuilder {
   }
 
   private findName4Style(style: Style): string | undefined {
+    for (const styleEntryDto of this.styleStepDto.createStyles) {
+      const newStyle: Style = createStyle4Dto(styleEntryDto.style);
+      if (style.equals(newStyle)) return styleEntryDto.styleName;
+    }
     const styleNames: string[] = this.table.getStyleNames();
     for (const styleName of styleNames) {
       const oldStyle: Style | undefined = this.table.getStyle(styleName);
@@ -178,7 +166,8 @@ export class StyleUpdateOperationDtoBuilder {
   }
 
   private readonly updateStyleOrAttachExistingOne = (
-    oldStyleName: string
+    oldStyleName: string,
+    isOldStyleOnSingleCell: boolean
   ): void => {
     const oldStyle: Style | undefined = this.table.getStyle(oldStyleName);
     if (!oldStyle) return;
@@ -191,6 +180,8 @@ export class StyleUpdateOperationDtoBuilder {
         this.findName4Style(newStyle);
       if (existingStyleName) {
         this.attachExistingStyle(existingStyleName, oldStyleName);
+        isOldStyleOnSingleCell &&
+          this.removeStyleWithoutStyleNames(oldStyleName, oldStyle);
       } else {
         this.updateStyle(oldStyleName, oldStyle, newStyle);
       }
@@ -201,11 +192,28 @@ export class StyleUpdateOperationDtoBuilder {
 
   private updateStyleProperties(style: Style, newProperties: Style): Style {
     const newStyle: Style = style.clone();
-    newProperties.forEach((name: string, value?: string | number) => {
+    newProperties.forEach((name: string, value?: string | number): boolean => {
       newStyle.set(name, value);
       return true;
     });
     return newStyle;
+  }
+
+  private attachExistingStyle(
+    existingStyleName: string,
+    oldStyleName?: string
+  ): void {
+    const updatableCellRanges: unknown[] = createDto4CellRangeList(
+      this.updatableCellStyles.get(oldStyleName)?.getRanges() ?? []
+    );
+    this.styleStepDto.cellStyleNames.push({
+      updatableCellRanges,
+      styleName: existingStyleName,
+    });
+    this.undoStyleStepDto.cellStyleNames.push({
+      updatableCellRanges,
+      styleName: oldStyleName,
+    });
   }
 
   private updateStyle(
@@ -244,6 +252,17 @@ export class StyleUpdateOperationDtoBuilder {
       updatableCellRanges,
       styleName: oldStyleName,
     });
+    this.undoStyleStepDto.createStyles.push({
+      styleName: oldStyleName,
+      style: oldStyle.getDto(),
+    });
+  }
+
+  private removeStyleWithoutStyleNames(
+    oldStyleName: string,
+    oldStyle: Style
+  ): void {
+    this.styleStepDto.removeStyles.push(oldStyleName);
     this.undoStyleStepDto.createStyles.push({
       styleName: oldStyleName,
       style: oldStyle.getDto(),

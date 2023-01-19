@@ -1,8 +1,8 @@
 import { Control, ControlArgs } from 'fit-core/view-model/index.js';
 
-import { FitImageId } from '../../../../image-registry/fit-image-registry.js';
 import { FitTextKey } from '../../../../language-dictionary/language-dictionary-keys.js';
-import { ControlType } from '../../../../common/view-model-utils.js';
+import { FitImageId } from '../../../../image-registry/fit-image-ids.js';
+import { FitControlType } from '../../../../common/controls/fit-control-type.js';
 
 export abstract class PushButton implements Control {
   protected abstract labelKey: FitTextKey;
@@ -11,7 +11,7 @@ export abstract class PushButton implements Control {
 
   public constructor(protected readonly args: ControlArgs) {}
 
-  public abstract getType(): ControlType | undefined;
+  public abstract getType(): FitControlType | undefined;
   public abstract run(): void;
   protected abstract isPushed(): boolean;
 

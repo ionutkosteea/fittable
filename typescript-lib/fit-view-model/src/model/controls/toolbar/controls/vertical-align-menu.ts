@@ -1,17 +1,17 @@
 import { Window, Control } from 'fit-core/view-model/index.js';
 
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
-import { ControlType } from '../../../common/view-model-utils.js';
-import { StyleCombo } from './common/style-combo.js';
 import { FitValueControl } from '../../../common/controls/fit-value-control.js';
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
+import { StyleCombo } from './common/style-combo.js';
 
 export class VerticalAlignMenu extends StyleCombo {
   protected readonly labelKey: FitTextKey = 'Vertical align';
   protected readonly imageId: FitImageId = 'alignTop';
   protected readonly styleAttName = 'place-items';
 
-  public getType(): ControlType | undefined {
+  public getType(): FitControlType | undefined {
     return 'pop-up-button';
   }
 

@@ -8,15 +8,26 @@ import { FitControl } from '../../common/controls/fit-control.js';
 import { FitOptionsControl } from '../../common/controls/fit-options-control.js';
 import { FitValueControl } from '../../common/controls/fit-value-control.js';
 import { FitWindow } from '../../common/controls/fit-window.js';
-import { FitImageId } from '../../image-registry/fit-image-registry.js';
-import { FitTextKey } from '../../language-dictionary/language-dictionary-keys.js';
+import { FitImageId } from '../../image-registry/fit-image-ids.js';
+import {
+  FitLanguageCode,
+  FitTextKey,
+} from '../../language-dictionary/language-dictionary-keys.js';
+import { FitThemeName } from '../../theme-switcher/fit-theme-switcher.js';
+
+export type FitSettingsBarControlId =
+  | 'settings-button'
+  | 'language-label'
+  | 'theme-label'
+  | FitLanguageCode
+  | FitThemeName;
 
 export class FitSettingsBarBuilder {
   constructor(private readonly args: SettingsBarArgs) {}
 
-  public build(): FitContainer<string> {
-    return new FitContainer() //
-      .addControl('settings', this.createButton());
+  public build(): FitContainer<FitSettingsBarControlId> {
+    return new FitContainer<FitSettingsBarControlId>() //
+      .addControl('settings-button', this.createButton());
   }
 
   private createButton(): FitOptionsControl {
@@ -28,17 +39,17 @@ export class FitSettingsBarBuilder {
   }
 
   private createWindow(): FitWindow<string> {
-    const window: FitWindow<string> = new FitWindow();
+    const window: FitWindow<FitSettingsBarControlId> = new FitWindow();
     this.addLanguages(window);
     this.addThemes(window);
     return window;
   }
 
-  private addLanguages(window: FitWindow<string>): void {
+  private addLanguages(window: FitWindow<FitSettingsBarControlId>): void {
     const languages: FitControl = new FitControl()
       .setType('label')
       .setLabel((): string => this.getText('Languages'));
-    window.addControl('language-selector', languages);
+    window.addControl('language-label', languages);
     for (const lang of this.args.dictionary.getRegisteredLanguages()) {
       const language: FitValueControl = new FitValueControl()
         .setLabel((): string => this.getText(lang as FitTextKey))
@@ -51,16 +62,16 @@ export class FitSettingsBarBuilder {
           ? this.getImageUrl('check')
           : undefined;
       });
-      window.addControl(lang, language);
+      window.addControl(lang as FitLanguageCode, language);
     }
   }
 
-  private addThemes(window: FitWindow<string>): void {
+  private addThemes(window: FitWindow<FitSettingsBarControlId>): void {
     if (!this.args.themeSwitcher) return;
     const themeSwitcher: FitControl = new FitControl()
       .setType('label')
       .setLabel((): string => this.getText('Color themes'));
-    window.addControl('theme-switcher', themeSwitcher);
+    window.addControl('theme-label', themeSwitcher);
     for (const themeName of this.args.themeSwitcher.getThemeNames()) {
       const theme: FitValueControl = new FitValueControl()
         .setLabel((): string => this.getText(themeName as FitTextKey))
@@ -74,7 +85,7 @@ export class FitSettingsBarBuilder {
           ? this.getImageUrl('check')
           : undefined;
       });
-      window.addControl(themeName, theme);
+      window.addControl(themeName as FitThemeName, theme);
     }
   }
 

@@ -11,10 +11,10 @@ import {
 import { FitOperationArgs } from '../../../../operation-executor/operation-args.js';
 import { FitWindow } from '../../../../common/controls/fit-window.js';
 import { FitValueControl } from '../../../../common/controls/fit-value-control.js';
-import { ControlType } from '../../../../common/view-model-utils.js';
 import { FitTextKey } from '../../../../language-dictionary/language-dictionary-keys.js';
-import { FitImageId } from '../../../../image-registry/fit-image-registry.js';
-import { getFirstCellStyle } from '../../../../common/view-model-utils.js';
+import { FitImageId } from '../../../../image-registry/fit-image-ids.js';
+import { getFirstCellStyle } from '../../../../common/style-functions.js';
+import { FitControlType } from '../../../../common/controls/fit-control-type.js';
 
 export abstract class StyleCombo implements OptionsControl {
   protected abstract labelKey: FitTextKey;
@@ -28,7 +28,7 @@ export abstract class StyleCombo implements OptionsControl {
     this.createOptionControls();
   }
 
-  public abstract getType(): ControlType | undefined;
+  public abstract getType(): FitControlType | undefined;
   protected abstract createOptionControls(): void;
 
   public getLabel(): string {

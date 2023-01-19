@@ -8,6 +8,8 @@ export interface CellSelectionListener {
   setCellSelectionRanges(ranges: CellSelectionRanges): this;
   onMouseDown(cellCoord: CellCoord, event?: FitMouseEvent): void;
   onMouseMove(cellCoord: CellCoord, event?: FitMouseEvent): void;
+  onMouseEnter(event?: FitMouseEvent): void;
+  onMouseLeave(event?: FitMouseEvent): void;
   onGlobalMouseUp(event?: FitMouseEvent): void;
   onGlobalKeyDown(event?: FitKeyboardEvent): void;
   onGlobalKeyUp(event?: FitKeyboardEvent): void;

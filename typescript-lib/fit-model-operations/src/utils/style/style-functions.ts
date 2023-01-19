@@ -15,8 +15,8 @@ export function findUpdatableCellStyles(
   newStyle?: Style
 ): Map<string | undefined, CellRangeList> {
   const updatableStyles: Map<string | undefined, CellRangeList> = new Map();
-  for (const range of selectedCells) {
-    range.forEachCell((rowId: number, colId: number) => {
+  for (const cellRange of selectedCells) {
+    cellRange.forEachCell((rowId: number, colId: number): void => {
       const styleName: string | undefined = getStyleName(table, rowId, colId);
       if (styleName) {
         const oldStyle: Style | undefined = table.getStyle(styleName);

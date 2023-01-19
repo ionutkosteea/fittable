@@ -7,8 +7,6 @@ export type FitTableDto = {
   columns?: FitColumnsDto;
   styles?: FitStylesDto;
   mergedRegions?: FitCellRangeDto[];
-  rowHeader?: FitRowHeaderDto;
-  columnHeader?: FitColumnHeaderDto;
 };
 
 export type FitRowsDto = {
@@ -55,14 +53,6 @@ export type FitStyleDto = {
   'border-right'?: string;
   'border-top'?: string;
   'border-bottom'?: string;
-};
-
-export type FitRowHeaderDto = {
-  numberOfColumns: number;
-};
-
-export type FitColumnHeaderDto = {
-  numberOfRows: number;
 };
 
 export type FitCellCoordDto = { rowId: number; colId: number };

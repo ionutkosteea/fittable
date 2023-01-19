@@ -9,7 +9,7 @@ import {
 } from 'fit-core/view-model';
 
 @Component({
-  selector: 'fit-settings-menu',
+  selector: 'fit-settings-bar',
   templateUrl: './settings-bar.component.html',
   styleUrls: ['./settings-bar.component.css'],
 })

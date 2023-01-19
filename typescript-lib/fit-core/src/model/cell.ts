@@ -34,8 +34,8 @@ export function createCell4Dto<T extends Cell>(dto: unknown): T {
   else throw new Error('CellFactory.createCell4Dto is not defined!');
 }
 
-export function asCellStyle(cell?: Cell): CellStyle | undefined {
+export function asCellStyle(cell?: Cell): (CellBasics & CellStyle) | undefined {
   return implementsTKeys<CellStyle>(cell, ['getStyleName'])
-    ? (cell as CellStyle)
+    ? (cell as CellBasics & CellStyle)
     : undefined;
 }

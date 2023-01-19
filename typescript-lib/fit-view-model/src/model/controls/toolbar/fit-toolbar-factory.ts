@@ -1,11 +1,12 @@
+import { asTableStyles } from 'fit-core/model/table.js';
 import {
   Container,
   ToolbarFactory,
   ControlArgs,
 } from 'fit-core/view-model/index.js';
 
+import { FitSeparator } from '../../common/controls/fit-separator.js';
 import { FitContainer } from '../../common/controls/fit-container.js';
-import { createSeparator } from '../../common/view-model-utils.js';
 import { UndoButton, RedoButton } from './controls/undo-redo-buttons.js';
 import { PaintFormatButton } from './controls/paint-format-button.js';
 import {
@@ -20,7 +21,6 @@ import { ColorMenu, BackgroundColorMenu } from './controls/color-menus.js';
 import { VerticalAlignMenu } from './controls/vertical-align-menu.js';
 import { HorizontalAlignMenu } from './controls/horizontal-align-menu.js';
 import { BorderMenuBuilder } from './controls/border-menu.js';
-import { asTableStyles } from 'fit-core/model/table.js';
 
 export type FitToolbarControlId =
   | 'undo'
@@ -45,7 +45,7 @@ export class FitToolbarFactory implements ToolbarFactory {
     toolbar
       .addControl('undo', new UndoButton(args))
       .addControl('redo', new RedoButton(args))
-      .addControl('separator1', createSeparator());
+      .addControl('separator1', new FitSeparator());
     const isStyledTable: boolean =
       asTableStyles(args.operationExecutor.getTable()) !== undefined;
     const hasCellSelection: boolean = args.getSelectedCells().length > 0;
@@ -61,21 +61,21 @@ export class FitToolbarFactory implements ToolbarFactory {
   ): void {
     toolbar
       .addControl('paint-format', new PaintFormatButton(args))
-      .addControl('separator2', createSeparator())
+      .addControl('separator2', new FitSeparator())
       .addControl('bold', new BoldButton(args))
       .addControl('italic', new ItalicButton(args))
       .addControl('underline', new UnderlineButton(args))
       .addControl('strike', new StrikeButton(args))
-      .addControl('separator3', createSeparator())
+      .addControl('separator3', new FitSeparator())
       .addControl('font-family', new FontFamilyCombo(args))
       .addControl('font-size', new FontSizeInput(args))
-      .addControl('separator4', createSeparator())
+      .addControl('separator4', new FitSeparator())
       .addControl('color', new ColorMenu(args))
       .addControl('background-color', new BackgroundColorMenu(args))
-      .addControl('separator5', createSeparator())
+      .addControl('separator5', new FitSeparator())
       .addControl('vertical-align', new VerticalAlignMenu(args))
       .addControl('horizontal-align', new HorizontalAlignMenu(args))
-      .addControl('separator5', createSeparator())
+      .addControl('separator5', new FitSeparator())
       .addControl('border', new BorderMenuBuilder(args).build());
   }
 }

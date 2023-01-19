@@ -121,7 +121,9 @@ export class OperationSubscriptions {
     if (!this.args.cellSelection) return;
     this.args.cellSelection.body.removeRanges();
     const id: number = OperationProperties.SelectedCells;
-    const selectedCells: CellRange[] = operation.properties[id] as CellRange[];
+    const operationProperty: unknown = operation.properties[id];
+    if (!operationProperty) return;
+    const selectedCells: CellRange[] = operationProperty as CellRange[];
     for (const cellRange of selectedCells) {
       this.args.cellSelection.body.addRange(
         cellRange.getFrom(),

@@ -30,6 +30,14 @@ export class CellSelectionDirective {
       .onMouseMove(getCellCoord(htmlCell), event);
   }
 
+  @HostListener('mouseleave') onMouseLeave(): void {
+    this.cellSelectionListener?.onMouseLeave();
+  }
+
+  @HostListener('mouseenter') onMouseEnter(): void {
+    this.cellSelectionListener?.onMouseEnter();
+  }
+
   @HostListener('window:mouseup', ['$event']) onGlobalMouseUp(
     event: MouseEvent
   ): void {

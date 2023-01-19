@@ -1,14 +1,15 @@
 import {
   ImageRegistry,
   ImageRegistryFactory,
-  Images,
 } from 'fit-core/view-model/index.js';
-import { defaultImages, FitImages, toSvgUrl } from './fit-images.js';
+
+import { FitImageId, FitImages } from './fit-image-ids.js';
+import { FIT_IMAGES, toSvgUrl } from './fit-images.js';
 
 export class FitImageRegistry implements ImageRegistry {
-  private images: Images = {};
+  private images: FitImages = {};
 
-  public setImages(images: Images): this {
+  public setImages(images: FitImages): this {
     this.images = images;
     return this;
   }
@@ -39,10 +40,8 @@ export class FitImageRegistry implements ImageRegistry {
   }
 }
 
-export type FitImageId = keyof FitImages;
-
 export class FitImageRegistryFactory implements ImageRegistryFactory {
   public createImageRegistry(): ImageRegistry {
-    return new FitImageRegistry().setImages(toSvgUrl(defaultImages));
+    return new FitImageRegistry().setImages(toSvgUrl(FIT_IMAGES));
   }
 }

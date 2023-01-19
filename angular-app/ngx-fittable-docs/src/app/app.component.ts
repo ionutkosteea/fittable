@@ -1,7 +1,7 @@
 import { Subject, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { ContentTitle } from './common/content-title.model';
+import { TopicTitle } from './common/topic-title.model';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +9,13 @@ import { ContentTitle } from './common/content-title.model';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  public readonly activeContent$: Subject<ContentTitle> = new Subject();
-  public activeContent: ContentTitle = 'Introduction';
+  public readonly activeContent$: Subject<TopicTitle> = new Subject();
+  public activeContent: TopicTitle = 'Introduction';
   private subscription?: Subscription;
 
   public ngOnInit(): void {
     this.subscription = this.activeContent$.subscribe(
-      (content: ContentTitle): void => {
+      (content: TopicTitle): void => {
         this.activeContent = content;
       }
     );

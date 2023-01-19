@@ -12,9 +12,9 @@ import {
   InputControl,
 } from 'fit-core/view-model/index.js';
 
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
-import { ControlType } from '../../../common/view-model-utils.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
 
 export abstract class MenuItem implements Control {
   protected abstract labelKey: FitTextKey;
@@ -40,7 +40,7 @@ export abstract class MenuItem implements Control {
     return imgUrl;
   }
 
-  public getType(): ControlType {
+  public getType(): FitControlType {
     return 'menu-item';
   }
 

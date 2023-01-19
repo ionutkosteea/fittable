@@ -5,10 +5,6 @@ import {
   createTable,
   CellRange,
   createCellRange,
-  asTableRowHeader,
-  createRowHeader,
-  asTableColumnHeader,
-  createColumnHeader,
   createCellCoord,
   CellCoord,
 } from 'fit-core/model/index.js';
@@ -88,12 +84,7 @@ export class CellSelectionPainterBuilder {
   }
 
   private createTable(): Table {
-    const table: Table = createTable(this.numberOfRows, this.numberOfColumns);
-    if (this.hasRowHeaders)
-      asTableRowHeader(table)?.setRowHeader(createRowHeader(1));
-    if (this.hasColumnHeaders)
-      asTableColumnHeader(table)?.setColumnHeader(createColumnHeader(1));
-    return table;
+    return createTable(this.numberOfRows, this.numberOfColumns);
   }
 
   private buildCellSelections(): void {

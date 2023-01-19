@@ -15,6 +15,20 @@
   border-bottom: 2px solid rgba(96, 96, 96, 0.1);
 }
 
+.logo {
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: fit-content;
+  color: #606060;
+  display: inline-table;
+  vertical-align: middle;
+  font-size: 26px;
+  font-weight: bolder;
+  font-style: italic;
+  padding-left: 6px;
+}
+
 .navigation {
   position: fixed;
   left: 0px;
@@ -32,5 +46,8 @@
 .content {
   margin-top: 52px;
   padding-top: 10px;
+  padding-bottom: 10px;
   margin-left: 240px;
+  height: calc(100% - 80px);
+  overflow-x: scroll;
 }

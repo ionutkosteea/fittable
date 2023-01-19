@@ -1,6 +1,6 @@
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
-import { ControlType } from '../../../common/view-model-utils.js';
 import { PushButton } from './common/push-button.js';
 
 export class UndoButton extends PushButton {
@@ -8,7 +8,7 @@ export class UndoButton extends PushButton {
   protected readonly iconPushedId: FitImageId = 'undoBlue';
   protected readonly iconPulledId: FitImageId = 'undo';
 
-  public getType(): ControlType {
+  public getType(): FitControlType {
     return 'push-button';
   }
 
@@ -26,7 +26,7 @@ export class RedoButton extends PushButton {
   protected readonly iconPushedId: FitImageId = 'redoBlue';
   protected readonly iconPulledId: FitImageId = 'redo';
 
-  public getType(): ControlType {
+  public getType(): FitControlType {
     return 'push-button';
   }
 

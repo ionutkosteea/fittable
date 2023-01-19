@@ -6,8 +6,6 @@ export * from './table/fit-column.js';
 export * from './table/fit-cell-coord.js';
 export * from './table/fit-cell.js';
 export * from './table/fit-cell-range.js';
-export * from './table/fit-row-header.js';
-export * from './table/fit-column-header.js';
 export * from './table/fit-line-range.js';
 export * from './table/fit-merged-regions.js';
 export * from './fit-model-config.js';

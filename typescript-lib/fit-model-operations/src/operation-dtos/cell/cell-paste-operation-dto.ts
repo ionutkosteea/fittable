@@ -1,4 +1,3 @@
-import { implementsTKeys } from 'fit-core/common/index.js';
 import {
   Table,
   Style,
@@ -6,6 +5,7 @@ import {
   Value,
   TableStyles,
   CellCoord,
+  asTableStyles,
 } from 'fit-core/model/index.js';
 import {
   OperationDto,
@@ -15,7 +15,10 @@ import {
 
 import { CellRangeAddressObjects } from '../../utils/cell/cell-range-address-objects.js';
 import { appendStyleStepsDto } from '../../utils/style/style-dto-functions.js';
-import { styleByCss } from '../../utils/style/style-functions.js';
+import {
+  getMaxStyleNameUid,
+  styleByCss,
+} from '../../utils/style/style-functions.js';
 import { CellValueOperationDtoVisitor } from '../../utils/cell/cell-value-operation-dto-visitor.js';
 import { CellValueOperationStepDto } from '../../operation-steps/cell/cell-value-operation-step.js';
 import { StyleOperationStepDto } from '../../operation-steps/style/style-operation-step.js';
@@ -50,18 +53,19 @@ export class CellPasteOperationDtoBuilder {
     cellStyleNames: [],
   };
   private readonly operationDto: OperationDto;
-  private readonly isStyledTable: boolean;
+  private readonly styledTable?: Table & TableStyles;
 
   private newValues: CellRangeAddressObjects<Value | undefined>;
   private newStyles: CellRangeAddressObjects<string | undefined>;
-  private tableNumberOfRows = 0;
-  private tableNumberOfCols = 0;
+  private htmlTableNumberOfRows = 0;
+  private htmlTableNumberOfCols = 0;
+  private maxStyleNameUid = 0;
 
   constructor(
     private readonly table: Table,
     private readonly args: CellPasteOperationDtoArgs
   ) {
-    this.isStyledTable = implementsTKeys<TableStyles>(table, ['getStyle']);
+    this.styledTable = asTableStyles(table);
     this.operationDto = {
       id: args.id,
       steps: [this.cellValueStepDto, this.styleStepDto],
@@ -71,6 +75,9 @@ export class CellPasteOperationDtoBuilder {
     };
     this.newValues = new CellRangeAddressObjects();
     this.newStyles = new CellRangeAddressObjects();
+    if (this.styledTable) {
+      this.maxStyleNameUid = getMaxStyleNameUid(this.styledTable);
+    }
   }
 
   public async build(): Promise<OperationDto> {
@@ -137,8 +144,14 @@ export class CellPasteOperationDtoBuilder {
     const colId: number = cellRange.getFrom().getColId() + htmlColId;
     this.prepareNewValue(rowId, colId, htmlCell);
     this.prepareNewStyle(rowId, colId, htmlCell);
-    this.tableNumberOfRows = Math.max(this.tableNumberOfRows, htmlRowId + 1);
-    this.tableNumberOfCols = Math.max(this.tableNumberOfCols, htmlColId + 1);
+    this.htmlTableNumberOfRows = Math.max(
+      this.htmlTableNumberOfRows,
+      htmlRowId + 1
+    );
+    this.htmlTableNumberOfCols = Math.max(
+      this.htmlTableNumberOfCols,
+      htmlColId + 1
+    );
   }
 
   private createHtmlTable(htmlText: string): HTMLTableElement {
@@ -184,7 +197,7 @@ export class CellPasteOperationDtoBuilder {
     colId: number,
     htmlCell: HTMLTableCellElement
   ): void {
-    if (!this.isStyledTable) return;
+    if (!this.styledTable) return;
     const cssStyle: string | null = htmlCell.getAttribute('style');
     this.newStyles.set(cssStyle ?? undefined, rowId, colId);
   }
@@ -196,10 +209,10 @@ export class CellPasteOperationDtoBuilder {
     const selectedNumberOfRows: number = to.getRowId() - from.getRowId() + 1;
     const selectedNumberOfCols: number = to.getColId() - from.getColId() + 1;
     const multiplyNumberOfRows: number = Math.floor(
-      selectedNumberOfRows / this.tableNumberOfRows
+      selectedNumberOfRows / this.htmlTableNumberOfRows
     );
     const multiplyNumberOfCols: number = Math.floor(
-      selectedNumberOfCols / this.tableNumberOfCols
+      selectedNumberOfCols / this.htmlTableNumberOfCols
     );
     this.multiplyCellValues(multiplyNumberOfRows, multiplyNumberOfCols);
     this.multiplyCellStyles(multiplyNumberOfRows, multiplyNumberOfCols);
@@ -219,8 +232,8 @@ export class CellPasteOperationDtoBuilder {
               cellRange.forEachCell((rowId: number, colId: number): void => {
                 multipliedCellValues.set(
                   value,
-                  rowId + i * this.tableNumberOfRows,
-                  colId + j * this.tableNumberOfCols
+                  rowId + i * this.htmlTableNumberOfRows,
+                  colId + j * this.htmlTableNumberOfCols
                 );
               });
             }
@@ -245,8 +258,8 @@ export class CellPasteOperationDtoBuilder {
               cellRange.forEachCell((rowId: number, colId: number): void => {
                 multipliedCellStyles.set(
                   style,
-                  rowId + i * this.tableNumberOfRows,
-                  colId + j * this.tableNumberOfCols
+                  rowId + i * this.htmlTableNumberOfRows,
+                  colId + j * this.htmlTableNumberOfCols
                 );
               });
             }
@@ -311,12 +324,17 @@ export class CellPasteOperationDtoBuilder {
   ): StyleUpdateOperationDtoBuilder {
     const style: Style | undefined = styleByCss(cssStyle);
     const builder: StyleUpdateOperationDtoBuilder =
-      new StyleUpdateOperationDtoBuilder(this.table as Table & TableStyles, {
-        id: 'style-update',
-        selectedCells,
-        style,
-      });
+      new StyleUpdateOperationDtoBuilder(
+        this.styledTable!,
+        {
+          id: 'style-update',
+          selectedCells,
+          style,
+        },
+        this.maxStyleNameUid
+      );
     builder.build();
+    this.maxStyleNameUid = builder.maxStyleNameUid;
     return builder;
   }
 

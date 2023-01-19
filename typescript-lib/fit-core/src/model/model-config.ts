@@ -1,6 +1,5 @@
 import { CellCoordFactory } from './cell-coord.js';
 import { CellFactory } from './cell.js';
-import { RowHeaderFactory, ColumnHeaderFactory } from './header.js';
 import { RowFactory, ColumnFactory } from './line.js';
 import { MergedRegionsFactory } from './merged-regions.js';
 import { CellRangeFactory } from './cell-range.js';
@@ -16,8 +15,6 @@ export type ModelConfig = {
   lineRangeFactory: LineRangeFactory;
   rowFactory?: RowFactory;
   columnFactory?: ColumnFactory;
-  rowHeaderFactory?: RowHeaderFactory;
-  columnHeaderFactory?: ColumnHeaderFactory;
   styleFactory?: StyleFactory;
   mergedRegionsFactory?: MergedRegionsFactory;
 };

@@ -1,0 +1,19 @@
+<div class="topic">
+  <h1 class="title">{{title}}</h1>
+  <h2 class="subtitle">Preview</h2>
+  <div class="fittable">
+    <fittable [designer]="fit"></fittable>
+  </div>
+  <h2 class="subtitle">HTML code</h2>
+  <ng-container *ngFor="let codeSnippet of htmlCode">
+    <div class="code-snippet">
+      <img [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
+    </div>
+  </ng-container>
+  <h2 class="subtitle">Typescript code</h2>
+  <ng-container *ngFor="let codeSnippet of typescriptCode">
+    <div class="code-snippet">
+      <img [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
+    </div>
+  </ng-container>
+</div>

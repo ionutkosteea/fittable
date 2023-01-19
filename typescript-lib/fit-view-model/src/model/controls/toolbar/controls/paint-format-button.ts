@@ -2,9 +2,9 @@ import { CellCoord, Table, Cell, asCellStyle } from 'fit-core/model/index.js';
 import { ControlArgs } from 'fit-core/view-model/index.js';
 
 import { FitOperationArgs } from '../../../operation-executor/operation-args.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
-import { ControlType } from '../../../common/view-model-utils.js';
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
 import { PushButton } from './common/push-button.js';
 
 export class PaintFormatButton extends PushButton {
@@ -33,7 +33,7 @@ export class PaintFormatButton extends PushButton {
     this.args.operationExecutor.run(args);
   }
 
-  public getType(): ControlType | undefined {
+  public getType(): FitControlType {
     return 'push-button';
   }
 

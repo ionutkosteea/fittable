@@ -44,7 +44,6 @@ export class CellMergeOperationDtoBuilder {
 
   private updateMergedRegions(): void {
     for (const cellRange of this.args.selectedCells) {
-      this.createRegion(cellRange);
       this.table
         .getMergedRegions()
         ?.forEachRegion((region: MergedRegion): void => {
@@ -52,6 +51,7 @@ export class CellMergeOperationDtoBuilder {
           const colId: number = region.getFrom().getColId();
           cellRange.hasCell(rowId, colId) && this.removeRegion(region);
         });
+      this.createRegion(cellRange);
     }
   }
 

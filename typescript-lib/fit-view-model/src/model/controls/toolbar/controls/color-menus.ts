@@ -5,17 +5,17 @@ import {
 } from 'fit-core/view-model/index.js';
 
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
-import { ControlType } from '../../../common/view-model-utils.js';
-import { StyleCombo } from './common/style-combo.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
 import { FitValueControl } from '../../../common/controls/fit-value-control.js';
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
+import { StyleCombo } from './common/style-combo.js';
 
 export class ColorMenu extends StyleCombo {
   protected readonly labelKey: FitTextKey = 'Text color';
   protected readonly imageId: FitImageId = 'color';
   protected readonly styleAttName = 'color';
 
-  public getType(): ControlType | undefined {
+  public getType(): FitControlType | undefined {
     return 'color-picker';
   }
 
@@ -32,7 +32,7 @@ export class BackgroundColorMenu extends StyleCombo {
   protected readonly imageId: FitImageId = 'backgroundColor';
   protected readonly styleAttName = 'background-color';
 
-  public getType(): ControlType | undefined {
+  public getType(): FitControlType | undefined {
     return 'color-picker';
   }
 

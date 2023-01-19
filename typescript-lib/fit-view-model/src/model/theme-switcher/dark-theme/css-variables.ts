@@ -1,6 +1,6 @@
-import { CssColorVariables } from '../../common/css-variables.js';
+import { FitCssColorVariables } from '../../common/css-variables.js';
 
-export const cssVariables: CssColorVariables = {
+export const cssVariables: FitCssColorVariables = {
   '--highlight-color': '#d2550b',
   '--disabled-color': '#5d5d5d',
   '--toolbar-background-color': '#383838',

@@ -1,0 +1,22 @@
+<div class="topic">
+  <h1 class="title">{{title}}</h1>
+  <h2 class="subtitle">Preview</h2>
+  <button *ngFor="let button of buttons" [class]="button.disabled ? 'button button-disabled':'button'"
+    (click)="button.run()" [disabled]="button.disabled">{{button.getLabel()}}</button>
+  <div class="fittable">
+    <fittable [designer]="fit"></fittable>
+  </div>
+  <textarea class="console" [value]="getConsoleText()" disabled></textarea>
+  <h2 class="subtitle">HTML code</h2>
+  <ng-container *ngFor="let codeSnippet of htmlCode">
+    <div class="code-snippet">
+      <img [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
+    </div>
+  </ng-container>
+  <h2 class="subtitle">Typescript code</h2>
+  <ng-container *ngFor="let codeSnippet of typescriptCode">
+    <div class="code-snippet">
+      <img [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
+    </div>
+  </ng-container>
+</div>

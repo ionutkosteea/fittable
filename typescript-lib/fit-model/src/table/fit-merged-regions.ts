@@ -67,9 +67,7 @@ export class FitMergedRegions implements MergedRegions {
     return this;
   }
 
-  public removeRegion(from: FitCellCoord): this {
-    const rowId: number = from.getRowId();
-    const colId: number = from.getColId();
+  public removeRegion(rowId: number, colId: number): this {
     for (let i = 0; i < this.dto.length; i++) {
       const region: FitCellRangeDto = this.dto[i];
       if (rowId === region.from.rowId && colId === region.from.colId) {

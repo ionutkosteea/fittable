@@ -5,9 +5,8 @@
     </colgroup>
     <thead (contextmenu)="showContextMenu($event)" fitCellSelection [cellSelectionListener]="getCellSelectionListener()"
       [cellSelectionRanges]="getCellSelectionRanges()">
-      <tr class="header-row" *ngFor="let rowId of getColumnHeaderRowIds()"
-        [ngStyle]="{'height.px':getColumnHeaderRowHeight(rowId)}">
-        <th class="header-cell" *ngFor="let colId of getColumnIds()" [attr.rowId]="rowId" [attr.colId]="colId">
+      <tr class="header-row" [ngStyle]="{'height.px':getColumnHeaderHeight()}">
+        <th class="header-cell" *ngFor="let colId of getColumnIds()" [attr.rowId]="0" [attr.colId]="colId">
           {{getColumnLabel(colId)}}</th>
       </tr>
     </thead>

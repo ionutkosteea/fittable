@@ -4,6 +4,7 @@ import {
   ViewModel,
   HostListeners,
   CellSelectionListener,
+  getViewModelConfig,
 } from 'fit-core/view-model';
 
 export abstract class TableCommon {
@@ -13,28 +14,24 @@ export abstract class TableCommon {
   public readonly hasColumnHeader = (): boolean =>
     this.viewModel.tableViewer.hasColumnHeader();
 
-  public readonly getColumnHeaderRowIds = (): RangeIterator =>
-    this.viewModel.tableViewer.getColumnHeaderRowIds();
-
-  public readonly getColumnHeaderRowHeight = (rowId: number) =>
-    this.viewModel.tableViewer.getColumnHeaderRowHeight(rowId);
-
   public readonly getColumnLabel = (
     colId: number
-  ): string | number | undefined =>
-    this.viewModel.tableViewer.getColumnHeaderCellValue(0, colId);
+  ): string | number | undefined => {
+    const getLabel: ((colId: number) => string | number) | undefined =
+      getViewModelConfig().getColumnHeaderText;
+    return getLabel && getLabel(colId);
+  };
 
-  public readonly getRowLabel = (rowId: number): string | number | undefined =>
-    this.viewModel.tableViewer.getRowHeaderCellValue(rowId, 0);
+  public readonly getRowLabel = (
+    rowId: number
+  ): string | number | undefined => {
+    const getLabel: ((rowId: number) => string | number) | undefined =
+      getViewModelConfig().getRowHeaderText;
+    return getLabel && getLabel(rowId);
+  };
 
   public readonly hasRowHeader = (): boolean =>
     this.viewModel.tableViewer.hasRowHeader();
-
-  public readonly getRowHeaderColumnIds = (): RangeIterator =>
-    this.viewModel.tableViewer.getRowHeaderColIds();
-
-  public readonly getRowHeaderColumnWidth = (colId: number) =>
-    this.viewModel.tableViewer.getRowHeaderColumnWidth(colId);
 
   public readonly getCellStyle = (
     rowId: number,

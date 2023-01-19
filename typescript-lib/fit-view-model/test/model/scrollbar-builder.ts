@@ -5,10 +5,6 @@ import {
   asTableColumns,
   createColumn,
   createTable,
-  asTableRowHeader,
-  createRowHeader,
-  asTableColumnHeader,
-  createColumnHeader,
   RowHeight,
   Line,
   ColumnWidth,
@@ -71,7 +67,7 @@ export class ScrollbarBuilder {
         asTableRows(table)?.addRow(lineId, row);
       });
       if (this.hasTableColumnHeader) {
-        asTableColumnHeader(table)?.setColumnHeader(createColumnHeader(1));
+        //TODO
       }
     } else {
       table.setNumberOfColumns(this.numberOfTableLines);
@@ -81,7 +77,7 @@ export class ScrollbarBuilder {
         asTableColumns(table)?.addColumn(lineId, col);
       });
       if (this.hasTableRowHeader) {
-        asTableRowHeader(table)?.setRowHeader(createRowHeader(1));
+        //TODO
       }
     }
     return table;

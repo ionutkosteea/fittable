@@ -1,22 +1,13 @@
-import {
-  DoubleKeyMap,
-  incrementLetter,
-  incrementNumber,
-  RangeIterator,
-} from 'fit-core/common/index.js';
+import { DoubleKeyMap } from 'fit-core/common/index.js';
 import {
   Value,
   Table,
-  asTableColumnHeader,
-  asTableRowHeader,
   Cell,
   asCellStyle,
   asTableStyles,
   Style,
   TableRows,
   TableColumns,
-  TableRowHeader,
-  TableColumnHeader,
   TableMergedRegions,
   asTableRows,
   asTableColumns,
@@ -45,8 +36,6 @@ export class FitTableViewer implements TableViewer {
   private config: ViewModelConfig;
   private rowTable?: TableRows;
   private columnTable?: TableColumns;
-  private rowHeaderTable?: TableRowHeader;
-  private columnHeaderTable?: TableColumnHeader;
   private mergedRegionsTable?: TableMergedRegions;
 
   constructor(private table: Table) {
@@ -58,8 +47,6 @@ export class FitTableViewer implements TableViewer {
     this.table = table;
     this.rowTable = asTableRows(table);
     this.columnTable = asTableColumns(table);
-    this.rowHeaderTable = asTableRowHeader(table);
-    this.columnHeaderTable = asTableColumnHeader(table);
     this.mergedRegionsTable = asTableMergedRegions(table);
     this.resetRowProperties();
     this.resetColumnProperties();
@@ -77,21 +64,7 @@ export class FitTableViewer implements TableViewer {
   }
 
   public getRowHeaderWidth(): number {
-    let width = 0;
-    if (this.config.showRowHeader) {
-      const numberOfColumns: number =
-        this.rowHeaderTable?.getRowHeader()?.getNumberOfColumns() ?? 0;
-      for (let colId = 0; colId < numberOfColumns; colId++) {
-        width += this.getRowHeaderColumnWidth(colId);
-      }
-    }
-    return width;
-  }
-
-  public getRowHeaderColumnWidth(colId: number): number {
-    return this.config.showRowHeader
-      ? this.config.rowHeaderColumnWidth ?? 0
-      : 0;
+    return this.config.rowHeaderWidth ?? 0;
   }
 
   public getBodyWidth(): number {
@@ -112,20 +85,8 @@ export class FitTableViewer implements TableViewer {
     return asRowHeight(row)?.getHeight() ?? this.config.rowHeight;
   }
 
-  public getColumnHeaderRowHeight(rowId: number): number {
-    return this.config.columnHeaderRowHeight ?? 0;
-  }
-
   public getColumnHeaderHeight(): number {
-    let height = 0;
-    if (this.config.showColumnHeader) {
-      const numberOfRows: number =
-        this.columnHeaderTable?.getColumnHeader()?.getNumberOfRows() ?? 0;
-      for (let rowId = 0; rowId < numberOfRows; rowId++) {
-        height += this.getColumnHeaderRowHeight(rowId);
-      }
-    }
-    return height;
+    return this.config.columnHeaderHeight ?? 0;
   }
 
   public getBodyHeight(): number {
@@ -264,45 +225,11 @@ export class FitTableViewer implements TableViewer {
   }
 
   public hasColumnHeader(): boolean {
-    return this.config.showColumnHeader ?? false;
-  }
-
-  public getColumnHeaderRowIds(): RangeIterator {
-    return new RangeIterator(0, this.getColumnHeaderRowNumber());
-  }
-
-  private getColumnHeaderRowNumber(): number {
-    return (
-      asTableColumnHeader(this.table)?.getColumnHeader()?.getNumberOfRows() ?? 0
-    );
-  }
-
-  public getColumnHeaderCellValue(
-    rowId: number,
-    colId: number
-  ): Value | undefined {
-    return incrementLetter(colId);
+    return this.config.columnHeaderHeight ? true : false;
   }
 
   public hasRowHeader(): boolean {
-    return this.config.showRowHeader ?? false;
-  }
-
-  public getRowHeaderColIds(): RangeIterator {
-    return new RangeIterator(0, this.getRowHeaderColumnNumber());
-  }
-
-  private getRowHeaderColumnNumber(): number {
-    return (
-      asTableRowHeader(this.table)?.getRowHeader()?.getNumberOfColumns() ?? 0
-    );
-  }
-
-  public getRowHeaderCellValue(
-    rowId: number,
-    colId: number
-  ): Value | undefined {
-    return incrementNumber(rowId);
+    return this.config.rowHeaderWidth ? true : false;
   }
 
   public getCellStyle(rowId: number, colId: number): Style | undefined {

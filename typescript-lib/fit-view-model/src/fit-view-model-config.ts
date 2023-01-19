@@ -5,7 +5,7 @@ import { FONT_FAMILY } from './model/common/font-family.js';
 import { FitTableViewerFactory } from './model/table-viewer/fit-table-viewer.js';
 import { FitCellEditorFactory } from './model/cell-editor/fit-cell-editor.js';
 import { FitCellSelectionFactory } from './model/cell-selection/fit-cell-selection.js';
-import { FitContextMenuFactory } from './model/controls/context-menu/fit-context-menu.js';
+import { FitContextMenuFactory } from './model/controls/context-menu/fit-context-menu-factory.js';
 import { FitToolbarFactory } from './model/controls/toolbar/fit-toolbar-factory.js';
 import { FitViewModelFactory } from './model/fit-view-model.js';
 import { FitTableScrollerFactory } from './model/table-scroller/fit-table-scroller.js';
@@ -22,6 +22,10 @@ import { FitCellSelectionScrollerFactory } from './model/cell-selection/fit-cell
 import { FitStatusbarFactory } from './model/controls/statusbar/fit-statusbar.js';
 import { FitThemeSwitcherFactory } from './model/theme-switcher/fit-theme-switcher.js';
 import { FitSettingsBarFactory } from './model/controls/settings-bar/fit-settings-bar-factory.js';
+import {
+  incrementLetter,
+  incrementNumber,
+} from 'fit-core/common/core-functions.js';
 
 export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   rowHeight: 21,
@@ -29,10 +33,10 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   fontSize: 12,
   colorPalette: COLOR_PALETTE,
   fontFamily: FONT_FAMILY,
-  showRowHeader: true,
-  showColumnHeader: true,
-  rowHeaderColumnWidth: 40,
-  columnHeaderRowHeight: 21,
+  getRowHeaderText: (rowId: number): number => incrementNumber(rowId),
+  getColumnHeaderText: (colId: number): string => incrementLetter(colId),
+  rowHeaderWidth: 40,
+  columnHeaderHeight: 21,
   languageDictionaryFactory: new FitLanguageDictionaryFactory(),
   imageRegistryFactory: new FitImageRegistryFactory(),
   cellEditorFactory: new FitCellEditorFactory(),
@@ -55,7 +59,7 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   hostListenersFactory: new FitHostListenersFactory(),
 };
 
-const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
+export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
   fontSize: FIT_VIEW_MODEL_CONFIG.fontSize,
   rowHeight: FIT_VIEW_MODEL_CONFIG.rowHeight,
   columnWidth: FIT_VIEW_MODEL_CONFIG.columnWidth,
@@ -75,10 +79,12 @@ export type FitViewModelConfigDef = {
   columnWidth?: number;
   colorPalette?: Option[];
   fontFamily?: Option[];
-  showRowHeader?: true;
-  showColumnHeader?: true;
-  rowHeaderColumnWidth?: number;
-  columnHeaderRowHeight?: number;
+  showRowHeader?: boolean;
+  showColumnHeader?: boolean;
+  rowHeaderWidth?: number;
+  columnHeaderHeight?: number;
+  getRowHeaderText?: (rowId: number) => number | string;
+  getColumnHeaderText?: (colId: number) => number | string;
   disableVirtualRows?: boolean;
   disableVirtualColumns?: boolean;
   rowHeader?: boolean;
@@ -185,16 +191,27 @@ function updateHeaderConfig(
   def: FitViewModelConfigDef
 ): void {
   if (def.rowHeader !== undefined) {
-    cfg.showRowHeader = def.rowHeader;
-    cfg.rowHeaderColumnWidth = def.rowHeader
-      ? def.rowHeaderColumnWidth ?? FIT_VIEW_MODEL_CONFIG.rowHeaderColumnWidth
-      : undefined;
+    if (def.rowHeader) {
+      cfg.getRowHeaderText =
+        def.getRowHeaderText ?? FIT_VIEW_MODEL_CONFIG.getRowHeaderText;
+      cfg.rowHeaderWidth =
+        def.rowHeaderWidth ?? FIT_VIEW_MODEL_CONFIG.rowHeaderWidth;
+    } else {
+      cfg.getRowHeaderText = undefined;
+      cfg.rowHeaderWidth = undefined;
+    }
   }
+
   if (def.columnHeader !== undefined) {
-    cfg.showColumnHeader = def.columnHeader;
-    cfg.columnHeaderRowHeight = def.columnHeader
-      ? def.columnHeaderRowHeight ?? FIT_VIEW_MODEL_CONFIG.columnHeaderRowHeight
-      : undefined;
+    if (def.columnHeader) {
+      cfg.getColumnHeaderText =
+        def.getColumnHeaderText ?? FIT_VIEW_MODEL_CONFIG.getColumnHeaderText;
+      cfg.columnHeaderHeight =
+        def.columnHeaderHeight ?? FIT_VIEW_MODEL_CONFIG.columnHeaderHeight;
+    } else {
+      cfg.getColumnHeaderText = undefined;
+      cfg.columnHeaderHeight = undefined;
+    }
   }
 }
 
@@ -229,7 +246,12 @@ function updateSettingsBarConfig(
 }
 
 function updateListenerConfig(cfg: ViewModelConfig): void {
-  if (cfg.toolbarFactory || cfg.contextMenuFactory || cfg.statusbarFactory) {
+  if (
+    cfg.toolbarFactory ||
+    cfg.contextMenuFactory ||
+    cfg.statusbarFactory ||
+    cfg.settingsBarFactory
+  ) {
     cfg.windowListenerFactory = FIT_VIEW_MODEL_CONFIG.windowListenerFactory;
   }
   if (cfg.toolbarFactory || cfg.contextMenuFactory) {

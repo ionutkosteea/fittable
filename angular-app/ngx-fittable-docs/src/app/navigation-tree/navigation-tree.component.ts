@@ -1,12 +1,12 @@
 import { Subject, Subscription } from 'rxjs';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
-import { ContentTitle } from '../common/content-title.model';
+import { TopicTitle } from '../common/topic-title.model';
 
 export interface Composite {
   label: string;
   isExpended: boolean;
-  leafs: ContentTitle[];
+  leafs: TopicTitle[];
 }
 
 @Component({
@@ -15,14 +15,14 @@ export interface Composite {
   styleUrls: ['./navigation-tree.component.css'],
 })
 export class NavigationTreeComponent implements OnInit, OnDestroy {
-  @Input() clickedLeaf$: Subject<ContentTitle> = new Subject();
+  @Input() clickedLeaf$: Subject<TopicTitle> = new Subject();
   public tree: Composite[] = createTree();
-  public clickedLeaf: ContentTitle = 'Introduction';
+  public clickedLeaf: TopicTitle = 'Introduction';
   private subscription?: Subscription;
 
   public ngOnInit(): void {
     this.subscription = this.clickedLeaf$.subscribe(
-      (leaf: ContentTitle): void => {
+      (leaf: TopicTitle): void => {
         this.clickedLeaf = leaf;
       }
     );
@@ -32,7 +32,7 @@ export class NavigationTreeComponent implements OnInit, OnDestroy {
     composite.isExpended = !composite.isExpended;
   }
 
-  public onLeafClick(leaf: ContentTitle): void {
+  public onLeafClick(leaf: TopicTitle): void {
     this.clickedLeaf$.next(leaf);
   }
 
@@ -46,7 +46,7 @@ function createTree(): Composite[] {
     {
       label: 'Getting started',
       isExpended: true,
-      leafs: ['Introduction', 'Installation'],
+      leafs: ['Introduction', 'Architecture', 'Installation'],
     },
     {
       label: 'Table model',
@@ -60,7 +60,7 @@ function createTree(): Composite[] {
         'Cell style',
         'Cell merge',
         'Table DTO',
-        'Table configuration',
+        'Custom table',
       ],
     },
     {
@@ -74,39 +74,35 @@ function createTree(): Composite[] {
         'Insert rows below',
         'Remove rows',
         'Resize columns',
-        'Insert columns above',
-        'Insert columns below',
+        'Insert columns left',
+        'Insert columns right',
         'Remove columns',
+        'Cell values',
         'Clear cells',
         'Remove cells',
-        'Cut cells',
-        'Copy cells',
-        'Paste cells',
-        'Merge cells',
+        'Cut / Paste cells',
+        'Copy / Paste cells',
         'Merge cells',
         'Unmerge cells',
-        'Undo',
-        'Redo',
         'Operation DTO',
-        'Operation configuration',
+        'Custom operation',
       ],
     },
     {
-      label: 'Table viewer',
+      label: 'Table designer',
       isExpended: false,
       leafs: [
-        'Language dictionary',
-        'Image registry',
-        'Table viewer',
         'Table scroller',
         'Cell selection',
         'Cell editor',
+        'Language dictionary',
+        'Image registry',
         'Theme switcher',
         'Settings bar',
         'Toolbar',
         'Context menu',
         'Statusbar',
-        'View model configuration',
+        'Custom view model',
       ],
     },
   ];

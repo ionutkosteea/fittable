@@ -1,10 +1,4 @@
-import {
-  CssStyle,
-  Style,
-  createStyle,
-  CellCoord,
-  createCellCoord,
-} from 'fit-core/model';
+import { CssStyle, CellCoord, createCellCoord } from 'fit-core/model';
 import { Window, Coord } from 'fit-core/view-model';
 
 export type ControlType =
@@ -24,10 +18,7 @@ export function createWindowStyle(window: Window): CssStyle {
   const x: number = position.x;
   const y: number = position.y;
   const transform: string = 'translate3d(' + x + 'px,' + y + 'px,0px)';
-  const style: Style = createStyle()
-    .set('display', display)
-    .set('transform', transform);
-  return style.toCss();
+  return { display, transform };
 }
 
 export function getCellCoord(htmlCell: HTMLElement): CellCoord {

@@ -1,9 +1,9 @@
 import { Window, Control } from 'fit-core/view-model/index.js';
 
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
-import { ControlType } from '../../../common/view-model-utils.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
 import { FitValueControl } from '../../../common/controls/fit-value-control.js';
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
 import { StyleCombo } from './common/style-combo.js';
 
 export class HorizontalAlignMenu extends StyleCombo {
@@ -11,7 +11,7 @@ export class HorizontalAlignMenu extends StyleCombo {
   protected readonly imageId: FitImageId = 'alignLeft';
   protected readonly styleAttName = 'text-align';
 
-  public getType(): ControlType {
+  public getType(): FitControlType {
     return 'pop-up-button';
   }
 

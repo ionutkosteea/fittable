@@ -1,0 +1,23 @@
+<div class="topic">
+  <h1 class="title">{{title}}</h1>
+  <h2 class="subtitle">Preview</h2>
+  <button class="button" (click)="runOperation()">{{buttonText}}</button>
+  <button class="button" (click)="undo()">Undo</button>
+  <button class="button" (click)="redo()">Redo</button>
+  <div class="fittable">
+    <fittable [designer]="fit"></fittable>
+  </div>
+  <textarea class="console" [value]="consoleText" disabled></textarea>
+  <h2 class="subtitle">HTML code</h2>
+  <ng-container *ngFor="let codeSnippet of htmlCode">
+    <div class="code-snippet">
+      <img [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
+    </div>
+  </ng-container>
+  <h2 class="subtitle">Typescript code</h2>
+  <ng-container *ngFor="let codeSnippet of typescriptCode">
+    <div class="code-snippet">
+      <img [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
+    </div>
+  </ng-container>
+</div>

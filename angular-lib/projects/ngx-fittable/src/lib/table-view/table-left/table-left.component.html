@@ -1,12 +1,12 @@
 <div class="table-left" *ngIf="hasRowHeader()" [ngStyle]="getContainerPosition()">
   <table class="table">
     <colgroup>
-      <col *ngFor="let colId of getRowHeaderColumnIds()" [ngStyle]="{'width.px':getRowHeaderColumnWidth(colId)}" />
+      <col [ngStyle]="{'width.px':getRowHeaderWidth()}" />
     </colgroup>
     <tbody (contextmenu)="showContextMenu($event)" fitCellSelection [cellSelectionListener]="getCellSelectionListener()"
       [cellSelectionRanges]="getCellSelectionRanges()">
       <tr *ngFor="let rowId of getRowIds()" [ngStyle]="{'height.px':getRowHeight(rowId)}">
-        <th class="header-cell" *ngFor="let colId of getRowHeaderColumnIds()" [attr.rowId]="rowId" [attr.colId]="colId">
+        <th class="header-cell" [attr.rowId]="rowId" [attr.colId]="0">
           <p class="cell-text">{{ getRowLabel(rowId) }}</p>
         </th>
       </tr>

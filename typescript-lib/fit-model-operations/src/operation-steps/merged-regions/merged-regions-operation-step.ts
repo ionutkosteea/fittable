@@ -37,9 +37,15 @@ export class MergedRegionsOperationStep implements OperationStep {
   private removeRegions(): void {
     for (const cellCoordDto of this.stepDto.remove4CellCoords) {
       const cellCoord: CellCoord = createCellCoord4Dto(cellCoordDto);
-      this.mergedRegions?.removeRegion(cellCoord);
+      this.mergedRegions?.removeRegion(
+        cellCoord.getRowId(),
+        cellCoord.getColId()
+      );
     }
-    !this.mergedRegions?.hasProperties() && this.table.setMergedRegions();
+    if (!this.mergedRegions?.hasProperties()) {
+      this.table.setMergedRegions();
+      this.mergedRegions = undefined;
+    }
   }
 
   private createRegions(): void {

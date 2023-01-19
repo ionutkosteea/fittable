@@ -1,6 +1,6 @@
 .menu-item {
   display: grid;
-  grid-template-columns: 18px 160px 40px;
+  grid-template-columns: 18px auto 40px;
   place-items: center normal;
   padding-left: 10px;
   padding-right: 10px;
@@ -20,6 +20,7 @@
 
 .label {
   padding-left: 10px;
+  padding-right: 10px;
   color: var(--toolbar-color);
 }
 

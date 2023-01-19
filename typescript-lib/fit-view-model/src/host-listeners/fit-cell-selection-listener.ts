@@ -19,6 +19,7 @@ export class FitCellSelectionListener implements CellSelectionListener {
   private isCtrlKeyDown = false;
   private isShiftKeyDown = false;
   private isMouseDown = false;
+  private isMouseLeave = false;
 
   constructor(
     private readonly cellSelection: CellSelection,
@@ -59,10 +60,21 @@ export class FitCellSelectionListener implements CellSelectionListener {
     this.selectedCell = cellCoord;
   }
 
+  public onMouseEnter(): void {
+    this.isMouseLeave = false;
+  }
+
+  public onMouseLeave(): void {
+    this.isMouseLeave = true;
+  }
+
   public onGlobalMouseUp(): void {
-    if (!this.isMouseDown) return;
-    this.endSelection();
-    this.isMouseDown = false;
+    if (this.isMouseDown) {
+      this.endSelection();
+      this.isMouseDown = false;
+    } else if (this.isMouseLeave) {
+      this.selectionRanges.setFocus(false);
+    }
   }
 
   private endSelection(): void {

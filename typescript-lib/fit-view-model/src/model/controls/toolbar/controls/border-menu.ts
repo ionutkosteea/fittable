@@ -10,18 +10,18 @@ import {
   BorderType,
   FitOperationArgs,
 } from '../../../operation-executor/operation-args.js';
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
 import { FitControl } from '../../../common/controls/fit-control.js';
 import { FitOptionsControl } from '../../../common/controls/fit-options-control.js';
 import { FitWindow } from '../../../common/controls/fit-window.js';
-import { createSeparator } from '../../../common/view-model-utils.js';
 import { FitValueControl } from '../../../common/controls/fit-value-control.js';
+import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
+import { FitSeparator } from '../../../common/controls/fit-separator.js';
 import {
   colorControls,
   createColorControls,
   setColorControls,
 } from './color-menus.js';
-import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
 
 export class BorderMenuBuilder {
   private readonly borderButton: FitOptionsControl;
@@ -42,7 +42,7 @@ export class BorderMenuBuilder {
     const window: Window = this.borderButton.getWindow();
     window.addControl('border-type', this.createTypeMenu());
     window.addControl('border-color', this.createColorPickerMenu());
-    window.addControl('separator', createSeparator());
+    window.addControl('separator', new FitSeparator());
     const buttons: FitControl[] = this.createLocationButtons();
     for (const button of buttons) {
       window.addControl(button.getLabel(), button);

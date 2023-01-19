@@ -100,6 +100,8 @@ describe('Test CellSelectionPainter', (): void => {
   });
 
   it('select range [0,0,1,1] in table with row - and column header', () => {
+    getViewModelConfig().rowHeaderWidth = 40;
+    getViewModelConfig().columnHeaderHeight = 21;
     const builder: CellSelectionPainterBuilder =
       new CellSelectionPainterBuilder()
         .setNumberOfTableRows(10)
@@ -110,9 +112,11 @@ describe('Test CellSelectionPainter', (): void => {
     const painter: CellSelectionPainter = builder.build();
     const bodyRange: Rectangle = painter.body.getRectangles()[0];
     expect(bodyRange.top === config!.rowHeight).toBeTruthy();
-    expect(bodyRange.left === config!.rowHeaderColumnWidth).toBeTruthy();
+    expect(bodyRange.left === config!.rowHeaderWidth).toBeTruthy();
     expect(bodyRange.width === 2 * config!.columnWidth).toBeTruthy();
     expect(bodyRange.height === 2 * config!.rowHeight).toBeTruthy();
     builder.destroy();
+    getViewModelConfig().rowHeaderWidth = undefined;
+    getViewModelConfig().columnHeaderHeight = undefined;
   });
 });

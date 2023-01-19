@@ -1,8 +1,8 @@
 import { createStyle, Style } from 'fit-core/model/index.js';
 
 import { FitTextKey } from '../../../language-dictionary/language-dictionary-keys.js';
-import { FitImageId } from '../../../image-registry/fit-image-registry.js';
-import { ControlType } from '../../../common/view-model-utils.js';
+import { FitImageId } from '../../../image-registry/fit-image-ids.js';
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
 import { StylePushButton } from './common/style-push-button.js';
 
 export class BoldButton extends StylePushButton {
@@ -11,7 +11,7 @@ export class BoldButton extends StylePushButton {
   protected readonly iconPulledId: FitImageId = 'bold';
   protected readonly style: Style = createStyle().set('font-weight', 'bold');
 
-  public getType(): ControlType {
+  public getType(): FitControlType {
     return 'push-button';
   }
 }
@@ -22,7 +22,7 @@ export class ItalicButton extends StylePushButton {
   protected readonly iconPulledId: FitImageId = 'italic';
   protected readonly style: Style = createStyle().set('font-style', 'italic');
 
-  public getType(): ControlType {
+  public getType(): FitControlType {
     return 'push-button';
   }
 }
@@ -36,7 +36,7 @@ export class UnderlineButton extends StylePushButton {
     'underline'
   );
 
-  public getType(): ControlType {
+  public getType(): FitControlType {
     return 'push-button';
   }
 }
@@ -50,7 +50,7 @@ export class StrikeButton extends StylePushButton {
     'line-through'
   );
 
-  public getType(): ControlType {
+  public getType(): FitControlType {
     return 'push-button';
   }
 }

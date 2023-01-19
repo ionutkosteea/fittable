@@ -15,8 +15,8 @@ import {
 } from 'fit-core/view-model/index.js';
 
 import { FitOperationArgs } from '../../../operation-executor/operation-args.js';
-import { ControlType } from '../../../common/view-model-utils.js';
-import { getFirstCellStyle } from '../../../common/view-model-utils.js';
+import { getFirstCellStyle } from '../../../common/style-functions.js';
+import { FitControlType } from '../../../common/controls/fit-control-type.js';
 
 export class FontSizeInput implements InputControl {
   public readonly focus$: Subject<boolean> = new Subject();
@@ -33,7 +33,7 @@ export class FontSizeInput implements InputControl {
     this.value = this.getStyleFontSize();
   }
 
-  public getType(): ControlType | undefined {
+  public getType(): FitControlType | undefined {
     return 'input';
   }
 
