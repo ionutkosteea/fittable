@@ -28,8 +28,8 @@ import {
 } from 'fit-core/common/core-functions.js';
 
 export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
-  rowHeight: 21,
-  columnWidth: 100,
+  rowHeights: 21,
+  columnWidths: 100,
   fontSize: 12,
   colorPalette: COLOR_PALETTE,
   fontFamily: FONT_FAMILY,
@@ -61,8 +61,8 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
 
 export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
   fontSize: FIT_VIEW_MODEL_CONFIG.fontSize,
-  rowHeight: FIT_VIEW_MODEL_CONFIG.rowHeight,
-  columnWidth: FIT_VIEW_MODEL_CONFIG.columnWidth,
+  rowHeights: FIT_VIEW_MODEL_CONFIG.rowHeights,
+  columnWidths: FIT_VIEW_MODEL_CONFIG.columnWidths,
   viewModelFactory: FIT_VIEW_MODEL_CONFIG.viewModelFactory,
   languageDictionaryFactory: FIT_VIEW_MODEL_CONFIG.languageDictionaryFactory,
   imageRegistryFactory: FIT_VIEW_MODEL_CONFIG.imageRegistryFactory,
@@ -75,8 +75,8 @@ export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
 
 export type FitViewModelConfigDef = {
   fontSize?: number;
-  rowHeight?: number;
-  columnWidth?: number;
+  rowHeights?: number;
+  columnWidths?: number;
   colorPalette?: Option[];
   fontFamily?: Option[];
   showRowHeader?: boolean;
@@ -120,8 +120,8 @@ function updateUnitConfig(
   def: FitViewModelConfigDef
 ): void {
   if (def.fontSize) cfg.fontSize = def.fontSize;
-  if (def.rowHeight) cfg.rowHeight = def.rowHeight;
-  if (def.columnWidth) cfg.columnWidth = def.columnWidth;
+  if (def.rowHeights) cfg.rowHeights = def.rowHeights;
+  if (def.columnWidths) cfg.columnWidths = def.columnWidths;
   if (def.disableVirtualRows !== undefined) {
     cfg.disableVirtualRows = def.disableVirtualRows;
   }

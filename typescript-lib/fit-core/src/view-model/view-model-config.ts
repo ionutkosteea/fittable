@@ -26,8 +26,8 @@ import { ThemeSwitcherFactory } from './model/theme-switcher.js';
 export type Option = { label: string; value?: string };
 
 export interface ViewModelConfig {
-  rowHeight: number;
-  columnWidth: number;
+  rowHeights: number;
+  columnWidths: number;
   fontSize: number;
   colorPalette?: Option[];
   fontFamily?: Option[];

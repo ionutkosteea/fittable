@@ -1,32 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 
-import { createColumn, createTable, registerModelConfig } from 'fit-core/model';
+import { createTable, registerModelConfig } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import { FitColumn, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
+import { FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
-import { THIN_VIEW_MODEL_CONFIG } from 'fit-view-model';
+import { createFitViewModelConfig } from 'fit-view-model';
 
 import { CodeSnippet } from '../common/code-snippet.model';
 import { TopicTitle } from '../../common/topic-title.model';
 import { SimpleTopic } from '../common/simple-topic.model';
 
 @Component({
-  selector: 'column-width',
+  selector: 'row-heights',
   templateUrl: '../common/simple-topic.html',
   styleUrls: ['../common/simple-topic.css', '../common/common.css'],
 })
-export class ColumnWidthtComponent implements SimpleTopic, OnInit {
-  public readonly title: TopicTitle = 'Column width';
+export class RowHeightsComponent implements SimpleTopic, OnInit {
+  public readonly title: TopicTitle = 'Row heights';
   public readonly htmlCode: CodeSnippet[] = [
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'column-width-ts.jpg' },
+    { image: 'row-heights-ts.jpg' },
   ];
   public fit!: FittableDesigner;
 
@@ -34,11 +34,12 @@ export class ColumnWidthtComponent implements SimpleTopic, OnInit {
     // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
-    registerViewModelConfig(THIN_VIEW_MODEL_CONFIG);
-
-    this.fit = createFittableDesigner(
-      createTable<FitTable>(5, 5) //
-        .addColumn(1, createColumn<FitColumn>().setWidth(200))
+    registerViewModelConfig(
+      createFitViewModelConfig({
+        rowHeights: 10, //default 21
+      })
     );
+
+    this.fit = createFittableDesigner(createTable(5, 5));
   }
 }

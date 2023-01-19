@@ -34,7 +34,7 @@ export class RowResizeMenuItem extends InputMenuItem {
     const rTable: TableRows | undefined = asTableRows(table);
     const row: Row | undefined = rTable?.getRow(rowId);
     const rowHeight: number | undefined = asRowHeight(row)?.getHeight();
-    return rowHeight ?? this.config.rowHeight;
+    return rowHeight ?? this.config.rowHeights;
   }
 
   public override isValid(): boolean {
@@ -56,7 +56,7 @@ export class RowResizeMenuItem extends InputMenuItem {
     return {
       id: 'row-height',
       selectedLines: this.getSelectedRows(),
-      dimension: this.value === this.config.rowHeight ? undefined : this.value,
+      dimension: this.value === this.config.rowHeights ? undefined : this.value,
     };
   }
 }

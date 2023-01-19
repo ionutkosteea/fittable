@@ -8,9 +8,7 @@
   <div class="content">
     <introduction *ngIf="activeContent==='Introduction'"></introduction>
     <architecture *ngIf="activeContent==='Architecture'"></architecture>
-    <row-header *ngIf="activeContent==='Row header'"></row-header>
     <row-height *ngIf="activeContent==='Row height'"></row-height>
-    <column-header *ngIf="activeContent==='Column header'"></column-header>
     <column-width *ngIf="activeContent==='Column width'"></column-width>
     <cell-value *ngIf="activeContent==='Cell value'"></cell-value>
     <cell-style *ngIf="activeContent==='Cell style'"></cell-style>
@@ -36,6 +34,10 @@
     <unmerge-cells *ngIf="activeContent==='Unmerge cells'"></unmerge-cells>
     <operation-dto *ngIf="activeContent==='Operation DTO'"></operation-dto>
     <custom-operation *ngIf="activeContent==='Custom operation'"></custom-operation>
+    <row-header *ngIf="activeContent==='Row header'"></row-header>
+    <column-header *ngIf="activeContent==='Column header'"></column-header>
+    <row-heights *ngIf="activeContent==='Row heights'"></row-heights>
+    <column-widths *ngIf="activeContent==='Column widths'"></column-widths>
     <table-scroller *ngIf="activeContent==='Table scroller'"></table-scroller>
     <cell-selection *ngIf="activeContent==='Cell selection'"></cell-selection>
     <cell-editor *ngIf="activeContent==='Cell editor'"></cell-editor>

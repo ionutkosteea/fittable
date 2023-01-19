@@ -6,9 +6,7 @@ import { NgxFittableModule } from 'ngx-fittable';
 import { AppComponent } from './app.component';
 import { NavigationTreeComponent } from './navigation-tree/navigation-tree.component';
 import { IntroductionComponent } from './topics/getting-started/introduction/introduction.component';
-import { RowHeaderComponent } from './topics/table-model/row-header.component';
 import { RowHeightComponent } from './topics/table-model/row-height.component';
-import { ColumnHeaderComponent } from './topics/table-model/column-header.component';
 import { ColumnWidthtComponent } from './topics/table-model/column-width.component';
 import { CellValueComponent } from './topics/table-model/cell-value.component';
 import { CellStyleComponent } from './topics/table-model/cell-style.component';
@@ -34,6 +32,10 @@ import { MergeCellsComponent } from './topics/table-operations/merge-cells.compo
 import { UnmergeCellsComponent } from './topics/table-operations/unmerge-cells.component';
 import { OperationDtoComponent } from './topics/table-operations/operation-dto.component';
 import { CustomOperationComponent } from './topics/table-operations/custom-operation.component';
+import { RowHeaderComponent } from './topics/table-designer/row-header.component';
+import { ColumnHeaderComponent } from './topics/table-designer/column-header.component';
+import { RowHeightsComponent } from './topics/table-designer/row-heights.component';
+import { ColumnWidthtsComponent } from './topics/table-designer/column-widths.component';
 import { TableScrollerComponent } from './topics/table-designer/table-scroller.component';
 import { CellSelectionComponent } from './topics/table-designer/cell-selection.component';
 import { CellEditorComponent } from './topics/table-designer/cell-editor.component';
@@ -53,9 +55,7 @@ import { ArchitectureComponent } from './topics/getting-started/architecture/arc
     NavigationTreeComponent,
     IntroductionComponent,
     ArchitectureComponent,
-    RowHeaderComponent,
     RowHeightComponent,
-    ColumnHeaderComponent,
     ColumnWidthtComponent,
     CellValueComponent,
     CellStyleComponent,
@@ -81,6 +81,10 @@ import { ArchitectureComponent } from './topics/getting-started/architecture/arc
     UnmergeCellsComponent,
     OperationDtoComponent,
     CustomOperationComponent,
+    RowHeaderComponent,
+    ColumnHeaderComponent,
+    RowHeightsComponent,
+    ColumnWidthtsComponent,
     TableScrollerComponent,
     CellSelectionComponent,
     CellEditorComponent,

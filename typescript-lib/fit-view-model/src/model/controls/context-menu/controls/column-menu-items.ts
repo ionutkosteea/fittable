@@ -34,7 +34,7 @@ export class ColumnResizeMenuItem extends InputMenuItem {
     const cTable: TableColumns | undefined = asTableColumns(table);
     const column: Column | undefined = cTable?.getColumn(colId);
     const columnWidth: number | undefined = asColumnWidth(column)?.getWidth();
-    return columnWidth ?? this.config.columnWidth;
+    return columnWidth ?? this.config.columnWidths;
   }
 
   public override isValid(): boolean {
@@ -57,7 +57,7 @@ export class ColumnResizeMenuItem extends InputMenuItem {
       id: 'column-width',
       selectedLines: this.getSelectedColumns(),
       dimension:
-        this.value === this.config.columnWidth ? undefined : this.value,
+        this.value === this.config.columnWidths ? undefined : this.value,
     };
   }
 }

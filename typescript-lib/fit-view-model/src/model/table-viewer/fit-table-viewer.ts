@@ -60,7 +60,7 @@ export class FitTableViewer implements TableViewer {
 
   public getColumnWidth(colId: number): number {
     const col: Column | undefined = this.columnTable?.getColumn(colId);
-    return asColumnWidth(col)?.getWidth() ?? this.config.columnWidth;
+    return asColumnWidth(col)?.getWidth() ?? this.config.columnWidths;
   }
 
   public getRowHeaderWidth(): number {
@@ -82,7 +82,7 @@ export class FitTableViewer implements TableViewer {
 
   public getRowHeight(rowId: number): number {
     const row: Row | undefined = this.rowTable?.getRow(rowId);
-    return asRowHeight(row)?.getHeight() ?? this.config.rowHeight;
+    return asRowHeight(row)?.getHeight() ?? this.config.rowHeights;
   }
 
   public getColumnHeaderHeight(): number {

@@ -9,7 +9,7 @@ import {
 } from 'fit-core/view-model';
 import { FitRow, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
-import { createFitViewModelConfig } from 'fit-view-model';
+import { THIN_VIEW_MODEL_CONFIG } from 'fit-view-model';
 
 import { CodeSnippet } from '../common/code-snippet.model';
 import { TopicTitle } from '../../common/topic-title.model';
@@ -34,11 +34,7 @@ export class RowHeightComponent implements SimpleTopic, OnInit {
     // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
-    registerViewModelConfig(
-      createFitViewModelConfig({
-        rowHeight: 10, //default 21
-      })
-    );
+    registerViewModelConfig(THIN_VIEW_MODEL_CONFIG);
 
     this.fit = createFittableDesigner(
       createTable<FitTable>(5, 5).addRow(1, createRow<FitRow>().setHeight(42))
