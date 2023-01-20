@@ -46,7 +46,7 @@ export class CellStyleComponent implements SimpleTopic, OnInit {
     this.fit = createFittableDesigner(
       createTable<FitTable>(5, 5)
         .addStyle(
-          's01',
+          's0',
           createStyle<FitStyle>()
             .set('font-weight', 'bold')
             .set('font-style', 'italic')
@@ -65,7 +65,7 @@ export class CellStyleComponent implements SimpleTopic, OnInit {
         .addCell(
           1,
           1,
-          createCell<FitCell>().setStyleName('s01').setValue('Styled text')
+          createCell<FitCell>().setStyleName('s0').setValue('Styled text')
         )
     );
   }
