@@ -10,7 +10,7 @@ import {
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import {
@@ -22,7 +22,7 @@ import {
 } from '../../utils/style/style-functions.js';
 import { StyleOperationStepDto } from '../../operation-steps/style/style-operation-step.js';
 
-export type StyleUpdateOperationDtoArgs = Id<'style-update'> & {
+export type StyleUpdateOperationDtoArgs = OperationId<'style-update'> & {
   selectedCells: CellRange[];
   style: Style;
 };

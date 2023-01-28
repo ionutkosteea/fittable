@@ -3,15 +3,15 @@ import { CellRemoveOperationStepDto } from '../operation-steps/cell/cell-remove-
 import { CellValueOperationStepDto } from '../operation-steps/cell/cell-value-operation-step.js';
 import {
   RowHeightOperationStepDto,
-  ColumnWidthOperationStepDto,
+  ColWidthOperationStepDto,
 } from '../operation-steps/line/line-dimension-operation-step.js';
 import {
   RowInsertOperationStepDto,
-  ColumnInsertOperationStepDto,
+  ColInsertOperationStepDto,
 } from '../operation-steps/line/line-insert-operation-step.js';
 import {
   RowRemoveOperationStepDto,
-  ColumnRemoveOperationStepDto,
+  ColRemoveOperationStepDto,
 } from '../operation-steps/line/line-remove-operation-step.js';
 import { StyleOperationStepDto } from '../operation-steps/style/style-operation-step.js';
 
@@ -20,16 +20,16 @@ import { CellPasteOperationDtoArgs } from '../operation-dtos/cell/cell-paste-ope
 import { CellRemoveOperationDtoArgs } from '../operation-dtos/cell/cell-remove-operation-dto.js';
 import { CellValueOperationDtoArgs } from '../operation-dtos/cell/cell-value-operation-dto.js';
 import {
-  ColumnWidthOperationDtoArgs,
+  ColWidthOperationDtoArgs,
   RowHeightOperationDtoArgs,
 } from '../operation-dtos/line/line-dimension-operation-dto.js';
 import {
   RowInsertOperationDtoArgs,
-  ColumnInsertOperationDtoArgs,
+  ColInsertOperationDtoArgs,
 } from '../operation-dtos/line/line-insert-operation-dto.js';
 import {
   RowRemoveOperationDtoArgs,
-  ColumnRemoveOperationDtoArgs,
+  ColRemoveOperationDtoArgs,
 } from '../operation-dtos/line/line-remove-operation-dto.js';
 import { StyleBorderOperationDtoArgs } from '../operation-dtos/style/style-border-operation-dto.js';
 import { StyleNameOperationDtoArgs } from '../operation-dtos/style/style-name-operation-dto.js';
@@ -49,11 +49,11 @@ export type FitOperationDtoArgs =
   | CellMergeOperationDtoArgs
   | CellUnmergeOperationDtoArgs
   | RowHeightOperationDtoArgs
-  | ColumnWidthOperationDtoArgs
+  | ColWidthOperationDtoArgs
   | RowInsertOperationDtoArgs
-  | ColumnInsertOperationDtoArgs
+  | ColInsertOperationDtoArgs
   | RowRemoveOperationDtoArgs
-  | ColumnRemoveOperationDtoArgs
+  | ColRemoveOperationDtoArgs
   | StyleBorderOperationDtoArgs
   | StyleNameOperationDtoArgs
   | StyleRemoveOperationDtoArgs
@@ -68,11 +68,11 @@ export type FitOperationDtoId =
   | CellMergeOperationDtoArgs['id']
   | CellUnmergeOperationDtoArgs['id']
   | RowHeightOperationDtoArgs['id']
-  | ColumnWidthOperationDtoArgs['id']
+  | ColWidthOperationDtoArgs['id']
   | RowInsertOperationDtoArgs['id']
-  | ColumnInsertOperationDtoArgs['id']
+  | ColInsertOperationDtoArgs['id']
   | RowRemoveOperationDtoArgs['id']
-  | ColumnRemoveOperationDtoArgs['id']
+  | ColRemoveOperationDtoArgs['id']
   | StyleBorderOperationDtoArgs['id']
   | StyleNameOperationDtoArgs['id']
   | StyleRemoveOperationDtoArgs['id']
@@ -83,10 +83,10 @@ export type FitOperationStepId =
   | CellRemoveOperationStepDto['id']
   | CellValueOperationStepDto['id']
   | RowHeightOperationStepDto['id']
-  | ColumnWidthOperationStepDto['id']
+  | ColWidthOperationStepDto['id']
   | RowInsertOperationStepDto['id']
-  | ColumnInsertOperationStepDto['id']
+  | ColInsertOperationStepDto['id']
   | RowRemoveOperationStepDto['id']
-  | ColumnRemoveOperationStepDto['id']
+  | ColRemoveOperationStepDto['id']
   | StyleOperationStepDto['id']
   | MergedRegionsOperationStepDto['id'];

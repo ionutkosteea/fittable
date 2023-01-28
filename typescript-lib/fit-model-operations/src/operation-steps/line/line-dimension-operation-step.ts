@@ -1,21 +1,13 @@
 import {
   Table,
-  Row,
-  Column,
   TableRows,
-  TableColumns,
-  createRow,
-  createColumn,
-  asColumnWidth,
-  ColumnWidth,
-  asRowHeight,
-  RowHeight,
+  TableCols,
   createLineRange4Dto,
 } from 'fit-core/model/index.js';
 import {
   OperationStep,
   OperationStepFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 export type DimensionDto = {
@@ -35,8 +27,6 @@ abstract class LineDimensionOperationStep implements OperationStep {
     lineDimension?: number
   ): void;
 
-  protected abstract removeLineIfNoProperties(lineIndex: number): void;
-
   public run(): void {
     this.updateLines();
   }
@@ -44,16 +34,17 @@ abstract class LineDimensionOperationStep implements OperationStep {
   private updateLines(): void {
     for (const dimensionDto of this.stepDto.dimensions) {
       for (const lineRangeDto of dimensionDto.updatableLineRanges) {
-        createLineRange4Dto(lineRangeDto).forEachLine((lineId: number) => {
-          this.updateDimension(lineId, dimensionDto.dimension);
-          this.removeLineIfNoProperties(lineId);
-        });
+        createLineRange4Dto(lineRangeDto).forEachLine(
+          (lineId: number): void => {
+            this.updateDimension(lineId, dimensionDto.dimension);
+          }
+        );
       }
     }
   }
 }
 
-export type RowHeightOperationStepDto = Id<'row-height'> &
+export type RowHeightOperationStepDto = OperationId<'row-height'> &
   LineDimensionOperationStepDto;
 
 export class RowHeightOperationStep extends LineDimensionOperationStep {
@@ -64,24 +55,8 @@ export class RowHeightOperationStep extends LineDimensionOperationStep {
     super(table, stepDto);
   }
 
-  protected updateDimension(rowId: number, height: number): void {
-    const row: Row | undefined = this.table.getRow(rowId);
-    if (row) {
-      asRowHeight(row)?.setHeight(height);
-    } else {
-      const newRow: Row = createRow();
-      const newRowHeight: RowHeight | undefined = asRowHeight(newRow);
-      if (newRowHeight) {
-        newRowHeight.setHeight(height);
-        this.table.addRow(rowId, newRow);
-      }
-    }
-  }
-
-  protected removeLineIfNoProperties(rowId: number): void {
-    let row: Row | undefined = this.table.getRow(rowId);
-    if (row?.hasProperties()) return;
-    this.table.removeRow(rowId, true);
+  protected updateDimension(rowId: number, height?: number): void {
+    this.table.setRowHeight(rowId, height);
   }
 }
 
@@ -94,43 +69,27 @@ export class RowHeightOperationStepFactory implements OperationStepFactory {
   }
 }
 
-export type ColumnWidthOperationStepDto = Id<'column-width'> &
+export type ColWidthOperationStepDto = OperationId<'column-width'> &
   LineDimensionOperationStepDto;
 
-export class ColumnWidthOperationStep extends LineDimensionOperationStep {
+export class ColWidthOperationStep extends LineDimensionOperationStep {
   constructor(
-    protected readonly table: Table & TableColumns,
-    protected readonly stepDto: ColumnWidthOperationStepDto
+    protected readonly table: Table & TableCols,
+    protected readonly stepDto: ColWidthOperationStepDto
   ) {
     super(table, stepDto);
   }
 
-  protected updateDimension(colId: number, width: number): void {
-    const col: Column | undefined = this.table.getColumn(colId);
-    if (col) {
-      asColumnWidth(col)?.setWidth(width);
-    } else {
-      const newCol: Column = createColumn();
-      const newColWidth: ColumnWidth | undefined = asColumnWidth(newCol);
-      if (newColWidth) {
-        newColWidth.setWidth(width);
-        this.table.addColumn(colId, newCol);
-      }
-    }
-  }
-
-  protected removeLineIfNoProperties(colId: number): void {
-    let column: Column | undefined = this.table.getColumn(colId);
-    if (column?.hasProperties()) return;
-    this.table.removeColumn(colId, true);
+  protected updateDimension(colId: number, width?: number): void {
+    this.table.setColWidth(colId, width);
   }
 }
 
-export class ColumnWidthOperationStepFactory implements OperationStepFactory {
+export class ColWidthOperationStepFactory implements OperationStepFactory {
   public createStep(
-    table: Table & TableColumns,
-    stepDto: ColumnWidthOperationStepDto
+    table: Table & TableCols,
+    stepDto: ColWidthOperationStepDto
   ): OperationStep {
-    return new ColumnWidthOperationStep(table, stepDto);
+    return new ColWidthOperationStep(table, stepDto);
   }
 }

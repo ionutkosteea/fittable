@@ -50,10 +50,10 @@ export class ResizeRowsComponent
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ rowHeader: true, columnHeader: true })
+      createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
     const afterRun$: Subject<Operation> = new Subject();
     this.subscription = afterRun$.subscribe((operation: Operation): void => {
       this.consoleText += 'Operation id: ' + operation.id + '\n';

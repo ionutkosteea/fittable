@@ -2,7 +2,7 @@ import {} from 'jasmine';
 
 import { Subject, Subscription } from 'rxjs';
 
-import { Table, createCell } from 'fit-core/model/index.js';
+import { Table } from 'fit-core/model/index.js';
 import { Operation } from 'fit-core/operations/index.js';
 
 import { TableOperationExecutor } from './model/table-operation-executor.js';
@@ -12,35 +12,33 @@ describe('Test Operation', () => {
     const executor: TableOperationExecutor = new TableOperationExecutor() //
       .createTable(1, 1);
 
-    const table: Table = executor
-      .getTable()
-      .addCell(0, 0, createCell().setValue('text'));
+    const table: Table = executor.getTable().setCellValue(0, 0, 'text');
 
     expect(executor.canUndo()).toBeFalsy();
     expect(executor.canRedo()).toBeFalsy();
 
     executor.runCellValue(0, 0, 1000);
-    expect(table.getCell(0, 0)?.getValue() === 1000).toBeTruthy();
+    expect(table.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.canUndo()).toBeTruthy();
     expect(executor.canRedo()).toBeFalsy();
 
     executor.runUndo();
-    expect(table.getCell(0, 0)?.getValue() === 'text').toBeTruthy();
+    expect(table.getCellValue(0, 0) === 'text').toBeTruthy();
     expect(executor.canUndo()).toBeFalsy();
     expect(executor.canRedo()).toBeTruthy();
 
     executor.runRedo();
-    expect(table.getCell(0, 0)?.getValue() === 1000).toBeTruthy();
+    expect(table.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.canUndo()).toBeTruthy();
     expect(executor.canRedo()).toBeFalsy();
 
     executor.runUndo();
-    expect(table.getCell(0, 0)?.getValue() === 'text').toBeTruthy();
+    expect(table.getCellValue(0, 0) === 'text').toBeTruthy();
     expect(executor.canUndo()).toBeFalsy();
     expect(executor.canRedo()).toBeTruthy();
 
     executor.runCellValue(0, 0, 1000);
-    expect(table.getCell(0, 0)?.getValue() === 1000).toBeTruthy();
+    expect(table.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.canUndo()).toBeTruthy();
     expect(executor.canRedo()).toBeFalsy();
   });

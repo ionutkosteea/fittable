@@ -31,7 +31,7 @@ export class CustomViewModelComponent implements SimpleTopic, OnInit {
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'custom-view-model-ts-01.jpg' },
+    { image: 'custom-view-model-ts.jpg' },
   ];
   public fit!: FittableDesigner;
 
@@ -44,7 +44,7 @@ export class CustomViewModelComponent implements SimpleTopic, OnInit {
     viewModelConfig.contextMenuFactory = this.createDummyContextMenuFactory();
     registerViewModelConfig(viewModelConfig);
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
   }
 
   private createDummyToolbarFactory(): ToolbarFactory {

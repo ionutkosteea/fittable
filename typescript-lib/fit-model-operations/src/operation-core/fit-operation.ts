@@ -3,7 +3,7 @@ import {
   OperationStep,
   OperationFactory,
   OperationDto,
-  Id,
+  OperationId,
   BaseOperationDto,
 } from 'fit-core/operations/index.js';
 
@@ -33,7 +33,9 @@ export class FitOperation implements Operation {
 
 export class FitOperationFactory implements OperationFactory {
   constructor(
-    public readonly createOperationStep: (stepDto: Id<string>) => OperationStep
+    public readonly createOperationStep: (
+      stepDto: OperationId<string>
+    ) => OperationStep
   ) {}
 
   public createOperation(operationDto: OperationDto): FitOperation {

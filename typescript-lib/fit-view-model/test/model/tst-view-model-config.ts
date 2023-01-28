@@ -20,8 +20,8 @@ class TstImageRegistryFactory implements ImageRegistryFactory {
 }
 
 export const TST_VIEW_MODEL_CONFIG: ViewModelConfig = {
-  rowHeight: 21,
-  columnWidth: 100,
+  rowHeights: 21,
+  colWidths: 100,
   fontSize: 12,
   colorPalette: [],
   fontFamily: [],

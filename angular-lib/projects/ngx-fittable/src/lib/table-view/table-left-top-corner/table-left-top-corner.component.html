@@ -1,11 +1,11 @@
-<div class="table-left-top" *ngIf="hasRowHeader() && hasColumnHeader()" [ngStyle]="getContainerPosition()">
+<div class="table-left-top" *ngIf="hasRowHeader() && hasColHeader()" [ngStyle]="getContainerPosition()">
   <table class="table">
     <colgroup>
       <col [ngStyle]="{'width.px':getRowHeaderWidth()}" />
     </colgroup>
     <thead fitCellSelection [cellSelectionListener]="getCellSelectionListener()"
       [cellSelectionRanges]="getCellSelectionRanges()">
-      <tr class="header-row" [ngStyle]="{'height.px':getColumnHeaderHeight()}">
+      <tr class="header-row" [ngStyle]="{'height.px':getColHeaderHeight()}">
         <th class="header-cell" [attr.rowId]="0" [attr.colId]="0">
           &nbsp;</th>
       </tr>

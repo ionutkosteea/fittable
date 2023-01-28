@@ -1,12 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {
-  Cell,
-  createCell,
-  createTable,
-  registerModelConfig,
-  Table,
-} from 'fit-core/model';
+import { createTable, registerModelConfig, Table } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
@@ -50,7 +44,7 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
   public readonly buttons: Button[] = [];
   public fit!: FittableDesigner;
   private virtualRowsButton?: Button;
-  private virtualColumnsButton?: Button;
+  private virtualColsButton?: Button;
   private verticalScrollbar?: Scrollbar;
   private horizontalScrollbar?: Scrollbar;
 
@@ -61,16 +55,17 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
     registerViewModelConfig(
       createFitViewModelConfig({
         rowHeader: true,
-        columnHeader: true,
+        colHeader: true,
         cellSelection: true,
         statusbar: true,
       })
     );
 
-    const table: Table = createTable(1000, 1000);
-    table.forEachCellCoord((rowId: number, colId: number): void => {
-      const cell: Cell = createCell().setValue('[' + rowId + ',' + colId + ']');
-      table.addCell(rowId, colId, cell);
+    const table: Table = createTable()
+      .setNumberOfRows(1000)
+      .setNumberOfCols(1000);
+    table.forEachCell((rowId: number, colId: number): void => {
+      table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
     this.fit = createFittableDesigner(table);
 
@@ -83,8 +78,8 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
   private createButtons(): void {
     this.virtualRowsButton = this.createVirtualRowsButton();
     this.buttons.push(this.virtualRowsButton);
-    this.virtualColumnsButton = this.createVirtualColumnsButton();
-    this.buttons.push(this.virtualColumnsButton);
+    this.virtualColsButton = this.createVirtualColsButton();
+    this.buttons.push(this.virtualColsButton);
     this.buttons.push(this.createScrollToTopButton());
   }
 
@@ -101,27 +96,27 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
         const tableScroller: TableScroller = this.fit.viewModel.tableScroller;
         if (config.disableVirtualRows) {
           tableScroller.setVerticalScrollbar();
-          this.virtualColumnsButton!.disabled = 'disabled';
+          this.virtualColsButton!.disabled = 'disabled';
         } else {
           tableScroller.setVerticalScrollbar(this.verticalScrollbar);
-          this.virtualColumnsButton!.disabled = undefined;
+          this.virtualColsButton!.disabled = undefined;
         }
       },
     };
   };
 
-  private createVirtualColumnsButton = (): Button => {
+  private createVirtualColsButton = (): Button => {
     return {
       getLabel: (): string => {
-        return getViewModelConfig().disableVirtualColumns
+        return getViewModelConfig().disableVirtualCols
           ? 'Enable virtual columns'
           : 'Disable virtual columns';
       },
       run: (): void => {
         const config: ViewModelConfig = getViewModelConfig();
-        config.disableVirtualColumns = !config.disableVirtualColumns;
+        config.disableVirtualCols = !config.disableVirtualCols;
         const tableScroller: TableScroller = this.fit.viewModel.tableScroller;
-        if (config.disableVirtualColumns) {
+        if (config.disableVirtualCols) {
           tableScroller.setHorizontalScrollbar();
           this.virtualRowsButton!.disabled = 'disabled';
         } else {
@@ -147,9 +142,9 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
     const lastRow: number = this.getLastRenderableRow();
     consoleText += 'Rendered rows: [' + firstRow + ',' + lastRow + ']\n';
     consoleText +=
-      'Total number of columns: ' + this.fit.table.getNumberOfColumns() + '\n';
-    const firstCol: number = this.getFirstRenderableColumn();
-    const lastCol: number = this.getLastRenderableColumn();
+      'Total number of columns: ' + this.fit.table.getNumberOfCols() + '\n';
+    const firstCol: number = this.getFirstRenderableCol();
+    const lastCol: number = this.getLastRenderableCol();
     consoleText += 'Rendered columns: [' + firstCol + ',' + lastCol + ']\n';
     consoleText +=
       'Scroll left: ' + this.fit.viewModel.tableScroller.getLeft() + '\n';
@@ -158,7 +153,7 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
     return consoleText;
   }
 
-  private getFirstRenderableColumn(): number {
+  private getFirstRenderableCol(): number {
     return (
       this.fit.viewModel.tableScroller
         .getHorizontalScrollbar()
@@ -166,13 +161,13 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
     );
   }
 
-  private getLastRenderableColumn(): number {
+  private getLastRenderableCol(): number {
     const colId: number =
       this.fit.viewModel.tableScroller
         .getHorizontalScrollbar()
         ?.getLastRenderableLine() ?? 0;
-    const numberOfColumns: number = this.fit.table.getNumberOfColumns();
-    return colId > 0 ? colId : numberOfColumns > 0 ? numberOfColumns - 1 : 0;
+    const numberOfCols: number = this.fit.table.getNumberOfCols();
+    return colId > 0 ? colId : numberOfCols > 0 ? numberOfCols - 1 : 0;
   }
 
   private getFirstRenderableRow(): number {

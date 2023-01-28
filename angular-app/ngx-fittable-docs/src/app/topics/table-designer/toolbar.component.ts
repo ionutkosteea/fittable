@@ -46,7 +46,7 @@ export class ToolbarComponent implements SimpleTopic, OnInit {
       createFitViewModelConfig({ toolbar: true, cellEditor: true })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
 
     this.replaceUndoButton();
   }

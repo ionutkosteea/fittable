@@ -1,7 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 
 import { implementsTKeys } from '../../common/core-functions.js';
-import { Value } from '../../model/cell.js';
+import { Value } from '../../model/table.js';
 import { CellRange } from '../../model/cell-range.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { OperationExecutor } from '../../operations/operation-core.js';

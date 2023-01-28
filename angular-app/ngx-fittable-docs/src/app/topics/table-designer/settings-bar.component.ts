@@ -49,7 +49,7 @@ export class SettingsBarComponent implements SimpleTopic, OnInit {
       createFitViewModelConfig({ settingsBar: true, themeSwitcher: true })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
 
     this.insertNewLanguageControl();
   }

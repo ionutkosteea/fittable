@@ -2,9 +2,7 @@ import { Subject, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
-  Cell,
   CellRange,
-  createCell,
   createCellCoord,
   createTable,
   registerModelConfig,
@@ -51,15 +49,14 @@ export class CellSelectionComponent implements ConsoleTopic, OnInit, OnDestroy {
     registerViewModelConfig(
       createFitViewModelConfig({
         rowHeader: true,
-        columnHeader: true,
+        colHeader: true,
         cellSelection: true,
       })
     );
 
-    const table: Table = createTable(5, 5);
-    table.forEachCellCoord((rowId: number, colId: number): void => {
-      const cell: Cell = createCell().setValue('[' + rowId + ',' + colId + ']');
-      table.addCell(rowId, colId, cell);
+    const table: Table = createTable();
+    table.forEachCell((rowId: number, colId: number): void => {
+      table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
     this.fit = createFittableDesigner(table);
 

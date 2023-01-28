@@ -3,19 +3,19 @@ import { Subject } from 'rxjs';
 import { Table } from '../model/table.js';
 import { getOperationConfig } from './operation-config.js';
 
-export type Id<T extends string> = { id: T };
+export type OperationId<T extends string> = { id: T };
 
 export type BaseOperationDto = {
-  steps: Id<string>[];
+  steps: OperationId<string>[];
   undoOperation?: BaseOperationDto;
 };
 
-export type OperationDto = Id<string> & BaseOperationDto;
+export type OperationDto = OperationId<string> & BaseOperationDto;
 
 export interface OperationDtoFactory {
   createOperationDto(
     table: Table,
-    args: Id<string>
+    args: OperationId<string>
   ): OperationDto | Promise<OperationDto>;
 }
 
@@ -26,7 +26,7 @@ export interface OperationStep {
 }
 
 export interface OperationStepFactory {
-  createStep(table: Table, stepDto: Id<string>): OperationStep;
+  createStep(table: Table, stepDto: OperationId<string>): OperationStep;
 }
 
 export type OperationStepFactoryClass = { new (): OperationStepFactory };
@@ -68,11 +68,13 @@ export interface OperationExecutor {
   clearListeners(): this;
   setTable(table: Table): this;
   getTable(): Table | undefined;
-  createOperationDto(args: Id<string>): OperationDto | Promise<OperationDto>;
+  createOperationDto(
+    args: OperationId<string>
+  ): OperationDto | Promise<OperationDto>;
   runOperationDto(operationDto: OperationDto | Promise<OperationDto>): this;
   createOperation(operationDto: OperationDto): Operation;
   runOperation(operation: Operation): this;
-  run(args: Id<string>): this;
+  run(args: OperationId<string>): this;
   canUndo(): boolean;
   undo(): this;
   canRedo(): boolean;

@@ -52,7 +52,7 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
       })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
 
     this.setFrenchAsCurrentLanguage();
     this.createButtons();

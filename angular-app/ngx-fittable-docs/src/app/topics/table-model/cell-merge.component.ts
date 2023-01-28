@@ -1,24 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import {
-  createCell,
-  createCellCoord,
-  createMergedRegions,
-  createTable,
-  registerModelConfig,
-} from 'fit-core/model';
+import { createTable, registerModelConfig } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import {
-  FitCell,
-  FitMergedRegions,
-  FitTable,
-  FIT_MODEL_CONFIG,
-} from 'fit-model';
+import { FitTable, FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
@@ -50,12 +39,10 @@ export class CellMergeComponent implements SimpleTopic, OnInit {
     );
 
     this.fit = createFittableDesigner(
-      createTable<FitTable>(5, 5)
-        .addCell(1, 1, createCell<FitCell>().setValue('Merged cell text'))
-        .setMergedRegions(
-          createMergedRegions<FitMergedRegions>() //
-            .addRegion(createCellCoord(1, 1), createCellCoord(2, 2))
-        )
+      createTable<FitTable>() // Fittable has by default 5 rows and 5 cols.
+        .setCellValue(1, 1, 'Merged cell text')
+        .setRowSpan(1, 1, 2)
+        .setColSpan(1, 1, 2)
     );
   }
 }

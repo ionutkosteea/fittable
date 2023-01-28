@@ -2,7 +2,6 @@ import { Subject, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
-  createCell,
   createCellCoord,
   createCellRange,
   createStyle,
@@ -15,7 +14,7 @@ import {
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import { FitCell, FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
+import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
 import {
   FitOperationDtoArgs,
   FIT_OPERATION_CONFIG,
@@ -53,13 +52,13 @@ export class PaintFormatComponent
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ rowHeader: true, columnHeader: true })
+      createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
     this.fit = createFittableDesigner(
-      createTable<FitTable>(5, 5) //
+      createTable<FitTable>()
         .addStyle('s0', createStyle<FitStyle>().set('background-color', 'blue'))
-        .addCell(0, 0, createCell<FitCell>().setStyleName('s0'))
+        .setCellStyleName(0, 0, 's0')
     );
     const afterRun$: Subject<Operation> = new Subject();
     this.subscription = afterRun$.subscribe((operation: Operation): void => {

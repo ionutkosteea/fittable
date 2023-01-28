@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { createCell, createTable, registerModelConfig } from 'fit-core/model';
+import { createTable, registerModelConfig } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
@@ -38,14 +38,11 @@ export class CellValueComponent implements SimpleTopic, OnInit {
       createFitViewModelConfig({ cellEditor: true, toolbar: true })
     );
 
-    const shortText = 'Short text';
-    const longText = 'Long text spreads on multiple lines';
-    const multipleLineText = 'Line1\nLine2\nLine3';
     this.fit = createFittableDesigner(
-      createTable(5, 5)
-        .addCell(1, 1, createCell().setValue(shortText))
-        .addCell(2, 1, createCell().setValue(longText))
-        .addCell(3, 1, createCell().setValue(multipleLineText))
+      createTable()
+        .setCellValue(1, 1, 'Short text')
+        .setCellValue(2, 1, 'Long text spreads on multiple lines')
+        .setCellValue(3, 1, 'Line1\nLine2\nLine3')
     );
   }
 }

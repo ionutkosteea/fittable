@@ -7,26 +7,26 @@ import {
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import { FIT_MODEL_CONFIG } from 'fit-model';
+import { FitTable, FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
-import { createFitViewModelConfig } from 'fit-view-model';
+import { THIN_VIEW_MODEL_CONFIG } from 'fit-view-model';
 
 import { CodeSnippet } from '../common/code-snippet.model';
 import { TopicTitle } from '../../common/topic-title.model';
 import { SimpleTopic } from '../common/simple-topic.model';
 
 @Component({
-  selector: 'column-widths',
+  selector: 'column-width',
   templateUrl: '../common/simple-topic.html',
   styleUrls: ['../common/simple-topic.css', '../common/common.css'],
 })
-export class ColumnWidthtsComponent implements SimpleTopic, OnInit {
-  public readonly title: TopicTitle = 'Column widths';
+export class ColWidthtComponent implements SimpleTopic, OnInit {
+  public readonly title: TopicTitle = 'Column width';
   public readonly htmlCode: CodeSnippet[] = [
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'column-widths-ts.jpg' },
+    { image: 'column-width-ts.jpg' },
   ];
   public fit!: FittableDesigner;
 
@@ -34,12 +34,10 @@ export class ColumnWidthtsComponent implements SimpleTopic, OnInit {
     // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
-    registerViewModelConfig(
-      createFitViewModelConfig({
-        columnWidths: 50, //default 100
-      })
-    );
+    registerViewModelConfig(THIN_VIEW_MODEL_CONFIG);
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(
+      createTable<FitTable>().setColWidth(1, 200)
+    );
   }
 }

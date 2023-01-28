@@ -1,8 +1,7 @@
-import { implementsTKeys } from '../common/index.js';
 import { CellCoord } from './cell-coord.js';
 import { getModelConfig } from './model-config.js';
 
-export interface CellRangeBasics {
+export interface CellRange {
   getDto(): unknown;
   getFrom(): CellCoord;
   setFrom(from: CellCoord): this;
@@ -10,17 +9,9 @@ export interface CellRangeBasics {
   setTo(to?: CellCoord): this;
   forEachCell(callbackFn: (rowId: number, colId: number) => void): void;
   hasCell(rowId: number, colId: number): boolean;
-  equals(other?: CellRangeBasics): boolean;
-  clone(): CellRangeBasics;
+  equals(other?: CellRange): boolean;
+  clone(): CellRange;
 }
-
-export interface CellRangeUpdater {
-  move(row: number, col: number): this;
-  increase(row: number, col: number): this;
-  decrease(row: number, col: number): this;
-}
-
-export type CellRange = CellRangeBasics & (CellRangeUpdater | {});
 
 export interface CellRangeFactory {
   createCellRange(from: CellCoord, to?: CellCoord): CellRange;
@@ -50,12 +41,4 @@ export function createDto4CellRangeList(rangeList: CellRange[]): unknown[] {
   const rangeDtoList: unknown[] = [];
   rangeList.forEach((range: CellRange) => rangeDtoList.push(range.getDto()));
   return rangeDtoList;
-}
-
-export function asCellRangeUpdater(
-  cellRange?: CellRange
-): (CellRangeBasics & CellRangeUpdater) | undefined {
-  return implementsTKeys<CellRangeUpdater>(cellRange, ['move'])
-    ? (cellRange as CellRangeBasics & CellRangeUpdater)
-    : undefined;
 }

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { createRow, createTable, registerModelConfig } from 'fit-core/model';
+import { createTable, registerModelConfig } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import { FitRow, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
+import { FitTable, FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { THIN_VIEW_MODEL_CONFIG } from 'fit-view-model';
 
@@ -37,7 +37,7 @@ export class RowHeightComponent implements SimpleTopic, OnInit {
     registerViewModelConfig(THIN_VIEW_MODEL_CONFIG);
 
     this.fit = createFittableDesigner(
-      createTable<FitTable>(5, 5).addRow(1, createRow<FitRow>().setHeight(42))
+      createTable<FitTable>().setRowHeight(1, 42)
     );
   }
 }

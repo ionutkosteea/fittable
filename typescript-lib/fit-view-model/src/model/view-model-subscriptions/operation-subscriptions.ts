@@ -181,23 +181,23 @@ export class OperationSubscriptions {
             this.refreshMergedRegions();
             break;
           case 'column-remove':
-            this.whenSelectionExceedsColumns();
+            this.whenSelectionExceedsCols();
             this.whenAllLinesRemoved();
-            this.refreshColumns();
+            this.refreshCols();
             this.refreshMergedRegions();
             break;
           case 'row-height':
             this.refreshRows();
             break;
           case 'column-width':
-            this.refreshColumns();
+            this.refreshCols();
             break;
           case 'row-insert':
             this.refreshRows();
             this.refreshMergedRegions();
             break;
           case 'column-insert':
-            this.refreshColumns();
+            this.refreshCols();
             this.refreshMergedRegions();
             break;
           case 'cell-merge':
@@ -223,7 +223,7 @@ export class OperationSubscriptions {
     this.args.cellEditor?.setCell(createCellCoord(removeData.lastRow, 0));
   }
 
-  private whenSelectionExceedsColumns(): void {
+  private whenSelectionExceedsCols(): void {
     const lastLines: LastLines | undefined = this.getLastLines();
     if (!lastLines) return;
     if (lastLines.lastCol >= lastLines.lastSelectedCol) return;
@@ -252,15 +252,13 @@ export class OperationSubscriptions {
     if (lastSelectedRow === 0 || lastSelectedCol === 0) return undefined;
     const table: Table = this.args.tableViewer.getTable();
     const lastRow: number = table.getNumberOfRows() - 1;
-    const lastCol: number = table.getNumberOfColumns() - 1;
+    const lastCol: number = table.getNumberOfCols() - 1;
     return { lastRow, lastCol, lastSelectedRow, lastSelectedCol };
   }
 
   private whenAllLinesRemoved(): void {
     const rowNum: number = this.args.tableViewer.getTable().getNumberOfRows();
-    const colNum: number = this.args.tableViewer
-      .getTable()
-      .getNumberOfColumns();
+    const colNum: number = this.args.tableViewer.getTable().getNumberOfCols();
     if (rowNum > 0 && colNum > 0) return;
     this.args.cellSelection?.clear();
     this.args.cellEditor?.setVisible(false);
@@ -272,8 +270,8 @@ export class OperationSubscriptions {
     this.args.cellSelectionPainter?.paint();
   }
 
-  private refreshColumns(): void {
-    this.args.tableViewer.resetColumnProperties();
+  private refreshCols(): void {
+    this.args.tableViewer.resetColProperties();
     this.args.tableScroller.resizeViewportWidth().renderTable();
     this.args.cellSelectionPainter?.paint();
   }

@@ -1,11 +1,9 @@
 import {
   Table,
   TableStyles,
-  Cell,
   CellRange,
   Style,
   createStyle,
-  asCellStyle,
   CellRangeList,
 } from 'fit-core/model/index.js';
 
@@ -17,7 +15,8 @@ export function findUpdatableCellStyles(
   const updatableStyles: Map<string | undefined, CellRangeList> = new Map();
   for (const cellRange of selectedCells) {
     cellRange.forEachCell((rowId: number, colId: number): void => {
-      const styleName: string | undefined = getStyleName(table, rowId, colId);
+      const styleName: string | undefined = //
+        table.getCellStyleName(rowId, colId);
       if (styleName) {
         const oldStyle: Style | undefined = table.getStyle(styleName);
         if (oldStyle && !oldStyle.contains(newStyle)) {
@@ -29,15 +28,6 @@ export function findUpdatableCellStyles(
     });
   }
   return updatableStyles;
-}
-
-function getStyleName(
-  table: Table & TableStyles,
-  rowId: number,
-  colId: number
-): string | undefined {
-  const cell: Cell | undefined = table.getCell(rowId, colId);
-  return asCellStyle(cell)?.getStyleName();
 }
 
 function setUpdatableStyles(args: {
@@ -60,8 +50,8 @@ export function countAllCellStyleNames(
   table: Table & TableStyles
 ): Map<string, number> {
   const cellStyleNamesCounter: Map<string, number> = new Map();
-  table.forEachCell((cell: Cell) => {
-    countCellStyleName(cellStyleNamesCounter, cell);
+  table.forEachCell((rowId: number, colId: number): void => {
+    countCellStyleName(cellStyleNamesCounter, table, rowId, colId);
   });
   return cellStyleNamesCounter;
 }
@@ -72,11 +62,8 @@ export function countSelectedCellStyleNames(
 ): Map<string, number> {
   const cellStyleNamesCounter: Map<string, number> = new Map();
   for (const range of selectedCells) {
-    range.forEachCell((rowId: number, colId: number) => {
-      const cell: Cell | undefined = table.getCell(rowId, colId);
-      if (cell) {
-        countCellStyleName(cellStyleNamesCounter, cell);
-      }
+    range.forEachCell((rowId: number, colId: number): void => {
+      countCellStyleName(cellStyleNamesCounter, table, rowId, colId);
     });
   }
   return cellStyleNamesCounter;
@@ -84,9 +71,11 @@ export function countSelectedCellStyleNames(
 
 function countCellStyleName(
   cellStyleNamesCounter: Map<string, number>,
-  cell: Cell
+  table: Table & TableStyles,
+  rowId: number,
+  colId: number
 ): void {
-  const styleName: string | undefined = asCellStyle(cell)?.getStyleName();
+  const styleName: string | undefined = table.getCellStyleName(rowId, colId);
   if (styleName) {
     if (cellStyleNamesCounter.has(styleName)) {
       const count: number = cellStyleNamesCounter.get(styleName) ?? 0;

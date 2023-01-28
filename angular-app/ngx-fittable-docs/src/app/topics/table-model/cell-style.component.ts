@@ -1,18 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import {
-  createCell,
-  createStyle,
-  createTable,
-  registerModelConfig,
-} from 'fit-core/model';
+import { createStyle, createTable, registerModelConfig } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import { FitCell, FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
+import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
@@ -44,7 +39,7 @@ export class CellStyleComponent implements SimpleTopic, OnInit {
     );
 
     this.fit = createFittableDesigner(
-      createTable<FitTable>(5, 5)
+      createTable<FitTable>() // Fittable has by default 5 rows and 5 cols.
         .addStyle(
           's0',
           createStyle<FitStyle>()
@@ -62,11 +57,8 @@ export class CellStyleComponent implements SimpleTopic, OnInit {
             .set('border-right', '2px solid blue')
             .set('border-bottom', '2px solid gray')
         )
-        .addCell(
-          1,
-          1,
-          createCell<FitCell>().setStyleName('s0').setValue('Styled text')
-        )
+        .setCellValue(1, 1, 'Styled text')
+        .setCellStyleName(1, 1, 's0')
     );
   }
 }

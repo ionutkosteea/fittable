@@ -1,11 +1,4 @@
-import {
-  CellRange,
-  Table,
-  TableColumns,
-  asTableColumns,
-  Column,
-  asColumnWidth,
-} from 'fit-core/model/index.js';
+import { asTableCols, CellRange, Table } from 'fit-core/model/index.js';
 import {
   ViewModelConfig,
   getViewModelConfig,
@@ -16,25 +9,23 @@ import { FitTextKey } from '../../../language-dictionary/language-dictionary-key
 import { FitOperationArgs } from '../../../operation-executor/operation-args.js';
 import { InputMenuItem, MenuItem } from './menu-item.js';
 
-export class ColumnResizeMenuItem extends InputMenuItem {
+export class ColResizeMenuItem extends InputMenuItem {
   protected labelKey: FitTextKey = 'Resize columns';
   protected iconId: FitImageId = 'width';
   private config: ViewModelConfig = getViewModelConfig();
 
   public override getValue(): number | undefined {
-    return this.value ?? this.getColumnWidth();
+    return this.value ?? this.getColWidth();
   }
 
-  private getColumnWidth(): number | undefined {
+  private getColWidth(): number | undefined {
     const cellRange: CellRange | undefined = this.args.getSelectedCells()[0];
     if (!cellRange) return undefined;
     const colId: number = cellRange.getFrom().getColId();
     const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
-    const cTable: TableColumns | undefined = asTableColumns(table);
-    const column: Column | undefined = cTable?.getColumn(colId);
-    const columnWidth: number | undefined = asColumnWidth(column)?.getWidth();
-    return columnWidth ?? this.config.columnWidths;
+    const colWidth: number | undefined = asTableCols(table)?.getColWidth(colId);
+    return colWidth ?? this.config.colWidths;
   }
 
   public override isValid(): boolean {
@@ -55,14 +46,13 @@ export class ColumnResizeMenuItem extends InputMenuItem {
   private getArgs(): FitOperationArgs {
     return {
       id: 'column-width',
-      selectedLines: this.getSelectedColumns(),
-      dimension:
-        this.value === this.config.columnWidths ? undefined : this.value,
+      selectedLines: this.getSelectedCols(),
+      dimension: this.value === this.config.colWidths ? undefined : this.value,
     };
   }
 }
 
-export class ColumnInsertLeftMenuItem extends InputMenuItem {
+export class ColInsertLeftMenuItem extends InputMenuItem {
   protected labelKey: FitTextKey = 'Insert columns left';
   protected iconId: FitImageId = 'insertLeft';
   protected value: number = 1;
@@ -85,13 +75,13 @@ export class ColumnInsertLeftMenuItem extends InputMenuItem {
   private getArgs(): FitOperationArgs {
     return {
       id: 'column-insert',
-      selectedLines: this.getFirstLine(this.getSelectedColumns()),
+      selectedLines: this.getFirstLine(this.getSelectedCols()),
       numberOfInsertableLines: this.value,
     };
   }
 }
 
-export class ColumnInsertRightMenuItem extends InputMenuItem {
+export class ColInsertRightMenuItem extends InputMenuItem {
   protected labelKey: FitTextKey = 'Insert columns right';
   protected iconId: FitImageId = 'insertRight';
   protected value: number = 1;
@@ -114,14 +104,14 @@ export class ColumnInsertRightMenuItem extends InputMenuItem {
   private getArgs(): FitOperationArgs {
     return {
       id: 'column-insert',
-      selectedLines: this.getFirstLine(this.getSelectedColumns()),
+      selectedLines: this.getFirstLine(this.getSelectedCols()),
       numberOfInsertableLines: this.value,
       canInsertAfter: true,
     };
   }
 }
 
-export class ColumnRemoveMenuItem extends MenuItem {
+export class ColRemoveMenuItem extends MenuItem {
   protected labelKey: FitTextKey = 'Remove columns';
   protected iconId: FitImageId = 'remove';
 
@@ -132,7 +122,7 @@ export class ColumnRemoveMenuItem extends MenuItem {
   private getArgs(): FitOperationArgs {
     return {
       id: 'column-remove',
-      selectedLines: this.getSelectedColumns(),
+      selectedLines: this.getSelectedCols(),
     };
   }
 }

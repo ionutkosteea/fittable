@@ -9,10 +9,10 @@ import {
   createCellRange,
 } from '../../dist/model/index.js';
 
-import { tstModelConfig } from '../model/table/tst-model-config.js';
+import { TST_MODEL_CONFIG } from '../model/table/tst-model-config.js';
 
 describe('Test CellRangeList', () => {
-  beforeAll(() => registerModelConfig(tstModelConfig));
+  beforeAll(() => registerModelConfig(TST_MODEL_CONFIG));
   afterAll(() => unregisterModelConfig());
 
   it('one cell selection', () => {

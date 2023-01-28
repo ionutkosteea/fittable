@@ -48,7 +48,7 @@ export class TableViewComponent implements OnDestroy {
 
   public getTableHeight(): number {
     const tableViewer: TableViewer = this.designer.viewModel.tableViewer;
-    return tableViewer.getColumnHeaderHeight() + tableViewer.getBodyHeight();
+    return tableViewer.getColHeaderHeight() + tableViewer.getBodyHeight();
   }
 
   public hasContextMenu(): boolean {
@@ -84,8 +84,8 @@ export class TableViewComponent implements OnDestroy {
   public readonly showRowHeader = (): boolean =>
     getViewModelConfig().rowHeaderWidth ? true : false;
 
-  public readonly showColumnHeader = (): boolean =>
-    getViewModelConfig().columnHeaderHeight ? true : false;
+  public readonly showColHeader = (): boolean =>
+    getViewModelConfig().colHeaderHeight ? true : false;
 
   public ngOnDestroy(): void {
     this.designer.viewModel.destroy();

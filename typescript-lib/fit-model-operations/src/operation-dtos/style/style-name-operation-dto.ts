@@ -4,21 +4,18 @@ import {
   TableStyles,
   Style,
   createDto4CellRangeList,
-  Cell,
-  asCellStyle,
-  CellStyle,
 } from 'fit-core/model/index.js';
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import { CellRangeAddressObjects } from '../../utils/cell/cell-range-address-objects.js';
 import { countAllCellStyleNames } from '../../utils/style/style-functions.js';
 import { StyleOperationStepDto } from '../../operation-steps/style/style-operation-step.js';
 
-export type StyleNameOperationDtoArgs = Id<'style-name'> & {
+export type StyleNameOperationDtoArgs = OperationId<'style-name'> & {
   selectedCells: CellRange[];
   styleName?: string;
 };
@@ -63,10 +60,9 @@ export class StyleNameOperationDtoBuilder {
 
   private markOldStyleNames(): void {
     for (const cellRange of this.args.selectedCells) {
-      cellRange.forEachCell((rowId: number, colId: number) => {
-        const cell: Cell | undefined = this.table.getCell(rowId, colId);
-        const sCell: CellStyle | undefined = asCellStyle(cell);
-        const oldStyleName: string | undefined = sCell?.getStyleName();
+      cellRange.forEachCell((rowId: number, colId: number): void => {
+        const oldStyleName: string | undefined = //
+          this.table.getCellStyleName(rowId, colId);
         oldStyleName !== this.args.styleName &&
           this.oldStyleNames.set(oldStyleName, rowId, colId);
       });
@@ -92,22 +88,19 @@ export class StyleNameOperationDtoBuilder {
   private updateStyles(): void {
     const allCellsCnt: Map<string, number> = countAllCellStyleNames(this.table);
     this.oldStyleNames.forEach(
-      (styleName: string | undefined, updatableCells: CellRange[]) => {
-        if (styleName) {
-          const numOfUndoCells: number =
-            this.calculateNumberOfCells(updatableCells);
-          const numOfAllCells: number | undefined = allCellsCnt.get(styleName);
-          if (numOfUndoCells >= (numOfAllCells ?? 0)) {
-            this.styleStepDto.removeStyles.push(styleName);
-            const style: Style | undefined = this.table.getStyle(styleName);
-            if (style) {
-              this.undoStyleStepDto.createStyles.push({
-                styleName,
-                style: style.getDto(),
-              });
-            }
-          }
-        }
+      (styleName: string | undefined, updatableCells: CellRange[]): void => {
+        if (!styleName) return;
+        const numOfUndoCells: number =
+          this.calculateNumberOfCells(updatableCells);
+        const numOfAllCells: number | undefined = allCellsCnt.get(styleName);
+        if (numOfUndoCells < (numOfAllCells ?? 0)) return;
+        this.styleStepDto.removeStyles.push(styleName);
+        const style: Style | undefined = this.table.getStyle(styleName);
+        if (!style) return;
+        this.undoStyleStepDto.createStyles.push({
+          styleName,
+          style: style.getDto(),
+        });
       }
     );
   }
@@ -122,9 +115,8 @@ export class StyleNameOperationDtoBuilder {
 
   private calculateNumberOfExistingCells(cellRange: CellRange): number {
     let numberOfCells = 0;
-    cellRange.forEachCell((rowId: number, colId: number) => {
-      const cell: Cell | undefined = this.table.getCell(rowId, colId);
-      cell && numberOfCells++;
+    cellRange.forEachCell((rowId: number, colId: number): void => {
+      this.table.hasCell(rowId, colId) && numberOfCells++;
     });
     return numberOfCells;
   }

@@ -1,7 +1,5 @@
 import {
   Table,
-  Cell,
-  createCell,
   Value,
   CellRange,
   createCellRange4Dto,
@@ -9,7 +7,7 @@ import {
 import {
   OperationStep,
   OperationStepFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 export type CellValueDto = {
@@ -17,7 +15,7 @@ export type CellValueDto = {
   value?: Value;
 };
 
-export type CellValueOperationStepDto = Id<'cell-value'> & {
+export type CellValueOperationStepDto = OperationId<'cell-value'> & {
   values: CellValueDto[];
 };
 
@@ -35,22 +33,29 @@ export class CellValueOperationStep implements OperationStep {
     for (let cellValueDto of this.stepDto.values) {
       for (let cellRangeDto of cellValueDto.updatableCellRanges) {
         const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
-        cellRange.forEachCell((rowId: number, colId: number): void => {
-          this.updateCellValue(rowId, colId, cellValueDto.value);
-        });
+        const fromRowId: number = cellRange.getFrom().getRowId();
+        const toRowId: number = cellRange.getTo().getRowId();
+        const fromColId: number = cellRange.getFrom().getColId();
+        const toColId: number = cellRange.getTo().getColId();
+        for (let rowId: number = fromRowId; rowId <= toRowId; rowId++) {
+          for (let colId: number = fromColId; colId <= toColId; colId++) {
+            this.table.setCellValue(rowId, colId, cellValueDto.value);
+          }
+          this.removeRowIfEmpty(rowId);
+        }
       }
     }
   }
 
-  private updateCellValue(rowId: number, colId: number, value?: Value): void {
-    let cell: Cell | undefined = this.table.getCell(rowId, colId);
-    if (cell) {
-      cell.setValue(value);
-    } else {
-      cell = createCell().setValue(value);
-      this.table.addCell(rowId, colId, cell);
+  private removeRowIfEmpty(rowId: number): void {
+    let isEmptyRow = true;
+    for (let colId = 0; colId < this.table.getNumberOfCols(); colId++) {
+      if (this.table.hasCell(rowId, colId)) {
+        isEmptyRow = false;
+        break;
+      }
     }
-    !cell.hasProperties() && this.table.removeCell(rowId, colId);
+    if (isEmptyRow) this.table.removeRowCells(rowId);
   }
 }
 

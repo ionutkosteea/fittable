@@ -2,21 +2,15 @@ import { DoubleKeyMap } from 'fit-core/common/index.js';
 import {
   Value,
   Table,
-  Cell,
-  asCellStyle,
   asTableStyles,
   Style,
   TableRows,
-  TableColumns,
+  TableCols,
   TableMergedRegions,
   asTableRows,
-  asTableColumns,
+  asTableCols,
   asTableMergedRegions,
-  Column,
-  asColumnWidth,
-  Row,
-  asRowHeight,
-  MergedRegion,
+  TableStyles,
 } from 'fit-core/model/index.js';
 import {
   getViewModelConfig,
@@ -29,14 +23,13 @@ export class FitTableViewer implements TableViewer {
   private width?: number;
   private height?: number;
   private rowPositions?: number[];
-  private columnPositions?: number[];
-  private rowSpans?: DoubleKeyMap<number>;
-  private colSpans?: DoubleKeyMap<number>;
+  private colPositions?: number[];
   private hiddenCells?: DoubleKeyMap<boolean>;
   private config: ViewModelConfig;
   private rowTable?: TableRows;
-  private columnTable?: TableColumns;
+  private colTable?: TableCols;
   private mergedRegionsTable?: TableMergedRegions;
+  private styledTable?: TableStyles;
 
   constructor(private table: Table) {
     this.config = getViewModelConfig();
@@ -46,10 +39,11 @@ export class FitTableViewer implements TableViewer {
   public setTable(table: Table): this {
     this.table = table;
     this.rowTable = asTableRows(table);
-    this.columnTable = asTableColumns(table);
+    this.colTable = asTableCols(table);
     this.mergedRegionsTable = asTableMergedRegions(table);
+    this.styledTable = asTableStyles(table);
     this.resetRowProperties();
-    this.resetColumnProperties();
+    this.resetColProperties();
     this.resetMergedRegions();
     return this;
   }
@@ -58,9 +52,8 @@ export class FitTableViewer implements TableViewer {
     return this.table;
   }
 
-  public getColumnWidth(colId: number): number {
-    const col: Column | undefined = this.columnTable?.getColumn(colId);
-    return asColumnWidth(col)?.getWidth() ?? this.config.columnWidths;
+  public getColWidth(colId: number): number {
+    return this.colTable?.getColWidth(colId) ?? this.config.colWidths;
   }
 
   public getRowHeaderWidth(): number {
@@ -74,19 +67,18 @@ export class FitTableViewer implements TableViewer {
 
   private calculateBodyWidth(): number {
     let width = 0;
-    for (let i = 0; i < this.table.getNumberOfColumns(); i++) {
-      width += this.getColumnWidth(i);
+    for (let i = 0; i < this.table.getNumberOfCols(); i++) {
+      width += this.getColWidth(i);
     }
     return width;
   }
 
   public getRowHeight(rowId: number): number {
-    const row: Row | undefined = this.rowTable?.getRow(rowId);
-    return asRowHeight(row)?.getHeight() ?? this.config.rowHeights;
+    return this.rowTable?.getRowHeight(rowId) ?? this.config.rowHeights;
   }
 
-  public getColumnHeaderHeight(): number {
-    return this.config.columnHeaderHeight ?? 0;
+  public getColHeaderHeight(): number {
+    return this.config.colHeaderHeight ?? 0;
   }
 
   public getBodyHeight(): number {
@@ -121,61 +113,67 @@ export class FitTableViewer implements TableViewer {
     return positions;
   }
 
-  public getColumnPosition(colId: number): number {
-    return this.getColumnPositions()[colId];
+  public getColPosition(colId: number): number {
+    return this.getColPositions()[colId];
   }
 
-  private getColumnPositions(): number[] {
-    if (!this.columnPositions) {
-      this.columnPositions = this.calculateColumnPositions();
+  private getColPositions(): number[] {
+    if (!this.colPositions) {
+      this.colPositions = this.calculateColPositions();
     }
-    return this.columnPositions;
+    return this.colPositions;
   }
 
-  private calculateColumnPositions(): number[] {
+  private calculateColPositions(): number[] {
     const positions: number[] = [];
     let position = 0;
-    for (let i = 0; i < this.table.getNumberOfColumns(); i++) {
+    for (let i = 0; i < this.table.getNumberOfCols(); i++) {
       positions.push(position);
-      position += this.getColumnWidth(i);
+      position += this.getColWidth(i);
     }
     return positions;
   }
 
   public getRowSpan(rowId: number, colId: number): number {
-    if (!this.rowSpans) this.calculateMergedRegions();
-    return this.rowSpans!.get(rowId, colId) ?? 1;
+    return this.mergedRegionsTable?.getRowSpan(rowId, colId) ?? 1;
   }
 
   public getMaxRowSpan(rowId: number): number {
-    if (!this.rowSpans) this.calculateMergedRegions();
-    const values: number[] | undefined = this.rowSpans!.getAll(rowId);
-    return values ? Math.max(...values) : 1;
+    let maxRowSpan = 1;
+    for (let i = 0; i < this.table.getNumberOfCols(); i++) {
+      const rowSpan: number =
+        this.mergedRegionsTable?.getRowSpan(rowId, i) ?? 1;
+      if (maxRowSpan < rowSpan) maxRowSpan = rowSpan;
+    }
+    return maxRowSpan;
   }
 
   public getColSpan(rowId: number, colId: number): number {
-    if (!this.colSpans) this.calculateMergedRegions();
-    return this.colSpans!.get(colId, rowId) ?? 1;
+    return this.mergedRegionsTable?.getColSpan(rowId, colId) ?? 1;
   }
 
   public getMaxColSpan(colId: number): number {
-    if (!this.colSpans) this.calculateMergedRegions();
-    const values: number[] | undefined = this.colSpans!.getAll(colId);
-    return values ? Math.max(...values) : 1;
+    let maxColSpan = 1;
+    for (let i = 0; i < this.table.getNumberOfRows(); i++) {
+      const colSpan: number =
+        this.mergedRegionsTable?.getColSpan(i, colId) ?? 1;
+      if (maxColSpan < colSpan) maxColSpan = colSpan;
+    }
+    return maxColSpan;
   }
 
   public isHiddenCell(rowId: number, colId: number): boolean {
-    if (!this.hiddenCells) this.calculateMergedRegions();
+    if (!this.hiddenCells) this.calculateHiddenCells();
     return this.hiddenCells!.get(rowId, colId) ?? false;
   }
 
   public hasHiddenCells4Row(rowId: number): boolean {
-    if (!this.hiddenCells) this.calculateMergedRegions();
+    if (!this.hiddenCells) this.calculateHiddenCells();
     return this.hiddenCells?.getAll(rowId) !== undefined;
   }
 
-  public hasHiddenCells4Column(colId: number): boolean {
-    if (!this.hiddenCells) this.calculateMergedRegions();
+  public hasHiddenCells4Col(colId: number): boolean {
+    if (!this.hiddenCells) this.calculateHiddenCells();
     for (const key of this.hiddenCells!.keys()) {
       const rowId: number = key as unknown as number;
       const value: boolean | undefined = this.hiddenCells!.get(rowId, colId);
@@ -184,25 +182,24 @@ export class FitTableViewer implements TableViewer {
     return false;
   }
 
-  private calculateMergedRegions(): void {
-    this.rowSpans = new DoubleKeyMap();
-    this.colSpans = new DoubleKeyMap();
+  private calculateHiddenCells(): void {
     this.hiddenCells = new DoubleKeyMap();
-    this.mergedRegionsTable
-      ?.getMergedRegions()
-      ?.forEachRegion((region: MergedRegion): void => {
-        const rowSpan: number = region.getRowSpan();
-        const colSpan: number = region.getColSpan();
-        const rowId: number = region.getFrom().getRowId();
-        const colId: number = region.getFrom().getColId();
-        rowSpan > 1 && this.rowSpans!.set(rowId, colId, rowSpan);
-        colSpan > 1 && this.colSpans!.set(colId, rowId, colSpan);
-        let isFirstCell = true;
-        region.forEachCell((rowId: number, colId: number): void => {
-          if (isFirstCell) isFirstCell = false;
-          else this.hiddenCells!.set(rowId, colId, true);
-        });
-      });
+    this.mergedRegionsTable?.forEachRegion(
+      (rowId: number, colId: number): void => {
+        const rowSpan: number | undefined = //
+          this.mergedRegionsTable!.getRowSpan(rowId, colId);
+        const toRowId: number = rowSpan ? rowId + rowSpan - 1 : rowId;
+        const colSpan: number | undefined = //
+          this.mergedRegionsTable!.getColSpan(rowId, colId);
+        const toColId: number = colSpan ? colId + colSpan - 1 : colId;
+        for (let i = rowId; i <= toRowId; i++) {
+          for (let j = colId; j <= toColId; j++) {
+            if (i === rowId && j === colId) continue;
+            this.hiddenCells?.set(i, j, true);
+          }
+        }
+      }
+    );
   }
 
   public resetRowProperties(): this {
@@ -211,21 +208,19 @@ export class FitTableViewer implements TableViewer {
     return this;
   }
 
-  public resetColumnProperties(): this {
+  public resetColProperties(): this {
     this.width = undefined;
-    this.columnPositions = undefined;
+    this.colPositions = undefined;
     return this;
   }
 
   public resetMergedRegions(): this {
-    this.rowSpans = undefined;
-    this.colSpans = undefined;
     this.hiddenCells = undefined;
     return this;
   }
 
-  public hasColumnHeader(): boolean {
-    return this.config.columnHeaderHeight ? true : false;
+  public hasColHeader(): boolean {
+    return this.config.colHeaderHeight ? true : false;
   }
 
   public hasRowHeader(): boolean {
@@ -233,14 +228,14 @@ export class FitTableViewer implements TableViewer {
   }
 
   public getCellStyle(rowId: number, colId: number): Style | undefined {
-    const cell: Cell | undefined = this.table.getCell(rowId, colId);
-    let styleName: string | undefined = asCellStyle(cell)?.getStyleName();
+    let styleName: string | undefined = //
+      this.styledTable?.getCellStyleName(rowId, colId);
     if (styleName) return asTableStyles(this.table)?.getStyle(styleName);
     else return undefined;
   }
 
   public getCellValue(rowId: number, colId: number): Value | undefined {
-    return this.table.getCell(rowId, colId)?.getValue();
+    return this.table.getCellValue(rowId, colId);
   }
 }
 

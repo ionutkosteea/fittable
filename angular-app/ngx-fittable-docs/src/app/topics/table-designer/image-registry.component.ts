@@ -44,7 +44,7 @@ export class ImageRegistryComponent implements ConsoleTopic, OnInit {
       })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
 
     this.createChangeIconButton();
   }

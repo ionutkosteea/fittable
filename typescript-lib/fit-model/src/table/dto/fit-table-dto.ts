@@ -1,43 +1,16 @@
 import { Value } from 'fit-core/model/index.js';
 
-export type FitTableDto = {
-  numberOfRows: number;
-  numberOfColumns: number;
-  rows?: FitRowsDto;
-  columns?: FitColumnsDto;
-  styles?: FitStylesDto;
-  mergedRegions?: FitCellRangeDto[];
-};
+export type FitMapDto<Val> = { [key: string]: Val };
 
-export type FitRowsDto = {
-  [rowId: number]: FitRowDto;
-};
+export type FitRowDto = { height?: number };
 
-export type FitRowDto = {
-  cells?: FitCellsDto;
-  height?: number;
-};
+export type FitColDto = { width?: number };
 
-export type FitCellsDto = {
-  [colId: number]: FitCellDto;
-};
+export type FitCellDto = { value?: Value; styleName?: string };
 
-export type FitCellDto = {
-  value?: Value;
-  styleName?: string;
-};
+export type FitMergedCellDto = { rowSpan?: number; colSpan?: number };
 
-export type FitColumnsDto = {
-  [colId: number]: FitColumnDto;
-};
-
-export type FitColumnDto = {
-  width?: number;
-};
-
-export type FitStylesDto = {
-  [name: string]: FitStyleDto;
-};
+export type FitMatrixDto<Cell> = { [rowId: string]: FitMapDto<Cell> };
 
 export type FitStyleDto = {
   'font-weight'?: string;
@@ -53,6 +26,16 @@ export type FitStyleDto = {
   'border-right'?: string;
   'border-top'?: string;
   'border-bottom'?: string;
+};
+
+export type FitTableDto = {
+  numberOfRows: number;
+  numberOfCols: number;
+  styles?: FitMapDto<FitStyleDto>;
+  rows?: FitMapDto<FitRowDto>;
+  cols?: FitMapDto<FitColDto>;
+  cells?: FitMatrixDto<FitCellDto>;
+  mergedCells?: FitMatrixDto<FitMergedCellDto>;
 };
 
 export type FitCellCoordDto = { rowId: number; colId: number };

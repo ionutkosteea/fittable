@@ -26,7 +26,7 @@ export interface CellSelectionRanges extends FocusableObject {
 
 export interface CellSelection {
   rowHeader?: CellSelectionRanges;
-  columnHeader?: CellSelectionRanges;
+  colHeader?: CellSelectionRanges;
   pageHeader?: CellSelectionRanges;
   body: CellSelectionRanges;
   clear(): this;
@@ -51,7 +51,7 @@ export interface CellSelectionRectangles {
 
 export interface CellSelectionPainter {
   rowHeader?: CellSelectionRectangles;
-  columnHeader?: CellSelectionRectangles;
+  colHeader?: CellSelectionRectangles;
   pageHeader?: CellSelectionRectangles;
   body: CellSelectionRectangles;
   paint(): this;

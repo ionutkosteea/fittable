@@ -20,9 +20,7 @@ import {
 
 export class CellSelectionPainterBuilder {
   private numberOfRows = 0;
-  private numberOfColumns = 0;
-  private hasRowHeaders = false;
-  private hasColumnHeaders = false;
+  private numberOfCols = 0;
   private table!: Table;
   private tableViewer!: TableViewer;
   private cellSelection!: CellSelection;
@@ -37,17 +35,8 @@ export class CellSelectionPainterBuilder {
     return this;
   }
 
-  public setNumberOfTableColumns(numberOfColumns: number): this {
-    this.numberOfColumns = numberOfColumns;
-    return this;
-  }
-
-  public setTableRowHeaders(headers: boolean): this {
-    this.hasRowHeaders = headers;
-    return this;
-  }
-  public setTableColumnHeaders(headers: boolean): this {
-    this.hasColumnHeaders = headers;
+  public setNumberOfTableCols(numberOfCols: number): this {
+    this.numberOfCols = numberOfCols;
     return this;
   }
 
@@ -66,7 +55,7 @@ export class CellSelectionPainterBuilder {
     return this;
   }
 
-  public selectColumnHeaderRange(from: CellCoord, to?: CellCoord): this {
+  public selectColHeaderRange(from: CellCoord, to?: CellCoord): this {
     this.colHeaderCellSelectionRanges.push(createCellRange(from, to));
     return this;
   }
@@ -84,7 +73,9 @@ export class CellSelectionPainterBuilder {
   }
 
   private createTable(): Table {
-    return createTable(this.numberOfRows, this.numberOfColumns);
+    return createTable()
+      .setNumberOfRows(this.numberOfRows)
+      .setNumberOfCols(this.numberOfCols);
   }
 
   private buildCellSelections(): void {
@@ -100,7 +91,7 @@ export class CellSelectionPainterBuilder {
     );
     this.selectCells(
       this.colHeaderCellSelectionRanges,
-      this.cellSelection.columnHeader
+      this.cellSelection.colHeader
     );
   }
 

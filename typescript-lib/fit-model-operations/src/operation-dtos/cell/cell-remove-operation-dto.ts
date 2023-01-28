@@ -1,4 +1,3 @@
-import { implementsTKeys } from 'fit-core/common/index.js';
 import {
   Table,
   CellRange,
@@ -8,14 +7,13 @@ import {
   createCellRange4Dto,
   createDto4CellRangeList,
   createCellRangeList4Dto,
-  asCellStyle,
-  Cell,
   CellRangeList,
+  asTableStyles,
 } from 'fit-core/model/index.js';
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import {
@@ -27,12 +25,12 @@ import { CellValueOperationStepDto } from '../../operation-steps/cell/cell-value
 import { StyleOperationStepDto } from '../../operation-steps/style/style-operation-step.js';
 import { CellRemoveOperationStepDto } from '../../operation-steps/cell/cell-remove-operation-step.js';
 
-export type CellRemoveOperationDtoArgs = Id<'cell-remove'> & {
+export type CellRemoveOperationDtoArgs = OperationId<'cell-remove'> & {
   selectedCells: CellRange[];
 };
 
 export class CellRemoveOperationDtoBuilder {
-  private readonly isStyledTable: boolean;
+  private readonly styledTable?: Table & TableStyles;
 
   public readonly cellRemoveStepDto: CellRemoveOperationStepDto = {
     id: 'cell-remove',
@@ -62,7 +60,7 @@ export class CellRemoveOperationDtoBuilder {
     private readonly table: Table,
     private readonly args: CellRemoveOperationDtoArgs
   ) {
-    this.isStyledTable = implementsTKeys<TableStyles>(this.table, ['getStyle']);
+    this.styledTable = asTableStyles(table);
     this.operationDto = {
       id: args.id,
       steps: [this.cellRemoveStepDto, this.styleStepDto],
@@ -75,8 +73,7 @@ export class CellRemoveOperationDtoBuilder {
   public build(): OperationDto {
     this.removeCells();
     this.undoCellValues();
-    // TODO: undo cell format and editor.
-    if (this.isStyledTable) {
+    if (this.styledTable) {
       this.undoStyleNames();
       this.removeStyles();
       this.undoRemoveStyles();
@@ -87,10 +84,9 @@ export class CellRemoveOperationDtoBuilder {
   private removeCells(): void {
     const removableCells: CellRangeList = new CellRangeList();
     for (const cellRange of this.args.selectedCells) {
-      cellRange.forEachCell((rowId: number, colId: number) => {
-        if (this.table.getCell(rowId, colId)) {
+      cellRange.forEachCell((rowId: number, colId: number): void => {
+        this.table.hasCell(rowId, colId) &&
           removableCells.addCell(rowId, colId);
-        }
       });
     }
     removableCells.getRanges().forEach((cellRange: CellRange) => {
@@ -103,11 +99,10 @@ export class CellRemoveOperationDtoBuilder {
       new CellRangeAddressObjects();
     for (const cellRangeDto of this.cellRemoveStepDto.removableCellRanges) {
       createCellRange4Dto(cellRangeDto).forEachCell(
-        (rowId: number, colId: number) => {
-          const cellValue: Value | undefined = this.table
-            .getCell(rowId, colId)
-            ?.getValue();
-          cellValue && oldValues.set(cellValue, rowId, colId);
+        (rowId: number, colId: number): void => {
+          const value: Value | undefined = //
+            this.table.getCellValue(rowId, colId);
+          value && oldValues.set(value, rowId, colId);
         }
       );
     }
@@ -125,7 +120,8 @@ export class CellRemoveOperationDtoBuilder {
     for (const cellRangeDto of this.cellRemoveStepDto.removableCellRanges) {
       createCellRange4Dto(cellRangeDto).forEachCell(
         (rowId: number, colId: number) => {
-          const styleName: string | undefined = this.getStyleName(rowId, colId);
+          const styleName: string | undefined = //
+            this.styledTable?.getCellStyleName(rowId, colId);
           if (styleName) {
             oldStyleNames.set(styleName, rowId, colId);
           }
@@ -141,11 +137,6 @@ export class CellRemoveOperationDtoBuilder {
         });
       }
     );
-  }
-
-  private getStyleName(rowId: number, colId: number): string | undefined {
-    const cell: Cell | undefined = this.table.getCell(rowId, colId);
-    return asCellStyle(cell)?.getStyleName();
   }
 
   private removeStyles(): void {

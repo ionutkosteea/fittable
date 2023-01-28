@@ -1,16 +1,14 @@
 import {
   Table,
   TableRows,
-  TableColumns,
   LineRange,
   createDto4LineRangeList,
   createLineRange,
-  asColumnWidth,
-  asRowHeight,
+  TableCols,
 } from 'fit-core/model/index.js';
 import {
   OperationDto,
-  Id,
+  OperationId,
   OperationDtoFactory,
 } from 'fit-core/operations/index.js';
 
@@ -18,7 +16,7 @@ import { LineRangeAddressObjects } from '../../utils/line/line-range-address-obj
 import {
   DimensionDto,
   RowHeightOperationStepDto,
-  ColumnWidthOperationStepDto,
+  ColWidthOperationStepDto,
 } from '../../operation-steps/line/line-dimension-operation-step.js';
 
 export type LineDimensionOperationDtoArgs = {
@@ -90,7 +88,7 @@ abstract class LineDimensionOperationDtoBuilder {
   }
 }
 
-export type RowHeightOperationDtoArgs = Id<'row-height'> &
+export type RowHeightOperationDtoArgs = OperationId<'row-height'> &
   LineDimensionOperationDtoArgs;
 
 export class RowHeightOperationDtoBuilder extends LineDimensionOperationDtoBuilder {
@@ -111,7 +109,7 @@ export class RowHeightOperationDtoBuilder extends LineDimensionOperationDtoBuild
   }
 
   protected getLineDimension(rowId: number): number | undefined {
-    return asRowHeight(this.table.getRow(rowId))?.getHeight();
+    return this.table.getRowHeight(rowId);
   }
 
   public build(): OperationDto {
@@ -133,45 +131,45 @@ export class RowHeightOperationDtoFactory implements OperationDtoFactory {
   }
 }
 
-export type ColumnWidthOperationDtoArgs = Id<'column-width'> &
+export type ColWidthOperationDtoArgs = OperationId<'column-width'> &
   LineDimensionOperationDtoArgs;
 
-export class ColumnWidthOperationDtoBuilder extends LineDimensionOperationDtoBuilder {
-  public readonly columnWidthStepDto: ColumnWidthOperationStepDto = {
+export class ColWidthOperationDtoBuilder extends LineDimensionOperationDtoBuilder {
+  public readonly colWidthStepDto: ColWidthOperationStepDto = {
     id: 'column-width',
     dimensions: this.dimensionsDto,
   };
-  public readonly undoColumnWidthStepDto: ColumnWidthOperationStepDto = {
+  public readonly undoColWidthStepDto: ColWidthOperationStepDto = {
     id: 'column-width',
     dimensions: this.undoDimensionsDto,
   };
 
   constructor(
-    protected table: Table & TableColumns,
-    protected args: ColumnWidthOperationDtoArgs
+    protected table: Table & TableCols,
+    protected args: ColWidthOperationDtoArgs
   ) {
     super(table, args);
   }
 
   protected getLineDimension(colId: number): number | undefined {
-    return asColumnWidth(this.table.getColumn(colId))?.getWidth();
+    return this.table.getColWidth(colId);
   }
 
   public build(): OperationDto {
     super.build();
     return {
       id: this.args.id,
-      steps: [this.columnWidthStepDto],
-      undoOperation: { steps: [this.undoColumnWidthStepDto] },
+      steps: [this.colWidthStepDto],
+      undoOperation: { steps: [this.undoColWidthStepDto] },
     };
   }
 }
 
-export class ColumnWidthOperationDtoFactory implements OperationDtoFactory {
+export class ColWidthOperationDtoFactory implements OperationDtoFactory {
   public createOperationDto(
-    table: Table & TableColumns,
-    args: ColumnWidthOperationDtoArgs
+    table: Table & TableCols,
+    args: ColWidthOperationDtoArgs
   ): OperationDto | Promise<OperationDto> {
-    return new ColumnWidthOperationDtoBuilder(table, args).build();
+    return new ColWidthOperationDtoBuilder(table, args).build();
   }
 }

@@ -7,19 +7,14 @@ import {
   createStyle,
   TableStyles,
   TableRows,
-  TableColumns,
-  Cell,
-  CellStyle,
-  createCell,
   createLineRange,
   CellRangeList,
   LineRangeList,
-  asRowHeight,
-  asColumnWidth,
   CellRange,
   LineRange,
   createCellRange,
   createCellCoord,
+  TableCols,
 } from 'fit-core/model/index.js';
 import {
   OperationExecutor,
@@ -36,29 +31,29 @@ import {
   BorderStyle,
 } from '../../dist/index.js';
 
-export type TstTable = Table & TableStyles & TableRows & TableColumns;
-
-export type TstCell = Cell & CellStyle;
+export type TstTable = Table & TableStyles & TableRows & TableCols;
 
 export class TableOperationExecutor {
   private table: TstTable;
   private readonly executor: OperationExecutor;
   private readonly selectedCells: CellRangeList;
   private readonly selectedRows: LineRangeList;
-  private readonly selectedColumns: LineRangeList;
+  private readonly selectedCols: LineRangeList;
 
   constructor() {
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
-    this.table = createTable<TstTable>(0, 0);
+    this.table = createTable<TstTable>();
     this.executor = createOperationExecutor().setTable(this.table);
     this.selectedCells = new CellRangeList();
     this.selectedRows = new LineRangeList();
-    this.selectedColumns = new LineRangeList();
+    this.selectedCols = new LineRangeList();
   }
 
-  public createTable(numberOfRows: number, numberOfColumns: number): this {
-    this.table = createTable(numberOfRows, numberOfColumns) as TstTable;
+  public createTable(numberOfRows: number, numberOfCols: number): this {
+    this.table = createTable()
+      .setNumberOfRows(numberOfRows)
+      .setNumberOfCols(numberOfCols) as TstTable;
     this.executor.setTable(this.table);
     return this;
   }
@@ -88,21 +83,12 @@ export class TableOperationExecutor {
     colId: number,
     styleName: string
   ): this {
-    this.getCellAndCreateIfNotPresent(rowId, colId).setStyleName(styleName);
+    this.table.setCellStyleName(rowId, colId, styleName);
     return this;
   }
 
-  private getCellAndCreateIfNotPresent(rowId: number, colId: number): TstCell {
-    const cell: TstCell | undefined = this.table.getCell(
-      rowId,
-      colId
-    ) as TstCell;
-    if (!cell) this.table.addCell(rowId, colId, createCell());
-    return this.table.getCell(rowId, colId) as TstCell;
-  }
-
   public getCellStyleName(rowId: number, colId: number): string | undefined {
-    return (this.table.getCell(rowId, colId) as TstCell)?.getStyleName();
+    return this.table.getCellStyleName(rowId, colId);
   }
 
   public getNumberOfStyles(): number {
@@ -110,18 +96,18 @@ export class TableOperationExecutor {
   }
 
   public setCellValue(rowId: number, colId: number, value: Value): this {
-    this.getCellAndCreateIfNotPresent(rowId, colId).setValue(value);
+    this.table.setCellValue(rowId, colId, value);
     return this;
   }
 
   public getCellValue(rowId: number, colId: number): Value | undefined {
-    return this.table.getCell(rowId, colId)?.getValue();
+    return this.table.getCellValue(rowId, colId);
   }
 
   public selectCell(rowId: number, colId: number): this {
     this.selectedCells.addCell(rowId, colId);
     this.selectedRows.add(createLineRange(rowId));
-    this.selectedColumns.add(createLineRange(colId));
+    this.selectedCols.add(createLineRange(colId));
     return this;
   }
 
@@ -129,16 +115,16 @@ export class TableOperationExecutor {
     return this.table.getNumberOfRows();
   }
 
-  public getNumberOfColumns(): number {
-    return this.table.getNumberOfColumns();
+  public getNumberOfCols(): number {
+    return this.table.getNumberOfCols();
   }
 
   public getRowHeight(rowId: number): number {
-    return asRowHeight(this.table.getRow(rowId))?.getHeight() ?? 0;
+    return this.table.getRowHeight(rowId) ?? 0;
   }
 
-  public getColumnWidth(colId: number): number {
-    return asColumnWidth(this.table.getColumn(colId))?.getWidth() ?? 0;
+  public getColWidth(colId: number): number {
+    return this.table.getColWidth(colId) ?? 0;
   }
 
   public canUndo(): boolean {
@@ -241,40 +227,40 @@ export class TableOperationExecutor {
     return this;
   }
 
-  public runInsertColumnsBefore(numberOfColumns: number): this {
+  public runInsertColsBefore(numberOfCols: number): this {
     const args: FitOperationDtoArgs = {
       id: 'column-insert',
-      selectedLines: this.getSelectedColumns(),
-      numberOfInsertableLines: numberOfColumns,
+      selectedLines: this.getSelectedCols(),
+      numberOfInsertableLines: numberOfCols,
     };
     this.executor.run(args);
     return this;
   }
 
-  public runInsertColumnsAfter(numberOfColumns: number): this {
+  public runInsertColsAfter(numberOfCols: number): this {
     const args: FitOperationDtoArgs = {
       id: 'column-insert',
-      selectedLines: this.getSelectedColumns(),
-      numberOfInsertableLines: numberOfColumns,
+      selectedLines: this.getSelectedCols(),
+      numberOfInsertableLines: numberOfCols,
       canInsertAfter: true,
     };
     this.executor.run(args);
     return this;
   }
 
-  public runRemoveColumns(): this {
+  public runRemoveCols(): this {
     const args: FitOperationDtoArgs = {
       id: 'column-remove',
-      selectedLines: this.getSelectedColumns(),
+      selectedLines: this.getSelectedCols(),
     };
     this.executor.run(args);
     return this;
   }
 
-  public runResizeColumns(width: number): this {
+  public runResizeCols(width: number): this {
     const args: FitOperationDtoArgs = {
       id: 'column-width',
-      selectedLines: this.getSelectedColumns(),
+      selectedLines: this.getSelectedCols(),
       dimension: width,
     };
     this.executor.run(args);
@@ -340,7 +326,7 @@ export class TableOperationExecutor {
     return this.selectedRows.getRanges();
   }
 
-  private getSelectedColumns(): LineRange[] {
-    return this.selectedColumns.getRanges();
+  private getSelectedCols(): LineRange[] {
+    return this.selectedCols.getRanges();
   }
 }

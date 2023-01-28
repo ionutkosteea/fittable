@@ -76,14 +76,14 @@ export class FitCellEditor implements CellEditor {
   }
 
   private update(): void {
-    if (!this.tableHasRowsAndColumns()) return;
+    if (!this.tableHasRowsAndCols()) return;
     this.cellRectangle = this.createCellRectangle(this.cellCoord);
     this.cellControl.setValue(this.getTableCellValue(this.cellCoord));
   }
 
-  private tableHasRowsAndColumns(): boolean {
+  private tableHasRowsAndCols(): boolean {
     const rowNum: number = this.tableViewer.getTable().getNumberOfRows();
-    const colNum: number = this.tableViewer.getTable().getNumberOfColumns();
+    const colNum: number = this.tableViewer.getTable().getNumberOfCols();
     return rowNum > 0 && colNum > 0;
   }
 
@@ -91,8 +91,7 @@ export class FitCellEditor implements CellEditor {
     return (
       this.tableViewer
         .getTable()
-        .getCell(cellCoord.getRowId(), cellCoord.getColId())
-        ?.getValue() ?? ''
+        .getCellValue(cellCoord.getRowId(), cellCoord.getColId()) ?? ''
     );
   }
 
@@ -101,15 +100,15 @@ export class FitCellEditor implements CellEditor {
     const colId: number = cellCoord.getColId();
     const left: number =
       this.tableViewer.getRowHeaderWidth() +
-      this.tableViewer.getColumnPosition(colId);
+      this.tableViewer.getColPosition(colId);
     const top: number =
-      this.tableViewer.getColumnHeaderHeight() +
+      this.tableViewer.getColHeaderHeight() +
       this.tableViewer.getRowPosition(rowId);
-    let width: number = this.tableViewer.getColumnWidth(colId);
+    let width: number = this.tableViewer.getColWidth(colId);
     const colSpan: number = this.tableViewer.getColSpan(rowId, colId);
     if (colSpan > 1) {
       for (let i = colId + 1; i < colId + colSpan; i++) {
-        width += this.tableViewer.getColumnWidth(i);
+        width += this.tableViewer.getColWidth(i);
       }
     }
     let height: number = this.tableViewer.getRowHeight(rowId);

@@ -26,7 +26,7 @@ export class StatusbarComponent implements SimpleTopic, OnInit {
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'statusbar-ts-01.jpg' },
+    { image: 'statusbar-ts.jpg' },
   ];
   public fit!: FittableDesigner;
 
@@ -36,7 +36,7 @@ export class StatusbarComponent implements SimpleTopic, OnInit {
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(createFitViewModelConfig({ statusbar: true }));
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
 
     this.changeText();
   }

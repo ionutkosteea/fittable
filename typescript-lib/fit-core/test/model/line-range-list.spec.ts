@@ -7,10 +7,10 @@ import {
   createLineRange,
 } from '../../dist/model/index.js';
 
-import { tstModelConfig } from './table/tst-model-config.js';
+import { TST_MODEL_CONFIG } from './table/tst-model-config.js';
 
 describe('Test LineRangeList', () => {
-  beforeAll(() => registerModelConfig(tstModelConfig));
+  beforeAll(() => registerModelConfig(TST_MODEL_CONFIG));
   afterAll(() => unregisterModelConfig());
 
   it('add parent interval', () => {

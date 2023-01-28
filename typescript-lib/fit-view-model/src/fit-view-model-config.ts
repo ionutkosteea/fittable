@@ -29,14 +29,14 @@ import {
 
 export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   rowHeights: 21,
-  columnWidths: 100,
+  colWidths: 100,
   fontSize: 12,
   colorPalette: COLOR_PALETTE,
   fontFamily: FONT_FAMILY,
   getRowHeaderText: (rowId: number): number => incrementNumber(rowId),
-  getColumnHeaderText: (colId: number): string => incrementLetter(colId),
+  getColHeaderText: (colId: number): string => incrementLetter(colId),
   rowHeaderWidth: 40,
-  columnHeaderHeight: 21,
+  colHeaderHeight: 21,
   languageDictionaryFactory: new FitLanguageDictionaryFactory(),
   imageRegistryFactory: new FitImageRegistryFactory(),
   cellEditorFactory: new FitCellEditorFactory(),
@@ -62,7 +62,7 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
 export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
   fontSize: FIT_VIEW_MODEL_CONFIG.fontSize,
   rowHeights: FIT_VIEW_MODEL_CONFIG.rowHeights,
-  columnWidths: FIT_VIEW_MODEL_CONFIG.columnWidths,
+  colWidths: FIT_VIEW_MODEL_CONFIG.colWidths,
   viewModelFactory: FIT_VIEW_MODEL_CONFIG.viewModelFactory,
   languageDictionaryFactory: FIT_VIEW_MODEL_CONFIG.languageDictionaryFactory,
   imageRegistryFactory: FIT_VIEW_MODEL_CONFIG.imageRegistryFactory,
@@ -76,19 +76,19 @@ export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
 export type FitViewModelConfigDef = {
   fontSize?: number;
   rowHeights?: number;
-  columnWidths?: number;
+  colWidths?: number;
   colorPalette?: Option[];
   fontFamily?: Option[];
   showRowHeader?: boolean;
-  showColumnHeader?: boolean;
+  showColHeader?: boolean;
   rowHeaderWidth?: number;
-  columnHeaderHeight?: number;
+  colHeaderHeight?: number;
   getRowHeaderText?: (rowId: number) => number | string;
-  getColumnHeaderText?: (colId: number) => number | string;
+  getColHeaderText?: (colId: number) => number | string;
   disableVirtualRows?: boolean;
-  disableVirtualColumns?: boolean;
+  disableVirtualCols?: boolean;
   rowHeader?: boolean;
-  columnHeader?: boolean;
+  colHeader?: boolean;
   cellEditor?: boolean;
   cellSelection?: boolean;
   contextMenu?: boolean;
@@ -121,12 +121,12 @@ function updateUnitConfig(
 ): void {
   if (def.fontSize) cfg.fontSize = def.fontSize;
   if (def.rowHeights) cfg.rowHeights = def.rowHeights;
-  if (def.columnWidths) cfg.columnWidths = def.columnWidths;
+  if (def.colWidths) cfg.colWidths = def.colWidths;
   if (def.disableVirtualRows !== undefined) {
     cfg.disableVirtualRows = def.disableVirtualRows;
   }
-  if (def.disableVirtualColumns !== undefined) {
-    cfg.disableVirtualColumns = def.disableVirtualColumns;
+  if (def.disableVirtualCols !== undefined) {
+    cfg.disableVirtualCols = def.disableVirtualCols;
   }
 }
 
@@ -202,15 +202,15 @@ function updateHeaderConfig(
     }
   }
 
-  if (def.columnHeader !== undefined) {
-    if (def.columnHeader) {
-      cfg.getColumnHeaderText =
-        def.getColumnHeaderText ?? FIT_VIEW_MODEL_CONFIG.getColumnHeaderText;
-      cfg.columnHeaderHeight =
-        def.columnHeaderHeight ?? FIT_VIEW_MODEL_CONFIG.columnHeaderHeight;
+  if (def.colHeader !== undefined) {
+    if (def.colHeader) {
+      cfg.getColHeaderText =
+        def.getColHeaderText ?? FIT_VIEW_MODEL_CONFIG.getColHeaderText;
+      cfg.colHeaderHeight =
+        def.colHeaderHeight ?? FIT_VIEW_MODEL_CONFIG.colHeaderHeight;
     } else {
-      cfg.getColumnHeaderText = undefined;
-      cfg.columnHeaderHeight = undefined;
+      cfg.getColHeaderText = undefined;
+      cfg.colHeaderHeight = undefined;
     }
   }
 }

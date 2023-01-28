@@ -11,14 +11,14 @@ export abstract class TableCommon {
   protected abstract viewModel: ViewModel;
   protected abstract hostListeners: HostListeners;
 
-  public readonly hasColumnHeader = (): boolean =>
-    this.viewModel.tableViewer.hasColumnHeader();
+  public readonly hasColHeader = (): boolean =>
+    this.viewModel.tableViewer.hasColHeader();
 
-  public readonly getColumnLabel = (
+  public readonly getColLabel = (
     colId: number
   ): string | number | undefined => {
     const getLabel: ((colId: number) => string | number) | undefined =
-      getViewModelConfig().getColumnHeaderText;
+      getViewModelConfig().getColHeaderText;
     return getLabel && getLabel(colId);
   };
 
@@ -56,11 +56,11 @@ export abstract class TableCommon {
   public readonly getRowIds = (): RangeIterator =>
     this.viewModel.tableScroller.getTableRowIds();
 
-  public readonly getColumnIds = (): RangeIterator =>
+  public readonly getColIds = (): RangeIterator =>
     this.viewModel.tableScroller.getTableColIds();
 
-  public readonly getColumnWidth = (colId: number): number =>
-    this.viewModel.tableViewer.getColumnWidth(colId);
+  public readonly getColWidth = (colId: number): number =>
+    this.viewModel.tableViewer.getColWidth(colId);
 
   public readonly getRowHeight = (rowId: number): number =>
     this.viewModel.tableViewer.getRowHeight(rowId);
@@ -89,6 +89,6 @@ export abstract class TableCommon {
   protected readonly getRowHeaderWidth = (): number =>
     this.viewModel.tableViewer.getRowHeaderWidth();
 
-  protected readonly getColumnHeaderHeight = (): number =>
-    this.viewModel.tableViewer.getColumnHeaderHeight();
+  protected readonly getColHeaderHeight = (): number =>
+    this.viewModel.tableViewer.getColHeaderHeight();
 }

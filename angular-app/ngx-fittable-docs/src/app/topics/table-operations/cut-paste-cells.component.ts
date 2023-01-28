@@ -2,7 +2,6 @@ import { Subject, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
-  createCell,
   createCellCoord,
   createCellRange,
   createStyle,
@@ -15,7 +14,7 @@ import {
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import { FitCell, FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
+import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
 import {
   FitOperationDtoArgs,
   FIT_OPERATION_CONFIG,
@@ -55,17 +54,16 @@ export class CutPasteCellsComponent
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ rowHeader: true, columnHeader: true })
+      createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    const table: FitTable = createTable<FitTable>(5, 5)
+    const table: FitTable = createTable<FitTable>()
       .addStyle('s0', createStyle<FitStyle>().set('background-color', 'yellow'))
-      .addCell(1, 1, createCell<FitCell>().setStyleName('s0').setValue('[1,1]'))
-      .addCell(
-        2,
-        1,
-        createCell<FitCell>().setStyleName('s0').setValue('[2,1]')
-      );
+      .setCellValue(1, 1, '[1,1]')
+      .setCellStyleName(1, 1, 's0')
+      .setCellValue(2, 1, '[2,1]')
+      .setCellStyleName(2, 1, 's0');
+
     this.fit = createFittableDesigner(table);
     const afterRun$: Subject<Operation> = new Subject();
     this.subscription = afterRun$.subscribe((operation: Operation): void => {

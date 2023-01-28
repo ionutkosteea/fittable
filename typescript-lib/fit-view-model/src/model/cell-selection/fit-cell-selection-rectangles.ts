@@ -60,13 +60,13 @@ export class BodySelectionRectangles extends FitCellSelectionRectangles {
   protected calcLeft(cellRange: CellRange): number {
     return (
       this.tableViewer.getRowHeaderWidth() +
-      this.tableViewer.getColumnPosition(cellRange.getFrom().getColId())
+      this.tableViewer.getColPosition(cellRange.getFrom().getColId())
     );
   }
 
   protected calcTop(cellRange: CellRange): number {
     return (
-      this.tableViewer.getColumnHeaderHeight() +
+      this.tableViewer.getColHeaderHeight() +
       this.tableViewer.getRowPosition(cellRange.getFrom().getRowId())
     );
   }
@@ -76,7 +76,7 @@ export class BodySelectionRectangles extends FitCellSelectionRectangles {
     const from: CellCoord = cellRange.getFrom();
     const to: CellCoord = cellRange.getTo();
     for (let colId: number = from.getColId(); colId <= to.getColId(); colId++) {
-      width += this.tableViewer.getColumnWidth(colId);
+      width += this.tableViewer.getColWidth(colId);
     }
     return width;
   }
@@ -103,15 +103,15 @@ export class PageHeaderCellSelectionRectangles extends FitCellSelectionRectangle
     return this.tableViewer.getRowHeaderWidth();
   }
   protected calcHeight(): number {
-    return this.tableViewer.getColumnHeaderHeight();
+    return this.tableViewer.getColHeaderHeight();
   }
 }
 
-export class ColumnHeaderSelectionRectangles extends FitCellSelectionRectangles {
+export class ColHeaderSelectionRectangles extends FitCellSelectionRectangles {
   protected calcLeft(cellRange: CellRange): number {
     return (
       this.tableViewer.getRowHeaderWidth() +
-      this.tableViewer.getColumnPosition(cellRange.getFrom().getColId())
+      this.tableViewer.getColPosition(cellRange.getFrom().getColId())
     );
   }
 
@@ -124,13 +124,13 @@ export class ColumnHeaderSelectionRectangles extends FitCellSelectionRectangles 
     const from: CellCoord = cellRange.getFrom();
     const to: CellCoord = cellRange.getTo();
     for (let colId: number = from.getColId(); colId <= to.getColId(); colId++) {
-      width += this.tableViewer.getColumnWidth(colId);
+      width += this.tableViewer.getColWidth(colId);
     }
     return width;
   }
 
   protected calcHeight(): number {
-    return this.tableViewer.getColumnHeaderHeight();
+    return this.tableViewer.getColHeaderHeight();
   }
 }
 
@@ -141,7 +141,7 @@ export class RowHeaderSelectionRectangles extends FitCellSelectionRectangles {
 
   protected calcTop(cellRange: CellRange): number {
     return (
-      this.tableViewer.getColumnHeaderHeight() +
+      this.tableViewer.getColHeaderHeight() +
       this.tableViewer.getRowPosition(cellRange.getFrom().getRowId())
     );
   }

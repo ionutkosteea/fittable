@@ -4,15 +4,15 @@ import { CellCopyOperationStepFactory } from '../operation-steps/cell/cell-copy-
 import { CellRemoveOperationStepFactory } from '../operation-steps/cell/cell-remove-operation-step.js';
 import { CellValueOperationStepFactory } from '../operation-steps/cell/cell-value-operation-step.js';
 import {
-  ColumnWidthOperationStepFactory,
+  ColWidthOperationStepFactory,
   RowHeightOperationStepFactory,
 } from '../operation-steps/line/line-dimension-operation-step.js';
 import {
-  ColumnInsertOperationStepFactory,
+  ColInsertOperationStepFactory,
   RowInsertOperationStepFactory,
 } from '../operation-steps/line/line-insert-operation-step.js';
 import {
-  ColumnRemoveOperationStepFactory,
+  ColRemoveOperationStepFactory,
   RowRemoveOperationStepFactory,
 } from '../operation-steps/line/line-remove-operation-step.js';
 import { StyleOperationStepFactory } from '../operation-steps/style/style-operation-step.js';
@@ -22,15 +22,15 @@ import { CellPasteOperationDtoFactory } from '../operation-dtos/cell/cell-paste-
 import { CellRemoveOperationDtoFactory } from '../operation-dtos/cell/cell-remove-operation-dto.js';
 import { CellValueOperationDtoFactory } from '../operation-dtos/cell/cell-value-operation-dto.js';
 import {
-  ColumnWidthOperationDtoFactory,
+  ColWidthOperationDtoFactory,
   RowHeightOperationDtoFactory,
 } from '../operation-dtos/line/line-dimension-operation-dto.js';
 import {
-  ColumnInsertOperationDtoFactory,
+  ColInsertOperationDtoFactory,
   RowInsertOperationDtoFactory,
 } from '../operation-dtos/line/line-insert-operation-dto.js';
 import {
-  ColumnRemoveOperationDtoFactory,
+  ColRemoveOperationDtoFactory,
   RowRemoveOperationDtoFactory,
 } from '../operation-dtos/line/line-remove-operation-dto.js';
 import { StyleBorderOperationDtoFactory } from '../operation-dtos/style/style-border-operation-dto.js';
@@ -46,15 +46,9 @@ import { CellUnmergeOperationDtoFactory } from '../operation-dtos/merged-regions
 export class FitOperationExecutorFactory implements OperationExecutorFactory {
   public createOperationExecutor(): FitOperationExecutor {
     return new FitOperationExecutor()
-      .bindOperationStepFactory('column-width', ColumnWidthOperationStepFactory)
-      .bindOperationStepFactory(
-        'column-insert',
-        ColumnInsertOperationStepFactory
-      )
-      .bindOperationStepFactory(
-        'column-remove',
-        ColumnRemoveOperationStepFactory
-      )
+      .bindOperationStepFactory('column-width', ColWidthOperationStepFactory)
+      .bindOperationStepFactory('column-insert', ColInsertOperationStepFactory)
+      .bindOperationStepFactory('column-remove', ColRemoveOperationStepFactory)
       .bindOperationStepFactory('row-height', RowHeightOperationStepFactory)
       .bindOperationStepFactory('row-remove', RowRemoveOperationStepFactory)
       .bindOperationStepFactory('row-insert', RowInsertOperationStepFactory)
@@ -69,9 +63,9 @@ export class FitOperationExecutorFactory implements OperationExecutorFactory {
       .bindOperationDtoFactory('row-height', RowHeightOperationDtoFactory)
       .bindOperationDtoFactory('row-insert', RowInsertOperationDtoFactory)
       .bindOperationDtoFactory('row-remove', RowRemoveOperationDtoFactory)
-      .bindOperationDtoFactory('column-width', ColumnWidthOperationDtoFactory)
-      .bindOperationDtoFactory('column-insert', ColumnInsertOperationDtoFactory)
-      .bindOperationDtoFactory('column-remove', ColumnRemoveOperationDtoFactory)
+      .bindOperationDtoFactory('column-width', ColWidthOperationDtoFactory)
+      .bindOperationDtoFactory('column-insert', ColInsertOperationDtoFactory)
+      .bindOperationDtoFactory('column-remove', ColRemoveOperationDtoFactory)
       .bindOperationDtoFactory('cell-value', CellValueOperationDtoFactory)
       .bindOperationDtoFactory('cell-cut', CellCutOperationDtoFactory)
       .bindOperationDtoFactory('cell-copy', CellCopyOperationDtoFactory)

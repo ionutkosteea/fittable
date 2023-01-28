@@ -1,4 +1,4 @@
-import { CellCoord, Table, Cell, asCellStyle } from 'fit-core/model/index.js';
+import { asTableStyles, CellCoord, Table } from 'fit-core/model/index.js';
 import { ControlArgs } from 'fit-core/view-model/index.js';
 
 import { FitOperationArgs } from '../../../operation-executor/operation-args.js';
@@ -50,11 +50,10 @@ export class PaintFormatButton extends PushButton {
     const cellCoord: CellCoord = this.args.getSelectedCells()[0].getFrom();
     const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
-    const cell: Cell | undefined = table.getCell(
+    this.styleName = asTableStyles(table)?.getCellStyleName(
       cellCoord.getRowId(),
       cellCoord.getColId()
     );
-    this.styleName = asCellStyle(cell)?.getStyleName();
   }
 
   protected isPushed(): boolean {

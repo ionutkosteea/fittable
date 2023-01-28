@@ -5,7 +5,7 @@ import {
   OperationStepFactoryClass,
   OperationDto,
   OperationStep,
-  Id,
+  OperationId,
   OperationExecutorListener,
 } from 'fit-core/operations/index.js';
 
@@ -131,7 +131,7 @@ export class FitOperationExecutor implements OperationExecutor {
   }
 
   private readonly createOperationStep = (
-    stepDto: Id<string>
+    stepDto: OperationId<string>
   ): OperationStep => {
     const Factory: OperationStepFactoryClass | undefined =
       this.operationStepFactories[stepDto.id as FitOperationStepId];

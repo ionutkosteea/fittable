@@ -1,29 +1,27 @@
 import {
   Style,
-  Cell,
   TableStyles,
   Table,
-  asCellStyle,
   CellRange,
   createCellRange4Dto,
   asTableStyles,
-  MergedRegions,
   asTableMergedRegions,
   TableMergedRegions,
+  Value,
 } from 'fit-core/model/index.js';
 import {
   OperationStep,
   OperationStepFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
-export type CellCopyOperationStepDto = Id<'cell-copy'> & {
+export type CellCopyOperationStepDto = OperationId<'cell-copy'> & {
   selectedCellRange: unknown;
 };
 
 export class CellCopyOperationStep implements OperationStep {
-  private readonly styledTable?: TableStyles;
-  private readonly mergedRegionsTable?: TableMergedRegions;
+  private readonly styledTable?: Table & TableStyles;
+  private readonly mergedRegionsTable?: Table & TableMergedRegions;
 
   constructor(
     private readonly table: Table,
@@ -64,20 +62,21 @@ export class CellCopyOperationStep implements OperationStep {
   }
 
   private createHtmlCell(rowId: number, colId: number): string {
-    const mergedRegions: MergedRegions | undefined =
-      this.mergedRegionsTable?.getMergedRegions();
-    const rowSpan: number = mergedRegions?.getRowSpan(rowId, colId) ?? 1;
-    const colSpan: number = mergedRegions?.getColSpan(rowId, colId) ?? 1;
-    if (rowSpan === 0 && colSpan === 0) {
+    if (this.isMergedHiddenCell(rowId, colId)) {
       return '';
     } else {
+      const rowSpan: number =
+        this.mergedRegionsTable?.getRowSpan(rowId, colId) ?? 0;
+      const colSpan: number =
+        this.mergedRegionsTable?.getColSpan(rowId, colId) ?? 0;
       const rowSpanAtt: string = rowSpan > 1 ? 'rowspan="' + rowSpan + '"' : '';
       const colSpanAtt: string = colSpan > 1 ? 'colspan="' + colSpan + '"' : '';
       let attributes: string = rowSpanAtt + ' ' + colSpanAtt;
-      const cell: Cell | undefined = this.table.getCell(rowId, colId);
-      if (cell) {
-        attributes += ' ' + this.getCssStyle(cell);
-        let text: string = cell.getValue() ? '' + cell.getValue() : '';
+      const cssStyle: string = this.getCssStyle(rowId, colId);
+      const value: Value | undefined = this.table.getCellValue(rowId, colId);
+      if (cssStyle || value) {
+        attributes += ' ' + this.getCssStyle(rowId, colId);
+        let text: string = value ? '' + value : '';
         text = text.replaceAll('\n', '<br>');
         return '<td ' + attributes + '>' + text + '</td>';
       } else {
@@ -86,9 +85,32 @@ export class CellCopyOperationStep implements OperationStep {
     }
   }
 
-  private getCssStyle(cell: Cell): string {
+  private isMergedHiddenCell(rowId: number, colId: number): boolean {
+    let isHiddenCell = false;
+    if (this.mergedRegionsTable) {
+      this.mergedRegionsTable.forEachRegion(
+        (row: number, col: number): void => {
+          if (isHiddenCell) return;
+          if (row === rowId && col === colId) return;
+          const rowSpan: number =
+            this.mergedRegionsTable?.getRowSpan(row, col) ?? 0;
+          const colSpan: number =
+            this.mergedRegionsTable?.getColSpan(row, col) ?? 0;
+          isHiddenCell =
+            rowId >= row &&
+            rowId < row + rowSpan &&
+            colId >= col &&
+            colId < col + colSpan;
+        }
+      );
+    }
+    return isHiddenCell;
+  }
+
+  private getCssStyle(rowId: number, colId: number): string {
     if (!this.styledTable) return '';
-    const styleName: string | undefined = asCellStyle(cell)?.getStyleName();
+    const styleName: string | undefined = //
+      this.styledTable.getCellStyleName(rowId, colId);
     const style: Style | undefined = styleName
       ? this.styledTable.getStyle(styleName)
       : undefined;

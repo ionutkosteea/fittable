@@ -2,7 +2,6 @@ import { Subject, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
-  createCell,
   createLineRange,
   createTable,
   registerModelConfig,
@@ -26,23 +25,23 @@ import { CodeSnippet } from '../common/code-snippet.model';
 import { ConsoleTopic } from './common/console-topic.model';
 
 @Component({
-  selector: 'insert-columns-right',
+  selector: 'remove-columns',
   templateUrl: './common/console-topic.html',
   styleUrls: ['./common/console-topic.css', '../common/common.css'],
 })
-export class InsertColumnsRightComponent
+export class RemoveColsComponent
   extends ConsoleTopic
   implements OnInit, OnDestroy
 {
-  public readonly title: TopicTitle = 'Insert columns right';
+  public readonly title: TopicTitle = 'Remove columns';
   public readonly htmlCode: CodeSnippet[] = [
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'insert-columns-right-ts-01.jpg' },
-    { image: 'insert-columns-right-ts-02.jpg' },
+    { image: 'remove-columns-ts-01.jpg' },
+    { image: 'remove-columns-ts-02.jpg' },
   ];
-  public readonly buttonText = 'Insert 2 columns after column B';
+  public readonly buttonText = 'Remove columns B, C';
   public fit!: FittableDesigner;
   public consoleText = '';
   private subscription?: Subscription;
@@ -52,16 +51,12 @@ export class InsertColumnsRightComponent
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ rowHeader: true, columnHeader: true })
+      createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    const table: Table = createTable(5, 5);
-    table.forEachCellCoord((rowId: number, colId: number): void => {
-      table.addCell(
-        rowId,
-        colId,
-        createCell().setValue('[' + rowId + ',' + colId + ']')
-      );
+    const table: Table = createTable();
+    table.forEachCell((rowId: number, colId: number): void => {
+      table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
     this.fit = createFittableDesigner(table);
     const afterRun$: Subject<Operation> = new Subject();
@@ -75,10 +70,8 @@ export class InsertColumnsRightComponent
 
   public runOperation(): void {
     const args: FitOperationDtoArgs = {
-      id: 'column-insert',
-      selectedLines: [createLineRange(1)],
-      numberOfInsertableLines: 2,
-      canInsertAfter: true,
+      id: 'column-remove',
+      selectedLines: [createLineRange(1, 2)],
     };
     this.fit.operationExecutor?.run(args);
   }

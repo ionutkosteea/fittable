@@ -4,7 +4,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   createCellCoord,
   createCellRange,
-  createMergedRegions,
   createTable,
   registerModelConfig,
 } from 'fit-core/model';
@@ -14,7 +13,7 @@ import {
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import { FitMergedRegions, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
+import { FitTable, FIT_MODEL_CONFIG } from 'fit-model';
 import {
   FitOperationDtoArgs,
   FIT_OPERATION_CONFIG,
@@ -52,16 +51,11 @@ export class UnmergeCellsComponent
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ rowHeader: true, columnHeader: true })
+      createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
     this.fit = createFittableDesigner(
-      createTable<FitTable>(5, 5).setMergedRegions(
-        createMergedRegions<FitMergedRegions>().addRegion(
-          createCellCoord(1, 1),
-          createCellCoord(2, 2)
-        )
-      )
+      createTable<FitTable>().setRowSpan(1, 1, 2).setColSpan(1, 1, 2)
     );
     const afterRun$: Subject<Operation> = new Subject();
     this.subscription = afterRun$.subscribe((operation: Operation): void => {
@@ -75,9 +69,7 @@ export class UnmergeCellsComponent
   public runOperation(): void {
     const args: FitOperationDtoArgs = {
       id: 'cell-unmerge',
-      selectedCells: [
-        createCellRange(createCellCoord(1, 1), createCellCoord(2, 2)),
-      ],
+      selectedCells: [createCellRange(createCellCoord(1, 1))],
     };
     this.fit.operationExecutor?.run(args);
   }

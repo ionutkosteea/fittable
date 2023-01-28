@@ -27,16 +27,16 @@ export type Option = { label: string; value?: string };
 
 export interface ViewModelConfig {
   rowHeights: number;
-  columnWidths: number;
+  colWidths: number;
   fontSize: number;
   colorPalette?: Option[];
   fontFamily?: Option[];
   getRowHeaderText?: (rowId: number) => string | number;
-  getColumnHeaderText?: (colId: number) => string | number;
+  getColHeaderText?: (colId: number) => string | number;
   rowHeaderWidth?: number;
-  columnHeaderHeight?: number;
+  colHeaderHeight?: number;
   disableVirtualRows?: boolean;
-  disableVirtualColumns?: boolean;
+  disableVirtualCols?: boolean;
   viewModelFactory: ViewModelFactory;
   languageDictionaryFactory: LanguageDictionaryFactory;
   imageRegistryFactory: ImageRegistryFactory;

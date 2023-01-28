@@ -1,17 +1,15 @@
 import {
   Table,
-  Cell,
   Style,
   TableStyles,
-  createCell,
   createCellRange4Dto,
-  asCellStyle,
   createStyle4Dto,
+  CellRange,
 } from 'fit-core/model/index.js';
 import {
   OperationStep,
   OperationStepFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 export type CellStyleNameDto = {
@@ -21,7 +19,7 @@ export type CellStyleNameDto = {
 
 export type StyleEntryDto = { styleName: string; style: unknown };
 
-export type StyleOperationStepDto = Id<'style'> & {
+export type StyleOperationStepDto = OperationId<'style'> & {
   cellStyleNames: CellStyleNameDto[];
   createStyles: StyleEntryDto[];
   updateStyles: StyleEntryDto[];
@@ -60,15 +58,8 @@ export class StyleOperationStep implements OperationStep {
   ): void {
     for (const cellRangeDto of updatableCells) {
       createCellRange4Dto(cellRangeDto).forEachCell(
-        (rowId: number, colId: number) => {
-          let cell: Cell | undefined = this.table.getCell(rowId, colId);
-          if (cell) {
-            asCellStyle(cell)?.setStyleName(styleName);
-          } else {
-            const cell: Cell = createCell();
-            asCellStyle(cell)?.setStyleName(styleName);
-            this.table.addCell(rowId, colId, cell);
-          }
+        (rowId: number, colId: number): void => {
+          this.table.setCellStyleName(rowId, colId, styleName);
         }
       );
     }
@@ -76,16 +67,29 @@ export class StyleOperationStep implements OperationStep {
 
   private updateUndefinedStyleName(updatableCells: unknown[]): void {
     for (const cellRangeDto of updatableCells) {
-      createCellRange4Dto(cellRangeDto).forEachCell(
-        (rowId: number, colId: number) => {
-          const cell: Cell | undefined = this.table.getCell(rowId, colId);
-          if (cell) {
-            asCellStyle(cell)?.setStyleName();
-            !cell.hasProperties() && this.table.removeCell(rowId, colId);
-          }
+      const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
+      const fromRowId: number = cellRange.getFrom().getRowId();
+      const toRowId: number = cellRange.getTo().getRowId();
+      const fromColId: number = cellRange.getFrom().getColId();
+      const toColId: number = cellRange.getTo().getColId();
+      for (let rowId: number = fromRowId; rowId <= toRowId; rowId++) {
+        for (let colId: number = fromColId; colId <= toColId; colId++) {
+          this.table.setCellStyleName(rowId, colId);
         }
-      );
+        this.removeRowIfEmpty(rowId);
+      }
     }
+  }
+
+  private removeRowIfEmpty(rowId: number): void {
+    let isEmptyRow = true;
+    for (let colId = 0; colId < this.table.getNumberOfCols(); colId++) {
+      if (this.table.hasCell(rowId, colId)) {
+        isEmptyRow = false;
+        break;
+      }
+    }
+    if (isEmptyRow) this.table.removeRowCells(rowId);
   }
 
   private createStyles(): void {

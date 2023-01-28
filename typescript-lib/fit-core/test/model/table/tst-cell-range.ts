@@ -1,13 +1,10 @@
 import { implementsTKeys } from '../../../dist/common/index.js';
-import {
-  CellRangeBasics,
-  CellRangeFactory,
-} from '../../../dist/model/index.js';
+import { CellRange, CellRangeFactory } from '../../../dist/model/index.js';
 
 import { TstCellRangeDto } from './dto/tst-table-dto.js';
 import { TstCellCoord } from './tst-cell-coord.js';
 
-export class TstCellRange implements CellRangeBasics {
+export class TstCellRange implements CellRange {
   constructor(private readonly dto: TstCellRangeDto) {
     this.fromTopLeftToBottomRight();
   }

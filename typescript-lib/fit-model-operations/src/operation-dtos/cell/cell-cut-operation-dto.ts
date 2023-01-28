@@ -1,6 +1,6 @@
 import { Table, CellRange } from 'fit-core/model/index.js';
 import {
-  Id,
+  OperationId,
   OperationDto,
   OperationDtoFactory,
 } from 'fit-core/operations/index.js';
@@ -8,7 +8,7 @@ import {
 import { CellRemoveOperationDtoFactory } from './cell-remove-operation-dto.js';
 import { CellCopyOperationDtoFactory } from './cell-copy-operation-dto.js';
 
-export type CellCutOperationDtoArgs = Id<'cell-cut'> & {
+export type CellCutOperationDtoArgs = OperationId<'cell-cut'> & {
   selectedCells: CellRange[];
 };
 
@@ -44,14 +44,14 @@ export class CellCutOperationDtoFactory implements OperationDtoFactory {
       steps: [],
       undoOperation: { steps: [] },
     };
-    cellCopyOperationDto.steps.forEach((step: Id<string>): void => {
+    cellCopyOperationDto.steps.forEach((step: OperationId<string>): void => {
       cellCutOperationDto.steps.push(step);
     });
-    cellRemoveOperationDto.steps.forEach((step: Id<string>): void => {
+    cellRemoveOperationDto.steps.forEach((step: OperationId<string>): void => {
       cellCutOperationDto.steps.push(step);
     });
     cellRemoveOperationDto.undoOperation!.steps.forEach(
-      (step: Id<string>): void => {
+      (step: OperationId<string>): void => {
         cellCutOperationDto.undoOperation?.steps.push(step);
       }
     );

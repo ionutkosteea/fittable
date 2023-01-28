@@ -28,7 +28,7 @@ import { TopicTitle } from 'src/app/common/topic-title.model';
 
 const FIT_TABLE_DTO: FitTableDto = {
   numberOfRows: 100,
-  numberOfColumns: 20,
+  numberOfCols: 20,
   styles: {
     s0: { 'font-weight': 'bold' },
     s1: { 'font-style': 'italic' },
@@ -47,28 +47,27 @@ const FIT_TABLE_DTO: FitTableDto = {
       'border-bottom': '2px solid #5488ff',
     },
   },
-  mergedRegions: [
-    { from: { rowId: 14, colId: 1 }, to: { rowId: 15, colId: 2 } },
-  ],
-  columns: { 2: { width: 50 } },
-  rows: {
-    1: { cells: { 1: { value: 'line1\nline2\nline3' } } },
-    2: { cells: { 1: { styleName: 's0', value: 'Bold' } } },
-    3: { cells: { 1: { styleName: 's1', value: 'Italic' } } },
-    4: { cells: { 1: { styleName: 's2', value: 'Underline' } } },
-    5: { cells: { 1: { styleName: 's3', value: 'Line-through' } } },
-    6: { cells: { 1: { styleName: 's4', value: 'Font fantasy' } } },
-    7: { cells: { 1: { styleName: 's5', value: 'Font size 16' } } },
-    8: { cells: { 1: { styleName: 's6', value: 'Color' } } },
-    9: { cells: { 1: { styleName: 's7', value: 'Backgroundcolor' } } },
-    10: { cells: { 1: { styleName: 's8', value: 'Align bottom' } } },
-    11: { cells: { 1: { styleName: 's9', value: 'Align right' } } },
-    12: { cells: { 1: { styleName: 's10', value: 'Border' } } },
+  mergedCells: { 14: { 1: { rowSpan: 2, colSpan: 2 } } },
+  cols: { 2: { width: 50 } },
+  rows: { 13: { height: 42 } },
+  cells: {
+    1: { 1: { value: 'line1\nline2\nline3' } },
+    2: { 1: { styleName: 's0', value: 'Bold' } },
+    3: { 1: { styleName: 's1', value: 'Italic' } },
+    4: { 1: { styleName: 's2', value: 'Underline' } },
+    5: { 1: { styleName: 's3', value: 'Line-through' } },
+    6: { 1: { styleName: 's4', value: 'Font fantasy' } },
+    7: { 1: { styleName: 's5', value: 'Font size 16' } },
+    8: { 1: { styleName: 's6', value: 'Color' } },
+    9: { 1: { styleName: 's7', value: 'Backgroundcolor' } },
+    10: { 1: { styleName: 's8', value: 'Align bottom' } },
+    11: { 1: { styleName: 's9', value: 'Align right' } },
+    12: { 1: { styleName: 's10', value: 'Border' } },
     13: {
-      height: 42,
-      cells: { 1: { value: 'Row height' }, 2: { value: 'Column width' } },
+      1: { value: 'Row height' },
+      2: { value: 'Column width' },
     },
-    14: { cells: { 1: { value: 'Merged cells' } } },
+    14: { 1: { value: 'Merged cells' } },
   },
 };
 
@@ -105,9 +104,9 @@ export class IntroductionComponent implements OnInit, AfterViewInit {
     navigation.push(this.createThemeSwitcherItem());
     navigation.push(this.createToolbarItem());
     navigation.push(this.createVirtualRowsItem());
-    navigation.push(this.createVirtualColumnsItem());
+    navigation.push(this.createVirtualColsItem());
     navigation.push(this.createRowHeaderItem());
-    navigation.push(this.createColumnHeaderItem());
+    navigation.push(this.createColHeaderItem());
     navigation.push(this.createCellSelectionItem());
     navigation.push(this.createCellEditorItem());
     navigation.push(this.createContextMenuItem());
@@ -155,14 +154,14 @@ export class IntroductionComponent implements OnInit, AfterViewInit {
     return item;
   }
 
-  private createVirtualColumnsItem(): NavigationItem {
+  private createVirtualColsItem(): NavigationItem {
     const item: NavigationItem = {
       label: 'Virtual columns',
       isChecked: (): boolean =>
-        getViewModelConfig().disableVirtualColumns ? false : true,
+        getViewModelConfig().disableVirtualCols ? false : true,
       run: (): void =>
         this.run({
-          disableVirtualColumns: item.isChecked(),
+          disableVirtualCols: item.isChecked(),
         }),
     };
     return item;
@@ -178,12 +177,12 @@ export class IntroductionComponent implements OnInit, AfterViewInit {
     return item;
   }
 
-  private createColumnHeaderItem(): NavigationItem {
+  private createColHeaderItem(): NavigationItem {
     const item: NavigationItem = {
       label: 'Column header',
       isChecked: (): boolean =>
-        getViewModelConfig().columnHeaderHeight ? true : false,
-      run: (): void => this.run({ columnHeader: !item.isChecked() }),
+        getViewModelConfig().colHeaderHeight ? true : false,
+      run: (): void => this.run({ colHeader: !item.isChecked() }),
     };
     return item;
   }

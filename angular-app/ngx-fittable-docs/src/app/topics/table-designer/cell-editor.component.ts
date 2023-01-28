@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
-  createCell,
   createCellCoord,
   createTable,
   registerModelConfig,
@@ -48,14 +47,14 @@ export class CellEditorComponent implements ConsoleTopic, OnInit {
     registerViewModelConfig(
       createFitViewModelConfig({
         rowHeader: true,
-        columnHeader: true,
+        colHeader: true,
         cellEditor: true,
       })
     );
 
-    const table: Table = createTable(5, 5);
-    table.forEachCellCoord((rowId: number, colId: number): void => {
-      table.addCell(rowId, colId, createCell().setValue(rowId * colId));
+    const table: Table = createTable();
+    table.forEachCell((rowId: number, colId: number): void => {
+      table.setCellValue(rowId, colId, rowId * colId);
     });
     this.fit = createFittableDesigner(table);
 

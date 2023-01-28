@@ -29,7 +29,7 @@ export class TableCenterComponent extends TableCommon {
 
   public getContainerPosition(): CssStyle {
     const left: number = this.getRowHeaderWidth() + this.getOffsetX();
-    const top: number = this.getColumnHeaderHeight() + this.getOffsetY();
+    const top: number = this.getColHeaderHeight() + this.getOffsetY();
     return { transform: 'translate3d(' + left + 'px,' + top + 'px,0px)' };
   }
 

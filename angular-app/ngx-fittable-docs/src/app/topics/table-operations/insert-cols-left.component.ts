@@ -2,7 +2,6 @@ import { Subject, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
-  createCell,
   createLineRange,
   createTable,
   registerModelConfig,
@@ -30,7 +29,7 @@ import { ConsoleTopic } from './common/console-topic.model';
   templateUrl: './common/console-topic.html',
   styleUrls: ['./common/console-topic.css', '../common/common.css'],
 })
-export class InsertColumnsLeftComponent
+export class InsertColsLeftComponent
   extends ConsoleTopic
   implements OnInit, OnDestroy
 {
@@ -52,16 +51,12 @@ export class InsertColumnsLeftComponent
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ rowHeader: true, columnHeader: true })
+      createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    const table: Table = createTable(5, 5);
-    table.forEachCellCoord((rowId: number, colId: number): void => {
-      table.addCell(
-        rowId,
-        colId,
-        createCell().setValue('[' + rowId + ',' + colId + ']')
-      );
+    const table: Table = createTable();
+    table.forEachCell((rowId: number, colId: number): void => {
+      table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
     this.fit = createFittableDesigner(table);
     const afterRun$: Subject<Operation> = new Subject();

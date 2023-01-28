@@ -1,11 +1,4 @@
-import {
-  CellRange,
-  TableRows,
-  asTableRows,
-  Row,
-  asRowHeight,
-  Table,
-} from 'fit-core/model/index.js';
+import { CellRange, asTableRows, Table } from 'fit-core/model/index.js';
 import {
   ViewModelConfig,
   getViewModelConfig,
@@ -31,9 +24,8 @@ export class RowResizeMenuItem extends InputMenuItem {
     const rowId: number = cellRange.getFrom().getRowId();
     const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
-    const rTable: TableRows | undefined = asTableRows(table);
-    const row: Row | undefined = rTable?.getRow(rowId);
-    const rowHeight: number | undefined = asRowHeight(row)?.getHeight();
+    const rowHeight: number | undefined =
+      asTableRows(table)?.getRowHeight(rowId);
     return rowHeight ?? this.config.rowHeights;
   }
 

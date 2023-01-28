@@ -1,13 +1,13 @@
 <div class="table-center" [ngStyle]="getContainerPosition()">
   <table class="table">
     <colgroup>
-      <col *ngFor="let colId of getColumnIds()" [ngStyle]="{'width.px':getColumnWidth(colId)}" />
+      <col *ngFor="let colId of getColIds()" [ngStyle]="{'width.px':getColWidth(colId)}" />
     </colgroup>
     <tbody (contextmenu)="showContextMenu($event)" fitCellEditorOpen [cellEditorListener]="getCellEditorListener()"
       [cellEditor]="getCellEditor()" [selectedCellsFn]="getSelectedCells" fitCellSelection
       [cellSelectionListener]="getCellSelectionListener()" [cellSelectionRanges]="getCellSelectionRanges()">
       <tr *ngFor="let rowId of getRowIds()" [ngStyle]="{'height.px':getRowHeight(rowId)}">
-        <ng-container *ngFor="let colId of getColumnIds()">
+        <ng-container *ngFor="let colId of getColIds()">
           <td class="cell" *ngIf="!isHiddenCell(rowId,colId)" [ngStyle]="getCellStyle(rowId,colId)"
             [rowSpan]="getRowSpan(rowId,colId)" [colSpan]="getColSpan(rowId,colId)" [attr.rowId]="rowId"
             [attr.colId]="colId">

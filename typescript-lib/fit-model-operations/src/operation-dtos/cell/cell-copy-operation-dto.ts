@@ -2,12 +2,12 @@ import { Table, CellRange } from 'fit-core/model/index.js';
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import { CellCopyOperationStepDto } from '../../operation-steps/cell/cell-copy-operation-step.js';
 
-export type CellCopyOperationDtoArgs = Id<'cell-copy'> & {
+export type CellCopyOperationDtoArgs = OperationId<'cell-copy'> & {
   selectedCells: CellRange[];
 };
 

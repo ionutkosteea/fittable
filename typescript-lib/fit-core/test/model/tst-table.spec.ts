@@ -8,7 +8,6 @@ import {
   createCellRangeList4Dto,
   CellRange,
   createDto4CellRangeList,
-  createCell,
   createLineRange,
   createLineRange4Dto,
   LineRange,
@@ -16,55 +15,50 @@ import {
   createDto4LineRangeList,
   CellCoord,
   registerModelConfig,
-  Cell,
   createTable,
   unregisterModelConfig,
+  Table,
 } from '../../dist/model/index.js';
 
-import { TstCell } from './table/tst-cell.js';
 import {
-  TstTableDto,
   TstCellCoordDto,
   TstCellRangeDto,
   TstLineRangeDto,
 } from './table/dto/tst-table-dto.js';
 import { TstTable } from './table/tst-table.js';
-import { tstModelConfig } from './table/tst-model-config.js';
+import { TST_MODEL_CONFIG } from './table/tst-model-config.js';
 
 describe('Test Table', () => {
-  beforeAll(() => registerModelConfig(tstModelConfig));
+  beforeAll(() => registerModelConfig(TST_MODEL_CONFIG));
   afterAll(() => unregisterModelConfig());
 
   it('create model via dto', () => {
-    const dto: TstTableDto = {
-      numberOfRows: 10,
-      numberOfColumns: 5,
-      rows: {
-        1: {
-          cells: { 0: { value: 'text' } },
-        },
-        3: { cells: { 2: { value: 1000, format: 'number' } } },
-      },
-    };
-
-    const table: TstTable = new TstTable(dto).clone();
-    expect(table.getNumberOfRows() === 10).toBeTruthy();
-    expect(table.getNumberOfColumns() === 5).toBeTruthy();
-    expect(table.getCell(1, 0)?.getValue() === 'text').toBeTruthy();
-    expect(table.getCell(3, 2)?.getValue() === 1000).toBeTruthy();
-    expect(table.getCell(3, 2)?.getFormat() === 'number').toBeTruthy();
+    const dto: string[][] = [
+      ['A1', 'A2'],
+      ['B1', 'B2'],
+      ['C1', 'C2'],
+    ];
+    const table: Table = new TstTable(dto).clone();
+    expect(table.getNumberOfRows() === 3).toBeTruthy();
+    expect(table.getNumberOfCols() === 2).toBeTruthy();
+    expect(table.getCellValue(0, 0) === 'A1').toBeTruthy();
+    expect(table.getCellValue(0, 1) === 'A2').toBeTruthy();
+    expect(table.getCellValue(1, 0) === 'B1').toBeTruthy();
+    expect(table.getCellValue(1, 1) === 'B2').toBeTruthy();
+    expect(table.getCellValue(2, 0) === 'C1').toBeTruthy();
+    expect(table.getCellValue(2, 1) === 'C2').toBeTruthy();
   });
 
   it('create model via API', () => {
-    const table: TstTable = createTable<TstTable>(10, 5)
-      .addCell(1, 0, new TstCell().setValue('text').clone())
-      .addCell(3, 2, new TstCell().setValue(1000).setFormat('number').clone());
+    const table: TstTable = createTable<TstTable>()
+      .setNumberOfRows(5)
+      .setNumberOfCols(3)
+      .setCellValue(1, 0, 'text')
+      .setCellValue(3, 3, 1000);
 
-    expect(table.getDto().numberOfRows === 10);
-    expect(table.getDto().numberOfColumns === 5);
-    expect(table.getDto().rows[1].cells[0].value === 'text');
-    expect(table.getDto().rows[3].cells[2].value === 1000);
-    expect(table.getDto().rows[3].cells[2].format === 'number');
+    expect(table.getDto().length === 5);
+    expect(table.getDto()[1][0] === 'text');
+    expect(table.getDto()[3][2] === 1000);
   });
 
   it('createCellCoord', () => {
@@ -109,11 +103,6 @@ describe('Test Table', () => {
     expect(dtoList.length === 1).toBeTruthy();
     expect(dtoList[0].from.rowId === 1).toBeTruthy();
     expect(dtoList[0].from.colId === 2).toBeTruthy();
-  });
-
-  it('createCell', () => {
-    const cell: Cell = createCell().setValue(1000);
-    expect(cell.getValue() === 1000).toBeTruthy();
   });
 
   it('createLineRange', () => {

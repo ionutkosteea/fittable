@@ -1,14 +1,14 @@
 import {
   Table,
-  TableRows,
-  TableColumns,
   createLineRange4Dto,
   LineRange,
+  asTableRows,
+  asTableCols,
 } from 'fit-core/model/index.js';
 import {
   OperationStep,
   OperationStepFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 export type MovableLinesDto = { updatableLineRange: unknown; move: number };
@@ -32,9 +32,9 @@ abstract class LineRemoveOperationStep implements OperationStep {
 
   public run(): void {
     this.countSelectedLines();
-    this.updateNumberOfLines();
     this.removeLines();
     this.moveLines();
+    this.updateNumberOfLines();
   }
 
   private countSelectedLines(): void {
@@ -67,12 +67,12 @@ abstract class LineRemoveOperationStep implements OperationStep {
   }
 }
 
-export type RowRemoveOperationStepDto = Id<'row-remove'> &
+export type RowRemoveOperationStepDto = OperationId<'row-remove'> &
   LineRemoveOperationStepDto;
 
 export class RowRemoveOperationStep extends LineRemoveOperationStep {
   constructor(
-    protected readonly table: Table & TableRows,
+    protected readonly table: Table,
     protected readonly stepDto: RowRemoveOperationStepDto
   ) {
     super(table, stepDto);
@@ -85,54 +85,58 @@ export class RowRemoveOperationStep extends LineRemoveOperationStep {
   }
 
   protected removeLine(rowId: number): void {
-    this.table.removeRow(rowId);
+    this.table.removeRowCells(rowId);
+    asTableRows(this.table)?.removeRow(rowId);
   }
 
   protected moveLine(rowId: number, move: number): void {
-    this.table.moveRow(rowId, move);
+    this.table.moveRowCells(rowId, move);
+    asTableRows(this.table)?.moveRow(rowId, move);
   }
 }
 
 export class RowRemoveOperationStepFactory implements OperationStepFactory {
   public createStep(
-    table: Table & TableRows,
+    table: Table,
     stepDto: RowRemoveOperationStepDto
   ): OperationStep {
     return new RowRemoveOperationStep(table, stepDto);
   }
 }
 
-export type ColumnRemoveOperationStepDto = Id<'column-remove'> &
+export type ColRemoveOperationStepDto = OperationId<'column-remove'> &
   LineRemoveOperationStepDto;
 
-export class ColumnRemoveOperationStep extends LineRemoveOperationStep {
+export class ColRemoveOperationStep extends LineRemoveOperationStep {
   constructor(
-    protected readonly table: Table & TableColumns,
-    protected readonly stepDto: ColumnRemoveOperationStepDto
+    protected readonly table: Table,
+    protected readonly stepDto: ColRemoveOperationStepDto
   ) {
     super(table, stepDto);
   }
 
   protected updateNumberOfLines(): void {
-    const numberOfColumns: number =
-      this.table.getNumberOfColumns() - this.numberOfSelectedLines;
-    this.table.setNumberOfColumns(numberOfColumns);
+    const numberOfCols: number =
+      this.table.getNumberOfCols() - this.numberOfSelectedLines;
+    this.table.setNumberOfCols(numberOfCols);
   }
 
   protected removeLine(colId: number): void {
-    this.table.removeColumn(colId);
+    this.table.removeColCells(colId);
+    asTableCols(this.table)?.removeCol(colId);
   }
 
   protected moveLine(colId: number, move: number): void {
-    this.table.moveColumn(colId, move);
+    this.table.moveColCells(colId, move);
+    asTableCols(this.table)?.moveCol(colId, move);
   }
 }
 
-export class ColumnRemoveOperationStepFactory implements OperationStepFactory {
+export class ColRemoveOperationStepFactory implements OperationStepFactory {
   public createStep(
-    table: Table & TableColumns,
-    stepDto: ColumnRemoveOperationStepDto
+    table: Table,
+    stepDto: ColRemoveOperationStepDto
   ): OperationStep {
-    return new ColumnRemoveOperationStep(table, stepDto);
+    return new ColRemoveOperationStep(table, stepDto);
   }
 }

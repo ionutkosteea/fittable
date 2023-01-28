@@ -6,24 +6,24 @@ import {
   createDto4LineRangeList,
   createLineRangeList4Dto,
   asTableMergedRegions,
-  MergedRegion,
+  TableMergedRegions,
 } from 'fit-core/model/index.js';
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import {
   LineInsertOperationStepDto,
   RowInsertOperationStepDto,
-  ColumnInsertOperationStepDto,
+  ColInsertOperationStepDto,
   MovableLinesDto,
 } from '../../operation-steps/line/line-insert-operation-step.js';
 import {
   LineRemoveOperationStepDto,
   RowRemoveOperationStepDto,
-  ColumnRemoveOperationStepDto,
+  ColRemoveOperationStepDto,
 } from '../../operation-steps/line/line-remove-operation-step.js';
 import { MergedRegionsOperationStepDto } from '../../operation-steps/merged-regions/merged-regions-operation-step.js';
 
@@ -41,8 +41,8 @@ abstract class LineInsertOperationDtoBuilder {
   };
   protected readonly mergedRegionsStepDto: MergedRegionsOperationStepDto = {
     id: 'merged-regions',
-    create4CellRanges: [],
-    remove4CellCoords: [],
+    moveRegions: [],
+    increaseRegions: [],
   };
   protected readonly undoLineRemoveStepDto: LineRemoveOperationStepDto = {
     removableLineRanges: [],
@@ -50,24 +50,26 @@ abstract class LineInsertOperationDtoBuilder {
   };
   protected readonly undoMergedRegionsStepDto: MergedRegionsOperationStepDto = {
     id: 'merged-regions',
-    create4CellRanges: [],
-    remove4CellCoords: [],
+    moveRegions: [],
+    increaseRegions: [],
   };
 
+  protected mergedRegionsTable?: Table & TableMergedRegions;
   private selectedLines: LineRange[];
 
   constructor(
     protected readonly table: Table,
     protected readonly args: LineInsertOperationDtoArgs
   ) {
+    this.mergedRegionsTable = asTableMergedRegions(table);
     this.selectedLines = args.selectedLines;
   }
 
   protected abstract getNumberOfLines(): number;
-  protected abstract getFromLineId(region: MergedRegion): number;
-  protected abstract getToLineId(region: MergedRegion): number;
-  protected abstract move(region: MergedRegion): void;
-  protected abstract increase(region: MergedRegion): void;
+  protected abstract getRegionLineId(rowId: number, colId: number): number;
+  protected abstract getLineSpan(rowId: number, colId: number): number;
+  protected abstract moveRegion(rowId: number, colId: number): void;
+  protected abstract increaseRegion(rowId: number, colId: number): void;
 
   protected insertLines(): void {
     if (this.args.canInsertAfter) {
@@ -153,39 +155,27 @@ abstract class LineInsertOperationDtoBuilder {
   }
 
   protected updateMergedRegions(): void {
-    asTableMergedRegions(this.table)
-      ?.getMergedRegions()
-      ?.forEachRegion((region: MergedRegion) => {
+    this.mergedRegionsTable?.forEachRegion(
+      (rowId: number, colId: number): void => {
         for (const lineRange of this.selectedLines) {
           const selectedFrom: number = lineRange.getFrom() - 1;
-          const regionFrom: number = this.getFromLineId(region);
-          const regionTo: number = this.getToLineId(region);
-          const newRegion: MergedRegion = region.clone() as MergedRegion;
+          const regionFrom: number = this.getRegionLineId(rowId, colId);
+          const lineSpan: number = this.getLineSpan(rowId, colId);
+          const regionTo: number = lineSpan
+            ? regionFrom + lineSpan - 1
+            : regionFrom;
           if (selectedFrom < regionFrom) {
-            this.move(newRegion);
-            this.updateMergedRegion(region, newRegion);
+            this.moveRegion(rowId, colId);
           } else if (selectedFrom >= regionFrom && selectedFrom < regionTo) {
-            this.increase(newRegion);
-            this.updateMergedRegion(region, newRegion);
+            this.increaseRegion(rowId, colId);
           }
         }
-      });
-  }
-
-  private updateMergedRegion(
-    region: MergedRegion,
-    newRegion: MergedRegion
-  ): void {
-    this.mergedRegionsStepDto.create4CellRanges.push(newRegion.getDto());
-    this.mergedRegionsStepDto.remove4CellCoords.push(region.getFrom().getDto());
-    this.undoMergedRegionsStepDto.create4CellRanges.push(region.getDto());
-    this.undoMergedRegionsStepDto.remove4CellCoords.push(
-      newRegion.getFrom().getDto()
+      }
     );
   }
 }
 
-export type RowInsertOperationDtoArgs = Id<'row-insert'> &
+export type RowInsertOperationDtoArgs = OperationId<'row-insert'> &
   LineInsertOperationDtoArgs;
 
 export class RowInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder {
@@ -224,20 +214,42 @@ export class RowInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
     return this.table.getNumberOfRows();
   }
 
-  protected getFromLineId(region: MergedRegion): number {
-    return region.getFrom().getRowId();
+  protected getRegionLineId(rowId: number, colId: number): number {
+    return rowId;
   }
 
-  protected getToLineId(region: MergedRegion): number {
-    return region.getTo().getRowId();
+  protected getLineSpan(rowId: number, colId: number): number {
+    return this.mergedRegionsTable!.getRowSpan(rowId, colId) ?? 0;
   }
 
-  protected move(region: MergedRegion): void {
-    region.move(this.args.numberOfInsertableLines, 0);
+  protected moveRegion(rowId: number, colId: number): void {
+    this.mergedRegionsStepDto.moveRegions!.push({
+      rowId,
+      colId,
+      moveRow: this.args.numberOfInsertableLines,
+      moveCol: 0,
+    });
+    this.undoMergedRegionsStepDto.moveRegions!.push({
+      rowId: rowId + this.args.numberOfInsertableLines,
+      colId,
+      moveRow: -this.args.numberOfInsertableLines,
+      moveCol: 0,
+    });
   }
 
-  protected increase(region: MergedRegion): void {
-    region.increase(this.args.numberOfInsertableLines, 0);
+  protected increaseRegion(rowId: number, colId: number): void {
+    this.mergedRegionsStepDto.increaseRegions!.push({
+      rowId,
+      colId,
+      increaseRow: this.args.numberOfInsertableLines,
+      increaseCol: 0,
+    });
+    this.undoMergedRegionsStepDto.increaseRegions!.push({
+      rowId,
+      colId,
+      increaseRow: -this.args.numberOfInsertableLines,
+      increaseCol: 0,
+    });
   }
 }
 
@@ -250,19 +262,19 @@ export class RowInsertOperationDtoFactory implements OperationDtoFactory {
   }
 }
 
-export type ColumnInsertOperationDtoArgs = Id<'column-insert'> &
+export type ColInsertOperationDtoArgs = OperationId<'column-insert'> &
   LineInsertOperationDtoArgs;
 
-export class ColumnInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder {
+export class ColInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder {
   constructor(
     protected readonly table: Table,
-    protected readonly args: ColumnInsertOperationDtoArgs
+    protected readonly args: ColInsertOperationDtoArgs
   ) {
     super(table, args);
   }
 
   protected getNumberOfLines(): number {
-    return this.table.getNumberOfColumns();
+    return this.table.getNumberOfCols();
   }
 
   public build(): OperationDto {
@@ -272,45 +284,67 @@ export class ColumnInsertOperationDtoBuilder extends LineInsertOperationDtoBuild
     this.insertLines();
     this.undoInsertLines();
     this.updateMergedRegions();
-    const columnInsertStepDto: ColumnInsertOperationStepDto = {
+    const colInsertStepDto: ColInsertOperationStepDto = {
       id: 'column-insert',
       ...this.lineInsertStepDto,
     };
-    const undoColumnInsertStepDto: ColumnRemoveOperationStepDto = {
+    const undoColInsertStepDto: ColRemoveOperationStepDto = {
       id: 'column-remove',
       ...this.undoLineRemoveStepDto,
     };
     return {
       id: this.args.id,
-      steps: [columnInsertStepDto, this.mergedRegionsStepDto],
+      steps: [colInsertStepDto, this.mergedRegionsStepDto],
       undoOperation: {
-        steps: [undoColumnInsertStepDto, this.undoMergedRegionsStepDto],
+        steps: [undoColInsertStepDto, this.undoMergedRegionsStepDto],
       },
     };
   }
 
-  protected getFromLineId(region: MergedRegion): number {
-    return region.getFrom().getColId();
+  protected getRegionLineId(rowId: number, colId: number): number {
+    return colId;
   }
 
-  protected getToLineId(region: MergedRegion): number {
-    return region.getTo().getColId();
+  protected getLineSpan(rowId: number, colId: number): number {
+    return this.mergedRegionsTable!.getColSpan(rowId, colId) ?? 0;
   }
 
-  protected move(region: MergedRegion): void {
-    region.move(0, this.args.numberOfInsertableLines);
+  protected moveRegion(rowId: number, colId: number): void {
+    this.mergedRegionsStepDto.moveRegions!.push({
+      rowId,
+      colId,
+      moveRow: 0,
+      moveCol: this.args.numberOfInsertableLines,
+    });
+    this.undoMergedRegionsStepDto.moveRegions!.push({
+      rowId,
+      colId: colId + this.args.numberOfInsertableLines,
+      moveRow: 0,
+      moveCol: -this.args.numberOfInsertableLines,
+    });
   }
 
-  protected increase(region: MergedRegion): void {
-    region.increase(0, this.args.numberOfInsertableLines);
+  protected increaseRegion(rowId: number, colId: number): void {
+    this.mergedRegionsStepDto.increaseRegions!.push({
+      rowId,
+      colId,
+      increaseRow: 0,
+      increaseCol: this.args.numberOfInsertableLines,
+    });
+    this.undoMergedRegionsStepDto.increaseRegions!.push({
+      rowId,
+      colId,
+      increaseRow: 0,
+      increaseCol: -this.args.numberOfInsertableLines,
+    });
   }
 }
 
-export class ColumnInsertOperationDtoFactory implements OperationDtoFactory {
+export class ColInsertOperationDtoFactory implements OperationDtoFactory {
   public createOperationDto(
     table: Table,
-    args: ColumnInsertOperationDtoArgs
+    args: ColInsertOperationDtoArgs
   ): OperationDto | Promise<OperationDto> {
-    return new ColumnInsertOperationDtoBuilder(table, args).build();
+    return new ColInsertOperationDtoBuilder(table, args).build();
   }
 }

@@ -37,14 +37,14 @@ describe('Test CellSelectionPainter', (): void => {
     const builder: CellSelectionPainterBuilder =
       new CellSelectionPainterBuilder()
         .setNumberOfTableRows(10)
-        .setNumberOfTableColumns(5)
+        .setNumberOfTableCols(5)
         .selectBodyRange(createCellCoord(0, 0));
     const painter: CellSelectionPainter = builder.build();
     const bodyRange: Rectangle = painter.body.getRectangles()[0];
     expect(bodyRange.top === 0).toBeTruthy();
     expect(bodyRange.left === 0).toBeTruthy();
-    expect(bodyRange.width === config!.columnWidth).toBeTruthy();
-    expect(bodyRange.height === config!.rowHeight).toBeTruthy();
+    expect(bodyRange.width === config!.colWidths).toBeTruthy();
+    expect(bodyRange.height === config!.rowHeights).toBeTruthy();
     builder.destroy();
   });
 
@@ -52,14 +52,14 @@ describe('Test CellSelectionPainter', (): void => {
     const builder: CellSelectionPainterBuilder =
       new CellSelectionPainterBuilder()
         .setNumberOfTableRows(10)
-        .setNumberOfTableColumns(5)
+        .setNumberOfTableCols(5)
         .selectBodyRange(createCellCoord(1, 1));
     const painter: CellSelectionPainter = builder.build();
     const bodyRange: Rectangle = painter.body.getRectangles()[0];
-    expect(bodyRange.top === config!.rowHeight).toBeTruthy();
-    expect(bodyRange.left === config!.columnWidth).toBeTruthy();
-    expect(bodyRange.width === config!.columnWidth).toBeTruthy();
-    expect(bodyRange.height === config!.rowHeight).toBeTruthy();
+    expect(bodyRange.top === config!.rowHeights).toBeTruthy();
+    expect(bodyRange.left === config!.colWidths).toBeTruthy();
+    expect(bodyRange.width === config!.colWidths).toBeTruthy();
+    expect(bodyRange.height === config!.rowHeights).toBeTruthy();
     builder.destroy();
   });
 
@@ -67,14 +67,14 @@ describe('Test CellSelectionPainter', (): void => {
     const builder: CellSelectionPainterBuilder =
       new CellSelectionPainterBuilder()
         .setNumberOfTableRows(10)
-        .setNumberOfTableColumns(5)
+        .setNumberOfTableCols(5)
         .selectBodyRange(createCellCoord(0, 0), createCellCoord(1, 1));
     const painter: CellSelectionPainter = builder.build();
     const bodyRange: Rectangle = painter.body.getRectangles()[0];
     expect(bodyRange.top === 0).toBeTruthy();
     expect(bodyRange.left === 0).toBeTruthy();
-    expect(bodyRange.width === 2 * config!.columnWidth).toBeTruthy();
-    expect(bodyRange.height === 2 * config!.rowHeight).toBeTruthy();
+    expect(bodyRange.width === 2 * config!.colWidths).toBeTruthy();
+    expect(bodyRange.height === 2 * config!.rowHeights).toBeTruthy();
     builder.destroy();
   });
 
@@ -82,41 +82,39 @@ describe('Test CellSelectionPainter', (): void => {
     const builder: CellSelectionPainterBuilder =
       new CellSelectionPainterBuilder()
         .setNumberOfTableRows(10)
-        .setNumberOfTableColumns(5)
+        .setNumberOfTableCols(5)
         .selectBodyRange(createCellCoord(0, 0))
         .selectBodyRange(createCellCoord(1, 0), createCellCoord(1, 1));
     const painter: CellSelectionPainter = builder.build();
     const bodyRange1: Rectangle = painter.body.getRectangles()[0];
     expect(bodyRange1.top === 0).toBeTruthy();
     expect(bodyRange1.left === 0).toBeTruthy();
-    expect(bodyRange1.width === config!.columnWidth).toBeTruthy();
-    expect(bodyRange1.height === config!.rowHeight).toBeTruthy();
+    expect(bodyRange1.width === config!.colWidths).toBeTruthy();
+    expect(bodyRange1.height === config!.rowHeights).toBeTruthy();
     const bodyRange2: Rectangle = painter.body.getRectangles()[1];
-    expect(bodyRange2.top === config!.rowHeight).toBeTruthy();
+    expect(bodyRange2.top === config!.rowHeights).toBeTruthy();
     expect(bodyRange2.left === 0).toBeTruthy();
-    expect(bodyRange2.width === 2 * config!.columnWidth).toBeTruthy();
-    expect(bodyRange2.height === config!.rowHeight).toBeTruthy();
+    expect(bodyRange2.width === 2 * config!.colWidths).toBeTruthy();
+    expect(bodyRange2.height === config!.rowHeights).toBeTruthy();
     builder.destroy();
   });
 
   it('select range [0,0,1,1] in table with row - and column header', () => {
     getViewModelConfig().rowHeaderWidth = 40;
-    getViewModelConfig().columnHeaderHeight = 21;
+    getViewModelConfig().colHeaderHeight = 21;
     const builder: CellSelectionPainterBuilder =
       new CellSelectionPainterBuilder()
         .setNumberOfTableRows(10)
-        .setNumberOfTableColumns(5)
-        .setTableRowHeaders(true)
-        .setTableColumnHeaders(true)
+        .setNumberOfTableCols(5)
         .selectBodyRange(createCellCoord(0, 0), createCellCoord(1, 1));
     const painter: CellSelectionPainter = builder.build();
     const bodyRange: Rectangle = painter.body.getRectangles()[0];
-    expect(bodyRange.top === config!.rowHeight).toBeTruthy();
+    expect(bodyRange.top === config!.rowHeights).toBeTruthy();
     expect(bodyRange.left === config!.rowHeaderWidth).toBeTruthy();
-    expect(bodyRange.width === 2 * config!.columnWidth).toBeTruthy();
-    expect(bodyRange.height === 2 * config!.rowHeight).toBeTruthy();
+    expect(bodyRange.width === 2 * config!.colWidths).toBeTruthy();
+    expect(bodyRange.height === 2 * config!.rowHeights).toBeTruthy();
     builder.destroy();
     getViewModelConfig().rowHeaderWidth = undefined;
-    getViewModelConfig().columnHeaderHeight = undefined;
+    getViewModelConfig().colHeaderHeight = undefined;
   });
 });

@@ -51,19 +51,17 @@ export class ClearCellsComponent
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ rowHeader: true, columnHeader: true })
+      createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
     const tableDto: FitTableDto = {
       numberOfRows: 5,
-      numberOfColumns: 5,
+      numberOfCols: 5,
       styles: { s0: { 'background-color': 'yellow' } },
-      rows: {
+      cells: {
         1: {
-          cells: {
-            1: { styleName: 's0', value: '[1,1]' },
-            2: { styleName: 's0', value: '[1,2]' },
-          },
+          1: { styleName: 's0', value: '[1,1]' },
+          2: { styleName: 's0', value: '[1,2]' },
         },
       },
     };

@@ -1,16 +1,14 @@
 import { implementsTKeys } from 'fit-core/common/index.js';
 import {
-  CellRangeBasics,
-  CellRangeUpdater,
+  CellRange,
   CellRangeFactory,
-  createCellCoord,
   createCellCoord4Dto,
 } from 'fit-core/model/index.js';
 
 import { FitCellRangeDto } from './dto/fit-table-dto.js';
 import { FitCellCoord } from './fit-cell-coord.js';
 
-export class FitCellRange implements CellRangeBasics, CellRangeUpdater {
+export class FitCellRange implements CellRange {
   constructor(private readonly dto: FitCellRangeDto) {
     this.fromTopLeftToBottomRight();
   }
@@ -93,40 +91,6 @@ export class FitCellRange implements CellRangeBasics, CellRangeUpdater {
     let numberOfCells = 0;
     this.forEachCell(() => numberOfCells++);
     return numberOfCells;
-  }
-
-  public move(row: number, col: number): this {
-    this.dto.from.rowId += row;
-    this.dto.from.colId += col;
-    if (this.dto.to) {
-      this.dto.to.rowId += row;
-      this.dto.to.colId += col;
-    }
-    return this;
-  }
-
-  public increase(row: number, col: number): this {
-    if (this.dto.to) {
-      this.dto.to.rowId += row;
-      this.dto.to.colId += col;
-    } else {
-      this.dto.to = {
-        rowId: this.dto.from.rowId + row,
-        colId: this.dto.from.colId + col,
-      };
-    }
-    return this;
-  }
-
-  public decrease(row: number, col: number): this {
-    if (!this.dto.to) throw Error('Single cell range cannod decrease!');
-    this.setTo(
-      createCellCoord<FitCellCoord>(
-        this.getTo().getRowId() - row,
-        this.getTo().getColId() - col
-      )
-    );
-    return this;
   }
 
   public equals(other?: FitCellRange): boolean {

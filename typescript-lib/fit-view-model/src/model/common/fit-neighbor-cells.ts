@@ -1,8 +1,11 @@
 import {
   CellCoord,
-  MergedRegion,
   asTableMergedRegions,
   Table,
+  CellRange,
+  TableMergedRegions,
+  createCellRange,
+  createCellCoord,
 } from 'fit-core/model/index.js';
 import { NeighborCells } from 'fit-core/view-model/index.js';
 
@@ -24,7 +27,7 @@ export class FitNeighborCells implements NeighborCells {
     let leftCell: CellCoord = this.cell.clone();
     if (this.cell.getColId() > 0) {
       leftCell.setColId(leftCell.getColId() - 1);
-      const region: MergedRegion | undefined = this.getMergedRegion(
+      const region: CellRange | undefined = this.getMergedRegion(
         this.table,
         leftCell.getRowId(),
         leftCell.getColId()
@@ -38,7 +41,7 @@ export class FitNeighborCells implements NeighborCells {
     let topCell: CellCoord = this.cell.clone();
     if (this.cell.getRowId() > 0) {
       topCell.setRowId(topCell.getRowId() - 1);
-      const region: MergedRegion | undefined = this.getMergedRegion(
+      const region: CellRange | undefined = this.getMergedRegion(
         this.table,
         topCell.getRowId(),
         topCell.getColId()
@@ -50,14 +53,14 @@ export class FitNeighborCells implements NeighborCells {
 
   public getRightCell(): CellCoord {
     let rightCell: CellCoord = this.cell.clone();
-    if (this.cell.getColId() < this.table.getNumberOfColumns() - 1) {
-      let region: MergedRegion | undefined = this.getMergedRegion(
+    if (this.cell.getColId() < this.table.getNumberOfCols() - 1) {
+      let region: CellRange | undefined = this.getMergedRegion(
         this.table,
         this.cell.getRowId(),
         this.cell.getColId()
       );
       if (region) {
-        rightCell.setColId(rightCell.getColId() + region.getColSpan());
+        rightCell.setColId(region.getTo().getColId() + 1);
       } else {
         region = this.getMergedRegion(
           this.table,
@@ -74,13 +77,13 @@ export class FitNeighborCells implements NeighborCells {
   public getBottomCell(): CellCoord {
     let bottomCell: CellCoord = this.cell.clone();
     if (this.cell.getRowId() < this.table.getNumberOfRows() - 1) {
-      let region: MergedRegion | undefined = this.getMergedRegion(
+      let region: CellRange | undefined = this.getMergedRegion(
         this.table,
         this.cell.getRowId(),
         this.cell.getColId()
       );
       if (region) {
-        bottomCell.setRowId(bottomCell.getRowId() + region.getRowSpan());
+        bottomCell.setRowId(region.getTo().getRowId() + 1);
       } else {
         region = this.getMergedRegion(
           this.table,
@@ -98,9 +101,23 @@ export class FitNeighborCells implements NeighborCells {
     table: Table,
     rowId: number,
     colId: number
-  ): MergedRegion | undefined {
-    return asTableMergedRegions(table)
-      ?.getMergedRegions()
-      ?.getRegion(rowId, colId);
+  ): CellRange | undefined {
+    let region: CellRange | undefined = undefined;
+    const mergedRegionsTable: TableMergedRegions | undefined =
+      asTableMergedRegions(table);
+    mergedRegionsTable?.forEachRegion((row: number, col: number): void => {
+      if (region) return;
+      const rowSpan: number = mergedRegionsTable.getRowSpan(row, col) ?? 0;
+      const colSpan: number = mergedRegionsTable.getColSpan(row, col) ?? 0;
+      const toRow: number = rowSpan ? row + rowSpan - 1 : row;
+      const toCol: number = colSpan ? col + colSpan - 1 : col;
+      if (rowId >= row && rowId <= toRow && colId >= col && colId <= toCol) {
+        region = createCellRange(
+          createCellCoord(row, col),
+          createCellCoord(toRow, toCol)
+        );
+      }
+    });
+    return region;
   }
 }

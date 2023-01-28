@@ -136,7 +136,7 @@ export class VerticalScrollbar extends VirtualScroller {
     return this.tableViewer.getTable().getNumberOfRows();
   }
   protected getTableDimension(): number {
-    const headerHeight: number = this.tableViewer.getColumnHeaderHeight();
+    const headerHeight: number = this.tableViewer.getColHeaderHeight();
     const bodyHeight: number = this.tableViewer.getBodyHeight();
     return headerHeight + bodyHeight;
   }
@@ -156,7 +156,7 @@ export class HorizontalScrollbar extends VirtualScroller {
     super();
   }
   protected getTableNumberOfLines(): number {
-    return this.tableViewer.getTable().getNumberOfColumns();
+    return this.tableViewer.getTable().getNumberOfCols();
   }
   protected getTableDimension(): number {
     const headerWidth: number = this.tableViewer.getRowHeaderWidth();
@@ -164,12 +164,12 @@ export class HorizontalScrollbar extends VirtualScroller {
     return headerWidth + bodyWidth;
   }
   protected getLinePosition(colId: number): number {
-    return this.tableViewer.getColumnPosition(colId);
+    return this.tableViewer.getColPosition(colId);
   }
   protected getLineDimension(colId: number): number {
-    return this.tableViewer.getColumnWidth(colId);
+    return this.tableViewer.getColWidth(colId);
   }
   protected hasHiddenCells4Line(colId: number): boolean {
-    return this.tableViewer.hasHiddenCells4Column(colId);
+    return this.tableViewer.hasHiddenCells4Col(colId);
   }
 }

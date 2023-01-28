@@ -1,7 +1,5 @@
 import {
-  asCellStyle,
   asTableStyles,
-  Cell,
   CellCoord,
   CellRange,
   Style,
@@ -16,10 +14,10 @@ export function getFirstCellStyle(
     selectedCells.length > 0 ? selectedCells[0] : undefined;
   if (!firstRange) return undefined;
   const cellCoord: CellCoord = firstRange.getFrom();
-  const cell: Cell | undefined = table.getCell(
-    cellCoord.getRowId(),
-    cellCoord.getColId()
-  );
-  const styleName: string = asCellStyle(cell)?.getStyleName() ?? '';
+  const styleName: string =
+    asTableStyles(table)?.getCellStyleName(
+      cellCoord.getRowId(),
+      cellCoord.getColId()
+    ) ?? '';
   return asTableStyles(table)?.getStyle(styleName);
 }

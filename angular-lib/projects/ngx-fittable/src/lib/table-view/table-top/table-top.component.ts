@@ -27,11 +27,11 @@ export class TableTopComponent extends TableCommon {
 
   public readonly getCellSelectionRanges = ():
     | CellSelectionRanges
-    | undefined => this.viewModel.cellSelection?.columnHeader;
+    | undefined => this.viewModel.cellSelection?.colHeader;
 
   public getCellSelectionStyle(): CssStyle[] {
     const styles: CssStyle[] = [];
-    this.viewModel.cellSelectionPainter?.columnHeader
+    this.viewModel.cellSelectionPainter?.colHeader
       ?.getRectangles()
       .forEach((rect: Rectangle): void => {
         const top: number = rect.top + this.getScrollTop();

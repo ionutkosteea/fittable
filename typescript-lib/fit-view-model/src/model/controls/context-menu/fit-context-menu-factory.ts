@@ -14,11 +14,11 @@ import {
   RowResizeMenuItem,
 } from './controls/row-menu-items.js';
 import {
-  ColumnInsertLeftMenuItem,
-  ColumnInsertRightMenuItem,
-  ColumnRemoveMenuItem,
-  ColumnResizeMenuItem,
-} from './controls/column-menu-items.js';
+  ColInsertLeftMenuItem,
+  ColInsertRightMenuItem,
+  ColRemoveMenuItem,
+  ColResizeMenuItem,
+} from './controls/col-menu-items.js';
 import {
   CellClearMenuItem,
   CellCopyMenuItem,
@@ -29,7 +29,7 @@ import {
   CellUnmergeMenuItem,
 } from './controls/cell-menu-items.js';
 import {
-  asTableColumns,
+  asTableCols,
   asTableMergedRegions,
   asTableRows,
 } from 'fit-core/model/table.js';
@@ -56,21 +56,21 @@ export class FitContextMenuFactory implements ContextMenuFactory {
   public createContextMenu(args: ControlArgs): Window {
     const window: FitWindow<FitContextMenuControlId> = new FitWindow();
     if (asTableRows(args.operationExecutor.getTable()) !== undefined) {
-      window
-        .addControl('row-width', new RowResizeMenuItem(args))
-        .addControl('row-insert-before', new RowInsertAboveMenuItem(args))
-        .addControl('row-insert-after', new RowInsertBelowMenuItem(args))
-        .addControl('row-remove', new RowRemoveMenuItem(args))
-        .addControl('separator1', new FitSeparator());
+      window.addControl('row-width', new RowResizeMenuItem(args));
     }
-    if (asTableColumns(args.operationExecutor.getTable()) !== undefined) {
-      window
-        .addControl('column-height', new ColumnResizeMenuItem(args))
-        .addControl('column-insert-before', new ColumnInsertLeftMenuItem(args))
-        .addControl('column-insert-after', new ColumnInsertRightMenuItem(args))
-        .addControl('column-remove', new ColumnRemoveMenuItem(args))
-        .addControl('separator2', new FitSeparator());
+    window
+      .addControl('row-insert-before', new RowInsertAboveMenuItem(args))
+      .addControl('row-insert-after', new RowInsertBelowMenuItem(args))
+      .addControl('row-remove', new RowRemoveMenuItem(args))
+      .addControl('separator1', new FitSeparator());
+    if (asTableCols(args.operationExecutor.getTable()) !== undefined) {
+      window.addControl('column-height', new ColResizeMenuItem(args));
     }
+    window
+      .addControl('column-insert-before', new ColInsertLeftMenuItem(args))
+      .addControl('column-insert-after', new ColInsertRightMenuItem(args))
+      .addControl('column-remove', new ColRemoveMenuItem(args))
+      .addControl('separator2', new FitSeparator());
     window
       .addControl('clear', new CellClearMenuItem(args))
       .addControl('remove', new CellRemoveMenuItem(args))

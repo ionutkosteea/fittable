@@ -1,66 +1,87 @@
+import { Table, TableMergedRegions } from 'fit-core/model/index.js';
 import {
-  CellCoord,
-  CellRange,
-  createCellCoord4Dto,
-  createCellRange4Dto,
-  createMergedRegions,
-  MergedRegions,
-  Table,
-  TableMergedRegions,
-} from 'fit-core/model/index.js';
-import {
-  Id,
+  OperationId,
   OperationStep,
   OperationStepFactory,
 } from 'fit-core/operations/index.js';
 
-export type MergedRegionsOperationStepDto = Id<'merged-regions'> & {
-  create4CellRanges: unknown[];
-  remove4CellCoords: unknown[];
+export type RemoveRegion = { rowId: number; colId: number };
+export type CreateRegion = RemoveRegion & {
+  rowSpan?: number;
+  colSpan?: number;
+};
+export type MoveRegion = RemoveRegion & {
+  moveRow: number;
+  moveCol: number;
+};
+export type IncreaseRegion = RemoveRegion & {
+  increaseRow: number;
+  increaseCol: number;
+};
+
+export type MergedRegionsOperationStepDto = OperationId<'merged-regions'> & {
+  createRegions?: CreateRegion[];
+  removeRegions?: RemoveRegion[];
+  moveRegions?: MoveRegion[];
+  increaseRegions?: IncreaseRegion[];
 };
 
 export class MergedRegionsOperationStep implements OperationStep {
-  private mergedRegions?: MergedRegions;
+  private removedRegionRowIds: Set<number> = new Set();
 
   constructor(
     private readonly table: Table & TableMergedRegions,
     private readonly stepDto: MergedRegionsOperationStepDto
-  ) {
-    this.mergedRegions = this.table.getMergedRegions();
-  }
+  ) {}
 
   public run(): void {
     this.removeRegions();
     this.createRegions();
-  }
-
-  private removeRegions(): void {
-    for (const cellCoordDto of this.stepDto.remove4CellCoords) {
-      const cellCoord: CellCoord = createCellCoord4Dto(cellCoordDto);
-      this.mergedRegions?.removeRegion(
-        cellCoord.getRowId(),
-        cellCoord.getColId()
-      );
-    }
-    if (!this.mergedRegions?.hasProperties()) {
-      this.table.setMergedRegions();
-      this.mergedRegions = undefined;
-    }
+    this.increaseRegions();
+    this.moveRegions();
+    this.removeEmptyRowRegions();
   }
 
   private createRegions(): void {
-    for (const cellRangeDto of this.stepDto.create4CellRanges) {
-      const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
-      if (this.mergedRegions) {
-        this.mergedRegions.addRegion(cellRange.getFrom(), cellRange.getTo());
-      } else {
-        this.table.setMergedRegions(
-          createMergedRegions().addRegion(
-            cellRange.getFrom(),
-            cellRange.getTo()
-          )
-        );
+    for (const r of this.stepDto?.createRegions ?? []) {
+      this.table
+        .setRowSpan(r.rowId, r.colId, r.rowSpan)
+        .setColSpan(r.rowId, r.colId, r.colSpan);
+    }
+  }
+
+  private removeRegions(): void {
+    for (const r of this.stepDto?.removeRegions ?? []) {
+      this.table.setRowSpan(r.rowId, r.colId).setColSpan(r.rowId, r.colId);
+      this.removedRegionRowIds.add(r.rowId);
+    }
+  }
+
+  private moveRegions(): void {
+    for (const r of this.stepDto?.moveRegions ?? []) {
+      this.table.moveRegion(r.rowId, r.colId, r.moveRow, r.moveCol);
+      this.removedRegionRowIds.add(r.rowId);
+    }
+  }
+
+  private increaseRegions(): void {
+    for (const r of this.stepDto?.increaseRegions ?? []) {
+      this.table.increaseRegion(r.rowId, r.colId, r.increaseRow, r.increaseCol);
+    }
+  }
+
+  private removeEmptyRowRegions(): void {
+    for (const rowId of this.removedRegionRowIds) {
+      let isRowWithoutRegions = true;
+      for (let colId = 0; colId < this.table.getNumberOfCols(); colId++) {
+        const rowSpan: number | undefined = this.table.getRowSpan(rowId, colId);
+        const colSpan: number | undefined = this.table.getColSpan(rowId, colId);
+        if (rowSpan || colSpan) {
+          isRowWithoutRegions = false;
+          break;
+        }
       }
+      isRowWithoutRegions && this.table.removeRowRegions(rowId);
     }
   }
 }

@@ -32,7 +32,7 @@ describe('Test CellSelectionRanges', () => {
 
   let cellSelector: FitCellSelection;
   beforeEach(() => {
-    const table: Table = createTable(0, 0);
+    const table: Table = createTable();
     cellSelector = new FitCellSelection(new FitTableViewer(table));
     cellSelector.body.createRange();
   });

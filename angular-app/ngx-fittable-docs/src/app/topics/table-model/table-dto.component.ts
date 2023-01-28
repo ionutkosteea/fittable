@@ -17,28 +17,22 @@ import { ConsoleTopic } from './common/console-topic.model';
 
 let fitTableDto: FitTableDto = {
   numberOfRows: 50,
-  numberOfColumns: 10,
-  rows: {
+  numberOfCols: 10,
+  cells: {
     1: {
-      cells: {
-        1: { value: '[1,1]' },
-        2: { value: '[1,2]' },
-        3: { value: '[1,3]' },
-      },
+      1: { value: '[1,1]' },
+      2: { value: '[1,2]' },
+      3: { value: '[1,3]' },
     },
     2: {
-      cells: {
-        1: { value: '[2,1]' },
-        2: { value: '[2,2]' },
-        3: { value: '[2,3]' },
-      },
+      1: { value: '[2,1]' },
+      2: { value: '[2,2]' },
+      3: { value: '[2,3]' },
     },
     3: {
-      cells: {
-        1: { value: '[3,1]' },
-        2: { value: '[3,2]' },
-        3: { value: '[3,3]' },
-      },
+      1: { value: '[3,1]' },
+      2: { value: '[3,2]' },
+      3: { value: '[3,3]' },
     },
   },
 };

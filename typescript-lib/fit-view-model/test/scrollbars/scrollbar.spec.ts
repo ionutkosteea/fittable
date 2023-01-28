@@ -34,7 +34,7 @@ describe('Test Scrollbars', () => {
   it('no scrollbar requried', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(2)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build();
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -44,7 +44,7 @@ describe('Test Scrollbars', () => {
   it('initial scrollbar parameters', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build();
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -54,9 +54,9 @@ describe('Test Scrollbars', () => {
   it('scroll to the second row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(config.rowHeight);
+      .renderTable(config.rowHeights);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 4).toBeTruthy();
@@ -65,10 +65,10 @@ describe('Test Scrollbars', () => {
   it('scroll to the third row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(2 * config.rowHeight);
-    expect(scrollbar.getOffset() === config.rowHeight).toBeTruthy();
+      .renderTable(2 * config.rowHeights);
+    expect(scrollbar.getOffset() === config.rowHeights).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 1).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 5).toBeTruthy();
   });
@@ -76,9 +76,9 @@ describe('Test Scrollbars', () => {
   it('scroll to the middle of the second row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(2 * config.rowHeight - config.rowHeight / 2);
+      .renderTable(2 * config.rowHeights - config.rowHeights / 2);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 4).toBeTruthy();
@@ -87,8 +87,8 @@ describe('Test Scrollbars', () => {
   it('initial scrollbar parameters -> table with custom first row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(0, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(0, 2 * config.rowHeights)
       .build();
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -98,10 +98,10 @@ describe('Test Scrollbars', () => {
   it('scroll to the second row -> table with custom first row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(0, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(0, 2 * config.rowHeights)
       .build()
-      .renderTable(2 * config.rowHeight);
+      .renderTable(2 * config.rowHeights);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 4).toBeTruthy();
@@ -110,11 +110,11 @@ describe('Test Scrollbars', () => {
   it('scroll to the third row -> table with custom first row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(0, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(0, 2 * config.rowHeights)
       .build()
-      .renderTable(3 * config.rowHeight);
-    expect(scrollbar.getOffset() === 2 * config.rowHeight).toBeTruthy();
+      .renderTable(3 * config.rowHeights);
+    expect(scrollbar.getOffset() === 2 * config.rowHeights).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 1).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 5).toBeTruthy();
   });
@@ -122,8 +122,8 @@ describe('Test Scrollbars', () => {
   it('initial scrollbar parameters -> table with custom second row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(1, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(1, 2 * config.rowHeights)
       .build();
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -133,10 +133,10 @@ describe('Test Scrollbars', () => {
   it('scroll to the second row -> table with custom second row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(1, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(1, 2 * config.rowHeights)
       .build()
-      .renderTable(config.rowHeight);
+      .renderTable(config.rowHeights);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 4).toBeTruthy();
@@ -145,11 +145,11 @@ describe('Test Scrollbars', () => {
   it('scroll to the third row -> table with custom second row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(1, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(1, 2 * config.rowHeights)
       .build()
-      .renderTable(3 * config.rowHeight);
-    expect(scrollbar.getOffset() === config.rowHeight).toBeTruthy();
+      .renderTable(3 * config.rowHeights);
+    expect(scrollbar.getOffset() === config.rowHeights).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 1).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 5).toBeTruthy();
   });
@@ -157,8 +157,8 @@ describe('Test Scrollbars', () => {
   it('initial scrollbar parameters -> table with custom third row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(2, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(2, 2 * config.rowHeights)
       .build();
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -168,10 +168,10 @@ describe('Test Scrollbars', () => {
   it('scroll to the second row -> table with custom third row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(2, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(2, 2 * config.rowHeights)
       .build()
-      .renderTable(config.rowHeight);
+      .renderTable(config.rowHeights);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 3).toBeTruthy();
@@ -180,11 +180,11 @@ describe('Test Scrollbars', () => {
   it('scroll to the third row -> table with custom third row height', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableLineDimension(2, 2 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
+      .setTableLineDimension(2, 2 * config.rowHeights)
       .build()
-      .renderTable(3 * config.rowHeight);
-    expect(scrollbar.getOffset() === config.rowHeight).toBeTruthy();
+      .renderTable(3 * config.rowHeights);
+    expect(scrollbar.getOffset() === config.rowHeights).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 1).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 5).toBeTruthy();
   });
@@ -192,9 +192,9 @@ describe('Test Scrollbars', () => {
   it('scroll backwards, from second - to first row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(config.rowHeight)
+      .renderTable(config.rowHeights)
       .renderTable(0);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -204,9 +204,9 @@ describe('Test Scrollbars', () => {
   it('scroll backwards, from third - to first row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(2 * config.rowHeight)
+      .renderTable(2 * config.rowHeights)
       .renderTable(0);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -216,9 +216,9 @@ describe('Test Scrollbars', () => {
   it('scroll backwards, from fourth - to first row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(3 * config.rowHeight)
+      .renderTable(3 * config.rowHeights)
       .renderTable(0);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -228,9 +228,9 @@ describe('Test Scrollbars', () => {
   it('scroll backwards, from fifth - to first row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(4 * config.rowHeight)
+      .renderTable(4 * config.rowHeights)
       .renderTable(0);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -240,10 +240,10 @@ describe('Test Scrollbars', () => {
   it('scroll backwards, from third - to second row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(2 * config.rowHeight)
-      .renderTable(config.rowHeight);
+      .renderTable(2 * config.rowHeights)
+      .renderTable(config.rowHeights);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 4).toBeTruthy();
@@ -252,11 +252,11 @@ describe('Test Scrollbars', () => {
   it('scroll backwards, from fourth - to third row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(3 * config.rowHeight)
-      .renderTable(2 * config.rowHeight);
-    expect(scrollbar.getOffset() === config.rowHeight).toBeTruthy();
+      .renderTable(3 * config.rowHeights)
+      .renderTable(2 * config.rowHeights);
+    expect(scrollbar.getOffset() === config.rowHeights).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 1).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 5).toBeTruthy();
   });
@@ -264,11 +264,11 @@ describe('Test Scrollbars', () => {
   it('scroll backwards, from fifth - to fourth row', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(4 * config.rowHeight)
-      .renderTable(3 * config.rowHeight);
-    expect(scrollbar.getOffset() === 2 * config.rowHeight).toBeTruthy();
+      .renderTable(4 * config.rowHeights)
+      .renderTable(3 * config.rowHeights);
+    expect(scrollbar.getOffset() === 2 * config.rowHeights).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 2).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 6).toBeTruthy();
   });
@@ -276,8 +276,7 @@ describe('Test Scrollbars', () => {
   it('no scrollbar requried -> table with column header', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(2)
-      .setViewport(3 * config.rowHeight)
-      .setTableColumnHeader(true)
+      .setViewport(3 * config.rowHeights)
       .build();
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -287,8 +286,7 @@ describe('Test Scrollbars', () => {
   it('initial scrollbar parameters -> table with column header', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableColumnHeader(true)
+      .setViewport(3 * config.rowHeights)
       .build();
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
@@ -298,10 +296,9 @@ describe('Test Scrollbars', () => {
   it('scroll to the second row -> table with column header', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableColumnHeader(true)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(config.rowHeight);
+      .renderTable(config.rowHeights);
     expect(scrollbar.getOffset() === 0).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 0).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 4).toBeTruthy();
@@ -310,11 +307,10 @@ describe('Test Scrollbars', () => {
   it('scroll to the third row -> table with column header', () => {
     const scrollbar: VirtualScroller = new ScrollbarBuilder('vertical')
       .setNumberOfTableLines(7)
-      .setViewport(3 * config.rowHeight)
-      .setTableColumnHeader(true)
+      .setViewport(3 * config.rowHeights)
       .build()
-      .renderTable(2 * config.rowHeight);
-    expect(scrollbar.getOffset() === config.rowHeight).toBeTruthy();
+      .renderTable(2 * config.rowHeights);
+    expect(scrollbar.getOffset() === config.rowHeights).toBeTruthy();
     expect(scrollbar.getFirstRenderableLine() === 1).toBeTruthy();
     expect(scrollbar.getLastRenderableLine() === 5).toBeTruthy();
   });

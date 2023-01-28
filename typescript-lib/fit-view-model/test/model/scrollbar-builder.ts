@@ -1,13 +1,8 @@
 import {
   Table,
   asTableRows,
-  createRow,
-  asTableColumns,
-  createColumn,
+  asTableCols,
   createTable,
-  RowHeight,
-  Line,
-  ColumnWidth,
 } from 'fit-core/model/index.js';
 import { TableViewer, createTableViewer } from 'fit-core/view-model/index.js';
 
@@ -22,24 +17,12 @@ export type ScrollbarType = 'vertical' | 'horizontal';
 export class ScrollbarBuilder {
   private viewport = 0;
   private numberOfTableLines = 0;
-  private hasTableRowHeader = false;
-  private hasTableColumnHeader = false;
   private tableLineDimensions: Map<number, number> = new Map();
 
   constructor(private readonly type: ScrollbarType = 'vertical') {}
 
   public setViewport(viewport = 0): this {
     this.viewport = viewport;
-    return this;
-  }
-
-  public setTableRowHeader(hasHeader: boolean): this {
-    this.hasTableRowHeader = hasHeader;
-    return this;
-  }
-
-  public setTableColumnHeader(hasHeader: boolean): this {
-    this.hasTableColumnHeader = hasHeader;
     return this;
   }
 
@@ -58,27 +41,19 @@ export class ScrollbarBuilder {
   }
 
   private createTable(): Table {
-    const table: Table = createTable(1, 1);
+    const table: Table = createTable().setNumberOfRows(1).setNumberOfCols(1);
     if (this.type === 'vertical') {
       table.setNumberOfRows(this.numberOfTableLines);
-      this.tableLineDimensions.forEach((dimension: number, lineId: number) => {
-        const row: Line & RowHeight = createRow<Line & RowHeight>();
-        row.setHeight(dimension);
-        asTableRows(table)?.addRow(lineId, row);
-      });
-      if (this.hasTableColumnHeader) {
-        //TODO
-      }
+      this.tableLineDimensions.forEach(
+        (height: number, rowId: number): void => {
+          asTableRows(table)?.setRowHeight(rowId, height);
+        }
+      );
     } else {
-      table.setNumberOfColumns(this.numberOfTableLines);
-      this.tableLineDimensions.forEach((dimension: number, lineId: number) => {
-        const col: Line & ColumnWidth = createColumn<Line & ColumnWidth>();
-        col.setWidth(dimension);
-        asTableColumns(table)?.addColumn(lineId, col);
+      table.setNumberOfCols(this.numberOfTableLines);
+      this.tableLineDimensions.forEach((width: number, colId: number): void => {
+        asTableCols(table)?.setColWidth(colId, width);
       });
-      if (this.hasTableRowHeader) {
-        //TODO
-      }
     }
     return table;
   }

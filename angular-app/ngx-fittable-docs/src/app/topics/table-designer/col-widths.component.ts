@@ -10,23 +10,23 @@ import {
 import { FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
-import { CodeSnippet } from '../common/code-snippet.model';
 
+import { CodeSnippet } from '../common/code-snippet.model';
 import { TopicTitle } from '../../common/topic-title.model';
 import { SimpleTopic } from '../common/simple-topic.model';
 
 @Component({
-  selector: 'column-header',
+  selector: 'column-widths',
   templateUrl: '../common/simple-topic.html',
   styleUrls: ['../common/simple-topic.css', '../common/common.css'],
 })
-export class ColumnHeaderComponent implements SimpleTopic, OnInit {
-  public readonly title: TopicTitle = 'Column header';
+export class ColWidthtsComponent implements SimpleTopic, OnInit {
+  public readonly title: TopicTitle = 'Column widths';
   public readonly htmlCode: CodeSnippet[] = [
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'column-header-ts.jpg' },
+    { image: 'column-widths-ts.jpg' },
   ];
   public fit!: FittableDesigner;
 
@@ -36,12 +36,10 @@ export class ColumnHeaderComponent implements SimpleTopic, OnInit {
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
       createFitViewModelConfig({
-        columnHeader: true,
-        columnHeaderHeight: 42, // default 21
-        getColumnHeaderText: (colId: number) => 'C' + (colId + 1), // default increment letter
+        colWidths: 50, //default 100
       })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
   }
 }

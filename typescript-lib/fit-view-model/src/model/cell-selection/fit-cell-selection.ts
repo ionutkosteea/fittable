@@ -15,7 +15,7 @@ import {
 
 export class FitCellSelection implements CellSelection {
   public readonly rowHeader: FitCellSelectionRanges;
-  public readonly columnHeader: FitCellSelectionRanges;
+  public readonly colHeader: FitCellSelectionRanges;
   public readonly pageHeader: FitCellSelectionRanges;
   public readonly body: FitCellSelectionRanges;
 
@@ -23,13 +23,13 @@ export class FitCellSelection implements CellSelection {
 
   constructor(private readonly tableViewer: TableViewer) {
     this.rowHeader = new FitCellSelectionRanges(tableViewer);
-    this.columnHeader = new FitCellSelectionRanges(tableViewer);
+    this.colHeader = new FitCellSelectionRanges(tableViewer);
     this.pageHeader = new FitCellSelectionRanges(tableViewer);
     this.body = new FitCellSelectionRanges(tableViewer);
     this.body.setFocus(true);
     this.handleBody();
     this.handleRowHeader();
-    this.handleColumnHeader();
+    this.handleColHeader();
     this.handlePageHeader();
   }
 
@@ -51,10 +51,10 @@ export class FitCellSelection implements CellSelection {
         );
       }
     }
-    if (getViewModelConfig().columnHeaderHeight) {
-      this.columnHeader.removeRanges();
+    if (getViewModelConfig().colHeaderHeight) {
+      this.colHeader.removeRanges();
       for (const cellRange of this.body.getRanges()) {
-        this.columnHeader.addRange(
+        this.colHeader.addRange(
           createCellCoord(0, cellRange.getFrom().getColId()),
           createCellCoord(0, cellRange.getTo().getColId())
         );
@@ -65,14 +65,14 @@ export class FitCellSelection implements CellSelection {
   protected handleRowHeader(): void {
     this.subscriptions.push(
       this.rowHeader.onAfterAddCell$().subscribe((): void => {
-        if (this.tableHasNoRowsOrColumns()) return;
+        if (this.tableHasNoRowsOrCols()) return;
         this.selectBodyByRowHeader();
-        this.selectColumnHeaderByBody();
+        this.selectColHeaderByBody();
       })
     );
     this.subscriptions.push(
       this.rowHeader.onAfterRemovePreviousRanges$().subscribe((): void => {
-        if (this.tableHasNoRowsOrColumns()) return;
+        if (this.tableHasNoRowsOrCols()) return;
         this.body.removePreviousRanges();
       })
     );
@@ -96,42 +96,42 @@ export class FitCellSelection implements CellSelection {
   }
 
   private get lastColId(): number {
-    return this.tableViewer.getTable().getNumberOfColumns() - 1;
+    return this.tableViewer.getTable().getNumberOfCols() - 1;
   }
 
-  private selectColumnHeaderByBody(): void {
-    this.columnHeader.setDisableAfterAddCell(true);
+  private selectColHeaderByBody(): void {
+    this.colHeader.setDisableAfterAddCell(true);
     const table: Table = this.tableViewer.getTable();
     const numberOfRows: number = getViewModelConfig().rowHeaderWidth ? 1 : 0;
-    const numberOfColumns: number = table.getNumberOfColumns() - 1;
-    this.columnHeader
+    const numberOfCols: number = table.getNumberOfCols() - 1;
+    this.colHeader
       .removeRanges()
       .createRange()
       .addCell(createCellCoord(0, 0))
-      .addCell(createCellCoord(numberOfRows, numberOfColumns))
+      .addCell(createCellCoord(numberOfRows, numberOfCols))
       .end();
-    this.columnHeader.setDisableAfterAddCell(false);
+    this.colHeader.setDisableAfterAddCell(false);
   }
 
-  protected handleColumnHeader(): void {
+  protected handleColHeader(): void {
     this.subscriptions.push(
-      this.columnHeader.onAfterAddCell$().subscribe(() => {
-        if (this.tableHasNoRowsOrColumns()) return;
-        this.selectBodyByColumnHeader();
+      this.colHeader.onAfterAddCell$().subscribe(() => {
+        if (this.tableHasNoRowsOrCols()) return;
+        this.selectBodyByColHeader();
         this.selectRowHeaderByBody();
       })
     );
     this.subscriptions.push(
-      this.columnHeader.onAfterRemovePreviousRanges$().subscribe(() => {
-        if (this.tableHasNoRowsOrColumns()) return;
+      this.colHeader.onAfterRemovePreviousRanges$().subscribe(() => {
+        if (this.tableHasNoRowsOrCols()) return;
         this.body.removePreviousRanges();
       })
     );
   }
 
-  private selectBodyByColumnHeader(): void {
+  private selectBodyByColHeader(): void {
     const lastRange: CellSelectionRange | undefined =
-      this.columnHeader.getLastRange();
+      this.colHeader.getLastRange();
     if (lastRange === undefined) return;
     const firstColId: number | undefined = lastRange.getFirstCell()?.getColId();
     if (firstColId === undefined) return;
@@ -154,14 +154,12 @@ export class FitCellSelection implements CellSelection {
     this.rowHeader.setDisableAfterAddCell(true);
     const table: Table = this.tableViewer.getTable();
     const numberOfRows: number = table.getNumberOfRows() - 1;
-    const numberOfColumns: number = getViewModelConfig().columnHeaderHeight
-      ? 1
-      : 0;
+    const numberOfCols: number = getViewModelConfig().colHeaderHeight ? 1 : 0;
     this.rowHeader
       .removeRanges()
       .createRange()
       .addCell(createCellCoord(0, 0))
-      .addCell(createCellCoord(numberOfRows, numberOfColumns))
+      .addCell(createCellCoord(numberOfRows, numberOfCols))
       .end();
     this.rowHeader.setDisableAfterAddCell(false);
   }
@@ -169,7 +167,7 @@ export class FitCellSelection implements CellSelection {
   protected handlePageHeader(): void {
     this.subscriptions.push(
       this.pageHeader.onAfterAddCell$().subscribe((): void => {
-        if (this.tableHasNoRowsOrColumns()) return;
+        if (this.tableHasNoRowsOrCols()) return;
         this.selectBody();
       })
     );
@@ -184,18 +182,16 @@ export class FitCellSelection implements CellSelection {
       .end();
   }
 
-  private tableHasNoRowsOrColumns(): boolean {
+  private tableHasNoRowsOrCols(): boolean {
     const numberOfRows: number = this.tableViewer.getTable().getNumberOfRows();
-    const numberOfColumns: number = this.tableViewer
-      .getTable()
-      .getNumberOfColumns();
-    return numberOfRows <= 0 || numberOfColumns <= 0;
+    const numberOfCols: number = this.tableViewer.getTable().getNumberOfCols();
+    return numberOfRows <= 0 || numberOfCols <= 0;
   }
 
   public clear(): this {
     this.body.removeRanges();
     this.rowHeader.removeRanges();
-    this.columnHeader.removeRanges();
+    this.colHeader.removeRanges();
     this.pageHeader.removeRanges();
     return this;
   }

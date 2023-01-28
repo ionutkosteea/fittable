@@ -90,19 +90,19 @@ export class FitTableScroller implements TableScroller {
 
   public getTableColIds(): RangeIterator {
     return new RangeIterator(
-      this.getFirstRenderableColumn(),
-      this.getLastRenderableColumn()
+      this.getFirstRenderableCol(),
+      this.getLastRenderableCol()
     );
   }
 
-  private getFirstRenderableColumn(): number {
+  private getFirstRenderableCol(): number {
     return this.horizontalScrollbar?.getFirstRenderableLine() ?? 0;
   }
 
-  private getLastRenderableColumn(): number {
+  private getLastRenderableCol(): number {
     const scrollbar: Scrollbar | undefined = this.horizontalScrollbar;
     if (scrollbar) return scrollbar.getLastRenderableLine() + 1;
-    else return this.tableViewer.getTable().getNumberOfColumns();
+    else return this.tableViewer.getTable().getNumberOfCols();
   }
 
   public renderTable(): this {

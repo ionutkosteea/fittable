@@ -63,7 +63,7 @@ export abstract class MenuItem implements Control {
     return lineRangeList.getRanges();
   }
 
-  protected getSelectedColumns(): LineRange[] {
+  protected getSelectedCols(): LineRange[] {
     const lineRangeList: LineRangeList = new LineRangeList();
     this.args
       .getSelectedCells()

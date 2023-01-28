@@ -1,14 +1,14 @@
 import {
   Table,
-  TableRows,
-  TableColumns,
   createLineRange4Dto,
   LineRange,
+  asTableRows,
+  asTableCols,
 } from 'fit-core/model/index.js';
 import {
   OperationStep,
   OperationStepFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 export type MovableLinesDto = { updatableLineRange: unknown; move: number };
@@ -60,12 +60,12 @@ abstract class LineInsertOperationStep implements OperationStep {
   }
 }
 
-export type RowInsertOperationStepDto = Id<'row-insert'> &
+export type RowInsertOperationStepDto = OperationId<'row-insert'> &
   LineInsertOperationStepDto;
 
 export class RowInsertOperationStep extends LineInsertOperationStep {
   constructor(
-    protected readonly table: Table & TableRows,
+    protected readonly table: Table,
     protected readonly stepDto: RowInsertOperationStepDto
   ) {
     super(table, stepDto);
@@ -77,47 +77,49 @@ export class RowInsertOperationStep extends LineInsertOperationStep {
     this.table.setNumberOfRows(numberOfRows);
   }
 
-  protected moveLine(row: number, move: number): void {
-    this.table.moveRow(row, move);
+  protected moveLine(rowId: number, move: number): void {
+    this.table.moveRowCells(rowId, move);
+    asTableRows(this.table)?.moveRow(rowId, move);
   }
 }
 
 export class RowInsertOperationStepFactory implements OperationStepFactory {
   public createStep(
-    table: Table & TableRows,
+    table: Table,
     stepDto: RowInsertOperationStepDto
   ): OperationStep {
     return new RowInsertOperationStep(table, stepDto);
   }
 }
 
-export type ColumnInsertOperationStepDto = Id<'column-insert'> &
+export type ColInsertOperationStepDto = OperationId<'column-insert'> &
   LineInsertOperationStepDto;
 
-export class ColumnInsertOperationStep extends LineInsertOperationStep {
+export class ColInsertOperationStep extends LineInsertOperationStep {
   constructor(
-    protected readonly table: Table & TableColumns,
-    protected readonly stepDto: ColumnInsertOperationStepDto
+    protected readonly table: Table,
+    protected readonly stepDto: ColInsertOperationStepDto
   ) {
     super(table, stepDto);
   }
 
   protected updateNumberOfLines(): void {
-    const numberOfColumns: number =
-      this.table.getNumberOfColumns() + this.numberOfSelectedLines;
-    this.table.setNumberOfColumns(numberOfColumns);
+    const numberOfCols: number =
+      this.table.getNumberOfCols() + this.numberOfSelectedLines;
+    this.table.setNumberOfCols(numberOfCols);
   }
 
-  protected moveLine(colulmnIndex: number, move: number): void {
-    this.table.moveColumn(colulmnIndex, move);
+  protected moveLine(colId: number, move: number): void {
+    this.table.moveColCells(colId, move);
+    asTableCols(this.table)?.moveCol(colId, move);
   }
 }
 
-export class ColumnInsertOperationStepFactory implements OperationStepFactory {
+export class ColInsertOperationStepFactory implements OperationStepFactory {
   public createStep(
-    table: Table & TableColumns,
-    stepDto: ColumnInsertOperationStepDto
+    table: Table,
+    stepDto: ColInsertOperationStepDto
   ): OperationStep {
-    return new ColumnInsertOperationStep(table, stepDto);
+    return new ColInsertOperationStep(table, stepDto);
   }
 }

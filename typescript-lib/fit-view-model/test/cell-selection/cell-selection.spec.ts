@@ -21,11 +21,7 @@ import { FIT_VIEW_MODEL_CONFIG } from '../../dist/index.js';
 
 const table: Table = new FitTable({
   numberOfRows: 2,
-  numberOfColumns: 2,
-  styles: {},
-  rows: [],
-  columns: [],
-  mergedRegions: [],
+  numberOfCols: 2,
 });
 
 let cellSelection: CellSelection;
@@ -49,7 +45,7 @@ describe('Test CellSelection', () => {
       cellSelection.rowHeader?.getFirstCell()?.getRowId() ?? 0;
     expect(headerRowId === selectedCell.getRowId()).toBeTruthy();
     const headerColId: number =
-      cellSelection.columnHeader?.getFirstCell()?.getColId() ?? 0;
+      cellSelection.colHeader?.getFirstCell()?.getColId() ?? 0;
     expect(headerColId === selectedCell.getColId()).toBeTruthy();
   });
 
@@ -70,7 +66,7 @@ describe('Test CellSelection', () => {
   it('column header selection', () => {
     cellSelection
       .clear()
-      .columnHeader?.createRange()
+      .colHeader?.createRange()
       .addCell(createCellCoord(0, 1))
       .end();
     const bodySelection: CellRange[] = cellSelection.body.getRanges();

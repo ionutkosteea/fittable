@@ -1,32 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 
-import { createColumn, createTable, registerModelConfig } from 'fit-core/model';
+import { createTable, registerModelConfig } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
-import { FitColumn, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
+import { FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
-import { THIN_VIEW_MODEL_CONFIG } from 'fit-view-model';
-
+import { createFitViewModelConfig } from 'fit-view-model';
 import { CodeSnippet } from '../common/code-snippet.model';
+
 import { TopicTitle } from '../../common/topic-title.model';
 import { SimpleTopic } from '../common/simple-topic.model';
 
 @Component({
-  selector: 'column-width',
+  selector: 'column-header',
   templateUrl: '../common/simple-topic.html',
   styleUrls: ['../common/simple-topic.css', '../common/common.css'],
 })
-export class ColumnWidthtComponent implements SimpleTopic, OnInit {
-  public readonly title: TopicTitle = 'Column width';
+export class ColHeaderComponent implements SimpleTopic, OnInit {
+  public readonly title: TopicTitle = 'Column header';
   public readonly htmlCode: CodeSnippet[] = [
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'column-width-ts.jpg' },
+    { image: 'column-header-ts.jpg' },
   ];
   public fit!: FittableDesigner;
 
@@ -34,11 +34,14 @@ export class ColumnWidthtComponent implements SimpleTopic, OnInit {
     // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
-    registerViewModelConfig(THIN_VIEW_MODEL_CONFIG);
-
-    this.fit = createFittableDesigner(
-      createTable<FitTable>(5, 5) //
-        .addColumn(1, createColumn<FitColumn>().setWidth(200))
+    registerViewModelConfig(
+      createFitViewModelConfig({
+        colHeader: true,
+        colHeaderHeight: 42, // default 21
+        getColHeaderText: (colId: number) => 'C' + (colId + 1), // default increment letter
+      })
     );
+
+    this.fit = createFittableDesigner(createTable());
   }
 }

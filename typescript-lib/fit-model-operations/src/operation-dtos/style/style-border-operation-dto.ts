@@ -8,7 +8,7 @@ import {
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import { appendStyleStepsDto } from '../../utils/style/style-dto-functions.js';
@@ -38,7 +38,7 @@ export type BorderStyle = {
   color: string;
 };
 
-export type StyleBorderOperationDtoArgs = Id<'style-border'> & {
+export type StyleBorderOperationDtoArgs = OperationId<'style-border'> & {
   selectedCells: CellRange[];
   borderStyle: BorderStyle;
 };

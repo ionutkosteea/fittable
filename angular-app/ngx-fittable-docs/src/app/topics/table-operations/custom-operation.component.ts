@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
-  Cell,
   CellCoord,
-  createCell,
   createCellCoord,
   createTable,
   registerModelConfig,
@@ -11,7 +9,7 @@ import {
   Value,
 } from 'fit-core/model';
 import {
-  Id,
+  OperationId,
   OperationDto,
   OperationDtoFactory,
   OperationStep,
@@ -58,10 +56,10 @@ export class CustomOperationComponent extends ConsoleTopic implements OnInit {
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ rowHeader: true, columnHeader: true })
+      createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
 
     this.fit.operationExecutor
       ?.bindOperationStepFactory('dummy-step', DummyOperationStepFactory)
@@ -81,7 +79,7 @@ export class CustomOperationComponent extends ConsoleTopic implements OnInit {
   }
 }
 
-type DummyOperationStepDto = Id<'dummy-step'> & {
+type DummyOperationStepDto = OperationId<'dummy-step'> & {
   rowId?: number;
   colId?: number;
   value?: Value;
@@ -94,11 +92,7 @@ class DummyOperationStep implements OperationStep {
     const rowId: number | undefined = this.stepDto.rowId;
     const colId: number | undefined = this.stepDto.colId;
     if (!rowId || !colId) return;
-    const cell: Cell | undefined = this.table.getCell(rowId, colId);
-    if (cell) cell.setValue(this.stepDto.value);
-    else
-      this.table //
-        .addCell(rowId, colId, createCell().setValue(this.stepDto.value));
+    this.table.setCellValue(rowId, colId, this.stepDto.value);
   }
 }
 
@@ -111,7 +105,7 @@ export class DummyOperationStepFactory implements OperationStepFactory {
   }
 }
 
-type DummyOperationDtoArgs = Id<'dummy-operation'> & {
+type DummyOperationDtoArgs = OperationId<'dummy-operation'> & {
   cellCoord: CellCoord;
   value: Value;
 };
@@ -158,8 +152,7 @@ class DummyOperationDtoBuilder {
   private getOldValue(): Value | undefined {
     const rowId: number = this.args.cellCoord.getRowId();
     const colId: number = this.args.cellCoord.getColId();
-    const cell: Cell | undefined = this.table.getCell(rowId, colId);
-    return cell?.getValue();
+    return this.table.getCellValue(rowId, colId);
   }
 }
 

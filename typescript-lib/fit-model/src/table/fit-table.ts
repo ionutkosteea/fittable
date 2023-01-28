@@ -1,80 +1,37 @@
-import { implementsTKeys } from 'fit-core/common/index.js';
 import {
-  TableBasics,
-  TableMergedRegions,
-  TableStyles,
-  TableRows,
-  TableColumns,
-  TableFactory,
   createStyle4Dto,
-  createRow4Dto,
-  createMergedRegions4Dto,
-  createRow,
+  Style,
+  TableBasics,
+  TableCols,
+  TableFactory,
+  TableMergedRegions,
+  TableRows,
+  TableStyles,
+  Value,
 } from 'fit-core/model/index.js';
 
 import {
-  FitTableDto,
+  FitCellDto,
+  FitColDto,
+  FitMapDto,
+  FitMergedCellDto,
   FitRowDto,
-  FitColumnDto,
-  FitStyleDto,
+  FitTableDto,
 } from './dto/fit-table-dto.js';
-import { FitRow } from './fit-row.js';
-import { FitColumn } from './fit-column.js';
-import { FitCell } from './fit-cell.js';
-import { FitMergedRegions } from './fit-merged-regions.js';
-import { FitStyle } from './fit-style.js';
 
 export class FitTable
-  implements
-    TableBasics,
-    TableStyles,
-    TableRows,
-    TableColumns,
-    TableMergedRegions
+  implements TableBasics, TableRows, TableCols, TableStyles, TableMergedRegions
 {
-  private readonly dto: FitTableDto = {
-    numberOfRows: 0,
-    numberOfColumns: 0,
-  };
-
-  public constructor(dto?: FitTableDto) {
-    if (dto) this.dto = dto;
-  }
+  constructor(
+    private readonly dto: FitTableDto = { numberOfRows: 5, numberOfCols: 5 }
+  ) {}
 
   public getDto(): FitTableDto {
     return this.dto;
   }
 
-  public addStyle(name: string, style: FitStyle): this {
-    if (!this.dto.styles) this.dto.styles = {};
-    this.dto.styles[name] = style.getDto();
-    return this;
-  }
-
-  public getStyleNames(): string[] {
-    return this.dto.styles
-      ? (Reflect.ownKeys(this.dto.styles) as string[])
-      : [];
-  }
-
-  public getStyle(name: string): FitStyle | undefined {
-    if (!this.dto.styles) return undefined;
-    const styleDto: FitStyleDto = this.dto.styles[name];
-    return styleDto && createStyle4Dto<FitStyle>(styleDto);
-  }
-
-  public removeStyle(name: string): this {
-    if (this.dto.styles && Reflect.has(this.dto.styles, name)) {
-      Reflect.deleteProperty(this.dto.styles, name);
-      if (Object.keys(this.dto.styles).length <= 0) {
-        Reflect.deleteProperty(this.dto, 'styles');
-      }
-    }
-    return this;
-  }
-
   public getNumberOfRows(): number {
-    return this.dto.numberOfRows;
+    return this.dto.numberOfRows ?? 0;
   }
 
   public setNumberOfRows(numberOfRows: number): this {
@@ -82,186 +39,328 @@ export class FitTable
     return this;
   }
 
-  public getRow(rowId: number): FitRow | undefined {
-    const rowDto: FitRowDto | undefined = this.dto.rows && this.dto.rows[rowId];
-    return rowDto && createRow4Dto<FitRow>(rowDto);
+  public getNumberOfCols(): number {
+    return this.dto.numberOfCols ?? 0;
   }
 
-  public addRow(rowId: number, row: FitRow): this {
-    if (rowId >= this.dto.numberOfRows) {
-      throw new Error(
-        'Row index has to be smaller than the total number of rows.'
-      );
-    }
-    if (!this.dto.rows) this.dto.rows = {};
-    this.dto.rows[rowId] = row.getDto();
+  public setNumberOfCols(numberOfCols: number): this {
+    this.dto.numberOfCols = numberOfCols;
     return this;
   }
 
-  public removeRow(rowId: number, ignoreCells?: boolean): this {
-    const row: FitRow | undefined = this.getRow(rowId);
-    if (row) {
-      if (ignoreCells && row.getNumberOfCells() > 0) {
-        row?.setHeight();
-      } else {
-        Reflect.deleteProperty(this.dto.rows!, rowId);
-        if (Object.keys(this.dto.rows!).length <= 0) {
-          Reflect.deleteProperty(this.dto, 'rows');
-        }
-      }
+  public getCellValue(rowId: number, colId: number): Value | undefined {
+    return this.getCellDto(rowId, colId)?.value;
+  }
+
+  public setCellValue(rowId: number, colId: number, value?: Value): this {
+    if (value) {
+      this.createMatrixCell('cells', rowId, colId);
+      this.dto.cells![rowId][colId]['value'] = value;
+    } else if (this.hasMatrixCell('cells', rowId, colId)) {
+      delete this.dto.cells![rowId][colId]['value'];
+      !this.hasCell(rowId, colId) && delete this.dto.cells![rowId][colId];
     }
     return this;
   }
 
-  public moveRow(rowId: number, move: number, ignoreCells?: boolean): this {
-    if (move !== 0) {
-      const row: FitRow | undefined = this.getRow(rowId)?.clone();
-      if (row) {
-        this.removeRow(rowId, ignoreCells);
-        this.addRow(rowId + move, row);
-      }
-    }
-    return this;
-  }
-
-  public getNumberOfColumns(): number {
-    return this.dto.numberOfColumns;
-  }
-
-  public setNumberOfColumns(numberOfColumns: number): this {
-    this.dto.numberOfColumns = numberOfColumns;
-    return this;
-  }
-
-  public getColumn(colId: number): FitColumn | undefined {
-    const columnDto: FitColumnDto | undefined =
-      this.dto.columns && this.dto.columns[colId];
-    return columnDto && new FitColumn(columnDto);
-  }
-
-  public addColumn(colId: number, column: FitColumn): this {
-    if (colId >= this.dto.numberOfColumns) {
-      throw new Error(
-        'Column index has to be smaller than the total number of columns.'
-      );
-    }
-    if (!this.dto.columns) this.dto.columns = {};
-    this.dto.columns[colId] = column.getDto();
-    return this;
-  }
-
-  public removeColumn(colId: number, ignoreCells?: boolean): this {
-    if (!ignoreCells && this.dto.rows) {
-      for (const key of Reflect.ownKeys(this.dto.rows)) {
-        const rowId: number = Number(key).valueOf();
-        const row: FitRow = createRow4Dto(this.dto.rows[rowId]);
-        row.removeCell(colId);
-      }
-    }
-    if (this.dto.columns && Reflect.has(this.dto.columns, colId)) {
-      Reflect.deleteProperty(this.dto.columns, colId);
-      if (Object.keys(this.dto.columns).length <= 0) {
-        Reflect.deleteProperty(this.dto, 'columns');
-      }
-    }
-    return this;
-  }
-
-  public moveColumn(colId: number, move: number, ignoreCells?: boolean): this {
-    if (move !== 0) {
-      if (!ignoreCells && this.dto.rows) {
-        for (const key of Reflect.ownKeys(this.dto.rows)) {
-          const rowId: number = Number(key).valueOf();
-          const row: FitRow = createRow4Dto(this.dto.rows[rowId]);
-          row.moveCell(colId, move);
-        }
-      }
-      const column: FitColumn | undefined = this.getColumn(colId);
-      if (column) {
-        this.removeColumn(colId, ignoreCells);
-        this.addColumn(colId + move, column);
-      }
-    }
-    return this;
-  }
-
-  public getCell(rowId: number, colId: number): FitCell | undefined {
-    const row: FitRow | undefined = this.getRow(rowId);
-    return row && row.getCell(colId);
-  }
-
-  public forEachCell(cellFn: (cell: FitCell) => void): void {
-    for (let i = 0; i < this.getNumberOfRows(); i++) {
-      for (let j = 0; j < this.getNumberOfColumns(); j++) {
-        const cell: FitCell | undefined = this.getCell(i, j);
-        cell && cellFn(cell);
-      }
-    }
-  }
-
-  public forEachCellCoord(
-    cellIdFn: (rowId: number, colId: number) => void
-  ): void {
-    for (let i = 0; i < this.dto.numberOfRows; i++) {
-      for (let j = 0; j < this.dto.numberOfColumns; j++) {
-        cellIdFn(i, j);
-      }
-    }
-  }
-
-  public addCell(rowId: number, colId: number, cell: FitCell): this {
-    const row: FitRow | undefined = this.getRow(rowId);
-    if (!row) this.addRow(rowId, createRow<FitRow>().addCell(colId, cell));
-    else row.addCell(colId, cell);
-    return this;
+  public hasCell(rowId: number, colId: number): boolean {
+    return (
+      this.getCellValue(rowId, colId) !== undefined ||
+      this.getCellStyleName(rowId, colId) !== undefined
+    );
   }
 
   public removeCell(rowId: number, colId: number): this {
-    const row: FitRow | undefined = this.getRow(rowId);
-    if (row) {
-      row.removeCell(colId);
-      if (!row.hasProperties()) {
-        Reflect.deleteProperty(this.dto.rows!, rowId);
-        if (Object.keys(this.dto.rows!).length <= 0) {
-          Reflect.deleteProperty(this.dto, 'rows');
-        }
+    if (this.dto.cells && this.dto.cells[rowId]) {
+      delete this.dto.cells[rowId][colId];
+    }
+    return this;
+  }
+
+  public forEachCell(cellFn: (rowId: number, colId: number) => void): void {
+    for (let i = 0; i < (this.dto.numberOfRows ?? 0); i++) {
+      for (let j = 0; j < (this.dto.numberOfCols ?? 0); j++) {
+        cellFn(i, j);
+      }
+    }
+  }
+
+  public removeRowCells(rowId: number): this {
+    this.dto.cells && delete this.dto.cells[rowId];
+    return this;
+  }
+
+  public moveRowCells(rowId: number, move: number): this {
+    if (this.dto.cells && this.dto.cells[rowId]) {
+      const row: FitMapDto<FitCellDto> = { ...this.dto.cells[rowId] };
+      delete this.dto.cells[rowId];
+      this.dto.cells[rowId + move] = row;
+    }
+    return this;
+  }
+
+  public removeColCells(colId: number): this {
+    if (this.dto.cells) {
+      for (const rowId of Object.keys(this.dto.cells)) {
+        delete this.dto.cells[rowId][colId];
       }
     }
     return this;
   }
 
-  public setMergedRegions(mergedRegions?: FitMergedRegions): this {
-    this.dto.mergedRegions = mergedRegions?.getDto();
-    !this.dto.mergedRegions &&
-      Reflect.deleteProperty(this.dto, 'mergedRegions');
+  public moveColCells(colId: number, move: number): this {
+    if (this.dto.cells) {
+      for (const rowId of Object.keys(this.dto.cells)) {
+        const row: FitMapDto<FitCellDto> = this.dto.cells[rowId];
+        const cell: FitCellDto | undefined = row[colId] && { ...row[colId] };
+        if (cell) {
+          delete row[colId];
+          row[colId + move] = cell;
+        }
+      }
+    }
     return this;
-  }
-
-  public getMergedRegions(): FitMergedRegions | undefined {
-    return (
-      this.dto.mergedRegions &&
-      createMergedRegions4Dto<FitMergedRegions>(this.dto.mergedRegions)
-    );
   }
 
   public clone(): FitTable {
     return new FitTable({ ...this.dto });
   }
+
+  public getColWidth(colId: number): number | undefined {
+    return this.dto.cols && this.dto.cols[colId]?.width;
+  }
+
+  public setColWidth(colId: number, width?: number): this {
+    if (width) {
+      if (!this.dto.cols) this.dto.cols = {};
+      if (!this.dto.cols[colId]) this.dto.cols[colId] = {};
+      this.dto.cols[colId]['width'] = width;
+    } else if (this.dto.cols && this.dto.cols[colId]) {
+      delete this.dto.cols[colId]['width'];
+      !this.hasCol(colId) && delete this.dto.cols[colId];
+    }
+    return this;
+  }
+
+  public hasCol(colId: number): boolean {
+    return this.getColWidth(colId) !== undefined;
+  }
+
+  public removeCol(colId: number): this {
+    this.dto.cols && delete this.dto.cols[colId];
+    return this;
+  }
+
+  public moveCol(colId: number, move: number): this {
+    if (this.dto.cols && this.dto.cols[colId]) {
+      const col: FitColDto = { ...this.dto.cols[colId] };
+      Reflect.deleteProperty(this.dto.cols, colId);
+      this.dto.cols[colId + move] = col;
+    }
+    return this;
+  }
+
+  public getRowHeight(rowId: number): number | undefined {
+    return this.dto.rows && this.dto.rows[rowId]?.height;
+  }
+
+  public setRowHeight(rowId: number, height?: number): this {
+    if (height) {
+      if (!this.dto.rows) this.dto.rows = {};
+      if (!this.dto.rows[rowId]) this.dto.rows[rowId] = {};
+      this.dto.rows[rowId]['height'] = height;
+    } else if (this.dto.rows && this.dto.rows[rowId]) {
+      delete this.dto.rows[rowId]['height'];
+      !this.hasRow(rowId) && delete this.dto.rows[rowId];
+    }
+    return this;
+  }
+
+  public hasRow(rowId: number): boolean {
+    return this.getRowHeight(rowId) !== undefined;
+  }
+
+  public removeRow(rowId: number): this {
+    this.dto.rows && delete this.dto.rows[rowId];
+    return this;
+  }
+
+  public moveRow(rowId: number, move: number): this {
+    if (this.dto.rows && this.dto.rows[rowId]) {
+      const row: FitRowDto = { ...this.dto.rows[rowId] };
+      delete this.dto.rows[rowId];
+      this.dto.rows[rowId + move] = row;
+    }
+    return this;
+  }
+
+  public getRowSpan(rowId: number, colId: number): number | undefined {
+    return this.getMergedCellDto(rowId, colId)?.rowSpan;
+  }
+
+  public setRowSpan(rowId: number, colId: number, rowSpan?: number): this {
+    if (rowSpan) {
+      this.createMatrixCell('mergedCells', rowId, colId);
+      this.dto.mergedCells![rowId][colId]['rowSpan'] = rowSpan;
+    } else if (this.hasMatrixCell('mergedCells', rowId, colId)) {
+      if (this.dto.mergedCells![rowId][colId]['colSpan']) {
+        delete this.dto.mergedCells![rowId][colId]['rowSpan'];
+      } else {
+        delete this.dto.mergedCells![rowId][colId];
+      }
+    }
+    return this;
+  }
+
+  public getColSpan(rowId: number, colId: number): number | undefined {
+    return this.getMergedCellDto(rowId, colId)?.colSpan;
+  }
+
+  public setColSpan(rowId: number, colId: number, colSpan?: number): this {
+    if (colSpan) {
+      this.createMatrixCell('mergedCells', rowId, colId);
+      this.dto.mergedCells![rowId][colId]['colSpan'] = colSpan;
+    } else if (this.hasMatrixCell('mergedCells', rowId, colId)) {
+      if (this.dto.mergedCells![rowId][colId]['rowSpan']) {
+        delete this.dto.mergedCells![rowId][colId]['colSpan'];
+      } else {
+        delete this.dto.mergedCells![rowId][colId];
+      }
+    }
+    return this;
+  }
+
+  public forEachRegion(cellFn: (rowId: number, colId: number) => void): void {
+    if (!this.dto.mergedCells) return;
+    for (const i of Object.keys(this.dto.mergedCells)) {
+      for (const j of Object.keys(this.dto.mergedCells[i])) {
+        cellFn(Number(i), Number(j));
+      }
+    }
+  }
+
+  public moveRegion(
+    rowId: number,
+    colId: number,
+    moveRow: number,
+    moveCol: number
+  ): this {
+    let rowSpan: number | undefined = this.getRowSpan(rowId, colId);
+    let colSpan: number | undefined = this.getColSpan(rowId, colId);
+    delete this.dto.mergedCells![rowId][colId];
+    this.setRowSpan(rowId + moveRow, colId + moveCol, rowSpan);
+    this.setColSpan(rowId + moveRow, colId + moveCol, colSpan);
+    return this;
+  }
+
+  public increaseRegion(
+    rowId: number,
+    colId: number,
+    increaseRow: number,
+    increaseCol: number
+  ): this {
+    let rowSpan: number | undefined = this.getRowSpan(rowId, colId);
+    this.setRowSpan(rowId, colId, rowSpan ? rowSpan + increaseRow : undefined);
+    let colSpan: number | undefined = this.getColSpan(rowId, colId);
+    this.setColSpan(rowId, colId, colSpan ? colSpan + increaseCol : undefined);
+    return this;
+  }
+
+  public removeRowRegions(rowId: number): this {
+    this.dto.mergedCells && delete this.dto.mergedCells[rowId];
+    return this;
+  }
+
+  public removeColRegions(colId: number): this {
+    if (this.dto.mergedCells) {
+      for (const rowId of Object.keys(this.dto.mergedCells)) {
+        delete this.dto.mergedCells[rowId][colId];
+      }
+    }
+    return this;
+  }
+
+  public getStyle(name: string): Style | undefined {
+    const styleDto = this.dto.styles && this.dto.styles[name];
+    return styleDto && createStyle4Dto(styleDto);
+  }
+
+  public addStyle(name: string, style: Style): this {
+    if (!this.dto.styles) this.dto.styles = {};
+    this.dto.styles[name] = style.toCss();
+    return this;
+  }
+
+  public getStyleNames(): string[] {
+    return this.dto.styles ? Object.keys(this.dto.styles) : [];
+  }
+
+  public removeStyle(name: string): this {
+    this.dto.styles && delete this.dto.styles[name];
+    return this;
+  }
+
+  public getCellStyleName(rowId: number, colId: number): string | undefined {
+    return this.getCellDto(rowId, colId)?.styleName;
+  }
+
+  public setCellStyleName(rowId: number, colId: number, name?: string): this {
+    if (name) {
+      this.createMatrixCell('cells', rowId, colId);
+      this.dto.cells![rowId][colId]['styleName'] = name;
+    } else if (this.hasMatrixCell('cells', rowId, colId)) {
+      delete this.dto.cells![rowId][colId]['styleName'];
+      !this.hasCell(rowId, colId) && delete this.dto.cells![rowId][colId];
+    }
+    return this;
+  }
+
+  private getCellDto(rowId: number, colId: number): FitCellDto | undefined {
+    return (
+      this.dto.cells && this.dto.cells![rowId] && this.dto.cells[rowId][colId]
+    );
+  }
+
+  private getMergedCellDto(
+    rowId: number,
+    colId: number
+  ): FitMergedCellDto | undefined {
+    return (
+      this.dto.mergedCells &&
+      this.dto.mergedCells![rowId] &&
+      this.dto.mergedCells[rowId][colId]
+    );
+  }
+
+  private createMatrixCell(
+    dtoKey: 'cells' | 'mergedCells',
+    rowId: number,
+    colId: number
+  ): void {
+    if (!this.dto[dtoKey]) this.dto[dtoKey] = {};
+    if (!this.dto[dtoKey]![rowId]) this.dto[dtoKey]![rowId] = {};
+    if (!this.dto[dtoKey]![rowId][colId]) this.dto[dtoKey]![rowId][colId] = {};
+  }
+
+  private hasMatrixCell(
+    dtoKey: 'cells' | 'mergedCells',
+    rowId: number,
+    colId: number
+  ): boolean {
+    return this.dto[dtoKey] &&
+      this.dto[dtoKey]![rowId] &&
+      this.dto[dtoKey]![rowId][colId]
+      ? true
+      : false;
+  }
 }
 
 export class FitTableFactory implements TableFactory {
-  public createTable(numberOfRows: number, numberOfColumns: number): FitTable {
-    return new FitTable()
-      .setNumberOfRows(numberOfRows)
-      .setNumberOfColumns(numberOfColumns);
+  public createTable(): FitTable {
+    return new FitTable();
   }
 
   public createTable4Dto(dto: FitTableDto): FitTable {
-    const isValidDto: boolean = implementsTKeys<FitTableDto>(dto, [
-      'numberOfRows',
-      'numberOfColumns',
-    ]);
-    if (isValidDto) return new FitTable(dto);
-    else throw new Error('Invalid table DTO.');
+    return new FitTable(dto);
   }
 }

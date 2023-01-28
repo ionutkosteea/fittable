@@ -70,8 +70,8 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
     if (this.rowId === numberOfRows - 1) return -1;
     const scrollTop: number = this.tableScroller.getTop();
     const clientHeight: number = this.tableScroller.getHeight();
-    const columnHeaderHeight: number = this.tableViewer.getColumnHeaderHeight();
-    const viewport: number = scrollTop + clientHeight - columnHeaderHeight;
+    const colHeaderHeight: number = this.tableViewer.getColHeaderHeight();
+    const viewport: number = scrollTop + clientHeight - colHeaderHeight;
     const rowPosition: number = this.tableViewer.getRowPosition(this.rowId);
     const rowHeight: number = this.getRowHeight(this.rowId);
     if (viewport >= rowPosition && viewport <= rowPosition + rowHeight) {
@@ -92,41 +92,39 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
   }
 
   private scrollLeft(): number {
-    if (this.colId === 0) return this.tableViewer.getColumnPosition(0);
+    if (this.colId === 0) return this.tableViewer.getColPosition(0);
     const scrollLeft: number = this.tableScroller.getLeft();
-    const colPosition: number = this.tableViewer.getColumnPosition(this.colId);
-    const colWidth: number = this.getColumnWidth(this.colId);
+    const colPosition: number = this.tableViewer.getColPosition(this.colId);
+    const colWidth: number = this.getColWidth(this.colId);
     if (scrollLeft >= colPosition && scrollLeft < colPosition + colWidth) {
-      return this.tableViewer.getColumnPosition(this.colId - 1);
+      return this.tableViewer.getColPosition(this.colId - 1);
     } else {
       return -1;
     }
   }
 
   private scrollRight(): number {
-    const numberOfCols: number = this.tableViewer
-      .getTable()
-      .getNumberOfColumns();
+    const numberOfCols: number = this.tableViewer.getTable().getNumberOfCols();
     if (this.colId === numberOfCols - 1) return -1;
     const scrollLeft: number = this.tableScroller.getLeft();
     const clientWidth: number = this.tableScroller.getWidth();
     const rowHeaderWidth: number = this.tableViewer.getRowHeaderWidth();
     const viewport: number = scrollLeft + clientWidth - rowHeaderWidth;
-    const colPosition: number = this.tableViewer.getColumnPosition(this.colId);
-    const colWidth: number = this.getColumnWidth(this.colId);
+    const colPosition: number = this.tableViewer.getColPosition(this.colId);
+    const colWidth: number = this.getColWidth(this.colId);
     if (viewport >= colPosition && viewport <= colPosition + colWidth) {
-      const nextColWidth: number = this.getColumnWidth(this.colId + 1);
+      const nextColWidth: number = this.getColWidth(this.colId + 1);
       return scrollLeft + colPosition + colWidth - viewport + nextColWidth;
     } else {
       return -1;
     }
   }
 
-  private getColumnWidth(colId: number): number {
-    let width: number = this.tableViewer.getColumnWidth(colId);
+  private getColWidth(colId: number): number {
+    let width: number = this.tableViewer.getColWidth(colId);
     const colSpan: number = this.tableViewer.getMaxColSpan(colId);
     for (let i = colId + 1; i < colId + colSpan; i++) {
-      width += this.tableViewer.getColumnWidth(i);
+      width += this.tableViewer.getColWidth(i);
     }
     return width;
   }

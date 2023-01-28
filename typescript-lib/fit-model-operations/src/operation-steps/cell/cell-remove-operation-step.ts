@@ -1,11 +1,11 @@
-import { Table, createCellRange4Dto } from 'fit-core/model/index.js';
+import { Table, createCellRange4Dto, CellRange } from 'fit-core/model/index.js';
 import {
   OperationStep,
   OperationStepFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
-export type CellRemoveOperationStepDto = Id<'cell-remove'> & {
+export type CellRemoveOperationStepDto = OperationId<'cell-remove'> & {
   removableCellRanges: unknown[];
 };
 
@@ -21,12 +21,29 @@ export class CellRemoveOperationStep implements OperationStep {
 
   private removeCells(): void {
     for (const cellRangeDto of this.stepDto.removableCellRanges) {
-      createCellRange4Dto(cellRangeDto).forEachCell(
-        (rowId: number, colId: number) => {
+      const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
+      const fromRowId: number = cellRange.getFrom().getRowId();
+      const toRowId: number = cellRange.getTo().getRowId();
+      const fromColId: number = cellRange.getFrom().getColId();
+      const toColId: number = cellRange.getTo().getColId();
+      for (let rowId: number = fromRowId; rowId <= toRowId; rowId++) {
+        for (let colId: number = fromColId; colId <= toColId; colId++) {
           this.table.removeCell(rowId, colId);
         }
-      );
+        this.removeRowIfEmpty(rowId);
+      }
     }
+  }
+
+  private removeRowIfEmpty(rowId: number): void {
+    let isEmptyRow = true;
+    for (let colId = 0; colId < this.table.getNumberOfCols(); colId++) {
+      if (this.table.hasCell(rowId, colId)) {
+        isEmptyRow = false;
+        break;
+      }
+    }
+    if (isEmptyRow) this.table.removeRowCells(rowId);
   }
 }
 

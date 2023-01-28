@@ -21,7 +21,7 @@ export class TableLeftComponent extends TableCommon {
 
   public getContainerPosition(): CssStyle {
     const left: number = this.getScrollLeft();
-    const top: number = this.getColumnHeaderHeight() + this.getOffsetY();
+    const top: number = this.getColHeaderHeight() + this.getOffsetY();
     return { transform: 'translate3d(' + left + 'px,' + top + 'px,0px)' };
   }
 

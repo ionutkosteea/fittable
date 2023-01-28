@@ -10,7 +10,7 @@ import {
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import { CellRangeAddressObjects } from '../../utils/cell/cell-range-address-objects.js';
@@ -25,7 +25,7 @@ import { StyleOperationStepDto } from '../../operation-steps/style/style-operati
 import { StyleUpdateOperationDtoBuilder } from '../style/style-update-operation-dto.js';
 import { StyleRemoveOperationDtoBuilder } from '../style/style-remove-operation-dto.js';
 
-export type CellPasteOperationDtoArgs = Id<'cell-paste'> & {
+export type CellPasteOperationDtoArgs = OperationId<'cell-paste'> & {
   selectedCells: CellRange[];
 };
 

@@ -14,14 +14,14 @@ import {
   BodySelectionRectangles,
   PageHeaderCellSelectionRectangles,
   RowHeaderSelectionRectangles,
-  ColumnHeaderSelectionRectangles,
+  ColHeaderSelectionRectangles,
 } from './fit-cell-selection-rectangles.js';
 
 export class FitCellSelectionPainter implements CellSelectionPainter {
   public readonly body: CellSelectionRectangles;
   public readonly pageHeader?: CellSelectionRectangles;
   public readonly rowHeader?: CellSelectionRectangles;
-  public readonly columnHeader?: CellSelectionRectangles;
+  public readonly colHeader?: CellSelectionRectangles;
 
   private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
@@ -32,7 +32,7 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
     this.body = this.createBodyPainterRanges();
     this.pageHeader = this.createPageHeaderPainterRanges();
     this.rowHeader = this.createRowHeaderPainterRanges();
-    this.columnHeader = this.createColumnHeaderPainterRanges();
+    this.colHeader = this.createColHeaderPainterRanges();
     this.subscribeToCellSelection();
   }
 
@@ -54,12 +54,10 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
     );
   }
 
-  private createColumnHeaderPainterRanges():
-    | CellSelectionRectangles
-    | undefined {
+  private createColHeaderPainterRanges(): CellSelectionRectangles | undefined {
     return (
-      this.cellSelection.columnHeader &&
-      new ColumnHeaderSelectionRectangles(this.tableViewer)
+      this.cellSelection.colHeader &&
+      new ColHeaderSelectionRectangles(this.tableViewer)
     );
   }
 
@@ -70,8 +68,8 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
     this.subscriptions.add(this.onEndSelectPageHeader());
     this.subscriptions.add(this.onAfterSelectRowHeaderCell());
     this.subscriptions.add(this.onEndSelectRowHeader());
-    this.subscriptions.add(this.onAfterSelectColumnHeaderCell());
-    this.subscriptions.add(this.onEndSelectColumnHeader());
+    this.subscriptions.add(this.onAfterSelectColHeaderCell());
+    this.subscriptions.add(this.onEndSelectColHeader());
   }
 
   private onAfterSelectBodyCell(): Subscription {
@@ -84,8 +82,8 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
     this.body.paint(this.cellSelection.body);
     this.cellSelection.rowHeader &&
       this.rowHeader?.paint(this.cellSelection.rowHeader);
-    this.cellSelection.columnHeader &&
-      this.columnHeader?.paint(this.cellSelection.columnHeader);
+    this.cellSelection.colHeader &&
+      this.colHeader?.paint(this.cellSelection.colHeader);
     this.cellSelection.pageHeader &&
       this.pageHeader?.paint(this.cellSelection.pageHeader);
   }
@@ -144,23 +142,23 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
     }
   }
 
-  private onAfterSelectColumnHeaderCell(): Subscription | undefined {
-    return this.cellSelection.columnHeader
+  private onAfterSelectColHeaderCell(): Subscription | undefined {
+    return this.cellSelection.colHeader
       ?.onAfterAddCell$()
       .subscribe(() =>
-        this.columnHeader?.paint(
-          this.cellSelection.columnHeader as CellSelectionRanges
+        this.colHeader?.paint(
+          this.cellSelection.colHeader as CellSelectionRanges
         )
       );
   }
 
-  private onEndSelectColumnHeader(): Subscription | undefined {
-    if (this.cellSelection.columnHeader) {
+  private onEndSelectColHeader(): Subscription | undefined {
+    if (this.cellSelection.colHeader) {
       const onEnd: Subject<CellRange[]> = new Subject();
-      this.cellSelection.columnHeader.addOnEnd$(onEnd);
+      this.cellSelection.colHeader.addOnEnd$(onEnd);
       return onEnd.subscribe(() =>
-        this.columnHeader?.paint(
-          this.cellSelection.columnHeader as CellSelectionRanges
+        this.colHeader?.paint(
+          this.cellSelection.colHeader as CellSelectionRanges
         )
       );
     } else {
@@ -172,8 +170,8 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
     this.body.paint(this.cellSelection.body);
     this.cellSelection.rowHeader &&
       this.rowHeader?.paint(this.cellSelection.rowHeader);
-    this.cellSelection.columnHeader &&
-      this.columnHeader?.paint(this.cellSelection.columnHeader);
+    this.cellSelection.colHeader &&
+      this.colHeader?.paint(this.cellSelection.colHeader);
     this.cellSelection.pageHeader &&
       this.pageHeader?.paint(this.cellSelection.pageHeader);
     return this;

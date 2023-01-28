@@ -29,7 +29,7 @@ export class ContextMenuComponent implements SimpleTopic, OnInit {
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'context-menu-ts-01.jpg' },
+    { image: 'context-menu-ts.jpg' },
   ];
   public fit!: FittableDesigner;
 
@@ -41,7 +41,7 @@ export class ContextMenuComponent implements SimpleTopic, OnInit {
       createFitViewModelConfig({ cellSelection: true, contextMenu: true })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
 
     this.removeClearMenuItem();
   }

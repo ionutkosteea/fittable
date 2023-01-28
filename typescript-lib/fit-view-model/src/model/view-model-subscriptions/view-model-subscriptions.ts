@@ -87,8 +87,8 @@ export class ViewModelSubscriptions {
     this.args.cellSelection?.body && objects.push(this.args.cellSelection.body);
     this.args.cellSelection?.rowHeader &&
       objects.push(this.args.cellSelection.rowHeader);
-    this.args.cellSelection?.columnHeader &&
-      objects.push(this.args.cellSelection.columnHeader);
+    this.args.cellSelection?.colHeader &&
+      objects.push(this.args.cellSelection.colHeader);
     this.args.cellSelection?.pageHeader &&
       objects.push(this.args.cellSelection.pageHeader);
     this.args.statusbar && objects.push(this.args.statusbar);
@@ -117,7 +117,7 @@ export class ViewModelSubscriptions {
   private hideCellEditorOnFocusHeader(): void {
     const focusableObjects: (FocusableObject | undefined)[] = [
       this.args.cellSelection?.rowHeader,
-      this.args.cellSelection?.columnHeader,
+      this.args.cellSelection?.colHeader,
       this.args.cellSelection?.pageHeader,
     ];
     for (const obj of focusableObjects) {

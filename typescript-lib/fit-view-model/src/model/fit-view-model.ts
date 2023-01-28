@@ -90,7 +90,7 @@ export class FitViewModel implements ViewModel {
   private createTableScroller(): TableScroller {
     const tableScroller: TableScroller = createTableScroller(this.tableViewer);
     this.config.disableVirtualRows && tableScroller.setVerticalScrollbar();
-    this.config.disableVirtualColumns && tableScroller.setHorizontalScrollbar();
+    this.config.disableVirtualCols && tableScroller.setHorizontalScrollbar();
     return tableScroller;
   }
 

@@ -1,31 +1,28 @@
 import {
   CellRange,
-  MergedRegion,
   TableBasics,
   TableMergedRegions,
 } from 'fit-core/model/index.js';
 import {
-  Id,
+  OperationId,
   OperationDto,
   OperationDtoFactory,
 } from 'fit-core/operations/index.js';
 
 import { MergedRegionsOperationStepDto } from '../../operation-steps/merged-regions/merged-regions-operation-step.js';
 
-export type CellUnmergeOperationDtoArgs = Id<'cell-unmerge'> & {
+export type CellUnmergeOperationDtoArgs = OperationId<'cell-unmerge'> & {
   selectedCells: CellRange[];
 };
 
 export class CellUnmergeOperationDtoBuilder {
   private readonly mergedRegionsStep: MergedRegionsOperationStepDto = {
     id: 'merged-regions',
-    create4CellRanges: [],
-    remove4CellCoords: [],
+    removeRegions: [],
   };
   private readonly undoMergedRegionsStep: MergedRegionsOperationStepDto = {
     id: 'merged-regions',
-    create4CellRanges: [],
-    remove4CellCoords: [],
+    createRegions: [],
   };
 
   constructor(
@@ -34,7 +31,7 @@ export class CellUnmergeOperationDtoBuilder {
   ) {}
 
   public build(): OperationDto {
-    this.updateMergedRegions();
+    this.removeExistingRegions();
     return {
       id: this.args.id,
       steps: [this.mergedRegionsStep],
@@ -42,21 +39,19 @@ export class CellUnmergeOperationDtoBuilder {
     };
   }
 
-  private updateMergedRegions(): void {
+  private removeExistingRegions(): void {
     for (const cellRange of this.args.selectedCells) {
-      this.table
-        .getMergedRegions()
-        ?.forEachRegion((region: MergedRegion): void => {
-          const rowId: number = region.getFrom().getRowId();
-          const colId: number = region.getFrom().getColId();
-          cellRange.hasCell(rowId, colId) && this.removeRegion(region);
+      this.table.forEachRegion((rowId: number, colId: number): void => {
+        if (!cellRange.hasCell(rowId, colId)) return;
+        this.mergedRegionsStep.removeRegions!.push({ rowId, colId });
+        this.undoMergedRegionsStep.createRegions!.push({
+          rowId,
+          colId,
+          rowSpan: this.table.getRowSpan(rowId, colId),
+          colSpan: this.table.getColSpan(rowId, colId),
         });
+      });
     }
-  }
-
-  private removeRegion(region: CellRange): void {
-    this.mergedRegionsStep.remove4CellCoords.push(region.getFrom().getDto());
-    this.undoMergedRegionsStep.create4CellRanges.push(region.getDto());
   }
 }
 

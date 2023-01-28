@@ -1,12 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {
-  Cell,
-  createCell,
-  createTable,
-  registerModelConfig,
-  Table,
-} from 'fit-core/model';
+import { createTable, registerModelConfig, Table } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
@@ -59,10 +53,9 @@ export class ThemeSwitcherComponent implements ConsoleTopic, OnInit {
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-    const table: Table = createTable(5, 5);
-    table.forEachCellCoord((rowId: number, colId: number): void => {
-      const cell: Cell = createCell().setValue('[' + rowId + ',' + colId + ']');
-      table.addCell(rowId, colId, cell);
+    const table: Table = createTable();
+    table.forEachCell((rowId: number, colId: number): void => {
+      table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
     this.fit = createFittableDesigner(table);
 

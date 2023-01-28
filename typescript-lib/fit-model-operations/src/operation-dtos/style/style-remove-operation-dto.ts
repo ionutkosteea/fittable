@@ -4,13 +4,11 @@ import {
   Style,
   TableStyles,
   createDto4CellRangeList,
-  asCellStyle,
-  Cell,
 } from 'fit-core/model/index.js';
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import { CellRangeAddressObjects } from '../../utils/cell/cell-range-address-objects.js';
@@ -20,7 +18,7 @@ import {
 } from '../../utils/style/style-functions.js';
 import { StyleOperationStepDto } from '../../operation-steps/style/style-operation-step.js';
 
-export type StyleRemoveOperationDtoArgs = Id<'style-remove'> & {
+export type StyleRemoveOperationDtoArgs = OperationId<'style-remove'> & {
   selectedCells: CellRange[];
 };
 
@@ -64,17 +62,13 @@ export class StyleRemoveOperationDtoBuilder {
     const removableStyles: CellRangeAddressObjects<string> =
       new CellRangeAddressObjects();
     for (const cellRange of this.args.selectedCells) {
-      cellRange.forEachCell((rowId: number, colId: number) => {
-        const styleName: string | undefined = this.getStyleName(rowId, colId);
+      cellRange.forEachCell((rowId: number, colId: number): void => {
+        const styleName: string | undefined = //
+          this.table.getCellStyleName(rowId, colId);
         styleName && removableStyles.set(styleName, rowId, colId);
       });
     }
     return removableStyles;
-  }
-
-  private getStyleName(rowId: number, colId: number): string | undefined {
-    const cell: Cell | undefined = this.table.getCell(rowId, colId);
-    return asCellStyle(cell)?.getStyleName();
   }
 
   private removeStyles(styleNameMap: CellRangeAddressObjects<string>): void {
@@ -83,7 +77,7 @@ export class StyleRemoveOperationDtoBuilder {
       this.table,
       this.args.selectedCells
     );
-    styleNameMap.forEach((styleName: string, address: CellRange[]) => {
+    styleNameMap.forEach((styleName: string, address: CellRange[]): void => {
       const updatableCellRanges: unknown[] = createDto4CellRangeList(address);
       this.styleStepDto.cellStyleNames.push({ updatableCellRanges });
       const numOfAllCells: number = allCellsCnt.get(styleName) ?? 0;
@@ -97,13 +91,13 @@ export class StyleRemoveOperationDtoBuilder {
   private undoRemovedStyles(
     styleNameMap: CellRangeAddressObjects<string>
   ): void {
-    styleNameMap.forEach((styleName: string, address: CellRange[]) => {
+    styleNameMap.forEach((styleName: string, address: CellRange[]): void => {
       this.undoStyleStepDto.cellStyleNames.push({
         updatableCellRanges: createDto4CellRangeList(address),
         styleName,
       });
     });
-    this.styleStepDto.removeStyles.forEach((styleName: string) => {
+    this.styleStepDto.removeStyles.forEach((styleName: string): void => {
       const style: Style | undefined = this.table.getStyle(styleName);
       style &&
         this.undoStyleStepDto.createStyles.push({

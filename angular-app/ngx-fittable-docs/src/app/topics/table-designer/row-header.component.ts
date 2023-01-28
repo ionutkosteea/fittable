@@ -42,6 +42,6 @@ export class RowHeaderComponent implements SimpleTopic, OnInit {
       })
     );
 
-    this.fit = createFittableDesigner(createTable(5, 5));
+    this.fit = createFittableDesigner(createTable());
   }
 }

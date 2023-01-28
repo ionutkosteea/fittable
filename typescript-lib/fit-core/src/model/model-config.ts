@@ -1,7 +1,4 @@
 import { CellCoordFactory } from './cell-coord.js';
-import { CellFactory } from './cell.js';
-import { RowFactory, ColumnFactory } from './line.js';
-import { MergedRegionsFactory } from './merged-regions.js';
 import { CellRangeFactory } from './cell-range.js';
 import { LineRangeFactory } from './line-range.js';
 import { StyleFactory } from './style.js';
@@ -9,14 +6,10 @@ import { TableFactory } from './table.js';
 
 export type ModelConfig = {
   tableFactory: TableFactory;
-  cellFactory: CellFactory;
   cellCoordFactory: CellCoordFactory;
   cellRangeFactory: CellRangeFactory;
   lineRangeFactory: LineRangeFactory;
-  rowFactory?: RowFactory;
-  columnFactory?: ColumnFactory;
   styleFactory?: StyleFactory;
-  mergedRegionsFactory?: MergedRegionsFactory;
 };
 
 declare global {

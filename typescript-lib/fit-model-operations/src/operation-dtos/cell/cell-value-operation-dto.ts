@@ -2,7 +2,6 @@ import {
   Table,
   CellRange,
   Value,
-  Cell,
   createCellRange4Dto,
   createDto4CellRangeList,
   CellRangeList,
@@ -10,13 +9,13 @@ import {
 import {
   OperationDto,
   OperationDtoFactory,
-  Id,
+  OperationId,
 } from 'fit-core/operations/index.js';
 
 import { CellRangeAddressObjects } from '../../utils/cell/cell-range-address-objects.js';
 import { CellValueOperationStepDto } from '../../operation-steps/cell/cell-value-operation-step.js';
 
-export type CellValueOperationDtoArgs = Id<'cell-value'> & {
+export type CellValueOperationDtoArgs = OperationId<'cell-value'> & {
   selectedCells: CellRange[];
   value?: Value;
 };
@@ -54,9 +53,9 @@ export class CellValueOperationDtoBuilder {
   private updateCellValues(): void {
     const updatableCells: CellRangeList = new CellRangeList();
     for (const cellRange of this.args.selectedCells) {
-      cellRange.forEachCell((rowId: number, colId: number) => {
-        const cell: Cell | undefined = this.table.getCell(rowId, colId);
-        const oldValue: Value | undefined = cell?.getValue();
+      cellRange.forEachCell((rowId: number, colId: number): void => {
+        const oldValue: Value | undefined = //
+          this.table.getCellValue(rowId, colId);
         if (oldValue !== this.args.value) updatableCells.addCell(rowId, colId);
       });
     }
@@ -72,18 +71,19 @@ export class CellValueOperationDtoBuilder {
     for (const values of this.cellValueStepDto.values) {
       for (const cellRangeDto of values.updatableCellRanges)
         createCellRange4Dto(cellRangeDto).forEachCell(
-          (rowId: number, colId: number) => {
-            const cell: Cell | undefined = this.table.getCell(rowId, colId);
-            undoValues.set(cell?.getValue(), rowId, colId);
+          (rowId: number, colId: number): void => {
+            undoValues.set(this.table.getCellValue(rowId, colId), rowId, colId);
           }
         );
     }
-    undoValues.forEach((value: Value | undefined, address: CellRange[]) => {
-      this.undoCellValueStepDto.values.push({
-        updatableCellRanges: createDto4CellRangeList(address),
-        value,
-      });
-    });
+    undoValues.forEach(
+      (value: Value | undefined, address: CellRange[]): void => {
+        this.undoCellValueStepDto.values.push({
+          updatableCellRanges: createDto4CellRangeList(address),
+          value,
+        });
+      }
+    );
   }
 }
 

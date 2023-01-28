@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { NavigationTreeComponent } from './navigation-tree/navigation-tree.component';
 import { IntroductionComponent } from './topics/getting-started/introduction/introduction.component';
 import { RowHeightComponent } from './topics/table-model/row-height.component';
-import { ColumnWidthtComponent } from './topics/table-model/column-width.component';
+import { ColWidthtComponent } from './topics/table-model/col-width.component';
 import { CellValueComponent } from './topics/table-model/cell-value.component';
 import { CellStyleComponent } from './topics/table-model/cell-style.component';
 import { CellMergeComponent } from './topics/table-model/cell-merge.component';
@@ -19,10 +19,10 @@ import { ResizeRowsComponent } from './topics/table-operations/resize-rows.compo
 import { InsertRowsAboveComponent } from './topics/table-operations/insert-rows-above.component';
 import { InsertRowsBelowComponent } from './topics/table-operations/insert-rows-below.component';
 import { RemoveRowsComponent } from './topics/table-operations/remove-rows.component';
-import { ResizeColumnsComponent } from './topics/table-operations/resize-columns.component';
-import { InsertColumnsLeftComponent } from './topics/table-operations/insert-columns-left.component';
-import { InsertColumnsRightComponent } from './topics/table-operations/insert-columns-right.component';
-import { RemoveColumnsComponent } from './topics/table-operations/remove-columns.component';
+import { ResizeColsComponent } from './topics/table-operations/resize-cols.component';
+import { InsertColsLeftComponent } from './topics/table-operations/insert-cols-left.component';
+import { InsertColsRightComponent } from './topics/table-operations/insert-cols-right.component';
+import { RemoveColsComponent } from './topics/table-operations/remove-cols.component';
 import { ClearCellsComponent } from './topics/table-operations/clear-cells.component';
 import { CellValuesComponent } from './topics/table-operations/cell-values.component';
 import { RemoveCellsComponent } from './topics/table-operations/remove-cells.component';
@@ -33,9 +33,9 @@ import { UnmergeCellsComponent } from './topics/table-operations/unmerge-cells.c
 import { OperationDtoComponent } from './topics/table-operations/operation-dto.component';
 import { CustomOperationComponent } from './topics/table-operations/custom-operation.component';
 import { RowHeaderComponent } from './topics/table-designer/row-header.component';
-import { ColumnHeaderComponent } from './topics/table-designer/column-header.component';
+import { ColHeaderComponent } from './topics/table-designer/col-header.component';
 import { RowHeightsComponent } from './topics/table-designer/row-heights.component';
-import { ColumnWidthtsComponent } from './topics/table-designer/column-widths.component';
+import { ColWidthtsComponent } from './topics/table-designer/col-widths.component';
 import { TableScrollerComponent } from './topics/table-designer/table-scroller.component';
 import { CellSelectionComponent } from './topics/table-designer/cell-selection.component';
 import { CellEditorComponent } from './topics/table-designer/cell-editor.component';
@@ -56,7 +56,7 @@ import { ArchitectureComponent } from './topics/getting-started/architecture/arc
     IntroductionComponent,
     ArchitectureComponent,
     RowHeightComponent,
-    ColumnWidthtComponent,
+    ColWidthtComponent,
     CellValueComponent,
     CellStyleComponent,
     CellMergeComponent,
@@ -68,10 +68,10 @@ import { ArchitectureComponent } from './topics/getting-started/architecture/arc
     InsertRowsAboveComponent,
     InsertRowsBelowComponent,
     RemoveRowsComponent,
-    ResizeColumnsComponent,
-    InsertColumnsLeftComponent,
-    InsertColumnsRightComponent,
-    RemoveColumnsComponent,
+    ResizeColsComponent,
+    InsertColsLeftComponent,
+    InsertColsRightComponent,
+    RemoveColsComponent,
     ClearCellsComponent,
     CellValuesComponent,
     RemoveCellsComponent,
@@ -82,9 +82,9 @@ import { ArchitectureComponent } from './topics/getting-started/architecture/arc
     OperationDtoComponent,
     CustomOperationComponent,
     RowHeaderComponent,
-    ColumnHeaderComponent,
+    ColHeaderComponent,
     RowHeightsComponent,
-    ColumnWidthtsComponent,
+    ColWidthtsComponent,
     TableScrollerComponent,
     CellSelectionComponent,
     CellEditorComponent,

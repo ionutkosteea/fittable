@@ -350,9 +350,9 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 1, 2000)
       .setCellValue(0, 2, 3000)
       .selectCell(0, 0)
-      .runRemoveColumns();
+      .runRemoveCols();
 
-    expect(executor.getNumberOfColumns() === 2).toBeTruthy();
+    expect(executor.getNumberOfCols() === 2).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 2000).toBeTruthy();
     expect(executor.getCellValue(0, 1) === 3000).toBeTruthy();
   });
@@ -364,9 +364,9 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 1, 2000)
       .setCellValue(0, 2, 3000)
       .selectCell(0, 2)
-      .runRemoveColumns();
+      .runRemoveCols();
 
-    expect(executor.getNumberOfColumns() === 2).toBeTruthy();
+    expect(executor.getNumberOfCols() === 2).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.getCellValue(0, 1) === 2000).toBeTruthy();
   });
@@ -378,9 +378,9 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 1, 2000)
       .setCellValue(0, 2, 3000)
       .selectCell(0, 1)
-      .runRemoveColumns();
+      .runRemoveCols();
 
-    expect(executor.getNumberOfColumns() === 2).toBeTruthy();
+    expect(executor.getNumberOfCols() === 2).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.getCellValue(0, 1) === 3000).toBeTruthy();
   });
@@ -393,9 +393,9 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 2, 3000)
       .selectCell(0, 0)
       .selectCell(0, 2)
-      .runRemoveColumns();
+      .runRemoveCols();
 
-    expect(executor.getNumberOfColumns() === 1).toBeTruthy();
+    expect(executor.getNumberOfCols() === 1).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 2000).toBeTruthy();
   });
 
@@ -405,7 +405,7 @@ describe('Line Operation Executor', () => {
       .addStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
-      .runRemoveColumns();
+      .runRemoveCols();
 
     expect(executor.getNumberOfStyles() === 0);
     expect(executor.getCellStyleName(0, 0)).toBeFalsy();
@@ -416,9 +416,9 @@ describe('Line Operation Executor', () => {
       .createTable(1, 1)
       .setCellValue(0, 0, 1000)
       .selectCell(0, 0)
-      .runInsertColumnsBefore(1);
+      .runInsertColsBefore(1);
 
-    expect(executor.getNumberOfColumns() === 2).toBeTruthy();
+    expect(executor.getNumberOfCols() === 2).toBeTruthy();
     expect(executor.getCellValue(0, 0)).toBeFalsy();
     expect(executor.getCellValue(0, 1) === 1000).toBeTruthy();
   });
@@ -428,9 +428,9 @@ describe('Line Operation Executor', () => {
       .createTable(1, 1)
       .setCellValue(0, 0, 1000)
       .selectCell(0, 0)
-      .runInsertColumnsAfter(1);
+      .runInsertColsAfter(1);
 
-    expect(executor.getNumberOfColumns() === 2).toBeTruthy();
+    expect(executor.getNumberOfCols() === 2).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.getCellValue(0, 1)).toBeFalsy();
   });
@@ -441,9 +441,9 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 0, 1000)
       .setCellValue(0, 1, 2000)
       .selectCell(0, 1)
-      .runInsertColumnsBefore(2);
+      .runInsertColsBefore(2);
 
-    expect(executor.getNumberOfColumns() === 4).toBeTruthy();
+    expect(executor.getNumberOfCols() === 4).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.getCellValue(0, 1)).toBeFalsy();
     expect(executor.getCellValue(0, 2)).toBeFalsy();
@@ -455,10 +455,10 @@ describe('Line Operation Executor', () => {
       .createTable(1, 1)
       .setCellValue(0, 0, 1000)
       .selectCell(0, 0)
-      .runInsertColumnsAfter(1)
-      .runInsertColumnsAfter(1);
+      .runInsertColsAfter(1)
+      .runInsertColsAfter(1);
 
-    expect(executor.getNumberOfColumns() === 3).toBeTruthy();
+    expect(executor.getNumberOfCols() === 3).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.getCellValue(0, 1)).toBeFalsy();
     expect(executor.getCellValue(0, 2)).toBeFalsy();
@@ -470,10 +470,10 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 0, 1000)
       .setCellValue(0, 1, 2000)
       .selectCell(0, 0)
-      .runRemoveColumns()
+      .runRemoveCols()
       .runUndo();
 
-    expect(executor.getNumberOfColumns() === 2).toBeTruthy();
+    expect(executor.getNumberOfCols() === 2).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.getCellValue(0, 1) === 2000).toBeTruthy();
   });
@@ -484,11 +484,11 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 0, 1000)
       .setCellValue(0, 1, 2000)
       .selectCell(0, 0)
-      .runRemoveColumns()
+      .runRemoveCols()
       .runUndo()
       .runRedo();
 
-    expect(executor.getNumberOfColumns() === 1).toBeTruthy();
+    expect(executor.getNumberOfCols() === 1).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 2000).toBeTruthy();
   });
 
@@ -498,10 +498,10 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 0, 1000)
       .setCellValue(0, 1, 2000)
       .selectCell(0, 1)
-      .runRemoveColumns()
+      .runRemoveCols()
       .runUndo();
 
-    expect(executor.getNumberOfColumns() === 2).toBeTruthy();
+    expect(executor.getNumberOfCols() === 2).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.getCellValue(0, 1) === 2000).toBeTruthy();
   });
@@ -512,11 +512,11 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 0, 1000)
       .setCellValue(0, 1, 2000)
       .selectCell(0, 1)
-      .runRemoveColumns()
+      .runRemoveCols()
       .runUndo()
       .runRedo();
 
-    expect(executor.getNumberOfColumns() === 1).toBeTruthy();
+    expect(executor.getNumberOfCols() === 1).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
   });
 
@@ -529,10 +529,10 @@ describe('Line Operation Executor', () => {
       .setCellValue(0, 3, 4000)
       .selectCell(0, 1)
       .selectCell(0, 2)
-      .runRemoveColumns()
+      .runRemoveCols()
       .runUndo();
 
-    expect(executor.getNumberOfColumns() === 4).toBeTruthy();
+    expect(executor.getNumberOfCols() === 4).toBeTruthy();
     expect(executor.getCellValue(0, 0) === 1000).toBeTruthy();
     expect(executor.getCellValue(0, 1) === 2000).toBeTruthy();
     expect(executor.getCellValue(0, 2) === 3000).toBeTruthy();
@@ -552,7 +552,7 @@ describe('Line Operation Executor', () => {
       .setCellStyleName(1, 0, 's0')
       .selectCell(0, 0)
       .selectCell(0, 1)
-      .runRemoveColumns()
+      .runRemoveCols()
       .runUndo();
 
     expect(executor.getNumberOfStyles() === 1).toBeTruthy();
@@ -599,9 +599,9 @@ describe('Line Operation Executor', () => {
     executor //
       .createTable(1, 1)
       .selectCell(0, 0)
-      .runResizeColumns(200);
+      .runResizeCols(200);
 
-    expect(executor.getColumnWidth(0) === 200).toBeTruthy();
+    expect(executor.getColWidth(0) === 200).toBeTruthy();
   });
 
   it('undo -> remove first - and third row from three rows table', () => {
@@ -625,9 +625,9 @@ describe('Line Operation Executor', () => {
       .createTable(1, 1)
       .selectCell(0, 0)
       .runRemoveRows()
-      .runRemoveColumns();
+      .runRemoveCols();
 
     expect(executor.getTable().getNumberOfRows() === 0).toBeTruthy();
-    expect(executor.getTable().getNumberOfColumns() === 0).toBeTruthy();
+    expect(executor.getTable().getNumberOfCols() === 0).toBeTruthy();
   });
 });
