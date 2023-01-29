@@ -41,7 +41,7 @@ export class ContextMenuComponent implements SimpleTopic, OnInit {
       createFitViewModelConfig({ cellSelection: true, contextMenu: true })
     );
 
-    this.fit = createFittableDesigner(createTable());
+    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
 
     this.removeClearMenuItem();
   }

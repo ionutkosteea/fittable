@@ -54,7 +54,7 @@ export class InsertRowsAboveComponent
       createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    const table: Table = createTable();
+    const table: Table = createTable(); // FitTable default: 5 rows, 5 cols
     table.forEachCell((rowId: number, colId: number): void => {
       table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });

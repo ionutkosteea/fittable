@@ -53,7 +53,7 @@ export class ThemeSwitcherComponent implements ConsoleTopic, OnInit {
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-    const table: Table = createTable();
+    const table: Table = createTable(); // FitTable default: 5 rows, 5 cols
     table.forEachCell((rowId: number, colId: number): void => {
       table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });

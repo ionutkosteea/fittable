@@ -39,7 +39,7 @@ export class CellValueComponent implements SimpleTopic, OnInit {
     );
 
     this.fit = createFittableDesigner(
-      createTable()
+      createTable() // FitTable default: 5 rows, 5 cols
         .setCellValue(1, 1, 'Short text')
         .setCellValue(2, 1, 'Long text spreads on multiple lines')
         .setCellValue(3, 1, 'Line1\nLine2\nLine3')

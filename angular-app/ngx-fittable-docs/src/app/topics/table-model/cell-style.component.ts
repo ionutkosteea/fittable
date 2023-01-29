@@ -39,7 +39,7 @@ export class CellStyleComponent implements SimpleTopic, OnInit {
     );
 
     this.fit = createFittableDesigner(
-      createTable<FitTable>() // Fittable has by default 5 rows and 5 cols.
+      createTable<FitTable>() // FitTable default: 5 rows, 5 cols
         .addStyle(
           's0',
           createStyle<FitStyle>()

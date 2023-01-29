@@ -40,6 +40,6 @@ export class ColWidthtsComponent implements SimpleTopic, OnInit {
       })
     );
 
-    this.fit = createFittableDesigner(createTable());
+    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
   }
 }

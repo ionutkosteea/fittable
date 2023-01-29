@@ -36,7 +36,7 @@ export class StatusbarComponent implements SimpleTopic, OnInit {
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(createFitViewModelConfig({ statusbar: true }));
 
-    this.fit = createFittableDesigner(createTable());
+    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
 
     this.changeText();
   }

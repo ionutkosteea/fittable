@@ -59,7 +59,7 @@ export class CustomOperationComponent extends ConsoleTopic implements OnInit {
       createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    this.fit = createFittableDesigner(createTable());
+    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
 
     this.fit.operationExecutor
       ?.bindOperationStepFactory('dummy-step', DummyOperationStepFactory)

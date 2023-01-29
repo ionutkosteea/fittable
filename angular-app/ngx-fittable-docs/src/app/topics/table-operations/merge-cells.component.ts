@@ -54,7 +54,7 @@ export class MergeCellsComponent
       createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    this.fit = createFittableDesigner(createTable());
+    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
     const afterRun$: Subject<Operation> = new Subject();
     this.subscription = afterRun$.subscribe((operation: Operation): void => {
       this.consoleText += 'Operation id: ' + operation.id + '\n';

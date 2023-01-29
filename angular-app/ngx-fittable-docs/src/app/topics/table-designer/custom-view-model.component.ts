@@ -44,7 +44,7 @@ export class CustomViewModelComponent implements SimpleTopic, OnInit {
     viewModelConfig.contextMenuFactory = this.createDummyContextMenuFactory();
     registerViewModelConfig(viewModelConfig);
 
-    this.fit = createFittableDesigner(createTable());
+    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
   }
 
   private createDummyToolbarFactory(): ToolbarFactory {

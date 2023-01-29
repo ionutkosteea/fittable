@@ -39,7 +39,7 @@ export class CellMergeComponent implements SimpleTopic, OnInit {
     );
 
     this.fit = createFittableDesigner(
-      createTable<FitTable>() // Fittable has by default 5 rows and 5 cols.
+      createTable<FitTable>() // FitTable default: 5 rows, 5 cols
         .setCellValue(1, 1, 'Merged cell text')
         .setRowSpan(1, 1, 2)
         .setColSpan(1, 1, 2)
