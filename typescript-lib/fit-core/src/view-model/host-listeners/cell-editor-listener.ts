@@ -17,9 +17,7 @@ export interface CellEditorListener {
   onGlobalMouseDown(event?: FitMouseEvent): void;
   onGlobalMouseUp(event?: FitMouseEvent): void;
   onKeyDown(event?: FitKeyboardEvent): void;
-  onGlobalKeyDown(event?: FitKeyboardEvent): void;
   onInput(event?: FitEvent): void;
-  onGlobalKeyUp(event?: FitKeyboardEvent): void;
   onContextMenu(event?: FitMouseEvent): void;
   onContextMenu$(): Observable<FitMouseEvent>;
 }

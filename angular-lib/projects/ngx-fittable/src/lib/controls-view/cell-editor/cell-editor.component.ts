@@ -144,14 +144,8 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   public readonly onTextAreaKeyDown = (event: KeyboardEvent): void =>
     this.cellEditorListener.onKeyDown(event);
 
-  public readonly onGlobalKeyDown = (event: KeyboardEvent): void =>
-    this.cellEditorListener.onGlobalKeyDown(event);
-
   public readonly onTextAreaInput = (event: Event): void =>
     this.cellEditorListener.onInput(event);
-
-  public readonly onGlobalKeyUp = (): void =>
-    this.cellEditorListener.onGlobalKeyUp();
 
   public readonly onTextAreaContextMenu = (event: MouseEvent): void =>
     this.cellEditorListener.onContextMenu(event);

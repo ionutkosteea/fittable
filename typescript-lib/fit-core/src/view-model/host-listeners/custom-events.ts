@@ -12,6 +12,9 @@ export interface FitMouseEvent extends FitEvent {
   x: number;
   y: number;
   button: number;
+  shiftKey: boolean;
+  ctrlKey: boolean;
+  metaKey: boolean;
 }
 
 export interface FitKeyboardEvent extends FitEvent {

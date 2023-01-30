@@ -37,7 +37,6 @@ export class FitCellEditorListener implements CellEditorListener {
   private enableControlEdit = false;
   private cellValue?: Value;
   private newCellValue?: string;
-  private isShiftKeyDown = false;
   private selectedCellsFn: () => CellRange[] = () => [];
   private selectedCells: CellRange[] = [];
   private isMouseDown = false;
@@ -59,7 +58,7 @@ export class FitCellEditorListener implements CellEditorListener {
 
   public onShow(cellCoord: CellCoord, event?: FitMouseEvent): void {
     event?.preventDefault();
-    if (this.isShiftKeyDown) {
+    if (event?.shiftKey) {
       this.enableControlEdit && this.enableControlEditAndKeys(false);
       this.cellEditor.getCellControl().focus$.next(true);
       return;
@@ -165,17 +164,9 @@ export class FitCellEditorListener implements CellEditorListener {
     this.cellEditor.getCellControl().setValue();
   }
 
-  public onGlobalKeyDown(event?: FitKeyboardEvent): void {
-    this.isShiftKeyDown = event?.shiftKey ?? false;
-  }
-
   public onInput(event: FitEvent): void {
     this.newCellValue = this.getHtmlInput(event)?.value;
     this.selectedCells = this.selectedCellsFn();
-  }
-
-  public onGlobalKeyUp(): void {
-    this.isShiftKeyDown = false;
   }
 
   public onContextMenu(event: FitMouseEvent): void {

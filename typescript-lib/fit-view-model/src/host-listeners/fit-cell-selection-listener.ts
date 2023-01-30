@@ -16,8 +16,6 @@ type ActionKey = 'Enter' | 'ArrowLeft' | 'ArrowUp' | 'ArrowRight' | 'ArrowDown';
 export class FitCellSelectionListener implements CellSelectionListener {
   private selectionRanges: CellSelectionRanges;
   private selectedCell?: CellCoord;
-  private isCtrlKeyDown = false;
-  private isShiftKeyDown = false;
   private isMouseDown = false;
   private isMouseLeave = false;
 
@@ -38,13 +36,13 @@ export class FitCellSelectionListener implements CellSelectionListener {
     event?.preventDefault();
     if (!this.selectionRanges.hasFocus()) {
       this.selectionRanges.setFocus(true);
-      if (this.isShiftKeyDown) return;
+      if (event?.shiftKey) return;
     }
     if (event?.button !== 0 && this.selectionRanges.hasCell(cellCoord)) return;
-    if (this.isShiftKeyDown) {
+    if (event?.shiftKey) {
       this.selectionRanges.removePreviousRanges();
     } else {
-      !this.isCtrlKeyDown && this.cellSelection.clear();
+      !event?.metaKey && this.cellSelection.clear();
       this.selectionRanges.createRange();
     }
     this.selectionRanges.addCell(cellCoord);
@@ -83,30 +81,28 @@ export class FitCellSelectionListener implements CellSelectionListener {
   }
 
   public onGlobalKeyDown(event: FitKeyboardEvent): void {
-    this.isCtrlKeyDown = event.metaKey;
-    this.isShiftKeyDown = event.shiftKey;
     if (!this.selectionRanges.hasFocus()) return;
     if ((event.key as ActionKey) === 'Enter' && event.ctrlKey) return;
     this.selectNextCell(event);
   }
 
   private selectNextCell(event: FitKeyboardEvent): void {
-    const activeCell: CellCoord | undefined = this.getActiveCell();
+    const activeCell: CellCoord | undefined = this.getActiveCell(event);
     if (!activeCell) return;
     const nextCell: CellCoord | undefined = this.getNextCell(event, activeCell);
     if (!nextCell) return;
     this.scrollIfLastVisibleLine(activeCell, event);
-    if (!this.isShiftKeyDown) {
+    if (!event.shiftKey) {
       this.cellSelection.clear();
       this.selectionRanges.createRange();
     }
     this.selectionRanges.addCell(nextCell);
-    !this.isShiftKeyDown && this.endSelection();
+    !event.shiftKey && this.endSelection();
   }
 
-  private getActiveCell(): CellCoord | undefined {
+  private getActiveCell(event: FitKeyboardEvent): CellCoord | undefined {
     let cell: CellCoord | undefined = this.selectionRanges.getFirstCell();
-    if (this.isShiftKeyDown) cell = this.selectionRanges.getLastCell() ?? cell;
+    if (event.shiftKey) cell = this.selectionRanges.getLastCell() ?? cell;
     return cell;
   }
 
@@ -150,10 +146,7 @@ export class FitCellSelectionListener implements CellSelectionListener {
     return nextCell;
   }
 
-  public onGlobalKeyUp(): void {
-    this.isCtrlKeyDown = false;
-    this.isShiftKeyDown = false;
-  }
+  public onGlobalKeyUp(): void {}
 }
 
 export class FitCellSelectionListenerFactory

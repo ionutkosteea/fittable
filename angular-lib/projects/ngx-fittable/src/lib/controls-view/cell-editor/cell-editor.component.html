@@ -2,6 +2,5 @@
   <textarea class="cell-editor-input" #textArea [ngStyle]="getTextAreaStyle()" [value]="getTextAreaValue()"
     (mouseenter)="onTextAreaMouseEnter($event)" (mousedown)="onTextAreaMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()" (window:mouseup)="onGlobalMouseUp()" (keydown)="onTextAreaKeyDown($event)"
-    (window:keydown)="onGlobalKeyDown($event)" (input)="onTextAreaInput($event)" (window:keyup)="onGlobalKeyUp()"
-    (contextmenu)="onTextAreaContextMenu($event)"></textarea>
+    (input)="onTextAreaInput($event)" (contextmenu)="onTextAreaContextMenu($event)"></textarea>
 </div>
