@@ -16,6 +16,8 @@ import {
   CellSelectionPainter,
   createCellSelectionPainter,
   CellSelectionRanges,
+  ScrollContainer,
+  createScrollContainer,
 } from 'fit-core/view-model/index.js';
 
 export class CellSelectionPainterBuilder {
@@ -23,6 +25,7 @@ export class CellSelectionPainterBuilder {
   private numberOfCols = 0;
   private table!: Table;
   private tableViewer!: TableViewer;
+  private tableScroller!: ScrollContainer;
   private cellSelection!: CellSelection;
   private cellSelectionPainter!: CellSelectionPainter;
   private bodyCellSelectionRanges: CellRange[] = [];
@@ -64,10 +67,12 @@ export class CellSelectionPainterBuilder {
     this.table = this.createTable();
     this.tableViewer = createTableViewer(this.table);
     this.cellSelection = createCellSelection(this.tableViewer);
-    this.cellSelectionPainter = createCellSelectionPainter(
-      this.tableViewer,
-      this.cellSelection
-    );
+    this.tableScroller = createScrollContainer();
+    this.cellSelectionPainter = createCellSelectionPainter({
+      tableViewer: this.tableViewer,
+      tableScroller: this.tableScroller,
+      cellSelection: this.cellSelection,
+    });
     this.buildCellSelections();
     return this.cellSelectionPainter;
   }

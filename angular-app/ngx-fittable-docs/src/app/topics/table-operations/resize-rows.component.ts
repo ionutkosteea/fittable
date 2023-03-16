@@ -1,4 +1,4 @@
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
@@ -6,7 +6,7 @@ import {
   createTable,
   registerModelConfig,
 } from 'fit-core/model';
-import { Operation, registerOperationConfig } from 'fit-core/operations';
+import { OperationDto, registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
@@ -39,6 +39,7 @@ export class ResizeRowsComponent
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'resize-rows-ts-01.jpg' },
     { image: 'resize-rows-ts-02.jpg' },
+    { image: 'resize-rows-ts-03.jpg' },
   ];
   public readonly buttonText = 'Resize rows 2, 3';
   public fit!: FittableDesigner;
@@ -54,13 +55,18 @@ export class ResizeRowsComponent
     );
 
     this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
-    const afterRun$: Subject<Operation> = new Subject();
-    this.subscription = afterRun$.subscribe((operation: Operation): void => {
-      this.consoleText += 'Operation id: ' + operation.id + '\n';
-    });
-    this.fit.operationExecutor?.addListener({
-      onAfterRun$: (): Subject<Operation> => afterRun$,
-    });
+
+    this.subscription = this.writeToConsole$();
+  }
+
+  private writeToConsole$(): Subscription {
+    return this.fit
+      .operationExecutor!.onAfterRun$()
+      .subscribe((operationDto: OperationDto): void => {
+        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
+        this.consoleText +=
+          'Operation steps: ' + JSON.stringify(operationDto.steps, null, 2);
+      });
   }
 
   public runOperation(): void {

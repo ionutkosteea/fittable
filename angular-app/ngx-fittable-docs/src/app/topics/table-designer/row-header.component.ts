@@ -11,8 +11,8 @@ import { FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
-import { CodeSnippet } from '../common/code-snippet.model';
 import { TopicTitle } from '../../common/topic-title.model';
+import { CodeSnippet } from '../common/code-snippet.model';
 import { SimpleTopic } from '../common/simple-topic.model';
 
 @Component({
@@ -38,7 +38,7 @@ export class RowHeaderComponent implements SimpleTopic, OnInit {
       createFitViewModelConfig({
         rowHeader: true,
         rowHeaderWidth: 80, // default 40
-        getRowHeaderText: (rowId: number): string => 'R' + (rowId + 1),
+        rowHeaderTextFn: (rowId: number): string => 'R' + (rowId + 1),
       })
     );
 

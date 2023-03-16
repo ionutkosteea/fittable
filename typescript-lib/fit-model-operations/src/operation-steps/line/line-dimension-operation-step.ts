@@ -11,7 +11,7 @@ import {
 } from 'fit-core/operations/index.js';
 
 export type DimensionDto = {
-  updatableLineRanges: unknown[];
+  lineRanges: unknown[];
   dimension?: number;
 };
 export type LineDimensionOperationStepDto = { dimensions: DimensionDto[] };
@@ -33,7 +33,7 @@ abstract class LineDimensionOperationStep implements OperationStep {
 
   private updateLines(): void {
     for (const dimensionDto of this.stepDto.dimensions) {
-      for (const lineRangeDto of dimensionDto.updatableLineRanges) {
+      for (const lineRangeDto of dimensionDto.lineRanges) {
         createLineRange4Dto(lineRangeDto).forEachLine(
           (lineId: number): void => {
             this.updateDimension(lineId, dimensionDto.dimension);

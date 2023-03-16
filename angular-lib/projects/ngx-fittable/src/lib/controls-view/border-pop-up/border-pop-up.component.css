@@ -1,0 +1,58 @@
+.border-pop-up-button {
+  display: flex;
+  position: relative;
+  margin: 0px;
+  padding: 0px;
+  cursor: auto;
+}
+
+.button {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.options {
+  -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  position: absolute;
+  top: 26px;
+  left: -6px;
+  background-color: var(--toolbar-background-color);
+  border-left: 1px solid var(--toolbar-border-color);
+  z-index: 10;
+  padding: 3px;
+  width: 211px;
+}
+
+.left-panel {
+  float: left;
+  position: relative;
+  width: 19%;
+}
+
+.right-panel {
+  float: left;
+  position: relative;
+  width: 81%;
+}
+
+.option {
+  -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  float: left;
+  padding: 6px;
+  margin: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.option:active {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}

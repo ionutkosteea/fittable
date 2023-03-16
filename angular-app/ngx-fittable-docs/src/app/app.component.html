@@ -34,10 +34,13 @@
     <unmerge-cells *ngIf="activeContent==='Unmerge cells'"></unmerge-cells>
     <operation-dto *ngIf="activeContent==='Operation DTO'"></operation-dto>
     <custom-operation *ngIf="activeContent==='Custom operation'"></custom-operation>
+    <table-interoperability *ngIf="activeContent==='Table interoperability'"></table-interoperability>
     <row-header *ngIf="activeContent==='Row header'"></row-header>
     <column-header *ngIf="activeContent==='Column header'"></column-header>
     <row-heights *ngIf="activeContent==='Row heights'"></row-heights>
     <column-widths *ngIf="activeContent==='Column widths'"></column-widths>
+    <column-filters *ngIf="activeContent==='Column filters (1/2)'"></column-filters>
+    <column-filter-executor *ngIf="activeContent==='Column filters (2/2)'"></column-filter-executor>
     <table-scroller *ngIf="activeContent==='Table scroller'"></table-scroller>
     <cell-selection *ngIf="activeContent==='Cell selection'"></cell-selection>
     <cell-editor *ngIf="activeContent==='Cell editor'"></cell-editor>

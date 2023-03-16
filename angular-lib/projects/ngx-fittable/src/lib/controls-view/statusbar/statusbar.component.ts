@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Statusbar } from 'fit-core/view-model';
 
@@ -9,8 +9,4 @@ import { Statusbar } from 'fit-core/view-model';
 })
 export class StatusbarComponent {
   @Input() model!: Statusbar;
-
-  @HostListener('mousedown') onMouseDown(): void {
-    !this.model.hasFocus() && this.model.setFocus(true);
-  }
 }

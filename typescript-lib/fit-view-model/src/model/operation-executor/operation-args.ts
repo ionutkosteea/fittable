@@ -1,6 +1,8 @@
 import { CellRange, Value, LineRange, Style } from 'fit-core/model/index.js';
 import { OperationId } from 'fit-core/operations/index.js';
 
+import { ColFilterOperationArgs } from '../col-filters/col-filter-operation.js';
+
 type RowHeightArgs = OperationId<'row-height'> & {
   selectedLines: LineRange[];
   dimension?: number;
@@ -8,8 +10,8 @@ type RowHeightArgs = OperationId<'row-height'> & {
 
 type RowInsertArgs = OperationId<'row-insert'> & {
   selectedLines: LineRange[];
-  numberOfInsertableLines: number;
-  canInsertAfter?: boolean;
+  numberOfNewLines: number;
+  insertAfter?: boolean;
 };
 
 type RowRemoveArgs = OperationId<'row-remove'> & {
@@ -23,8 +25,8 @@ type ColWidthArgs = OperationId<'column-width'> & {
 
 type ColInsertArgs = OperationId<'column-insert'> & {
   selectedLines: LineRange[];
-  numberOfInsertableLines: number;
-  canInsertAfter?: boolean;
+  numberOfNewLines: number;
+  insertAfter?: boolean;
 };
 
 type ColRemoveArgs = OperationId<'column-remove'> & {
@@ -67,7 +69,7 @@ type StyleNameArgs = OperationId<'style-name'> & {
 
 type StyleUpdateArgs = OperationId<'style-update'> & {
   selectedCells: CellRange[];
-  style: Style;
+  styleSnippet: Style;
 };
 
 export type BorderLocation =
@@ -96,7 +98,7 @@ export type StyleBorderArgs = OperationId<'style-border'> & {
   borderStyle: BorderStyle;
 };
 
-export type FitOperationArgs =
+export type FitUIOperationArgs =
   | RowHeightArgs
   | RowInsertArgs
   | RowRemoveArgs
@@ -112,6 +114,7 @@ export type FitOperationArgs =
   | CellUnmergeArgs
   | StyleNameArgs
   | StyleUpdateArgs
-  | StyleBorderArgs;
+  | StyleBorderArgs
+  | ColFilterOperationArgs;
 
-export type FitOperationId = FitOperationArgs['id'];
+export type FitUIOperationId = FitUIOperationArgs['id'] | 'style-name-copy';

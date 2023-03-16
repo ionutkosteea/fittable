@@ -11,11 +11,11 @@ import {
   OperationId,
 } from 'fit-core/operations/index.js';
 
-export type MovableLinesDto = { updatableLineRange: unknown; move: number };
+export type MoveLinesDto = { lineRange: unknown; move: number };
 
 export type LineRemoveOperationStepDto = {
-  removableLineRanges: unknown[];
-  movableLineRanges: MovableLinesDto[];
+  lineRanges: unknown[];
+  moveLines: MoveLinesDto[];
 };
 
 abstract class LineRemoveOperationStep implements OperationStep {
@@ -39,7 +39,7 @@ abstract class LineRemoveOperationStep implements OperationStep {
 
   private countSelectedLines(): void {
     this.numberOfSelectedLines = 0;
-    for (const lineRangeDto of this.stepDto.removableLineRanges) {
+    for (const lineRangeDto of this.stepDto.lineRanges) {
       createLineRange4Dto(lineRangeDto).forEachLine(
         () => this.numberOfSelectedLines++
       );
@@ -47,8 +47,8 @@ abstract class LineRemoveOperationStep implements OperationStep {
   }
 
   private removeLines(): void {
-    for (let i = this.stepDto.removableLineRanges.length - 1; i >= 0; i--) {
-      const lineRangeDto: unknown = this.stepDto.removableLineRanges[i];
+    for (let i = this.stepDto.lineRanges.length - 1; i >= 0; i--) {
+      const lineRangeDto: unknown = this.stepDto.lineRanges[i];
       const lineRange: LineRange = createLineRange4Dto(lineRangeDto);
       for (let j = lineRange.getTo(); j >= lineRange.getFrom(); j--) {
         this.removeLine(j);
@@ -57,12 +57,10 @@ abstract class LineRemoveOperationStep implements OperationStep {
   }
 
   private moveLines(): void {
-    for (const movableLine of this.stepDto.movableLineRanges) {
-      createLineRange4Dto(movableLine.updatableLineRange).forEachLine(
-        (lineId) => {
-          this.moveLine(lineId, -1 * movableLine.move);
-        }
-      );
+    for (const movableLine of this.stepDto.moveLines) {
+      createLineRange4Dto(movableLine.lineRange).forEachLine((lineId): void => {
+        this.moveLine(lineId, -1 * movableLine.move);
+      });
     }
   }
 }

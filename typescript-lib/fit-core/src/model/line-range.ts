@@ -1,3 +1,4 @@
+import { MissingFactoryMethodError } from '../common/factory-error.js';
 import { getModelConfig } from './model-config.js';
 
 export interface LineRange {
@@ -28,7 +29,7 @@ export function createLineRange<T extends LineRange>(
 export function createLineRange4Dto<T extends LineRange>(dto: unknown): T {
   const factory: LineRangeFactory = getModelConfig().lineRangeFactory;
   if (factory.createLineRange4Dto) return factory.createLineRange4Dto(dto) as T;
-  else throw new Error('LineRangeFactory.createLineRange4Dto is not defined!');
+  else throw new MissingFactoryMethodError();
 }
 
 export function createLineRangeList4Dto(dtoList: unknown[]): LineRange[] {

@@ -24,14 +24,14 @@ export type StyleRemoveOperationDtoArgs = OperationId<'style-remove'> & {
 
 export class StyleRemoveOperationDtoBuilder {
   public readonly styleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
     cellStyleNames: [],
   };
   public readonly undoStyleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
@@ -78,8 +78,8 @@ export class StyleRemoveOperationDtoBuilder {
       this.args.selectedCells
     );
     styleNameMap.forEach((styleName: string, address: CellRange[]): void => {
-      const updatableCellRanges: unknown[] = createDto4CellRangeList(address);
-      this.styleStepDto.cellStyleNames.push({ updatableCellRanges });
+      const cellRanges: unknown[] = createDto4CellRangeList(address);
+      this.styleStepDto.cellStyleNames.push({ cellRanges });
       const numOfAllCells: number = allCellsCnt.get(styleName) ?? 0;
       const numOfSelectedCells: number = selectedCellsCnt.get(styleName) ?? 0;
       if (numOfAllCells === numOfSelectedCells) {
@@ -93,7 +93,7 @@ export class StyleRemoveOperationDtoBuilder {
   ): void {
     styleNameMap.forEach((styleName: string, address: CellRange[]): void => {
       this.undoStyleStepDto.cellStyleNames.push({
-        updatableCellRanges: createDto4CellRangeList(address),
+        cellRanges: createDto4CellRangeList(address),
         styleName,
       });
     });

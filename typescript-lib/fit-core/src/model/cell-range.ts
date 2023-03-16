@@ -1,3 +1,4 @@
+import { MissingFactoryMethodError } from '../common/factory-error.js';
 import { CellCoord } from './cell-coord.js';
 import { getModelConfig } from './model-config.js';
 
@@ -28,7 +29,7 @@ export function createCellRange<T extends CellRange>(
 export function createCellRange4Dto<T extends CellRange>(dto: unknown): T {
   const factory: CellRangeFactory = getModelConfig().cellRangeFactory;
   if (factory.createCellRange4Dto) return factory.createCellRange4Dto(dto) as T;
-  else throw new Error('CellRangeFactory.createCellRange4Dto is not defined!');
+  else throw new MissingFactoryMethodError();
 }
 
 export function createCellRangeList4Dto(dtoList: unknown[]): CellRange[] {

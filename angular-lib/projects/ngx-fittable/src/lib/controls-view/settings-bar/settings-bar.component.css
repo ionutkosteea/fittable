@@ -1,5 +1,5 @@
 .settings-bar {
-  position:absolute;
+  position: absolute;
   top: 9px;
   right: 0px;
   padding: 4px;
@@ -9,4 +9,5 @@
   border-bottom-left-radius: 6px;
   border-top-left-radius: 6px;
   background-color: var(--toolbar-background-color);
+  z-index: 10;
 }

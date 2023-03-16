@@ -1,41 +1,42 @@
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import { CellRange } from 'fit-core/model/cell-range.js';
+import { implementsTKeys } from 'fit-core/common/index.js';
 import {
-  TableScroller,
+  ScrollContainer,
   CellEditor,
   CellSelection,
   Container,
-  Control,
   FocusableObject,
   Window,
-  Statusbar,
+  ColFilters,
+  Control,
+  asOptionsControl,
 } from 'fit-core/view-model/index.js';
 
-import { StyleCombo } from '../controls/toolbar/controls/common/style-combo.js';
-import { StylePushButton } from '../controls/toolbar/controls/common/style-push-button.js';
-import { FontSizeInput } from '../controls/toolbar/controls/font-size-input.js';
-import { PaintFormatButton } from '../controls/toolbar/controls/paint-format-button.js';
+import { ControlUpdater } from '../toolbar/controls/common/control-updater.js';
+import { FitSettingsBarControlId } from '../settings-bar/fit-settings-bar-factory.js';
 
 export type ViewModelSubscriptionsArgs = {
-  tableScroller: TableScroller;
+  tableScroller: ScrollContainer;
   cellEditor?: CellEditor;
   cellSelection?: CellSelection;
+  settingsBar?: Container;
   toolbar?: Container;
   contextMenu?: Window;
-  statusbar?: Statusbar;
+  colFilters?: ColFilters;
 };
 
 export class ViewModelSubscriptions {
-  private readonly subscriptions: Subscription[] = [];
+  private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
   constructor(private args: ViewModelSubscriptionsArgs) {}
 
   public init(): void {
     window?.addEventListener('resize', this.onWindowResize);
+    window?.addEventListener('keydown', this.onWindowKeyDown);
     this.updateToolbarByCellSelection();
     this.focusActiveObject();
-    this.focusBodySelectionOnCellEditorFocusOut();
+    this.focusBodyOnCellEditorMove();
     this.hideCellEditorOnFocusHeader();
   }
 
@@ -43,45 +44,46 @@ export class ViewModelSubscriptions {
     this.args.tableScroller
       .resizeViewportHeight()
       .resizeViewportWidth()
-      .renderTable();
+      .renderModel();
+  };
+
+  private onWindowKeyDown = (event: KeyboardEvent): void => {
+    if (event.key.toUpperCase() === 'F' && event.metaKey) {
+      for (const obj of this.getFocusableObjects()) {
+        obj.setFocus(false, true);
+      }
+    }
   };
 
   private updateToolbarByCellSelection(): void {
-    const afterCellSelection$: Subject<CellRange[]> = new Subject();
-    this.args.cellSelection?.body.addOnEnd$(afterCellSelection$);
-    this.args.toolbar?.getControls().forEach((control: Control): void => {
-      if (
-        control instanceof StyleCombo ||
-        control instanceof StylePushButton ||
-        control instanceof FontSizeInput ||
-        control instanceof PaintFormatButton
-      ) {
-        const subscription: Subscription = afterCellSelection$.subscribe(
-          (): void => control.updateByCellSelection()
-        );
-        this.subscriptions.push(subscription);
+    for (const control of this.args.toolbar?.getControls() ?? []) {
+      if (implementsTKeys<ControlUpdater>(control, ['updateByCellSelection'])) {
+        const subscription: Subscription | undefined =
+          this.args.cellSelection?.body
+            .onEnd$()
+            .subscribe((): void => control.updateByCellSelection());
+        this.subscriptions.add(subscription);
       }
-    });
+    }
   }
 
   private focusActiveObject(): void {
-    this.getFocusableObjects().forEach((obj) => {
-      this.subscriptions.push(this.createFocusSubscription(obj));
+    this.getFocusableObjects().forEach((obj: FocusableObject): void => {
+      this.subscriptions.add(this.focusOutOthers$(obj));
     });
   }
 
-  private createFocusSubscription(object: FocusableObject): Subscription {
+  private focusOutOthers$(object: FocusableObject): Subscription {
     let other: FocusableObject[] = this.getFocusableObjects();
     const subscription: Subscription = this.ifObjectIsFocusedFocusOutOthers$(
       object,
-      other.filter((obj) => obj !== object)
+      other.filter((obj: FocusableObject): boolean => obj !== object)
     );
     return subscription;
   }
 
   private getFocusableObjects(): FocusableObject[] {
     const objects: FocusableObject[] = [];
-    this.args.toolbar && objects.push(this.args.toolbar);
     this.args.contextMenu && objects.push(this.args.contextMenu);
     this.args.cellEditor && objects.push(this.args.cellEditor);
     this.args.cellSelection?.body && objects.push(this.args.cellSelection.body);
@@ -91,8 +93,18 @@ export class ViewModelSubscriptions {
       objects.push(this.args.cellSelection.colHeader);
     this.args.cellSelection?.pageHeader &&
       objects.push(this.args.cellSelection.pageHeader);
-    this.args.statusbar && objects.push(this.args.statusbar);
+    this.args.colFilters &&
+      objects.push(this.args.colFilters.getPopUpButton(0).getWindow());
+    const settingsWindow: Window | undefined = this.getSettingsWindow();
+    settingsWindow && objects.push(settingsWindow);
     return objects;
+  }
+
+  private getSettingsWindow(): Window | undefined {
+    if (!this.args.settingsBar) return undefined;
+    const id: FitSettingsBarControlId = 'settings-button';
+    const control: Control = this.args.settingsBar.getControl(id);
+    return asOptionsControl(control)?.getWindow();
   }
 
   private ifObjectIsFocusedFocusOutOthers$(
@@ -101,17 +113,21 @@ export class ViewModelSubscriptions {
   ): Subscription {
     return object.onAfterSetFocus$().subscribe((focus: boolean): void => {
       if (!focus) return;
-      others.forEach((o: FocusableObject) => o.setFocus(false, true));
+      others.forEach((o: FocusableObject): void => {
+        o.hasFocus() && o.setFocus(false, true);
+      });
     });
   }
 
-  private focusBodySelectionOnCellEditorFocusOut(): void {
+  private focusBodyOnCellEditorMove(): void {
     const subscription: Subscription | undefined = this.args.cellEditor
-      ?.onAfterSetFocus$()
-      .subscribe((focus: boolean): void => {
-        if (!focus) this.args.cellSelection?.body.setFocus(true, true);
+      ?.onAfterSetCell$()
+      .subscribe((): void => {
+        this.args.cellEditor?.hasFocus() &&
+          !this.args.cellSelection?.body.hasFocus() &&
+          this.args.cellSelection?.body.setFocus(true);
       });
-    subscription && this.subscriptions.push(subscription);
+    this.subscriptions.add(subscription);
   }
 
   private hideCellEditorOnFocusHeader(): void {
@@ -121,23 +137,20 @@ export class ViewModelSubscriptions {
       this.args.cellSelection?.pageHeader,
     ];
     for (const obj of focusableObjects) {
-      const subscription: Subscription | undefined =
-        this.createHeaderFocusSubscription(obj);
-      subscription && this.subscriptions.push(subscription);
+      this.subscriptions.add(this.createHeaderFocus$(obj));
     }
   }
 
-  private createHeaderFocusSubscription(
+  private createHeaderFocus$(
     header?: FocusableObject
   ): Subscription | undefined {
     return header?.onAfterSetFocus$().subscribe((focus: boolean): void => {
-      if (!focus) return;
-      this.args.cellEditor?.setVisible(false);
+      focus && this.args.cellEditor?.setVisible(false);
     });
   }
 
   public destroy(): void {
     window?.removeEventListener('resize', this.onWindowResize);
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+    this.subscriptions.forEach((s?: Subscription): void => s?.unsubscribe());
   }
 }

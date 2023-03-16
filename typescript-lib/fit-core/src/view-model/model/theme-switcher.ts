@@ -1,3 +1,4 @@
+import { MissingFactoryError } from '../../common/factory-error.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { Images, ImageRegistry } from './image-registry.js';
 
@@ -28,6 +29,6 @@ export function createThemeSwitcher(
   if (factory) {
     return factory.createThemeSwitcher(imageRegistry);
   } else {
-    throw new Error('ThemeSwitcherFactory is not defined!');
+    throw new MissingFactoryError();
   }
 }

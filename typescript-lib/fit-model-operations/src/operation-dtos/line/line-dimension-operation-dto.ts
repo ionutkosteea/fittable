@@ -70,7 +70,7 @@ abstract class LineDimensionOperationDtoBuilder {
   private updateLineDimensions(): void {
     const lineRanges: LineRange[] = this.oldLineDimensions.getAllAddresses();
     this.dimensionsDto.push({
-      updatableLineRanges: createDto4LineRangeList(lineRanges),
+      lineRanges: createDto4LineRangeList(lineRanges),
       dimension: this.args.dimension,
     });
   }
@@ -81,7 +81,7 @@ abstract class LineDimensionOperationDtoBuilder {
         lineRanges &&
           this.undoDimensionsDto.push({
             dimension,
-            updatableLineRanges: createDto4LineRangeList(lineRanges),
+            lineRanges: createDto4LineRangeList(lineRanges),
           });
       }
     );

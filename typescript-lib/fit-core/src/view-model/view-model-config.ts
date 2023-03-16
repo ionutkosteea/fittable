@@ -5,23 +5,22 @@ import {
   CellSelectionFactory,
   CellSelectionPainterFactory,
 } from './model/cell-selection.js';
-import {
-  ContextMenuFactory,
-  SettingsBarFactory,
-  StatusbarFactory,
-  ToolbarFactory,
-} from './model/controls.js';
 import { ViewModelFactory } from './model/view-model.js';
 import { CellEditorListenerFactory } from './host-listeners/cell-editor-listener.js';
 import { CellSelectionListenerFactory } from './host-listeners/cell-selection-listener.js';
 import { WindowListenerFactory } from './host-listeners/window-listener.js';
-import { TableScrollerListenerFactory } from './host-listeners/table-scroller-listener.js';
-import { HostListenersFactory } from './host-listeners/host-listeners.js';
-import { TableScrollerFactory } from './model/table-scroller.js';
+import { ScrollContainerListenerFactory } from './host-listeners/scroll-container-listener.js';
+import { ScrollContainerFactory } from './model/scroll-container.js';
 import { InputControlListenerFactory } from './host-listeners/input-control-listener.js';
 import { CellSelectionScrollerFactory } from './model/cell-selection-scroller.js';
 import { TableViewerFactory } from './model/table-viewer.js';
 import { ThemeSwitcherFactory } from './model/theme-switcher.js';
+import { ColFiltersFactory } from './model/col-filters.js';
+import { ContextMenuFactory } from './model/context-menu.js';
+import { ToolbarFactory } from './model/toolbar.js';
+import { SettingsBarFactory } from './model/settings-bar.js';
+import { StatusbarFactory } from './model/statusbar.js';
+import { MobileLayoutFactory } from './model/mobile-layout.js';
 
 export type Option = { label: string; value?: string };
 
@@ -31,8 +30,8 @@ export interface ViewModelConfig {
   fontSize: number;
   colorPalette?: Option[];
   fontFamily?: Option[];
-  getRowHeaderText?: (rowId: number) => string | number;
-  getColHeaderText?: (colId: number) => string | number;
+  rowHeaderTextFn?: (rowId: number) => string | number;
+  colHeaderTextFn?: (colId: number) => string | number;
   rowHeaderWidth?: number;
   colHeaderHeight?: number;
   disableVirtualRows?: boolean;
@@ -40,8 +39,9 @@ export interface ViewModelConfig {
   viewModelFactory: ViewModelFactory;
   languageDictionaryFactory: LanguageDictionaryFactory;
   imageRegistryFactory: ImageRegistryFactory;
-  tableScrollerFactory: TableScrollerFactory;
+  scrollContainerFactory: ScrollContainerFactory;
   tableViewerFactory: TableViewerFactory;
+  mobileLayoutFactory: MobileLayoutFactory;
   cellSelectionScrollerFactory?: CellSelectionScrollerFactory;
   cellEditorFactory?: CellEditorFactory;
   cellSelectionFactory?: CellSelectionFactory;
@@ -51,8 +51,8 @@ export interface ViewModelConfig {
   toolbarFactory?: ToolbarFactory;
   settingsBarFactory?: SettingsBarFactory;
   statusbarFactory?: StatusbarFactory;
-  hostListenersFactory: HostListenersFactory;
-  tableScrollerListenerFactory: TableScrollerListenerFactory;
+  colFiltersFactory?: ColFiltersFactory;
+  scrollContainerListenerFactory: ScrollContainerListenerFactory;
   cellEditorListenerFactory?: CellEditorListenerFactory;
   cellSelectionListenerFactory?: CellSelectionListenerFactory;
   windowListenerFactory?: WindowListenerFactory;

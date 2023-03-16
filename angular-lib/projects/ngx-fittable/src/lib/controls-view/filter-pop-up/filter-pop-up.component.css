@@ -1,0 +1,122 @@
+.pop-up-button {
+  position: absolute;
+  top: 5px;
+  right: 2px;
+  width: 12px;
+  height: 8px;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.window {
+  -webkit-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  border-left: 1px solid var(--context-menu-border-color);
+  border-top: 1px solid var(--context-menu-border-color);
+  background-color: var(--context-menu-background-color);
+  color: var(--context-menu-color);
+  position: fixed;
+  left: 0px;
+  top: 21px;
+  padding: 10px;
+  text-align: left;
+  display: none;
+  z-index: 15;
+}
+
+.label {
+  font-size: 12px;
+}
+
+.search-input {
+  color: var(--context-menu-color);
+  background-color: var(--context-menu-background-color);
+  border: 1px solid var(--context-menu-border-color);
+  margin: 0px;
+  padding: 2px;
+  width: calc(100% - 2px - 4px);
+  border-radius: 4px;
+  font-size: 14px;
+  background-position: bottom 4px right 4px;
+  background-repeat: no-repeat;
+  background-size: 12px;
+}
+
+.value-button-bar {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+.value-button {
+  background-color: var(--context-menu-background-color);
+  border: 1px solid var(--context-menu-border-color);
+  color: var(--context-menu-color);
+  margin-left: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.value-button:active {
+  border-color: var(--context-menu-background-color);
+}
+
+.scroller {
+  position: relative;
+  height: 100px;
+  overflow: scroll;
+  margin: 0px;
+  padding: 0px;
+  scroll-behavior: smooth;
+  background-color: var(--scrollbar-background-color);
+}
+
+.check-list-container {
+  position: relative;
+  margin: 0px;
+  padding: 0px;
+  background-color: var(--context-menu-background-color);
+}
+
+.check-list {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+}
+
+.check-item {
+  position: relative;
+  font-size: 12px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.check-item label {
+  cursor: pointer;
+}
+
+.check-item:hover {
+  background-color: var(--context-menu-background-hover-color);
+}
+
+.button-bar {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.action-button {
+  -webkit-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
+  background-color: var(--highlight-color);
+  color: white;
+  border: none;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 4px;
+  cursor: pointer;
+}

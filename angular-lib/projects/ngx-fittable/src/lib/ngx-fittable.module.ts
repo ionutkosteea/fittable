@@ -6,7 +6,7 @@ import { TableTopComponent } from './table-view/table-top/table-top.component';
 import { TableLeftComponent } from './table-view/table-left/table-left.component';
 import { TableCenterComponent } from './table-view/table-center/table-center.component';
 import { TableViewComponent } from './table-view/table-view.component';
-import { TableScrollerDirective } from './table-view/common/table-scroller.directive';
+import { ScrollContainerDirective } from './table-view/common/scroll-container.directive';
 import { CellSelectionDirective } from './table-view/common/cell-selection.directive';
 import { ToolbarComponent } from './controls-view/toolbar/toolbar.component';
 import { ButtonComponent } from './controls-view/button/button.component';
@@ -16,13 +16,17 @@ import { PopUpButtonComponent } from './controls-view/pop-up-button/pop-up-butto
 import { ColorPickerComponent } from './controls-view/color-picker/color-picker.component';
 import { ContextMenuComponent } from './controls-view/context-menu/context-menu.component';
 import { MenuItemComponent } from './controls-view/context-menu/menu-item/menu-item.component';
-import { BorderPopUpButtonComponent } from './controls-view/border-pop-up-botton/border-pop-up-button.component';
-import { BorderTypeComponent } from './controls-view/border-pop-up-botton/border-type/border-type.component';
+import { BorderPopUpButtonComponent } from './controls-view/border-pop-up/border-pop-up.component';
+import { BorderTypeComponent } from './controls-view/border-pop-up/border-type/border-type.component';
 import { StatusbarComponent } from './controls-view/statusbar/statusbar.component';
 import { CellEditorOpenDirective } from './controls-view/cell-editor/cell-editor.directive';
 import { CellEditorComponent } from './controls-view/cell-editor/cell-editor.component';
 import { SettingsBarComponent } from './controls-view/settings-bar/settings-bar.component';
 import { SettingsButtonComponent } from './controls-view/settings-bar/settings-button/settings-button.component';
+import {
+  FilterPopupButtonComponent,
+  FilterPopupWindowComponent,
+} from './controls-view/filter-pop-up/filter-pop-up.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,7 @@ import { SettingsButtonComponent } from './controls-view/settings-bar/settings-b
     TableLeftComponent,
     TableCenterComponent,
     TableViewComponent,
-    TableScrollerDirective,
+    ScrollContainerDirective,
     CellSelectionDirective,
     ToolbarComponent,
     ButtonComponent,
@@ -48,6 +52,8 @@ import { SettingsButtonComponent } from './controls-view/settings-bar/settings-b
     CellEditorComponent,
     SettingsBarComponent,
     SettingsButtonComponent,
+    FilterPopupButtonComponent,
+    FilterPopupWindowComponent,
   ],
   imports: [CommonModule],
   providers: [],

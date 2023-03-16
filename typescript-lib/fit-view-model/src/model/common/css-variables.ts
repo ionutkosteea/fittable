@@ -2,7 +2,6 @@ import { CssVariables } from 'fit-core/view-model/index.js';
 
 export type FitCssColorVariable =
   | '--highlight-color'
-  | '--disabled-color'
   | '--toolbar-background-color'
   | '--toolbar-background-hover-color'
   | '--toolbar-color'
@@ -36,7 +35,6 @@ export type FitCssColorVariables = { [name in FitCssColorVariable]: string };
 
 export const FIT_CSS_COLOR_VARIABLES: FitCssColorVariables = {
   '--highlight-color': '#2987d6',
-  '--disabled-color': '#b7b7b7',
   '--toolbar-background-color': '#ffffff',
   '--toolbar-background-hover-color': 'rgba(96, 96, 96, 0.1)',
   '--toolbar-color': '#606060',

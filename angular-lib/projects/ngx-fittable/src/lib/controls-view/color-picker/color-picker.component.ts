@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import {
   Component,
   Input,
@@ -10,16 +10,18 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
-import { Value } from 'fit-core/model';
+import { Value, CssStyle } from 'fit-core/model';
 import {
   OptionsControl,
   Control,
   ValueControl,
   asValueControl,
   WindowListener,
+  createWindowListener,
 } from 'fit-core/view-model';
 
 import { OptionsComponent } from '../common/options-component.model';
+import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
   selector: 'fit-color-picker',
@@ -31,14 +33,15 @@ export class ColorPickerComponent
   implements AfterViewInit, OnDestroy
 {
   @Input() override model!: OptionsControl;
-  @Input() override windowListener!: WindowListener;
   @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('colorPicker') colorPickerRef!: ElementRef;
 
+  protected override windowListener!: WindowListener;
   private numberDefaultOfColors = 0;
   private readonly subscriptions: Subscription[] = [];
 
   public ngAfterViewInit(): void {
+    this.windowListener = createWindowListener(this.model.getWindow());
     this.numberDefaultOfColors = this.model.getWindow().getControlIds().length;
     this.subscriptions.push(this.onWindowSetVisible$());
   }
@@ -48,6 +51,13 @@ export class ColorPickerComponent
       .getWindow()
       .onAfterSetFocus$()
       .subscribe((focus: boolean): void => this.isVisibleEvent.emit(focus));
+  }
+
+  public getButtonStyle(): CssStyle {
+    const style: CssStyle = createToggleStyle(this.model);
+    style['background-image'] = this.getIcon();
+    style['background-repeat'] = 'no-repeat';
+    return style;
   }
 
   public readonly getColorNoneId = (): string => this.getOptionIds()[0];
@@ -83,9 +93,11 @@ export class ColorPickerComponent
         getLabel = () => customColor;
         getValue = () => customColor;
         setValue = () => this;
+        onSetValue$ = () => new Observable<Value | undefined>();
         isValid = () => true;
         getIcon = () => undefined;
         getType = () => undefined;
+        isDisabled = () => false;
         run = () => {};
       })()
     );

@@ -24,7 +24,6 @@ import {
 
 import { CellRangeAddressObjects } from '../../utils/cell/cell-range-address-objects.js';
 import { LineRangeAddressObjects } from '../../utils/line/line-range-address-objects.js';
-
 import {
   TableLinesHelper,
   TableRowsHelper,
@@ -34,10 +33,9 @@ import {
   countAllCellStyleNames,
   countSelectedCellStyleNames,
 } from '../../utils/style/style-functions.js';
-
 import {
   LineRemoveOperationStepDto,
-  MovableLinesDto,
+  MoveLinesDto,
   RowRemoveOperationStepDto,
   ColRemoveOperationStepDto,
 } from '../../operation-steps/line/line-remove-operation-step.js';
@@ -47,7 +45,6 @@ import {
   ColWidthOperationStepDto,
   DimensionDto,
 } from '../../operation-steps/line/line-dimension-operation-step.js';
-
 import {
   LineInsertOperationStepDto,
   RowInsertOperationStepDto,
@@ -67,11 +64,11 @@ type LineRemoveOperationDtoArgs = {
 
 abstract class LineRemoveOperationDtoBuilder {
   protected lineRemoveStepDto: LineRemoveOperationStepDto = {
-    removableLineRanges: [],
-    movableLineRanges: [],
+    lineRanges: [],
+    moveLines: [],
   };
   protected styleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     cellStyleNames: [],
     createStyles: [],
     updateStyles: [],
@@ -85,8 +82,8 @@ abstract class LineRemoveOperationDtoBuilder {
   };
   protected undoLineInsertStepDto: LineInsertOperationStepDto = {
     numberOfNewLines: 0,
-    selectedLineRanges: [],
-    movableLines: [],
+    lineRanges: [],
+    moveLines: [],
   };
   protected undoLineDimensionStepDto: LineDimensionOperationStepDto = {
     dimensions: [],
@@ -96,7 +93,7 @@ abstract class LineRemoveOperationDtoBuilder {
     values: [],
   };
   protected undoStyleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     cellStyleNames: [],
     createStyles: [],
     updateStyles: [],
@@ -151,17 +148,16 @@ abstract class LineRemoveOperationDtoBuilder {
   }
 
   private removeLines(): void {
-    this.lineRemoveStepDto.removableLineRanges = createDto4LineRangeList(
+    this.lineRemoveStepDto.lineRanges = createDto4LineRangeList(
       this.args.selectedLines
     );
   }
 
   private moveLines(): void {
-    const movableLinesDto: MovableLinesDto[] = [];
-    const removableLinesDto: unknown[] =
-      this.lineRemoveStepDto.removableLineRanges;
+    const moveLinesDto: MoveLinesDto[] = [];
+    const removeLineRangesDto: unknown[] = this.lineRemoveStepDto.lineRanges;
     const removableLines: LineRange[] =
-      createLineRangeList4Dto(removableLinesDto);
+      createLineRangeList4Dto(removeLineRangesDto);
     const sortedLines: LineRange[] = this.sortLineRanges(removableLines);
     const numberOfLines: number = this.getTableLinesHelper().getNumberOfLines();
     let move = 0;
@@ -169,27 +165,27 @@ abstract class LineRemoveOperationDtoBuilder {
       move += sortedLines[i].getNumberOfLines();
       const from: number = sortedLines[i].getTo() + 1;
       if (from < numberOfLines) {
-        const updatableLineRange: unknown = createLineRange(from).getDto();
-        movableLinesDto.push({ updatableLineRange, move });
+        const lineRangeDto: unknown = createLineRange(from).getDto();
+        moveLinesDto.push({ lineRange: lineRangeDto, move });
       }
       if (i > 0) {
-        const lineRangeDto: unknown = movableLinesDto[i - 1].updatableLineRange;
+        const lineRangeDto: unknown = moveLinesDto[i - 1].lineRange;
         const to: number = sortedLines[i].getFrom() - 1;
         const lineRange: LineRange =
           createLineRange4Dto(lineRangeDto).setTo(to);
-        movableLinesDto[i - 1].updatableLineRange = lineRange.getDto();
+        moveLinesDto[i - 1].lineRange = lineRange.getDto();
       }
     }
-    if (movableLinesDto.length > 0) {
-      const n: number = movableLinesDto.length - 1;
-      const lineRangeDto: unknown = movableLinesDto[n].updatableLineRange;
+    if (moveLinesDto.length > 0) {
+      const n: number = moveLinesDto.length - 1;
+      const lineRangeDto: unknown = moveLinesDto[n].lineRange;
       const lineRange: LineRange = createLineRange4Dto(lineRangeDto);
       if (lineRange.getTo() === lineRange.getFrom()) {
         lineRange.setTo(numberOfLines - 1);
-        movableLinesDto[n].updatableLineRange = lineRange.getDto();
+        moveLinesDto[n].lineRange = lineRange.getDto();
       }
     }
-    this.lineRemoveStepDto.movableLineRanges = movableLinesDto;
+    this.lineRemoveStepDto.moveLines = moveLinesDto;
   }
 
   private sortLineRanges(lineRanges: LineRange[]): LineRange[] {
@@ -207,7 +203,7 @@ abstract class LineRemoveOperationDtoBuilder {
     const allCellsCnt: Map<string, number> = countAllCellStyleNames(sTable);
     const selectedCellsCnt: Map<string, number> = countSelectedCellStyleNames(
       sTable,
-      createCellRangeList4Dto(this.getUpdatableCellRangesDto())
+      createCellRangeList4Dto(this.getCellRangeDtos())
     );
     selectedCellsCnt.forEach(
       (numOfSelectedCells: number, styleName: string) => {
@@ -222,14 +218,14 @@ abstract class LineRemoveOperationDtoBuilder {
     return this.table as Table & TableStyles;
   }
 
-  private getUpdatableCellRangesDto(): unknown[] {
-    const updatableCellRangesDto: unknown[] = [];
+  private getCellRangeDtos(): unknown[] {
+    const cellRangeDtos: unknown[] = [];
     for (const cellStyleNames of this.undoStyleStepDto.cellStyleNames) {
-      cellStyleNames.updatableCellRanges.forEach((cellRangeDto: unknown) =>
-        updatableCellRangesDto.push(cellRangeDto)
-      );
+      cellStyleNames.cellRanges.forEach((cellRangeDto: unknown): void => {
+        cellRangeDtos.push(cellRangeDto);
+      });
     }
-    return updatableCellRangesDto;
+    return cellRangeDtos;
   }
 
   protected undo(): void {
@@ -242,36 +238,39 @@ abstract class LineRemoveOperationDtoBuilder {
   private undoLineDimensions(): void {
     const oldDimensions: LineRangeAddressObjects<number> =
       new LineRangeAddressObjects();
-    for (const lineRangesDto of this.lineRemoveStepDto.removableLineRanges) {
-      createLineRange4Dto(lineRangesDto).forEachLine((lineId: number) => {
+    for (const lineRangesDto of this.lineRemoveStepDto.lineRanges) {
+      createLineRange4Dto(lineRangesDto).forEachLine((lineId: number): void => {
         const helper: TableLinesHelper = this.getTableLinesHelper();
         const dimension: number | undefined = helper.getDimension(lineId);
         dimension && oldDimensions.set(dimension, createLineRange(lineId));
       });
     }
-    oldDimensions.forEach((dimension: number, lineRanges?: LineRange[]) => {
-      if (lineRanges) {
-        const updatableLineRanges: unknown[] =
-          createDto4LineRangeList(lineRanges);
-        const dimensionDto: DimensionDto = { updatableLineRanges, dimension };
-        this.undoLineDimensionStepDto.dimensions.push(dimensionDto);
+    oldDimensions.forEach(
+      (dimension: number, lineRanges?: LineRange[]): void => {
+        if (lineRanges) {
+          const updatableLineRanges: unknown[] =
+            createDto4LineRangeList(lineRanges);
+          const dimensionDto: DimensionDto = {
+            lineRanges: updatableLineRanges,
+            dimension,
+          };
+          this.undoLineDimensionStepDto.dimensions.push(dimensionDto);
+        }
       }
-    });
+    );
   }
 
   private undoRemovedLines(): void {
     this.undoLineInsertStepDto.numberOfNewLines = 1;
-    this.undoLineInsertStepDto.selectedLineRanges =
-      this.lineRemoveStepDto.removableLineRanges;
-    this.lineRemoveStepDto.movableLineRanges.forEach(
-      (movableLines: MovableLinesDto) => {
-        const lineRange: LineRange = createLineRange4Dto(
-          movableLines.updatableLineRange
-        );
+    this.undoLineInsertStepDto.lineRanges = this.lineRemoveStepDto.lineRanges;
+    this.lineRemoveStepDto.moveLines.forEach(
+      (movableLines: MoveLinesDto): void => {
+        const lineRange: LineRange = //
+          createLineRange4Dto(movableLines.lineRange);
         const from: number = lineRange.getFrom() - movableLines.move;
         const to: number = lineRange.getTo() - movableLines.move;
-        this.undoLineInsertStepDto.movableLines.push({
-          updatableLineRange: createLineRange(from, to).getDto(),
+        this.undoLineInsertStepDto.moveLines.push({
+          lineRange: createLineRange(from, to).getDto(),
           move: movableLines.move,
         });
       }
@@ -281,8 +280,8 @@ abstract class LineRemoveOperationDtoBuilder {
   private undoCellValues(): void {
     const oldValues: CellRangeAddressObjects<Value | undefined> =
       new CellRangeAddressObjects();
-    this.lineRemoveStepDto.removableLineRanges.forEach(
-      (removableLineRange: unknown) => {
+    this.lineRemoveStepDto.lineRanges.forEach(
+      (removableLineRange: unknown): void => {
         this.getTableLinesHelper().forEachLineCell(
           createLineRange4Dto(removableLineRange),
           (rowId: number, colId: number): void => {
@@ -293,10 +292,12 @@ abstract class LineRemoveOperationDtoBuilder {
         );
       }
     );
-    oldValues.forEach((value: Value | undefined, address: CellRange[]) => {
-      const updatableCellRanges: unknown[] = createDto4CellRangeList(address);
-      this.undoCellValueStepDto.values.push({ updatableCellRanges, value });
-    });
+    oldValues.forEach(
+      (value: Value | undefined, address: CellRange[]): void => {
+        const cellRanges: unknown[] = createDto4CellRangeList(address);
+        this.undoCellValueStepDto.values.push({ cellRanges, value });
+      }
+    );
   }
 
   private undoStyles(): void {
@@ -307,7 +308,7 @@ abstract class LineRemoveOperationDtoBuilder {
   private undoRemovedCellStyleNames(): void {
     const oldStyleNames: CellRangeAddressObjects<string> =
       new CellRangeAddressObjects();
-    this.lineRemoveStepDto.removableLineRanges.forEach(
+    this.lineRemoveStepDto.lineRanges.forEach(
       (removableLineRange: unknown): void => {
         this.getTableLinesHelper().forEachLineCell(
           createLineRange4Dto(removableLineRange),
@@ -321,7 +322,7 @@ abstract class LineRemoveOperationDtoBuilder {
     );
     oldStyleNames.forEach((styleName: string, address: CellRange[]) => {
       this.undoStyleStepDto.cellStyleNames.push({
-        updatableCellRanges: createDto4CellRangeList(address),
+        cellRanges: createDto4CellRangeList(address),
         styleName,
       });
     });
@@ -340,7 +341,7 @@ abstract class LineRemoveOperationDtoBuilder {
   }
 
   protected updateMergedRegions(): void {
-    this.mergedRegionsTable?.forEachRegion(
+    this.mergedRegionsTable?.forEachMergedCell(
       (rowId: number, colId: number): void => {
         const regionFrom: number = this.getRegionLineId(rowId, colId);
         const lineSpan: number = this.getLineSpan(rowId, colId);

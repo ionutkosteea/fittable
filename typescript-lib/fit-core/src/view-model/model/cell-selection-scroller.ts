@@ -1,5 +1,6 @@
+import { MissingFactoryError } from '../../common/factory-error.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { TableScroller } from './table-scroller.js';
+import { ScrollContainer } from './scroll-container.js';
 import { TableViewer } from './table-viewer.js';
 
 export type ScrollDirection = 'Left' | 'Up' | 'Right' | 'Down';
@@ -14,17 +15,17 @@ export interface CellSelectionScroller {
 export interface CellSelectionScrollerFactory {
   createCellSelectionScroller(
     tableViewer: TableViewer,
-    tableScroller: TableScroller
+    tableScroller: ScrollContainer
   ): CellSelectionScroller;
 }
 
 export function createCellSelectionScroller(
   tableViewer: TableViewer,
-  tableScroller: TableScroller
+  tableScroller: ScrollContainer
 ): CellSelectionScroller {
   const factory: CellSelectionScrollerFactory | undefined =
     getViewModelConfig().cellSelectionScrollerFactory;
   if (factory)
     return factory.createCellSelectionScroller(tableViewer, tableScroller);
-  else throw new Error('CellSelectionScrollerFactory is not defined!');
+  else throw new MissingFactoryError();
 }

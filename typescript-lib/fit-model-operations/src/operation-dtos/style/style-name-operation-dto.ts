@@ -22,14 +22,14 @@ export type StyleNameOperationDtoArgs = OperationId<'style-name'> & {
 
 export class StyleNameOperationDtoBuilder {
   public readonly styleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
     cellStyleNames: [],
   };
   public readonly undoStyleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
@@ -72,13 +72,13 @@ export class StyleNameOperationDtoBuilder {
   private updateCellStyleNames(): void {
     const cellRanges: CellRange[] = this.oldStyleNames.getAllAddresses();
     this.styleStepDto.cellStyleNames.push({
-      updatableCellRanges: createDto4CellRangeList(cellRanges),
+      cellRanges: createDto4CellRangeList(cellRanges),
       styleName: this.args.styleName,
     });
     this.oldStyleNames.forEach(
       (styleName: string | undefined, address: CellRange[]) => {
         this.undoStyleStepDto.cellStyleNames.push({
-          updatableCellRanges: createDto4CellRangeList(address),
+          cellRanges: createDto4CellRangeList(address),
           styleName,
         });
       }

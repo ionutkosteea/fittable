@@ -1,17 +1,14 @@
 import { Observable } from 'rxjs';
 
-import { CellCoord } from '../../model/cell-coord.js';
+import { MissingFactoryError } from '../../common/factory-error.js';
 import { CellRange } from '../../model/cell-range.js';
 import { CellEditor } from '../model/cell-editor.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { FitEvent, FitKeyboardEvent, FitMouseEvent } from './custom-events.js';
 
 export interface CellEditorListener {
-  setCellEditor(cellEditor: CellEditor): this;
-  getCellEditor(): CellEditor;
-  setSelectedCells(selectedCellsFn: () => CellRange[]): this;
-  onShow(cellCoord: CellCoord, event?: FitEvent): void;
-  onInit(): void;
+  readonly cellEditor: CellEditor;
+  onShow(event: FitEvent): void;
   onMouseEnter(event?: FitMouseEvent): void;
   onMouseDown(event?: FitMouseEvent): void;
   onGlobalMouseDown(event?: FitMouseEvent): void;
@@ -23,15 +20,21 @@ export interface CellEditorListener {
 }
 
 export interface CellEditorListenerFactory {
-  createCellEditorListener(): CellEditorListener;
+  createCellEditorListener(
+    cellEditor: CellEditor,
+    selectedCellsFn: () => CellRange[]
+  ): CellEditorListener;
 }
 
-export function createCellEditorListener(): CellEditorListener {
+export function createCellEditorListener(
+  cellEditor: CellEditor,
+  selectedCellsFn: () => CellRange[]
+): CellEditorListener {
   const factory: CellEditorListenerFactory | undefined =
     getViewModelConfig().cellEditorListenerFactory;
   if (factory) {
-    return factory.createCellEditorListener();
+    return factory.createCellEditorListener(cellEditor, selectedCellsFn);
   } else {
-    throw new Error('CellEditorListenerFactory is not defined!');
+    throw new MissingFactoryError();
   }
 }

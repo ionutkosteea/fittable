@@ -45,4 +45,10 @@ export const deDE: FitDictionary = {
   'Color themes': 'Farbthemen',
   Rows: 'Zeilen',
   Columns: 'Spalten',
+  'Select all': 'Alles auswählen',
+  Clear: 'Nichts auswählen',
+  Cancel: 'Annulieren',
+  'Blank cells': 'Leere Zellen',
+  'Filter by value': 'Nach Wert filtern',
+  Search: 'Suchen',
 };

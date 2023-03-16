@@ -1,0 +1,27 @@
+<div class="topic">
+  <h1 class="title">{{title}}</h1>
+  <p class="description">
+    Changes performed in one table will be propagated in the other table as well.
+  </p>
+  <h2 class="subtitle">Preview</h2>
+  <div class="content">
+    <div class="fittable">
+      <fittable [designer]="fit1"></fittable>
+    </div>
+    <div class="fittable">
+      <fittable [designer]="fit2"></fittable>
+    </div>
+  </div>
+  <h2 class="subtitle">HTML code</h2>
+  <ng-container *ngFor="let codeSnippet of htmlCode">
+    <div class="code-snippet">
+      <img [src]="'../../../assets/code-snippets/'+codeSnippet.image" />
+    </div>
+  </ng-container>
+  <h2 class="subtitle">Typescript code</h2>
+  <ng-container *ngFor="let codeSnippet of typescriptCode">
+    <div class="code-snippet">
+      <img [src]="'../../../assets/code-snippets/'+codeSnippet.image" />
+    </div>
+  </ng-container>
+</div>

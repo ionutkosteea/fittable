@@ -1,16 +1,18 @@
 import { OperationExecutor } from '../../operations/operation-core.js';
-
+import { Table } from '../../model/table.js';
 import { LanguageDictionary } from './language-dictionary.js';
 import { ImageRegistry } from './image-registry.js';
 import { CellSelection, CellSelectionPainter } from './cell-selection.js';
 import { CellEditor } from './cell-editor.js';
-import { Window, Container, Statusbar } from './controls.js';
-import { TableScroller } from './table-scroller.js';
+import { Window, Container } from './controls.js';
+import { ScrollContainer } from './scroll-container.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { CellSelectionScroller } from './cell-selection-scroller.js';
 import { TableViewer } from './table-viewer.js';
-import { Table } from '../../model/table.js';
 import { ThemeSwitcher } from './theme-switcher.js';
+import { ColFilters } from './col-filters.js';
+import { Statusbar } from './statusbar.js';
+import { MobileLayout } from './mobile-layout.js';
 
 export interface ViewModel {
   table: Table;
@@ -18,7 +20,8 @@ export interface ViewModel {
   dictionary: LanguageDictionary;
   imageRegistry: ImageRegistry;
   tableViewer: TableViewer;
-  tableScroller: TableScroller;
+  tableScroller: ScrollContainer;
+  mobileLayout: MobileLayout;
   cellSelection?: CellSelection;
   cellSelectionPainter?: CellSelectionPainter;
   cellSelectionScroller?: CellSelectionScroller;
@@ -28,6 +31,7 @@ export interface ViewModel {
   settingsBar?: Container;
   toolbar?: Container;
   statusbar?: Statusbar;
+  colFilters?: ColFilters;
   loadTable(table: Table): void;
   destroy(): void;
 }

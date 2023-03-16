@@ -1,11 +1,10 @@
-<div class="table-center" [ngStyle]="getContainerPosition()">
+<div class="table-center" [ngStyle]="getTableOffset()">
   <table class="table">
     <colgroup>
       <col *ngFor="let colId of getColIds()" [ngStyle]="{'width.px':getColWidth(colId)}" />
     </colgroup>
-    <tbody (contextmenu)="showContextMenu($event)" fitCellEditorOpen [cellEditorListener]="getCellEditorListener()"
-      [cellEditor]="getCellEditor()" [selectedCellsFn]="getSelectedCells" fitCellSelection
-      [cellSelectionListener]="getCellSelectionListener()" [cellSelectionRanges]="getCellSelectionRanges()">
+    <tbody (contextmenu)="showContextMenu($event)" fitCellEditorOpen [cellEditorListener]="cellEditorListener"
+      fitCellSelection [cellSelectionListener]="cellSelectionListener" [cellSelectionRanges]="getCellSelectionRanges()">
       <tr *ngFor="let rowId of getRowIds()" [ngStyle]="{'height.px':getRowHeight(rowId)}">
         <ng-container *ngFor="let colId of getColIds()">
           <td class="cell" *ngIf="!isHiddenCell(rowId,colId)" [ngStyle]="getCellStyle(rowId,colId)"
@@ -18,6 +17,6 @@
     </tbody>
   </table>
 </div>
-<div class="cell-selection" *ngFor="let rectangle of getCellSelectionStyle()" [ngStyle]="rectangle"></div>
-<fit-cell-editor *ngIf="hasCellEditor()" [cellEditorListener]="getCellEditorListener()"
-  [cellStyle]="getCellEditorStyle()"></fit-cell-editor>
+<div class="cell-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>
+<fit-cell-editor *ngIf="cellEditorListener !== undefined" [cellEditorListener]="cellEditorListener"
+  [getCellStyle]="getCellStyle"></fit-cell-editor>

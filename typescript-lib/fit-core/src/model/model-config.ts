@@ -3,6 +3,7 @@ import { CellRangeFactory } from './cell-range.js';
 import { LineRangeFactory } from './line-range.js';
 import { StyleFactory } from './style.js';
 import { TableFactory } from './table.js';
+import { ColFilterExecutorFactory } from './col-filter-executor.js';
 
 export type ModelConfig = {
   tableFactory: TableFactory;
@@ -10,6 +11,7 @@ export type ModelConfig = {
   cellRangeFactory: CellRangeFactory;
   lineRangeFactory: LineRangeFactory;
   styleFactory?: StyleFactory;
+  colFilterExecutorFactory?: ColFilterExecutorFactory;
 };
 
 declare global {

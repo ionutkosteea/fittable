@@ -11,7 +11,7 @@ import {
 } from 'fit-core/operations/index.js';
 
 export type CellValueDto = {
-  updatableCellRanges: unknown[];
+  cellRanges: unknown[];
   value?: Value;
 };
 
@@ -31,7 +31,7 @@ export class CellValueOperationStep implements OperationStep {
 
   private updateCells(): void {
     for (let cellValueDto of this.stepDto.values) {
-      for (let cellRangeDto of cellValueDto.updatableCellRanges) {
+      for (let cellRangeDto of cellValueDto.cellRanges) {
         const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
         const fromRowId: number = cellRange.getFrom().getRowId();
         const toRowId: number = cellRange.getTo().getRowId();

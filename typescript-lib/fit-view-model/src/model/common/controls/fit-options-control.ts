@@ -1,24 +1,28 @@
-import { OptionsControl, Window } from 'fit-core/view-model/index.js';
+import { OptionsControl } from 'fit-core/view-model/index.js';
 
 import { FitControl } from './fit-control.js';
+import { FitWindow } from './fit-window.js';
 
-export class FitOptionsControl extends FitControl implements OptionsControl {
-  private selectedOptionId?: string;
+export class FitOptionsControl<Id extends string>
+  extends FitControl
+  implements OptionsControl
+{
+  private selectedOptionId?: Id;
 
-  constructor(private window: Window) {
+  constructor(private window: FitWindow<Id>) {
     super();
   }
 
-  public getWindow(): Window {
+  public getWindow(): FitWindow<Id> {
     return this.window;
   }
 
-  public setSelectedControl(id: string): this {
+  public setSelectedControl(id: Id): this {
     this.selectedOptionId = id;
     return this;
   }
 
-  public getSelectedControl(): string | undefined {
+  public getSelectedControl(): Id | undefined {
     return this.selectedOptionId;
   }
 }

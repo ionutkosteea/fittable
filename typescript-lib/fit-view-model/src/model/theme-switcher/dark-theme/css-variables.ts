@@ -2,7 +2,6 @@ import { FitCssColorVariables } from '../../common/css-variables.js';
 
 export const cssVariables: FitCssColorVariables = {
   '--highlight-color': '#d2550b',
-  '--disabled-color': '#5d5d5d',
   '--toolbar-background-color': '#383838',
   '--toolbar-background-hover-color': 'rgba(255, 255, 255, 0.2)',
   '--toolbar-color': '#a7a7a7',

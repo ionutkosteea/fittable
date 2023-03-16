@@ -33,10 +33,10 @@ export class FitTableViewer implements TableViewer {
 
   constructor(private table: Table) {
     this.config = getViewModelConfig();
-    this.setTable(table);
+    this.loadTable(table);
   }
 
-  public setTable(table: Table): this {
+  public loadTable(table: Table): this {
     this.table = table;
     this.rowTable = asTableRows(table);
     this.colTable = asTableCols(table);
@@ -48,8 +48,12 @@ export class FitTableViewer implements TableViewer {
     return this;
   }
 
-  public getTable(): Table {
-    return this.table;
+  public getNumberOfRows(): number {
+    return this.table.getNumberOfRows();
+  }
+
+  public getNumberOfCols(): number {
+    return this.table.getNumberOfCols();
   }
 
   public getColWidth(colId: number): number {
@@ -184,7 +188,7 @@ export class FitTableViewer implements TableViewer {
 
   private calculateHiddenCells(): void {
     this.hiddenCells = new DoubleKeyMap();
-    this.mergedRegionsTable?.forEachRegion(
+    this.mergedRegionsTable?.forEachMergedCell(
       (rowId: number, colId: number): void => {
         const rowSpan: number | undefined = //
           this.mergedRegionsTable!.getRowSpan(rowId, colId);
@@ -200,6 +204,10 @@ export class FitTableViewer implements TableViewer {
         }
       }
     );
+  }
+
+  public forEachMergedCell(cell: (rowId: number, colId: number) => void): void {
+    this.mergedRegionsTable?.forEachMergedCell(cell);
   }
 
   public resetRowProperties(): this {

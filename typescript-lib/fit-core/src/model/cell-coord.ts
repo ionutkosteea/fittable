@@ -1,3 +1,4 @@
+import { MissingFactoryMethodError } from '../common/factory-error.js';
 import { getModelConfig } from './model-config.js';
 
 export interface CellCoord {
@@ -25,5 +26,5 @@ export function createCellCoord<T extends CellCoord>(
 export function createCellCoord4Dto<T extends CellCoord>(dto: unknown): T {
   const factory: CellCoordFactory = getModelConfig().cellCoordFactory;
   if (factory.createCellCoord4Dto) return factory.createCellCoord4Dto(dto) as T;
-  else throw new Error('CellCoordFactory.createCellCoord4Dto is not defined!');
+  else throw new MissingFactoryMethodError();
 }

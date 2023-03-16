@@ -1,189 +1,258 @@
-import { Subject, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import {
   CellRange,
   CellCoord,
   createCellCoord,
   Table,
+  createCellRange,
 } from 'fit-core/model/index.js';
-import { Operation, OperationExecutor } from 'fit-core/operations/index.js';
+import { OperationDto, OperationExecutor } from 'fit-core/operations/index.js';
 import {
-  TableScroller,
+  ScrollContainer,
   CellEditor,
   CellSelection,
   CellSelectionPainter,
   TableViewer,
-  asInputControl,
+  ColFilters,
+  Container,
+  Window,
+  FocusableObject,
+  CellSelectionRanges,
 } from 'fit-core/view-model/index.js';
 
-import { FitOperationId } from '../operation-executor/operation-args.js';
+import { FitUIOperationId } from '../operation-executor/operation-args.js';
+import { ColFilterOperationSubscriptions } from '../col-filters/col-filter-operation-subscriptions.js';
 
-enum OperationProperties {
-  SelectedCells = 1,
-  CellEditor = 2,
-  VerticalScrollbar = 3,
-  HorizontalScrollbar = 4,
-}
-
+type Focus =
+  | 'Body'
+  | 'RowHeader'
+  | 'ColHeader'
+  | 'PageHeader'
+  | 'CellEditor'
+  | 'ColFilter';
+type UndoState = {
+  focus?: Focus;
+  selectedCells?: CellRange[];
+  cellEditor?: CellCoord;
+  scroll?: { left: number; top: number };
+};
 type LastLines = {
   lastRow: number;
   lastCol: number;
   lastSelectedRow: number;
   lastSelectedCol: number;
 };
-
 export type OperationSubscriptionArgs = {
   operationExecutor: OperationExecutor;
-  tableScroller: TableScroller;
+  tableScroller: ScrollContainer;
   tableViewer: TableViewer;
   cellEditor?: CellEditor;
   cellSelection?: CellSelection;
   cellSelectionPainter?: CellSelectionPainter;
+  toolbar?: Container;
+  contextMenu?: Window;
+  colFilters?: ColFilters;
+  loadTableFn?: (table: Table) => void;
 };
 
 export class OperationSubscriptions {
-  private selectedBodyCells?: CellRange[];
-  private readonly subscriptions: Subscription[] = [];
+  private selectedBodyCells: CellRange[] = [
+    createCellRange(createCellCoord(0, 0)),
+  ];
+  private currentFocus?: Focus = 'Body';
+  private filterSubscriptions?: ColFilterOperationSubscriptions;
+  private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
   constructor(private args: OperationSubscriptionArgs) {}
 
   public init(): void {
-    this.args.cellSelection &&
-      this.subscriptions.push(this.setSelectedBodyCells$());
-    this.createCommonSubscriptions();
-    this.createCustomSubscriptions();
+    this.setSelectedBodyCells();
+    this.setCurrentFocus();
+    this.createUpdateSubscriptions();
+    this.createRefreshSubscriptions();
+    this.createFilterSubscriptions();
   }
 
-  private setSelectedBodyCells$(): Subscription {
-    const selectedCells$: Subject<CellRange[]> = new Subject();
-    this.args.cellSelection?.body.addOnEnd$(selectedCells$);
-    return selectedCells$.subscribe((selectedCells: CellRange[]): void => {
-      this.selectedBodyCells = selectedCells;
-    });
+  private setSelectedBodyCells(): void {
+    this.subscriptions.add(
+      this.args.cellSelection?.body
+        .onEnd$()
+        .subscribe((cellRanges: CellRange[]): void => {
+          this.selectedBodyCells = cellRanges;
+        })
+    );
   }
 
-  private createCommonSubscriptions(): void {
-    this.args.operationExecutor.addListener({
-      onAfterRun$: this.afterCommonUpdate$,
-      onAfterUndo$: this.afterUndoRedo$,
-      onAfterRedo$: this.afterUndoRedo$,
-    });
+  private setCurrentFocus(): void {
+    this.setObjectFocus(this.args.cellSelection?.body, 'Body');
+    this.setObjectFocus(this.args.cellSelection?.rowHeader, 'RowHeader');
+    this.setObjectFocus(this.args.cellSelection?.colHeader, 'ColHeader');
+    this.setObjectFocus(this.args.cellSelection?.pageHeader, 'PageHeader');
+    this.setObjectFocus(this.args.cellEditor, 'CellEditor');
+    this.setObjectFocus(
+      this.args.colFilters?.getPopUpButton(0).getWindow(),
+      'ColFilter'
+    );
   }
 
-  private readonly afterCommonUpdate$ = (): Subject<Operation> => {
-    const selectedCells$: Subject<Operation> = new Subject();
-    this.subscriptions.push(
-      selectedCells$.subscribe((operation: Operation): void => {
-        this.markSelectedCells(operation);
-        this.markCellEditorPosition(operation);
-        this.markScrollPosition(operation);
-        this.restoreFocus();
+  private setObjectFocus(object?: FocusableObject, focus?: Focus): void {
+    this.subscriptions.add(
+      object?.onAfterSetFocus$().subscribe((isFocused: boolean): void => {
+        if (isFocused) this.currentFocus = focus;
       })
     );
-    return selectedCells$;
-  };
+  }
 
-  private readonly markSelectedCells = (operation: Operation): void => {
-    if (!this.selectedBodyCells) return;
-    operation.properties[OperationProperties.SelectedCells] =
-      this.selectedBodyCells;
-  };
+  private createUpdateSubscriptions(): void {
+    this.afterUpdate();
+    this.afterUndoRedo(this.args.operationExecutor.onAfterUndo$());
+    this.afterUndoRedo(this.args.operationExecutor.onAfterRedo$());
+  }
 
-  private readonly markCellEditorPosition = (operation: Operation): void => {
+  private afterUpdate(): void {
+    this.subscriptions.add(
+      this.args.operationExecutor
+        .onAfterRun$()
+        .subscribe((operationDto: OperationDto): void => {
+          this.createUndoState(operationDto);
+          this.markCurrentFocus(operationDto);
+          this.markSelectedCells(operationDto);
+          this.markCellEditorCoord(operationDto);
+          this.markScrollPosition(operationDto);
+        })
+    );
+  }
+
+  private createUndoState(operationDto: OperationDto): void {
+    if (!operationDto.undoOperation) return;
+    if (!operationDto.properties) operationDto.properties = {};
+    operationDto.properties['undoState'] = {};
+  }
+
+  private getUndoState(operationDto: OperationDto): UndoState | undefined {
+    const undoState: unknown =
+      operationDto.properties && operationDto.properties['undoState'];
+    return undoState ? (undoState as UndoState) : undefined;
+  }
+
+  private markCurrentFocus(operationDto: OperationDto): void {
+    const undoState: UndoState | undefined = this.getUndoState(operationDto);
+    if (undoState) undoState.focus = this.currentFocus;
+  }
+
+  private markSelectedCells(operationDto: OperationDto): void {
+    if (!this.args.cellSelection) return;
+    const undoState: UndoState | undefined = this.getUndoState(operationDto);
+    if (!undoState) return;
+    const operationId: FitUIOperationId = operationDto.id as FitUIOperationId;
+    if (operationId === 'style-name') {
+      undoState.selectedCells = this.args.cellSelection.body.getRanges();
+    } else {
+      undoState.selectedCells = this.selectedBodyCells;
+    }
+  }
+
+  private markCellEditorCoord(operationDto: OperationDto): void {
     if (!this.args.cellEditor?.isVisible()) return;
     const cellCoord: CellCoord = this.args.cellEditor.getCell();
-    operation.properties[OperationProperties.CellEditor] = cellCoord;
-    this.args.cellEditor.setCell(cellCoord);
-    asInputControl(this.args.cellEditor?.getCellControl())?.focus$.next(true);
-  };
+    const undoState: UndoState | undefined = this.getUndoState(operationDto);
+    if (undoState) undoState.cellEditor = cellCoord;
+  }
 
-  private readonly markScrollPosition = (operation: Operation): void => {
+  private markScrollPosition(operationDto: OperationDto): void {
     const top: number = this.args.tableScroller.getTop();
-    operation.properties[OperationProperties.VerticalScrollbar] = top;
     const left: number = this.args.tableScroller.getLeft();
-    operation.properties[OperationProperties.HorizontalScrollbar] = left;
-  };
+    const undoState: UndoState | undefined = this.getUndoState(operationDto);
+    if (undoState) undoState.scroll = { left, top };
+  }
 
-  private readonly afterUndoRedo$ = (): Subject<Operation> => {
-    const selectCells$: Subject<Operation> = new Subject();
-    this.subscriptions.push(
-      selectCells$.subscribe((operation: Operation): void => {
-        this.selectMarkedCells(operation);
-        this.setCellEditorPosition(operation);
-        this.setScrollPosition(operation);
-        this.restoreFocus();
+  private afterUndoRedo(operation$: Observable<OperationDto>): void {
+    this.subscriptions.add(
+      operation$.subscribe((operationDto: OperationDto): void => {
+        this.setSelectedCells(operationDto);
+        this.setCellEditorCoord(operationDto);
+        this.setScrollPosition(operationDto);
       })
     );
-    return selectCells$;
-  };
+  }
 
-  private selectMarkedCells(operation: Operation): void {
+  private setSelectedCells(operationDto: OperationDto): void {
     if (!this.args.cellSelection) return;
+    const undoState: UndoState | undefined = this.getUndoState(operationDto);
+    if (!undoState) return;
+    const selectedCells: CellRange[] | undefined = undoState.selectedCells;
+    if (!selectedCells) return;
     this.args.cellSelection.body.removeRanges();
-    const id: number = OperationProperties.SelectedCells;
-    const operationProperty: unknown = operation.properties[id];
-    if (!operationProperty) return;
-    const selectedCells: CellRange[] = operationProperty as CellRange[];
+    this.args.cellSelection.rowHeader?.removeRanges();
+    this.args.cellSelection.colHeader?.removeRanges();
     for (const cellRange of selectedCells) {
-      this.args.cellSelection.body.addRange(
-        cellRange.getFrom(),
-        cellRange.getTo()
+      const from: CellCoord = cellRange.getFrom();
+      const to: CellCoord = cellRange.getTo();
+      this.args.cellSelection.body.addRange(from, to);
+      this.args.cellSelection.rowHeader?.addRange(
+        createCellCoord(from.getRowId(), 1),
+        createCellCoord(to.getRowId(), 1)
+      );
+      this.args.cellSelection.colHeader?.addRange(
+        createCellCoord(1, from.getColId()),
+        createCellCoord(1, to.getColId())
       );
     }
     this.args.cellSelection.body.end();
+    this.args.cellSelection.rowHeader?.end();
+    this.args.cellSelection.colHeader?.end();
   }
 
-  private readonly setCellEditorPosition = (operation: Operation): void => {
+  private setCellEditorCoord(operationDto: OperationDto): void {
     if (!this.args.cellEditor) return;
-    const id: number = OperationProperties.CellEditor;
-    const cellCoord: unknown = operation.properties[id];
+    const undoState: UndoState | undefined = this.getUndoState(operationDto);
+    if (!undoState) return;
+    const cellCoord: CellCoord | undefined = undoState.cellEditor;
+    const isVisible: boolean = this.args.cellEditor.isVisible();
     if (cellCoord) {
-      this.args.cellEditor.setCell(cellCoord as CellCoord);
-      asInputControl(this.args.cellEditor?.getCellControl())?.focus$.next(true);
-    } else if (this.args.cellEditor.isVisible()) {
+      !isVisible && this.args.cellEditor.setVisible(true);
+      this.args.cellEditor.setCell(cellCoord);
+    } else if (isVisible) {
       this.args.cellEditor.setVisible(false);
     }
-  };
-
-  private readonly setScrollPosition = (operation: Operation): void => {
-    const topId: number = OperationProperties.VerticalScrollbar;
-    const top: number = operation.properties[topId] as number;
-    const leftId: number = OperationProperties.HorizontalScrollbar;
-    const left: number = operation.properties[leftId] as number;
-    this.args.tableScroller.scrollTo(left, top);
-  };
-
-  private readonly restoreFocus = (): void => {
-    setTimeout((): void => {
-      this.args.cellSelection?.body.setFocus(true);
-      asInputControl(this.args.cellEditor?.getCellControl())?.focus$.next(true);
-    });
-  };
-
-  private createCustomSubscriptions(): void {
-    this.args.operationExecutor.addListener({
-      onAfterRun$: this.afterCustomUpdate$,
-      onAfterUndo$: this.afterCustomUpdate$,
-      onAfterRedo$: this.afterCustomUpdate$,
-    });
   }
 
-  private readonly afterCustomUpdate$ = (): Subject<Operation> => {
-    const refresh$: Subject<Operation> = new Subject();
-    this.subscriptions.push(
-      refresh$.subscribe((operation: Operation) => {
-        const operationId: FitOperationId = operation.id as FitOperationId;
-        switch (operationId) {
+  private setScrollPosition(operationDto: OperationDto): void {
+    const undoState: UndoState | undefined = this.getUndoState(operationDto);
+    if (!undoState) return;
+    const scroll: UndoState['scroll'] = undoState.scroll;
+    if (!scroll) return;
+    this.args.tableScroller.scrollTo(scroll.left, scroll.top);
+  }
+
+  private createRefreshSubscriptions(): void {
+    this.refreshAfterExecution('Run');
+    this.refreshAfterExecution('Undo');
+    this.refreshAfterExecution('Redo');
+  }
+
+  private refreshAfterExecution(action: 'Run' | 'Undo' | 'Redo'): void {
+    const operationExecutor: OperationExecutor = this.args.operationExecutor;
+    let action$: Observable<OperationDto> = operationExecutor.onAfterRun$();
+    if (action === 'Undo') action$ = operationExecutor.onAfterUndo$();
+    else if (action === 'Redo') action$ = operationExecutor.onAfterRedo$();
+    this.subscriptions.add(
+      action$.subscribe((operationDto: OperationDto): void => {
+        const id: FitUIOperationId = operationDto.id as FitUIOperationId;
+        switch (id) {
+          case 'cell-remove':
           case 'row-remove':
-            this.whenSelectionExceedsRows();
-            this.whenAllLinesRemoved();
+          case 'column-remove':
+            this.refreshIfSelectionExceedsRows();
+            this.refreshIfSelectionExceedsCols();
+            this.refreshIfAllLinesRemoved();
             this.refreshRows();
+            this.refreshCols();
             this.refreshMergedRegions();
             break;
-          case 'column-remove':
-            this.whenSelectionExceedsCols();
-            this.whenAllLinesRemoved();
-            this.refreshCols();
+          case 'cell-merge':
+          case 'cell-unmerge':
             this.refreshMergedRegions();
             break;
           case 'row-height':
@@ -200,17 +269,50 @@ export class OperationSubscriptions {
             this.refreshCols();
             this.refreshMergedRegions();
             break;
-          case 'cell-merge':
-          case 'cell-unmerge':
-            this.refreshMergedRegions();
-            break;
+        }
+        if (operationDto.preventFocus) {
+          this.args.cellEditor?.setCell(this.args.cellEditor.getCell());
+        } else {
+          if (id === 'style-name-copy') {
+            this.focusCellEditorControl();
+            !this.args.cellSelection?.body.hasFocus() &&
+              this.args.cellSelection?.body.setFocus(true);
+          } else {
+            this.focus(operationDto);
+          }
         }
       })
     );
-    return refresh$;
-  };
+  }
 
-  private whenSelectionExceedsRows(): void {
+  private focus(operationDto: OperationDto): void {
+    const undoState: UndoState | undefined = this.getUndoState(operationDto);
+    if (!undoState) return;
+    let cellSelection: CellSelectionRanges | undefined;
+    const focus: Focus | undefined = undoState.focus;
+    if (focus === 'Body' || focus === 'CellEditor' || focus === 'ColFilter') {
+      cellSelection = this.args.cellSelection?.body;
+      this.focusCellEditorControl();
+    } else if (focus === 'RowHeader') {
+      cellSelection = this.args.cellSelection?.rowHeader;
+    } else if (focus === 'ColHeader') {
+      cellSelection = this.args.cellSelection?.colHeader;
+    } else if (focus === 'PageHeader') {
+      cellSelection = this.args.cellSelection?.pageHeader;
+    }
+    !cellSelection?.hasFocus() && cellSelection?.setFocus(true);
+  }
+
+  private focusCellEditorControl(): void {
+    setTimeout((): void => {
+      const cellEditor: CellEditor | undefined = this.args.cellEditor;
+      cellEditor?.setCell(cellEditor.getCell());
+      cellEditor?.hasFocus() && cellEditor.setFocus(false);
+      cellEditor?.getCellControl().setFocus(true);
+    });
+  }
+
+  private refreshIfSelectionExceedsRows(): void {
     const removeData: LastLines | undefined = this.getLastLines();
     if (!removeData) return;
     if (removeData.lastRow >= removeData.lastSelectedRow) return;
@@ -223,7 +325,7 @@ export class OperationSubscriptions {
     this.args.cellEditor?.setCell(createCellCoord(removeData.lastRow, 0));
   }
 
-  private whenSelectionExceedsCols(): void {
+  private refreshIfSelectionExceedsCols(): void {
     const lastLines: LastLines | undefined = this.getLastLines();
     if (!lastLines) return;
     if (lastLines.lastCol >= lastLines.lastSelectedCol) return;
@@ -250,15 +352,14 @@ export class OperationSubscriptions {
       if (lastSelectedCol < toCol) lastSelectedCol = toCol;
     }
     if (lastSelectedRow === 0 || lastSelectedCol === 0) return undefined;
-    const table: Table = this.args.tableViewer.getTable();
-    const lastRow: number = table.getNumberOfRows() - 1;
-    const lastCol: number = table.getNumberOfCols() - 1;
+    const lastRow: number = this.args.tableViewer.getNumberOfRows() - 1;
+    const lastCol: number = this.args.tableViewer.getNumberOfCols() - 1;
     return { lastRow, lastCol, lastSelectedRow, lastSelectedCol };
   }
 
-  private whenAllLinesRemoved(): void {
-    const rowNum: number = this.args.tableViewer.getTable().getNumberOfRows();
-    const colNum: number = this.args.tableViewer.getTable().getNumberOfCols();
+  private refreshIfAllLinesRemoved(): void {
+    const rowNum: number = this.args.tableViewer.getNumberOfRows();
+    const colNum: number = this.args.tableViewer.getNumberOfCols();
     if (rowNum > 0 && colNum > 0) return;
     this.args.cellSelection?.clear();
     this.args.cellEditor?.setVisible(false);
@@ -266,13 +367,13 @@ export class OperationSubscriptions {
 
   private refreshRows(): void {
     this.args.tableViewer.resetRowProperties();
-    this.args.tableScroller.resizeViewportHeight().renderTable();
+    this.args.tableScroller.resizeViewportHeight().renderModel();
     this.args.cellSelectionPainter?.paint();
   }
 
   private refreshCols(): void {
     this.args.tableViewer.resetColProperties();
-    this.args.tableScroller.resizeViewportWidth().renderTable();
+    this.args.tableScroller.resizeViewportWidth().renderModel();
     this.args.cellSelectionPainter?.paint();
   }
 
@@ -282,7 +383,25 @@ export class OperationSubscriptions {
     this.args.cellEditor?.setCell(this.args.cellEditor?.getCell());
   }
 
+  private createFilterSubscriptions(): void {
+    const operationExecutor: OperationExecutor = this.args.operationExecutor;
+    const colFilters: ColFilters | undefined = this.args.colFilters;
+    const loadTableFn: ((table: Table) => void) | undefined =
+      this.args.loadTableFn;
+    if (colFilters && loadTableFn) {
+      this.filterSubscriptions = new ColFilterOperationSubscriptions({
+        operationExecutor,
+        colFilters,
+        loadTableFn,
+        toolbar: this.args.toolbar,
+        contextMenu: this.args.contextMenu,
+        cellEditor: this.args.cellEditor,
+      });
+    }
+  }
+
   public destroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+    this.subscriptions.forEach((s?: Subscription): void => s?.unsubscribe());
+    this.filterSubscriptions?.destroy();
   }
 }

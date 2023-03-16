@@ -36,7 +36,7 @@
   top: 32px;
   background-color: var(--toolbar-background-color);
   border-left: 1px solid var(--toolbar-border-color);
-  z-index: 2;
+  z-index: 10;
   overflow-x: scroll;
   width: 158px;
   max-height: 70vh;

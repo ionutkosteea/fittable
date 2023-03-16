@@ -59,7 +59,7 @@ export class FitOperationExecutorFactory implements OperationExecutorFactory {
         'merged-regions',
         MergedRegionsOperationStepFactory
       )
-      .bindOperationStepFactory('style', StyleOperationStepFactory)
+      .bindOperationStepFactory('style-changes', StyleOperationStepFactory)
       .bindOperationDtoFactory('row-height', RowHeightOperationDtoFactory)
       .bindOperationDtoFactory('row-insert', RowInsertOperationDtoFactory)
       .bindOperationDtoFactory('row-remove', RowRemoveOperationDtoFactory)

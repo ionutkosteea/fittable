@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { TopicTitle } from 'src/app/common/topic-title.model';
+
+import { TopicTitle } from '../../../common/topic-title.model';
 
 @Component({
   selector: 'architecture',

@@ -1,3 +1,4 @@
+import { incrementLetter, incrementNumber } from 'fit-core/common/index.js';
 import { Option, ViewModelConfig } from 'fit-core/view-model/index.js';
 
 import { COLOR_PALETTE } from './model/common/color-palette.js';
@@ -5,27 +6,24 @@ import { FONT_FAMILY } from './model/common/font-family.js';
 import { FitTableViewerFactory } from './model/table-viewer/fit-table-viewer.js';
 import { FitCellEditorFactory } from './model/cell-editor/fit-cell-editor.js';
 import { FitCellSelectionFactory } from './model/cell-selection/fit-cell-selection.js';
-import { FitContextMenuFactory } from './model/controls/context-menu/fit-context-menu-factory.js';
-import { FitToolbarFactory } from './model/controls/toolbar/fit-toolbar-factory.js';
+import { FitContextMenuFactory } from './model/context-menu/fit-context-menu-factory.js';
+import { FitToolbarFactory } from './model/toolbar/fit-toolbar-factory.js';
 import { FitViewModelFactory } from './model/fit-view-model.js';
-import { FitTableScrollerFactory } from './model/table-scroller/fit-table-scroller.js';
+import { FitScrollContainerFactory } from './model/scroll-container/fit-scroll-container.js';
 import { FitCellEditorListenerFactory } from './host-listeners/fit-cell-editor-listener.js';
 import { FitCellSelectionListenerFactory } from './host-listeners/fit-cell-selection-listener.js';
-import { FitTableScrollerListenerFactory } from './host-listeners/fit-table-scroller-listener.js';
-import { FitHostListenersFactory } from './host-listeners/fit-host-listeners.js';
+import { FitScrollContainerListenerFactory } from './host-listeners/fit-scroll-container-listener.js';
 import { FitCellSelectionPainterFactory } from './model/cell-selection/fit-cell-selection-painter.js';
 import { FitImageRegistryFactory } from './model/image-registry/fit-image-registry.js';
 import { FitLanguageDictionaryFactory } from './model/language-dictionary/fit-language-dictionary.js';
 import { FitWindowListenerFactory } from './host-listeners/fit-window-listener.js';
 import { FitInputControlListenerFactory } from './host-listeners/fit-input-control-listener.js';
 import { FitCellSelectionScrollerFactory } from './model/cell-selection/fit-cell-selection-scroller.js';
-import { FitStatusbarFactory } from './model/controls/statusbar/fit-statusbar.js';
+import { FitStatusbarFactory } from './model/statusbar/fit-statusbar.js';
 import { FitThemeSwitcherFactory } from './model/theme-switcher/fit-theme-switcher.js';
-import { FitSettingsBarFactory } from './model/controls/settings-bar/fit-settings-bar-factory.js';
-import {
-  incrementLetter,
-  incrementNumber,
-} from 'fit-core/common/core-functions.js';
+import { FitSettingsBarFactory } from './model/settings-bar/fit-settings-bar-factory.js';
+import { FitColFiltersFactory } from './model/col-filters/fit-col-filters.js';
+import { FitMobileLayoutFactory } from './model/mobile-layout/fit-mobile-layout.js';
 
 export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   rowHeights: 21,
@@ -33,8 +31,8 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   fontSize: 12,
   colorPalette: COLOR_PALETTE,
   fontFamily: FONT_FAMILY,
-  getRowHeaderText: (rowId: number): number => incrementNumber(rowId),
-  getColHeaderText: (colId: number): string => incrementLetter(colId),
+  rowHeaderTextFn: (rowId: number): number => incrementNumber(rowId),
+  colHeaderTextFn: (colId: number): string => incrementLetter(colId),
   rowHeaderWidth: 40,
   colHeaderHeight: 21,
   languageDictionaryFactory: new FitLanguageDictionaryFactory(),
@@ -46,17 +44,18 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   contextMenuFactory: new FitContextMenuFactory(),
   toolbarFactory: new FitToolbarFactory(),
   statusbarFactory: new FitStatusbarFactory(),
-  tableScrollerFactory: new FitTableScrollerFactory(),
+  scrollContainerFactory: new FitScrollContainerFactory(),
   tableViewerFactory: new FitTableViewerFactory(),
+  mobileLayoutFactory: new FitMobileLayoutFactory(),
   viewModelFactory: new FitViewModelFactory(),
   themeSwitcherFactory: new FitThemeSwitcherFactory(),
   settingsBarFactory: new FitSettingsBarFactory(),
   cellEditorListenerFactory: new FitCellEditorListenerFactory(),
+  colFiltersFactory: new FitColFiltersFactory(),
   cellSelectionListenerFactory: new FitCellSelectionListenerFactory(),
   windowListenerFactory: new FitWindowListenerFactory(),
-  tableScrollerListenerFactory: new FitTableScrollerListenerFactory(),
+  scrollContainerListenerFactory: new FitScrollContainerListenerFactory(),
   inputControlListenerFactory: new FitInputControlListenerFactory(),
-  hostListenersFactory: new FitHostListenersFactory(),
 };
 
 export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
@@ -66,11 +65,11 @@ export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
   viewModelFactory: FIT_VIEW_MODEL_CONFIG.viewModelFactory,
   languageDictionaryFactory: FIT_VIEW_MODEL_CONFIG.languageDictionaryFactory,
   imageRegistryFactory: FIT_VIEW_MODEL_CONFIG.imageRegistryFactory,
-  tableScrollerFactory: FIT_VIEW_MODEL_CONFIG.tableScrollerFactory,
+  scrollContainerFactory: FIT_VIEW_MODEL_CONFIG.scrollContainerFactory,
+  mobileLayoutFactory: FIT_VIEW_MODEL_CONFIG.mobileLayoutFactory,
   tableViewerFactory: FIT_VIEW_MODEL_CONFIG.tableViewerFactory,
-  hostListenersFactory: FIT_VIEW_MODEL_CONFIG.hostListenersFactory,
-  tableScrollerListenerFactory:
-    FIT_VIEW_MODEL_CONFIG.tableScrollerListenerFactory,
+  scrollContainerListenerFactory:
+    FIT_VIEW_MODEL_CONFIG.scrollContainerListenerFactory,
 };
 
 export type FitViewModelConfigDef = {
@@ -83,8 +82,8 @@ export type FitViewModelConfigDef = {
   showColHeader?: boolean;
   rowHeaderWidth?: number;
   colHeaderHeight?: number;
-  getRowHeaderText?: (rowId: number) => number | string;
-  getColHeaderText?: (colId: number) => number | string;
+  rowHeaderTextFn?: (rowId: number) => number | string;
+  colHeaderTextFn?: (colId: number) => number | string;
   disableVirtualRows?: boolean;
   disableVirtualCols?: boolean;
   rowHeader?: boolean;
@@ -96,6 +95,7 @@ export type FitViewModelConfigDef = {
   statusbar?: boolean;
   themeSwitcher?: boolean;
   settingsBar?: boolean;
+  colFilters?: boolean;
 };
 
 export function createFitViewModelConfig(
@@ -111,6 +111,7 @@ export function createFitViewModelConfig(
   updateContextMenuConfig(config, configDef);
   updateStatusbarConfig(config, configDef);
   updateSettingsBarConfig(config, configDef);
+  updateColFiltersConfig(config, configDef);
   updateListenerConfig(config);
   return config;
 }
@@ -192,24 +193,24 @@ function updateHeaderConfig(
 ): void {
   if (def.rowHeader !== undefined) {
     if (def.rowHeader) {
-      cfg.getRowHeaderText =
-        def.getRowHeaderText ?? FIT_VIEW_MODEL_CONFIG.getRowHeaderText;
+      cfg.rowHeaderTextFn =
+        def.rowHeaderTextFn ?? FIT_VIEW_MODEL_CONFIG.rowHeaderTextFn;
       cfg.rowHeaderWidth =
         def.rowHeaderWidth ?? FIT_VIEW_MODEL_CONFIG.rowHeaderWidth;
     } else {
-      cfg.getRowHeaderText = undefined;
+      cfg.rowHeaderTextFn = undefined;
       cfg.rowHeaderWidth = undefined;
     }
   }
 
   if (def.colHeader !== undefined) {
     if (def.colHeader) {
-      cfg.getColHeaderText =
-        def.getColHeaderText ?? FIT_VIEW_MODEL_CONFIG.getColHeaderText;
+      cfg.colHeaderTextFn =
+        def.colHeaderTextFn ?? FIT_VIEW_MODEL_CONFIG.colHeaderTextFn;
       cfg.colHeaderHeight =
         def.colHeaderHeight ?? FIT_VIEW_MODEL_CONFIG.colHeaderHeight;
     } else {
-      cfg.getColHeaderText = undefined;
+      cfg.colHeaderTextFn = undefined;
       cfg.colHeaderHeight = undefined;
     }
   }
@@ -245,12 +246,28 @@ function updateSettingsBarConfig(
   }
 }
 
+function updateColFiltersConfig(
+  cfg: ViewModelConfig,
+  def: FitViewModelConfigDef
+): void {
+  if (cfg.colHeaderHeight) {
+    if (def.colFilters !== undefined) {
+      cfg.colFiltersFactory = def.colFilters
+        ? FIT_VIEW_MODEL_CONFIG.colFiltersFactory
+        : undefined;
+    }
+  } else {
+    cfg.colFiltersFactory = undefined;
+  }
+}
+
 function updateListenerConfig(cfg: ViewModelConfig): void {
   if (
     cfg.toolbarFactory ||
     cfg.contextMenuFactory ||
     cfg.statusbarFactory ||
-    cfg.settingsBarFactory
+    cfg.settingsBarFactory ||
+    cfg.colFiltersFactory
   ) {
     cfg.windowListenerFactory = FIT_VIEW_MODEL_CONFIG.windowListenerFactory;
   }

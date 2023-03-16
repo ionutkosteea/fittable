@@ -7,12 +7,7 @@ import {
 } from 'fit-core/view-model/index.js';
 
 export class FitWindowListener implements WindowListener {
-  private window!: Window;
-
-  public setWindow(window: Window): this {
-    this.window = window;
-    return this;
-  }
+  constructor(private readonly window: Window) {}
 
   public onShow(event?: FitMouseEvent): void {
     if (event) {
@@ -48,7 +43,7 @@ export class FitWindowListener implements WindowListener {
 }
 
 export class FitWindowListenerFactory implements WindowListenerFactory {
-  public createWindowListener(): FitWindowListener {
-    return new FitWindowListener();
+  public createWindowListener(window: Window): FitWindowListener {
+    return new FitWindowListener(window);
   }
 }

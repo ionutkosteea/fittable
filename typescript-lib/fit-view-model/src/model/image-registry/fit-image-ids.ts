@@ -49,6 +49,9 @@ export type FitImageId =
   | 'merge'
   | 'unmerge'
   | 'settings'
-  | 'check';
+  | 'check'
+  | 'filter'
+  | 'filterBlue'
+  | 'search';
 
 export type FitImages = { [id in FitImageId]?: string };

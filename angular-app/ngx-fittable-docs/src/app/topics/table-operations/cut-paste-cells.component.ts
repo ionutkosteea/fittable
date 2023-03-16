@@ -1,4 +1,4 @@
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
@@ -8,7 +8,7 @@ import {
   createTable,
   registerModelConfig,
 } from 'fit-core/model';
-import { Operation, registerOperationConfig } from 'fit-core/operations';
+import { OperationDto, registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
@@ -43,6 +43,7 @@ export class CutPasteCellsComponent
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'cut-paste-cells-ts-01.jpg' },
     { image: 'cut-paste-cells-ts-02.jpg' },
+    { image: 'cut-paste-cells-ts-03.jpg' },
   ];
   public buttonText: ButtonText = 'Cut cells B2, B3';
   public fit!: FittableDesigner;
@@ -65,13 +66,18 @@ export class CutPasteCellsComponent
       .setCellStyleName(2, 1, 's0');
 
     this.fit = createFittableDesigner(table);
-    const afterRun$: Subject<Operation> = new Subject();
-    this.subscription = afterRun$.subscribe((operation: Operation): void => {
-      this.consoleText += 'Operation id: ' + operation.id + '\n';
-    });
-    this.fit.operationExecutor?.addListener({
-      onAfterRun$: (): Subject<Operation> => afterRun$,
-    });
+
+    this.subscription = this.writeToConsole$();
+  }
+
+  private writeToConsole$(): Subscription {
+    return this.fit
+      .operationExecutor!.onAfterRun$()
+      .subscribe((operationDto: OperationDto): void => {
+        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
+        this.consoleText +=
+          'Operation steps: ' + JSON.stringify(operationDto.steps, null, 2);
+      });
   }
 
   public runOperation(): void {

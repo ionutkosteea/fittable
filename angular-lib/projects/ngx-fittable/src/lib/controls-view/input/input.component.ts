@@ -9,31 +9,38 @@ import {
   OnInit,
 } from '@angular/core';
 
-import { Value } from 'fit-core/model';
-import { InputControl, InputControlListener } from 'fit-core/view-model';
+import { Value, CssStyle } from 'fit-core/model';
+import {
+  InputControl,
+  InputControlListener,
+  createInputControlListener,
+} from 'fit-core/view-model';
+
+import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
   selector: 'fit-input',
   template:
-    '<input #inputField type="number" min="1" [value]="model.getValue()" />',
+    '<input #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="model.getValue()" [disabled]="getDisabled()" />',
   styles: [
     'input {width:40px;height:26px;border:none;margin:0;padding:0;text-align:center;color:var(--toolbar-color);background-color:var(--toolbar-background-color);font-size: 14px}',
   ],
 })
 export class InputComponent implements OnInit, OnDestroy {
   @Input() model!: InputControl;
-  @Input() inputControlListener!: InputControlListener;
   @ViewChild('inputField') inputFieldRef!: ElementRef;
 
-  private subscriptions: Subscription[] = [];
+  private inputControlListener!: InputControlListener;
+  private readonly subscriptions: Subscription[] = [];
 
   public ngOnInit(): void {
+    this.inputControlListener = createInputControlListener(this.model);
     this.subscriptions.push(this.onFocus$());
     this.subscriptions.push(this.onForceValue$());
   }
 
   private onFocus$(): Subscription {
-    return this.model.focus$.subscribe((focus: boolean): void => {
+    return this.model.onSetFocus$().subscribe((focus: boolean): void => {
       const htmlInput: HTMLElement = this.getHtmlInput();
       if (focus) htmlInput.focus();
       else htmlInput.blur();
@@ -41,16 +48,21 @@ export class InputComponent implements OnInit, OnDestroy {
   }
 
   private onForceValue$(): Subscription {
-    return this.model.forceValue$!.subscribe((value?: Value): void => {
+    return this.model.onSetValue$().subscribe((value?: Value): void => {
       this.getHtmlInput().value = value ? '' + value : '';
     });
   }
 
-  private getHtmlInput = (): HTMLInputElement =>
+  private readonly getHtmlInput = (): HTMLInputElement =>
     this.inputFieldRef.nativeElement;
 
+  public readonly getStyle = (): CssStyle => createToggleStyle(this.model);
+
+  public readonly getDisabled = (): string | null =>
+    this.model.isDisabled() ? 'disabled' : null;
+
   @HostListener('mouseenter') onMouseEnter(): void {
-    this.inputControlListener.setInputControl(this.model).onMouseEnter();
+    this.inputControlListener.onMouseEnter();
   }
 
   @HostListener('mouseleave') onMouseLeave(): void {

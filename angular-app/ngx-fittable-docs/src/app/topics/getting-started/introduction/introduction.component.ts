@@ -24,7 +24,8 @@ import {
   FIT_VIEW_MODEL_CONFIG,
 } from 'fit-view-model';
 import { TableViewComponent } from 'ngx-fittable';
-import { TopicTitle } from 'src/app/common/topic-title.model';
+
+import { TopicTitle } from '../../../common/topic-title.model';
 
 const FIT_TABLE_DTO: FitTableDto = {
   numberOfRows: 100,
@@ -107,6 +108,7 @@ export class IntroductionComponent implements OnInit, AfterViewInit {
     navigation.push(this.createVirtualColsItem());
     navigation.push(this.createRowHeaderItem());
     navigation.push(this.createColHeaderItem());
+    navigation.push(this.createColFiltersItem());
     navigation.push(this.createCellSelectionItem());
     navigation.push(this.createCellEditorItem());
     navigation.push(this.createContextMenuItem());
@@ -183,6 +185,16 @@ export class IntroductionComponent implements OnInit, AfterViewInit {
       isChecked: (): boolean =>
         getViewModelConfig().colHeaderHeight ? true : false,
       run: (): void => this.run({ colHeader: !item.isChecked() }),
+    };
+    return item;
+  }
+
+  private createColFiltersItem(): NavigationItem {
+    const item: NavigationItem = {
+      label: 'Column filters',
+      isChecked: (): boolean =>
+        getViewModelConfig().colFiltersFactory !== undefined,
+      run: (): void => this.run({ colFilters: !item.isChecked() }),
     };
     return item;
   }

@@ -17,7 +17,7 @@ export class FitOperation implements Operation {
   ) {}
 
   public run(): this {
-    this.steps.forEach((step: OperationStep) => step.run());
+    this.steps.forEach((step: OperationStep): void => step.run());
     return this;
   }
 
@@ -26,7 +26,8 @@ export class FitOperation implements Operation {
   }
 
   public undo(): this {
-    this.undoOperation?.steps.forEach((step: OperationStep) => step.run());
+    this.undoOperation?.steps //
+      .forEach((step: OperationStep): void => step.run());
     return this;
   }
 }
@@ -41,9 +42,8 @@ export class FitOperationFactory implements OperationFactory {
   public createOperation(operationDto: OperationDto): FitOperation {
     const steps: OperationStep[] = this.createOperationSteps(operationDto);
     if (operationDto.undoOperation) {
-      const undoSteps: OperationStep[] = this.createOperationSteps(
-        operationDto.undoOperation
-      );
+      const undoSteps: OperationStep[] = //
+        this.createOperationSteps(operationDto.undoOperation);
       return new FitOperation(
         operationDto.id,
         steps,

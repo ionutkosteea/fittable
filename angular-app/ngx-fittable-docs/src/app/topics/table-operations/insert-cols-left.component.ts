@@ -1,4 +1,4 @@
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
@@ -7,7 +7,7 @@ import {
   registerModelConfig,
   Table,
 } from 'fit-core/model';
-import { Operation, registerOperationConfig } from 'fit-core/operations';
+import { OperationDto, registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
@@ -40,6 +40,7 @@ export class InsertColsLeftComponent
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'insert-columns-left-ts-01.jpg' },
     { image: 'insert-columns-left-ts-02.jpg' },
+    { image: 'insert-columns-left-ts-03.jpg' },
   ];
   public readonly buttonText = 'Insert 2 columns before column B';
   public fit!: FittableDesigner;
@@ -59,20 +60,25 @@ export class InsertColsLeftComponent
       table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
     this.fit = createFittableDesigner(table);
-    const afterRun$: Subject<Operation> = new Subject();
-    this.subscription = afterRun$.subscribe((operation: Operation): void => {
-      this.consoleText += 'Operation id: ' + operation.id + '\n';
-    });
-    this.fit.operationExecutor?.addListener({
-      onAfterRun$: (): Subject<Operation> => afterRun$,
-    });
+
+    this.subscription = this.writeToConsole$();
+  }
+
+  private writeToConsole$(): Subscription {
+    return this.fit
+      .operationExecutor!.onAfterRun$()
+      .subscribe((operationDto: OperationDto): void => {
+        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
+        this.consoleText +=
+          'Operation steps: ' + JSON.stringify(operationDto.steps, null, 2);
+      });
   }
 
   public runOperation(): void {
     const args: FitOperationDtoArgs = {
       id: 'column-insert',
       selectedLines: [createLineRange(1)],
-      numberOfInsertableLines: 2,
+      numberOfNewLines: 2,
     };
     this.fit.operationExecutor?.run(args);
   }

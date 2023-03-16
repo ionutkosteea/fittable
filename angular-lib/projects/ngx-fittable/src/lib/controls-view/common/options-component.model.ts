@@ -9,12 +9,13 @@ import {
   WindowListener,
 } from 'fit-core/view-model';
 
-import { ControlType, createWindowStyle } from './control-utils.model';
+import { ControlType } from './control-type.model';
+import { createWindowStyle } from './style-functions.model';
 
 @Injectable({ providedIn: 'root' })
 export class OptionsComponent {
   public model!: OptionsControl;
-  public windowListener!: WindowListener;
+  protected windowListener!: WindowListener;
 
   public getWindowStyle(): CssStyle {
     return createWindowStyle(this.model.getWindow());
@@ -36,7 +37,8 @@ export class OptionsComponent {
   }
 
   public showOptionsWindow(): void {
-    this.windowListener.setWindow(this.model.getWindow()).onShow();
+    if (this.model.isDisabled()) return;
+    this.windowListener.onShow();
   }
 
   public getLabel(): string {
@@ -75,7 +77,7 @@ export class OptionsComponent {
     return this.getSelectedControl()?.getIcon();
   }
 
-  private getSelectedControl(): Control | undefined {
+  public getSelectedControl(): Control | undefined {
     let id: string | undefined = this.model.getSelectedControl();
     if (!id) id = this.model.getWindow().getControlIds()[0];
     return id ? this.getControl(id) : undefined;
@@ -88,7 +90,7 @@ export class OptionsComponent {
   }
 
   @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
-    this.windowListener.setWindow(this.model.getWindow()).onMouseDown(event);
+    this.windowListener.onMouseDown(event);
   }
 
   @HostListener('window:mousedown') onGlobalMouseDown(): void {
@@ -96,6 +98,6 @@ export class OptionsComponent {
   }
 
   private hideOptionsWindow(): void {
-    this.windowListener.setWindow(this.model.getWindow()).onGlobalMouseDown();
+    this.windowListener.onGlobalMouseDown();
   }
 }

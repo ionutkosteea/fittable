@@ -1,15 +1,22 @@
+import { Observable, Subject } from 'rxjs';
+
 import { CellRange, CellCoord } from 'fit-core/model/index.js';
 import {
   TableViewer,
   CellSelectionRanges,
   Rectangle,
   CellSelectionRectangles,
+  ScrollContainer,
 } from 'fit-core/view-model/index.js';
 
 abstract class FitCellSelectionRectangles implements CellSelectionRectangles {
-  private rectangles: Rectangle[] = [];
+  protected rectangles: Rectangle[] = [];
+  private afterPaint$: Subject<void> = new Subject();
 
-  constructor(protected readonly tableViewer: TableViewer) {}
+  constructor(
+    protected readonly tableViewer: TableViewer,
+    protected readonly tableScroller: ScrollContainer
+  ) {}
 
   protected abstract calcLeft(cellRange: CellRange): number;
   protected abstract calcTop(cellRange: CellRange): number;
@@ -18,6 +25,7 @@ abstract class FitCellSelectionRectangles implements CellSelectionRectangles {
 
   public paint(cellSelection: CellSelectionRanges): this {
     this.createRectangles(cellSelection);
+    this.afterPaint$.next();
     return this;
   }
 
@@ -51,6 +59,10 @@ abstract class FitCellSelectionRectangles implements CellSelectionRectangles {
     return false;
   }
 
+  public onAfterPaint$(): Observable<void> {
+    return this.afterPaint$.asObservable();
+  }
+
   public getRectangles(): Rectangle[] {
     return this.rectangles;
   }
@@ -63,14 +75,12 @@ export class BodySelectionRectangles extends FitCellSelectionRectangles {
       this.tableViewer.getColPosition(cellRange.getFrom().getColId())
     );
   }
-
   protected calcTop(cellRange: CellRange): number {
     return (
       this.tableViewer.getColHeaderHeight() +
       this.tableViewer.getRowPosition(cellRange.getFrom().getRowId())
     );
   }
-
   protected calcWidth(cellRange: CellRange): number {
     let width = 0;
     const from: CellCoord = cellRange.getFrom();
@@ -80,7 +90,6 @@ export class BodySelectionRectangles extends FitCellSelectionRectangles {
     }
     return width;
   }
-
   protected calcHeight(cellRange: CellRange): number {
     let height = 0;
     const from: CellCoord = cellRange.getFrom();
@@ -114,11 +123,9 @@ export class ColHeaderSelectionRectangles extends FitCellSelectionRectangles {
       this.tableViewer.getColPosition(cellRange.getFrom().getColId())
     );
   }
-
   protected calcTop(): number {
     return 0;
   }
-
   protected calcWidth(cellRange: CellRange): number {
     let width = 0;
     const from: CellCoord = cellRange.getFrom();
@@ -128,28 +135,23 @@ export class ColHeaderSelectionRectangles extends FitCellSelectionRectangles {
     }
     return width;
   }
-
   protected calcHeight(): number {
     return this.tableViewer.getColHeaderHeight();
   }
 }
-
 export class RowHeaderSelectionRectangles extends FitCellSelectionRectangles {
   protected calcLeft(): number {
     return 0;
   }
-
   protected calcTop(cellRange: CellRange): number {
     return (
       this.tableViewer.getColHeaderHeight() +
       this.tableViewer.getRowPosition(cellRange.getFrom().getRowId())
     );
   }
-
   protected calcWidth(): number {
     return this.tableViewer.getRowHeaderWidth();
   }
-
   protected calcHeight(cellRange: CellRange): number {
     let height = 0;
     const from: CellCoord = cellRange.getFrom();

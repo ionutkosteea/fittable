@@ -6,8 +6,9 @@ export class FitControl implements Control {
   private labelFn!: () => string;
   private iconFn?: () => string | undefined;
   private type?: FitControlType;
-  private isValidFn?: () => boolean;
+  private validFn?: () => boolean;
   private runFn?: () => void;
+  private disabled = false;
 
   public getLabel(): string {
     return this.labelFn();
@@ -37,11 +38,20 @@ export class FitControl implements Control {
   }
 
   public isValid(): boolean {
-    return this.isValidFn ? this.isValidFn() : true;
+    return this.validFn ? this.validFn() : true;
   }
 
-  public setIsValidFn(isValidFn: () => boolean): this {
-    this.isValidFn = isValidFn;
+  public setValid(validFn: () => boolean): this {
+    this.validFn = validFn;
+    return this;
+  }
+
+  public isDisabled(): boolean {
+    return this.disabled;
+  }
+
+  public setDisabled(disabled: boolean): this {
+    this.disabled = disabled;
     return this;
   }
 

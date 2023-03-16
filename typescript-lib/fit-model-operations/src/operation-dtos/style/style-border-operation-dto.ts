@@ -51,14 +51,14 @@ export type BorderName =
 
 export class StyleBorderOperationDtoBuilder {
   public readonly styleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
     cellStyleNames: [],
   };
   public readonly undoStyleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
@@ -267,7 +267,7 @@ export class StyleBorderOperationDtoBuilder {
       const builder: StyleUpdateOperationDtoBuilder =
         new StyleUpdateOperationDtoBuilder(
           this.table,
-          { id: 'style-update', selectedCells: address, style },
+          { id: 'style-update', selectedCells: address, styleSnippet: style },
           maxStyleNameUid
         );
       builder.build();

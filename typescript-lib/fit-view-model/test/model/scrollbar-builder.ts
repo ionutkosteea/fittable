@@ -6,11 +6,11 @@ import {
 } from 'fit-core/model/index.js';
 import { TableViewer, createTableViewer } from 'fit-core/view-model/index.js';
 
+import { VirtualScrollbar } from '../../dist/model/scroll-container/fit-scrollbar.js';
 import {
-  VirtualScroller,
   VerticalScrollbar,
   HorizontalScrollbar,
-} from '../../dist/model/table-scroller/fit-scrollbar.js';
+} from '../../dist/model/scroll-container/table-scrollbars.js';
 
 export type ScrollbarType = 'vertical' | 'horizontal';
 
@@ -36,7 +36,7 @@ export class ScrollbarBuilder {
     return this;
   }
 
-  public build(): VirtualScroller {
+  public build(): VirtualScrollbar {
     return this.createScrollbar();
   }
 
@@ -58,10 +58,10 @@ export class ScrollbarBuilder {
     return table;
   }
 
-  private createScrollbar(): VirtualScroller {
+  private createScrollbar(): VirtualScrollbar {
     const table: Table = this.createTable();
     const tableCache: TableViewer = createTableViewer(table);
-    const scrollbar: VirtualScroller =
+    const scrollbar: VirtualScrollbar =
       this.type === 'vertical'
         ? new VerticalScrollbar(tableCache)
         : new HorizontalScrollbar(tableCache);

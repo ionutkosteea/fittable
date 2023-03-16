@@ -14,16 +14,21 @@ import {
 
 import { FitNeighborCells } from '../common/fit-neighbor-cells.js';
 
+type Name = 'RowHeader' | 'ColHeader' | 'PageHeader' | 'Body';
+
 export class FitCellSelectionRanges implements CellSelectionRanges {
   private ranges: CellSelectionRange[] = [];
-  private afterAddCell$: Subject<CellCoord> = new Subject();
+  private readonly afterAddCell$: Subject<CellCoord> = new Subject();
   private disableAfterAddCell = false;
-  private afterRemovePreviousRanges$: Subject<void> = new Subject();
-  private end$: Subject<CellRange[]>[] = [];
+  private readonly afterRemovePreviousRanges$: Subject<void> = new Subject();
+  private readonly end$: Subject<CellRange[]> = new Subject();
   private focus = false;
-  private afterSetFocus$: Subject<boolean> = new Subject();
+  private readonly afterSetFocus$: Subject<boolean> = new Subject();
 
-  constructor(private readonly tableViewer: TableViewer) {}
+  constructor(
+    public readonly name: Name,
+    private readonly tableViewer: TableViewer
+  ) {}
 
   public createRange(): this {
     const newSelection = new CellSelectionRange(this.tableViewer);
@@ -125,20 +130,17 @@ export class FitCellSelectionRanges implements CellSelectionRanges {
 
   public getNeighborCells(): NeighborCells {
     return new FitNeighborCells()
-      .setTable(this.tableViewer.getTable())
+      .setTableViewer(this.tableViewer)
       .setCell(this.getFirstCell()!);
   }
 
-  public addOnEnd$(endSelection$: Subject<CellRange[]>): this {
-    this.end$.push(endSelection$);
+  public end(): this {
+    this.end$.next(this.getRanges());
     return this;
   }
 
-  public end(): this {
-    this.end$.forEach((subject: Subject<CellRange[]>): void => {
-      subject.next(this.getRanges());
-    });
-    return this;
+  public onEnd$(): Observable<CellRange[]> {
+    return this.end$.asObservable();
   }
 
   public hasFocus(): boolean {

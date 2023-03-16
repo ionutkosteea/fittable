@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import {
   Container,
@@ -7,11 +7,9 @@ import {
   asInputControl,
   OptionsControl,
   asOptionsControl,
-  InputControlListener,
-  WindowListener,
 } from 'fit-core/view-model';
 
-import { ControlType } from '../common/control-utils.model';
+import { ControlType } from '../common/control-type.model';
 
 @Component({
   selector: 'fit-toolbar',
@@ -20,8 +18,6 @@ import { ControlType } from '../common/control-utils.model';
 })
 export class ToolbarComponent {
   @Input() model!: Container;
-  @Input() windowListener?: WindowListener;
-  @Input() inputControlListener?: InputControlListener;
 
   public readonly getControlIDs = (): string[] => this.model.getControlIds();
 
@@ -42,21 +38,5 @@ export class ToolbarComponent {
     const options: OptionsControl | undefined = asOptionsControl(control);
     if (options) return options;
     else throw new Error('Invalid options control for id ' + id);
-  }
-
-  public readonly hasWindowListener = (): boolean =>
-    this.windowListener !== undefined;
-
-  public readonly getWindowListener = (): WindowListener =>
-    this.windowListener as WindowListener;
-
-  public readonly hasInputControlListener = (): boolean =>
-    this.inputControlListener !== undefined;
-
-  public readonly getInputControlListener = (): InputControlListener =>
-    this.inputControlListener as InputControlListener;
-
-  @HostListener('mousedown') onMouseDown(): void {
-    !this.model.hasFocus() && this.model.setFocus(true);
   }
 }

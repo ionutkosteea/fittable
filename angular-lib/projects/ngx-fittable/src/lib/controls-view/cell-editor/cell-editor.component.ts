@@ -1,6 +1,5 @@
 import { Subscription } from 'rxjs';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Input,
@@ -9,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { CssStyle, Style, Value } from 'fit-core/model';
+import { CssStyle, Value, CellCoord } from 'fit-core/model';
 import {
   CellEditor,
   CellEditorListener,
@@ -22,57 +21,129 @@ import {
   templateUrl: './cell-editor.component.html',
   styleUrls: ['./cell-editor.component.css'],
 })
-export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CellEditorComponent implements OnInit, OnDestroy {
   @Input() cellEditorListener!: CellEditorListener;
-  @Input() cellStyle?: Style;
+  @Input() getCellStyle!: (rowId: number, colId: number) => CssStyle | null;
   @ViewChild('textArea') textAreaRef!: ElementRef;
 
+  public cellEditorStyle: CssStyle = {};
+  public textAreaStyle: CssStyle = {};
   private readonly subscriptions: Subscription[] = [];
 
   public ngOnInit(): void {
-    this.createSubscriptions();
+    this.initCellEditor();
+    this.createCellEditorSubscriptions();
+    this.createCellEditorInputSubscriptions();
   }
 
-  public ngAfterViewInit(): void {
-    this.cellEditorListener.onInit();
+  private initCellEditor(): void {
+    this.updateCellEditorVisibility(true);
+    this.updateCellEditorRectangle();
+    this.updateTextAreaCellStyle();
   }
 
-  private createSubscriptions(): void {
-    const inputControl: InputControl = this.getInputControl();
+  private createCellEditorSubscriptions(): void {
+    const cellEditor: CellEditor = this.cellEditorListener.cellEditor;
     this.subscriptions.push(
-      inputControl.focus$.subscribe((enable: boolean): void => {
-        this.focus(enable);
+      cellEditor.onAfterSetCell$().subscribe((): void => {
+        this.updateCellEditorRectangle();
+        this.updateTextAreaCellStyle();
       })
     );
-    inputControl.scrollToEnd$ &&
-      this.subscriptions.push(
-        inputControl.scrollToEnd$.subscribe((): void => this.scrollToEnd())
-      );
-    inputControl.ctrlEnter$ &&
-      this.subscriptions.push(
-        inputControl.ctrlEnter$.subscribe((): void => this.ctrlEnter())
-      );
-    inputControl.forceValue$ &&
-      this.subscriptions.push(
-        inputControl.forceValue$.subscribe((value?: Value): void => {
-          this.forceValue(value);
+    this.subscriptions.push(
+      cellEditor.onAfterSetVisible$().subscribe((visible: boolean): void => {
+        this.updateCellEditorVisibility(visible);
+      })
+    );
+    this.subscriptions.push(
+      cellEditor
+        .onAfterSetPointerEvents$()
+        .subscribe((events: boolean): void => {
+          this.updateCellEditorPointerEvents(events);
         })
-      );
+    );
   }
 
-  private focus(enable: boolean): void {
+  private createCellEditorInputSubscriptions(): void {
+    const inputControl: InputControl = this.getInputControl();
+    this.subscriptions.push(
+      inputControl.onSetFocus$().subscribe((enable: boolean): void => {
+        this.focusTextArea(enable);
+      })
+    );
+    this.subscriptions.push(
+      inputControl
+        .onScrollToEnd$()
+        .subscribe((): void => this.textAreaScrollToEnd())
+    );
+    this.subscriptions.push(
+      inputControl
+        .onCtrlEnter$()
+        .subscribe((): void => this.textAreaCtrlEnter())
+    );
+    this.subscriptions.push(
+      inputControl
+        .onSetValue$()
+        .subscribe((value?: Value): void => this.textAreaValue(value))
+    );
+    this.subscriptions.push(
+      inputControl.onSetTextCursor$().subscribe((cursor: boolean): void => {
+        this.updateTextAreaCaretColor(cursor);
+      })
+    );
+  }
+
+  private updateCellEditorVisibility(visible: boolean): void {
+    this.cellEditorStyle['display'] = visible ? 'block' : 'none';
+  }
+
+  private updateCellEditorRectangle(): void {
+    const rect: Rectangle | undefined =
+      this.cellEditorListener.cellEditor.getCellRectangle();
+    if (!rect) return;
+    this.cellEditorStyle['left.px'] = rect.left;
+    this.cellEditorStyle['top.px'] = rect.top;
+    this.cellEditorStyle['width.px'] = rect.width;
+    this.cellEditorStyle['height.px'] = rect.height;
+  }
+
+  private updateCellEditorPointerEvents(events: boolean): void {
+    this.cellEditorStyle['pointer-events'] = events ? 'auto' : 'none';
+  }
+
+  private focusTextArea(enable: boolean): void {
     const textArea: HTMLTextAreaElement = this.getTextArea();
     if (enable) return textArea.focus({ preventScroll: true });
     else return textArea.blur();
   }
 
-  private scrollToEnd(): void {
+  private updateTextAreaCaretColor(caret: boolean): void {
+    this.textAreaStyle['caret-color'] = caret ? 'auto' : 'transparent';
+  }
+
+  private updateTextAreaCellStyle(): void {
+    Object.keys(this.textAreaStyle).forEach((value: string): void => {
+      if (value === 'caret-color') return;
+      delete this.textAreaStyle[value];
+    });
+    const cellCoord: CellCoord = this.cellEditorListener.cellEditor.getCell();
+    const rowId: number = cellCoord.getRowId();
+    const colId: number = cellCoord.getColId();
+    const cellStyle: CssStyle | null = this.getCellStyle(rowId, colId);
+    if (cellStyle) {
+      for (const name of Object.keys(cellStyle)) {
+        this.textAreaStyle[name] = cellStyle[name];
+      }
+    }
+  }
+
+  private textAreaScrollToEnd(): void {
     const textArea: HTMLTextAreaElement = this.getTextArea();
     textArea.scrollTop = textArea.scrollHeight;
     textArea.scrollLeft = textArea.scrollWidth;
   }
 
-  private ctrlEnter(): void {
+  private textAreaCtrlEnter(): void {
     const textArea: HTMLTextAreaElement = this.getTextArea();
     const textCursor: number = textArea.selectionStart;
     const start: string = textArea.value.slice(0, textCursor);
@@ -81,53 +152,21 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     textArea.selectionEnd = textCursor + 1;
   }
 
-  private forceValue(value?: Value): void {
-    this.getTextArea().value = value ? '' + value : '';
+  private textAreaValue(value?: Value): void {
+    this.getTextArea().value = value === undefined ? '' : '' + value;
   }
 
   private getTextArea(): HTMLTextAreaElement {
     return this.textAreaRef.nativeElement as HTMLTextAreaElement;
   }
 
-  public getStyle(): CssStyle {
-    const cellEditor: CellEditor = this.cellEditorListener.getCellEditor();
-    const display: string = cellEditor.isVisible() ? 'block' : 'none';
-    const pointerEvents: string = cellEditor.hasPointerEvents()
-      ? 'auto'
-      : 'none';
-    const style: CssStyle = { display, pointerEvents };
-    const rect: Rectangle | undefined = cellEditor.getCellRectangle();
-    if (rect) {
-      style['left.px'] = rect.left;
-      style['top.px'] = rect.top;
-      style['width.px'] = rect.width;
-      style['height.px'] = rect.height;
-    }
-    return style;
-  }
-
-  public getTextAreaStyle(): CssStyle {
-    const caretColor: string = this.getInputControl().hasTextCursor()
-      ? 'auto'
-      : 'transparent';
-    const style: CssStyle = { caretColor };
-    if (this.cellStyle)
-      this.cellStyle.forEach(
-        (name: string, value?: string | number): boolean => {
-          style[name] = value;
-          return true;
-        }
-      );
-    return style;
-  }
-
   public getTextAreaValue(): string {
     const value: Value | undefined = this.getInputControl().getValue();
-    return value ? '' + value : '';
+    return value === undefined ? '' : '' + value;
   }
 
   private readonly getInputControl = (): InputControl =>
-    this.cellEditorListener.getCellEditor().getCellControl();
+    this.cellEditorListener.cellEditor.getCellControl();
 
   public readonly onTextAreaMouseEnter = (event: MouseEvent): void =>
     this.cellEditorListener.onMouseEnter(event);

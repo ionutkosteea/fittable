@@ -1,9 +1,9 @@
-<div class="table-left-top" *ngIf="hasRowHeader() && hasColHeader()" [ngStyle]="getContainerPosition()">
+<div class="table-left-top" *ngIf="hasRowHeader() && hasColHeader()" [ngStyle]="getTableOffset()">
   <table class="table">
     <colgroup>
       <col [ngStyle]="{'width.px':getRowHeaderWidth()}" />
     </colgroup>
-    <thead fitCellSelection [cellSelectionListener]="getCellSelectionListener()"
+    <thead fitCellSelection [cellSelectionListener]="cellSelectionListener"
       [cellSelectionRanges]="getCellSelectionRanges()">
       <tr class="header-row" [ngStyle]="{'height.px':getColHeaderHeight()}">
         <th class="header-cell" [attr.rowId]="0" [attr.colId]="0">
@@ -12,4 +12,4 @@
     </thead>
   </table>
 </div>
-<div class="header-selection" *ngFor="let rect of getCellSelectionStyle()" [ngStyle]="rect"></div>
+<div class="header-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>

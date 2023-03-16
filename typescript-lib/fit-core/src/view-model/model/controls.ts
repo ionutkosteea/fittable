@@ -1,28 +1,25 @@
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { implementsTKeys } from '../../common/core-functions.js';
 import { Value } from '../../model/table.js';
 import { CellRange } from '../../model/cell-range.js';
-import { getViewModelConfig } from '../view-model-config.js';
 import { OperationExecutor } from '../../operations/operation-core.js';
 import { LanguageDictionary } from './language-dictionary.js';
 import { ImageRegistry } from './image-registry.js';
-import { TableScroller } from './table-scroller.js';
-import { ThemeSwitcher } from './theme-switcher.js';
-import { TableViewer } from './table-viewer.js';
 
 export interface Control {
   getLabel(): string;
   getIcon(): string | undefined;
   getType(): string | undefined;
   isValid(): boolean;
+  isDisabled(): boolean;
   run(): void;
 }
 
 export interface ValueControl extends Control {
-  forceValue$?: Subject<Value | undefined>;
   getValue(): Value | undefined;
   setValue(value?: Value): this;
+  onSetValue$(): Observable<Value | undefined>;
 }
 
 export function asValueControl(control?: Control): ValueControl | undefined {
@@ -32,15 +29,33 @@ export function asValueControl(control?: Control): ValueControl | undefined {
 }
 
 export interface InputControl extends ValueControl {
-  focus$: Subject<boolean>;
-  scrollToEnd$?: Subject<void>;
-  ctrlEnter$?: Subject<void>;
+  hasFocus(): boolean;
+  setFocus(focus: boolean): this;
+  onSetFocus$(): Observable<boolean>;
+  scrollToEnd(): this;
+  onScrollToEnd$(): Observable<void>;
+  ctrlEnter(): this;
+  onCtrlEnter$(): Observable<void>;
   hasTextCursor(): boolean;
-  setTextCursor(visible: boolean): this;
+  setTextCursor(cursor: boolean): this;
+  onSetTextCursor$(): Observable<boolean>;
 }
 
 export function asInputControl(control?: Control): InputControl | undefined {
-  return implementsTKeys<InputControl>(control, ['focus$'])
+  return implementsTKeys<InputControl>(control, ['hasFocus'])
+    ? control
+    : undefined;
+}
+
+export interface CheckBoxControl extends Control {
+  isChecked(): boolean;
+  setChecked(checked: boolean): this;
+}
+
+export function asCheckBoxControl(
+  control?: Control
+): CheckBoxControl | undefined {
+  return implementsTKeys<CheckBoxControl>(control, ['isChecked'])
     ? control
     : undefined;
 }
@@ -50,7 +65,6 @@ export interface FocusableObject {
   setFocus(focus: boolean, ignoreTrigger?: boolean): this;
   onAfterSetFocus$(): Observable<boolean>;
 }
-
 export type ControlMap = { [id: string]: Control };
 
 export interface Container extends FocusableObject {
@@ -98,64 +112,4 @@ export interface ControlArgs {
   dictionary: LanguageDictionary;
   imageRegistry: ImageRegistry;
   getSelectedCells(): CellRange[];
-}
-
-export interface ContextMenuFactory {
-  createContextMenu(args: ControlArgs): Window;
-}
-
-export function createContextMenu(args: ControlArgs): Window {
-  const factory: ContextMenuFactory | undefined =
-    getViewModelConfig().contextMenuFactory;
-  if (factory) return factory.createContextMenu(args);
-  else throw new Error('ContextMenuFactory is not defined!');
-}
-
-export interface ToolbarFactory {
-  createToolbar(args: ControlArgs): Container;
-}
-
-export function createToolbar(args: ControlArgs): Container {
-  const factory: ToolbarFactory | undefined =
-    getViewModelConfig().toolbarFactory;
-  if (factory) return factory.createToolbar(args);
-  else throw new Error('ToolbarFactory is not defined!');
-}
-
-export interface Statusbar extends FocusableObject {
-  getText(): string;
-}
-
-export type StatusbarArgs = {
-  dictionary: LanguageDictionary;
-  tableViewer: TableViewer;
-  tableScroller: TableScroller;
-};
-
-export interface StatusbarFactory {
-  createStatusbar(args: StatusbarArgs): Statusbar;
-}
-
-export function createStatusbar(args: StatusbarArgs): Statusbar {
-  const factory: StatusbarFactory | undefined =
-    getViewModelConfig().statusbarFactory;
-  if (factory) return factory.createStatusbar(args);
-  else throw new Error('StatusbarFactory is not defined!');
-}
-
-export type SettingsBarArgs = {
-  dictionary: LanguageDictionary;
-  imageRegistry: ImageRegistry;
-  themeSwitcher?: ThemeSwitcher;
-};
-
-export interface SettingsBarFactory {
-  createSettingsBar(args: SettingsBarArgs): Container;
-}
-
-export function createSettingsBar(args: SettingsBarArgs): Container {
-  const factory: SettingsBarFactory | undefined =
-    getViewModelConfig().settingsBarFactory;
-  if (factory) return factory.createSettingsBar(args);
-  else throw new Error('SettingsBarFactory is not defined!');
 }

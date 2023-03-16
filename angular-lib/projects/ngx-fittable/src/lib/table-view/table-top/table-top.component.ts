@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 
-import { CssStyle } from 'fit-core/model';
+import { CssStyle, getModelConfig } from 'fit-core/model';
 import {
   ViewModel,
-  Rectangle,
-  HostListeners,
   CellSelectionRanges,
+  ColFilters,
+  CellSelectionListener,
 } from 'fit-core/view-model';
 
 import { TableCommon } from '../common/table-common.model';
@@ -17,30 +17,21 @@ import { TableCommon } from '../common/table-common.model';
 })
 export class TableTopComponent extends TableCommon {
   @Input() viewModel!: ViewModel;
-  @Input() hostListeners!: HostListeners;
+  @Input() cellSelectionListener?: CellSelectionListener;
 
-  public getContainerPosition(): CssStyle {
-    const left: number = this.getRowHeaderWidth() + this.getOffsetX();
-    const top: number = this.getScrollTop();
-    return { transform: 'translate3d(' + left + 'px,' + top + 'px,0px)' };
-  }
+  public readonly getTableOffset = (): CssStyle =>
+    this.viewModel.mobileLayout.colHeaderOffset;
 
   public readonly getCellSelectionRanges = ():
     | CellSelectionRanges
     | undefined => this.viewModel.cellSelection?.colHeader;
 
-  public getCellSelectionStyle(): CssStyle[] {
-    const styles: CssStyle[] = [];
-    this.viewModel.cellSelectionPainter?.colHeader
-      ?.getRectangles()
-      .forEach((rect: Rectangle): void => {
-        const top: number = rect.top + this.getScrollTop();
-        styles.push({
-          transform: 'translate3d(' + rect.left + 'px,' + top + 'px,0px)',
-          width: rect.width + 'px',
-          height: rect.height + 'px',
-        });
-      });
-    return styles;
-  }
+  public readonly getCellSelectionRectangles = (): CssStyle[] =>
+    this.viewModel.mobileLayout.colHeaderSelectionRectangles;
+
+  public readonly hasColFilters = (): boolean =>
+    getModelConfig().colFilterExecutorFactory !== undefined &&
+    this.viewModel.colFilters !== undefined;
+
+  public readonly getColFilters = (): ColFilters => this.viewModel.colFilters!;
 }

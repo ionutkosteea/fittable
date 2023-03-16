@@ -1,0 +1,23 @@
+<div class="window" #filterWindow [ngStyle]="getWindowStyle()">
+  <div class="label">{{getSearchInput().getLabel()}}</div>
+  <input class="search-input" #searchInput [value]="getSearchInput().getValue() ?? ''"
+    [ngStyle]="{backgroundImage:getSearchInput().getIcon()}" (input)="onSearchInput($event)" />
+  <div class="value-button-bar">
+    <button class="value-button" (click)="getClearButton().run()">{{getClearButton().getLabel()}}</button>
+    <button class="value-button" (click)="getSelectAllButton().run()">{{getSelectAllButton().getLabel()}}</button>
+  </div>
+  <div class="scroller" #scroller fitScrollContainer [scrollContainer]="getScrollContainer()">
+    <div *ngIf="hasCheckList()" class="check-list-container" [ngStyle]="{'height.px':getCheckListHeight()}">
+      <div class="check-list" [ngStyle]="{transform:'translate3d(0px,'+getOffsetY()+'px,0px)'}">
+        <div *ngFor="let id of getCheckBoxIds()" class="check-item" (click)="onCheckBoxClick(id)">
+          <input type="checkbox" [id]="id" [checked]="getCheckBox(id).isChecked() ? 'checked' : undefined" />
+          <label [for]="id" (click)="onCheckBoxClick(id)">{{getCheckBox(id).getLabel()}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="button-bar">
+    <button class="action-button" (click)="getOkButton().run()">{{getOkButton().getLabel()}}</button>
+    <button class="action-button" (click)="getCancelButton().run()">{{getCancelButton().getLabel()}}</button>
+  </div>
+</div>

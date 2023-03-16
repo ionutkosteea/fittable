@@ -2,6 +2,11 @@
   position: absolute;
   margin: 0px;
   padding: 0px;
+  left: 0px;
+  top: 0px;
+  width: 0px;
+  height: 0px;
+  box-sizing: border-box;
 }
 
 .cell-editor-input {
@@ -21,6 +26,7 @@
   -moz-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
   resize: none;
   border: none;
+  box-sizing: border-box;
 }
 
 .cell-editor-input:focus {

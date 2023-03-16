@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import {
   registerModelConfig,
   Value,
@@ -20,7 +22,7 @@ import {
   OperationExecutor,
   createOperationExecutor,
   registerOperationConfig,
-  OperationExecutorListener,
+  OperationDto,
 } from 'fit-core/operations/index.js';
 
 import { FIT_MODEL_CONFIG } from '../../../fit-model/dist/index.js';
@@ -136,18 +138,12 @@ export class TableOperationExecutor {
     return this;
   }
 
+  public onAfterUndo$(): Observable<OperationDto> {
+    return this.executor.onAfterUndo$();
+  }
+
   public canRedo(): boolean {
     return this.executor.canRedo();
-  }
-
-  public addOperationListener(listener: OperationExecutorListener): this {
-    this.executor.addListener(listener);
-    return this;
-  }
-
-  public clearOperationListeners(): this {
-    this.executor.clearListeners();
-    return this;
   }
 
   public runRedo(): this {
@@ -155,14 +151,18 @@ export class TableOperationExecutor {
     return this;
   }
 
+  public onAfterRedo$(): Observable<OperationDto> {
+    return this.executor.onAfterRedo$();
+  }
+
   public runFontBold(isBold: boolean): this {
-    const style: Style = isBold
+    const styleSnippet: Style = isBold
       ? createStyle().set('font-weight', 'bold')
       : createStyle().set('font-weight', undefined);
     const args: FitOperationDtoArgs = {
       id: 'style-update',
       selectedCells: this.getSelectedCells(),
-      style,
+      styleSnippet,
     };
     this.executor.run(args);
     return this;
@@ -191,7 +191,7 @@ export class TableOperationExecutor {
     const args: FitOperationDtoArgs = {
       id: 'row-insert',
       selectedLines: this.getSelectedRows(),
-      numberOfInsertableLines: numberOfRows,
+      numberOfNewLines: numberOfRows,
     };
     this.executor.run(args);
     return this;
@@ -201,8 +201,8 @@ export class TableOperationExecutor {
     const args: FitOperationDtoArgs = {
       id: 'row-insert',
       selectedLines: this.getSelectedRows(),
-      numberOfInsertableLines: numberOfRows,
-      canInsertAfter: true,
+      numberOfNewLines: numberOfRows,
+      insertAfter: true,
     };
     this.executor.run(args);
     return this;
@@ -231,7 +231,7 @@ export class TableOperationExecutor {
     const args: FitOperationDtoArgs = {
       id: 'column-insert',
       selectedLines: this.getSelectedCols(),
-      numberOfInsertableLines: numberOfCols,
+      numberOfNewLines: numberOfCols,
     };
     this.executor.run(args);
     return this;
@@ -241,8 +241,8 @@ export class TableOperationExecutor {
     const args: FitOperationDtoArgs = {
       id: 'column-insert',
       selectedLines: this.getSelectedCols(),
-      numberOfInsertableLines: numberOfCols,
-      canInsertAfter: true,
+      numberOfNewLines: numberOfCols,
+      insertAfter: true,
     };
     this.executor.run(args);
     return this;
@@ -316,6 +316,10 @@ export class TableOperationExecutor {
     };
     this.executor.run(args);
     return this;
+  }
+
+  public onAfterRun$(): Observable<OperationDto> {
+    return this.executor.onAfterRun$();
   }
 
   private getSelectedCells(): CellRange[] {

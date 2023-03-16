@@ -1,5 +1,5 @@
-<div class="cell-editor" [ngStyle]="getStyle()">
-  <textarea class="cell-editor-input" #textArea [ngStyle]="getTextAreaStyle()" [value]="getTextAreaValue()"
+<div class="cell-editor" [ngStyle]="cellEditorStyle">
+  <textarea class="cell-editor-input" #textArea [ngStyle]="textAreaStyle" [value]="getTextAreaValue()"
     (mouseenter)="onTextAreaMouseEnter($event)" (mousedown)="onTextAreaMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()" (window:mouseup)="onGlobalMouseUp()" (keydown)="onTextAreaKeyDown($event)"
     (input)="onTextAreaInput($event)" (contextmenu)="onTextAreaContextMenu($event)"></textarea>

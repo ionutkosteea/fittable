@@ -1,6 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import { WindowListener, OptionsControl } from 'fit-core/view-model';
+import {
+  WindowListener,
+  createWindowListener,
+  OptionsControl,
+} from 'fit-core/view-model';
 import { OptionsComponent } from '../../common/options-component.model';
 
 @Component({
@@ -8,7 +12,15 @@ import { OptionsComponent } from '../../common/options-component.model';
   templateUrl: './settings-button.component.html',
   styleUrls: ['./settings-button.component.css'],
 })
-export class SettingsButtonComponent extends OptionsComponent {
+export class SettingsButtonComponent
+  extends OptionsComponent
+  implements OnInit
+{
   @Input() override model!: OptionsControl;
-  @Input() override windowListener!: WindowListener;
+
+  protected override windowListener!: WindowListener;
+
+  public ngOnInit(): void {
+    this.windowListener = createWindowListener(this.model.getWindow());
+  }
 }

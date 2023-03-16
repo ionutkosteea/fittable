@@ -1,17 +1,16 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import {
   Container,
   TableViewer,
-  TableScrollerListener,
-  InputControlListener,
   Window,
-  WindowListener,
   Statusbar,
   getViewModelConfig,
   ViewModel,
-  HostListeners,
   FittableDesigner,
+  ScrollContainer,
+  CellSelectionListener,
+  createCellSelectionListener,
 } from 'fit-core/view-model';
 
 @Component({
@@ -19,13 +18,24 @@ import {
   templateUrl: './table-view.component.html',
   styleUrls: ['./table-view.component.css'],
 })
-export class TableViewComponent implements OnDestroy {
+export class TableViewComponent implements OnInit, OnDestroy {
   @Input() designer!: FittableDesigner;
 
-  public readonly getViewModel = (): ViewModel => this.designer.viewModel;
+  public cellSelectionListener?: CellSelectionListener;
 
-  public readonly getHostListeners = (): HostListeners =>
-    this.designer.hostListeners;
+  public ngOnInit(): void {
+    this.cellSelectionListener = this.createCellSelectionListener();
+  }
+
+  private createCellSelectionListener(): CellSelectionListener | undefined {
+    const wm = this.getViewModel();
+    return (
+      wm.cellSelection &&
+      createCellSelectionListener(wm.cellSelection, wm.cellSelectionScroller)
+    );
+  }
+
+  public readonly getViewModel = (): ViewModel => this.designer.viewModel;
 
   public hasToolbar(): boolean {
     return this.designer.viewModel.toolbar !== undefined;
@@ -34,12 +44,8 @@ export class TableViewComponent implements OnDestroy {
   public readonly getToolbar = (): Container =>
     this.designer.viewModel.toolbar as Container;
 
-  public readonly getInputControlListener = ():
-    | InputControlListener
-    | undefined => this.designer.hostListeners.inputControlListener;
-
-  public readonly getTableScrollerListener = (): TableScrollerListener =>
-    this.designer.hostListeners.tableScrollerListener;
+  public readonly getTableScroller = (): ScrollContainer =>
+    this.designer.viewModel.tableScroller;
 
   public getTableWidth(): number {
     const tableViewer: TableViewer = this.designer.viewModel.tableViewer;
@@ -52,17 +58,11 @@ export class TableViewComponent implements OnDestroy {
   }
 
   public hasContextMenu(): boolean {
-    return (
-      this.designer.viewModel.contextMenu !== undefined &&
-      this.designer.hostListeners.windowListener !== undefined
-    );
+    return this.designer.viewModel.contextMenu !== undefined;
   }
 
   public readonly getContextMenu = (): Window =>
     this.designer.viewModel.contextMenu as Window;
-
-  public readonly getWindowListener = (): WindowListener =>
-    this.designer.hostListeners.windowListener as WindowListener;
 
   public hasStatusbar(): boolean {
     return this.designer.viewModel.statusbar !== undefined;
@@ -72,10 +72,7 @@ export class TableViewComponent implements OnDestroy {
     this.designer.viewModel.statusbar as Statusbar;
 
   public hasSettingsBar(): boolean {
-    return (
-      this.designer.viewModel.settingsBar !== undefined &&
-      this.designer.hostListeners.windowListener !== undefined
-    );
+    return this.designer.viewModel.settingsBar !== undefined;
   }
 
   public readonly getSettingsBar = (): Container =>

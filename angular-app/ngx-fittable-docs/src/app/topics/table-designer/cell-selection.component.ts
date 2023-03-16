@@ -1,4 +1,4 @@
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
@@ -19,8 +19,8 @@ import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
-import { Button, ConsoleTopic } from './common/console-topic.model';
 import { CodeSnippet } from '../common/code-snippet.model';
+import { Button, ConsoleTopic } from './common/console-topic.model';
 
 @Component({
   selector: 'cell-selection',
@@ -78,14 +78,15 @@ export class CellSelectionComponent implements ConsoleTopic, OnInit, OnDestroy {
   }
 
   private writeCellSelectionToConsole(): void {
-    const onEnd$: Subject<CellRange[]> = new Subject();
-    this.subscription = onEnd$.subscribe((cellRanges: CellRange[]): void => {
-      this.consoleText = '';
-      for (const cellRange of cellRanges) {
-        this.consoleText += JSON.stringify(cellRange.getDto(), null, 2) + '\n';
-      }
-    });
-    this.fit.viewModel.cellSelection?.body.addOnEnd$(onEnd$);
+    this.subscription = this.fit.viewModel
+      .cellSelection!.body.onEnd$()
+      .subscribe((cellRanges: CellRange[]): void => {
+        this.consoleText = '';
+        for (const cellRange of cellRanges) {
+          this.consoleText +=
+            JSON.stringify(cellRange.getDto(), null, 2) + ',\n';
+        }
+      });
   }
 
   public getConsoleText(): string {

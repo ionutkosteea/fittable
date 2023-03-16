@@ -45,6 +45,13 @@ export type FitTextKey =
   | 'Light mode'
   | 'Dark mode'
   | 'Rows'
-  | 'Columns';
+  | 'Columns'
+  | 'Select all'
+  | 'Clear'
+  | 'Cancel'
+  | 'Blank cells'
+  | 'Filter by value'
+  | 'Search'
+  | 'Ok';
 
 export type FitDictionary = { [key in FitTextKey]?: string };

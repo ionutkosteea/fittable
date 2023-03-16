@@ -78,12 +78,12 @@ describe('Test CellSelectionRanges', () => {
   });
 
   it('check end-selection observable', () => {
-    const subject$ = new Subject<CellRange[]>();
     let testCoord: CellCoord | undefined;
-    subject$.subscribe(() => (testCoord = cellSelector.body.getLastCell()));
+    cellSelector.body
+      .onEnd$()
+      .subscribe(() => (testCoord = cellSelector.body.getLastCell()));
     cellSelector.body
       .removeRanges()
-      .addOnEnd$(subject$)
       .createRange()
       .addCell(createCellCoord(1, 1))
       .addCell(createCellCoord(1, 2))

@@ -6,6 +6,7 @@
   cursor: default;
   border: 1px dotted var(--table-header-border-color);
   border-collapse: collapse;
+  box-sizing: border-box;
 }
 
 .header-row {
@@ -22,6 +23,7 @@
   font-size: 10px;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .header-selection {
@@ -43,4 +45,5 @@
   display: grid;
   place-items: inherit;
   text-decoration: inherit;
+  box-sizing: border-box;
 }

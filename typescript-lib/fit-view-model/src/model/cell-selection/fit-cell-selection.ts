@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 
-import { Table, createCellCoord, CellCoord } from 'fit-core/model/index.js';
+import { createCellCoord, CellCoord } from 'fit-core/model/index.js';
 import {
   CellSelection,
   CellSelectionFactory,
@@ -22,11 +22,10 @@ export class FitCellSelection implements CellSelection {
   private readonly subscriptions: Subscription[] = [];
 
   constructor(private readonly tableViewer: TableViewer) {
-    this.rowHeader = new FitCellSelectionRanges(tableViewer);
-    this.colHeader = new FitCellSelectionRanges(tableViewer);
-    this.pageHeader = new FitCellSelectionRanges(tableViewer);
-    this.body = new FitCellSelectionRanges(tableViewer);
-    this.body.setFocus(true);
+    this.rowHeader = new FitCellSelectionRanges('RowHeader', tableViewer);
+    this.colHeader = new FitCellSelectionRanges('ColHeader', tableViewer);
+    this.pageHeader = new FitCellSelectionRanges('PageHeader', tableViewer);
+    this.body = new FitCellSelectionRanges('Body', tableViewer);
     this.handleBody();
     this.handleRowHeader();
     this.handleColHeader();
@@ -96,14 +95,13 @@ export class FitCellSelection implements CellSelection {
   }
 
   private get lastColId(): number {
-    return this.tableViewer.getTable().getNumberOfCols() - 1;
+    return this.tableViewer.getNumberOfCols() - 1;
   }
 
   private selectColHeaderByBody(): void {
     this.colHeader.setDisableAfterAddCell(true);
-    const table: Table = this.tableViewer.getTable();
     const numberOfRows: number = getViewModelConfig().rowHeaderWidth ? 1 : 0;
-    const numberOfCols: number = table.getNumberOfCols() - 1;
+    const numberOfCols: number = this.tableViewer.getNumberOfCols() - 1;
     this.colHeader
       .removeRanges()
       .createRange()
@@ -147,13 +145,12 @@ export class FitCellSelection implements CellSelection {
   }
 
   private get lastRowId(): number {
-    return this.tableViewer.getTable().getNumberOfRows() - 1;
+    return this.tableViewer.getNumberOfRows() - 1;
   }
 
   private selectRowHeaderByBody(): void {
     this.rowHeader.setDisableAfterAddCell(true);
-    const table: Table = this.tableViewer.getTable();
-    const numberOfRows: number = table.getNumberOfRows() - 1;
+    const numberOfRows: number = this.tableViewer.getNumberOfRows() - 1;
     const numberOfCols: number = getViewModelConfig().colHeaderHeight ? 1 : 0;
     this.rowHeader
       .removeRanges()
@@ -183,8 +180,8 @@ export class FitCellSelection implements CellSelection {
   }
 
   private tableHasNoRowsOrCols(): boolean {
-    const numberOfRows: number = this.tableViewer.getTable().getNumberOfRows();
-    const numberOfCols: number = this.tableViewer.getTable().getNumberOfCols();
+    const numberOfRows: number = this.tableViewer.getNumberOfRows();
+    const numberOfCols: number = this.tableViewer.getNumberOfCols();
     return numberOfRows <= 0 || numberOfCols <= 0;
   }
 

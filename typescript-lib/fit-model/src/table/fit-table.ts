@@ -8,6 +8,8 @@ import {
   TableRows,
   TableStyles,
   Value,
+  ColConditionFn,
+  TableColFilter,
 } from 'fit-core/model/index.js';
 
 import {
@@ -20,7 +22,13 @@ import {
 } from './dto/fit-table-dto.js';
 
 export class FitTable
-  implements TableBasics, TableRows, TableCols, TableStyles, TableMergedRegions
+  implements
+    TableBasics,
+    TableRows,
+    TableCols,
+    TableStyles,
+    TableMergedRegions,
+    TableColFilter
 {
   constructor(
     private readonly dto: FitTableDto = { numberOfRows: 5, numberOfCols: 5 }
@@ -53,7 +61,7 @@ export class FitTable
   }
 
   public setCellValue(rowId: number, colId: number, value?: Value): this {
-    if (value) {
+    if (value !== undefined) {
       this.createMatrixCell('cells', rowId, colId);
       this.dto.cells![rowId][colId]['value'] = value;
     } else if (this.hasMatrixCell('cells', rowId, colId)) {
@@ -230,7 +238,9 @@ export class FitTable
     return this;
   }
 
-  public forEachRegion(cellFn: (rowId: number, colId: number) => void): void {
+  public forEachMergedCell(
+    cellFn: (rowId: number, colId: number) => void
+  ): void {
     if (!this.dto.mergedCells) return;
     for (const i of Object.keys(this.dto.mergedCells)) {
       for (const j of Object.keys(this.dto.mergedCells[i])) {
@@ -352,6 +362,31 @@ export class FitTable
       this.dto[dtoKey]![rowId][colId]
       ? true
       : false;
+  }
+
+  public filterByCol(colId: number, conditionFn: ColConditionFn): FitTable {
+    let numberOfRows = 0;
+    const filterDto: FitTableDto = {
+      numberOfRows: numberOfRows,
+      numberOfCols: this.dto.numberOfCols,
+      styles: this.dto.styles,
+      cols: this.dto.cols,
+      rows: {},
+      cells: {},
+    };
+    for (let rowId = 0; rowId < this.getNumberOfRows(); rowId++) {
+      const value: Value | undefined = this.getCellValue(rowId, colId);
+      if (!conditionFn(rowId, colId, value)) continue;
+      if (this.dto.cells![rowId!]) {
+        filterDto.cells![numberOfRows] = this.dto.cells![rowId!];
+      }
+      if (this.dto.rows && this.dto.rows[rowId!]) {
+        filterDto.rows![numberOfRows] = this.dto.rows[rowId!];
+      }
+      numberOfRows++;
+    }
+    filterDto.numberOfRows = numberOfRows;
+    return new FitTable(filterDto);
   }
 }
 

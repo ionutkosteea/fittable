@@ -1,3 +1,7 @@
+import {
+  MissingFactoryError,
+  MissingFactoryMethodError,
+} from '../common/factory-error.js';
 import { getModelConfig } from './model-config.js';
 
 export type CssStyle = { [name in string]?: string | number };
@@ -29,11 +33,11 @@ export function createStyle<T extends Style>(): T {
 export function createStyle4Dto<T extends Style>(dto: unknown): T {
   const factory: StyleFactory = getFactory();
   if (factory.createStyle4Dto) return factory.createStyle4Dto(dto) as T;
-  else throw new Error('StyleFactory.createStyle4Dto is not defined!');
+  else throw new MissingFactoryMethodError();
 }
 
 function getFactory(): StyleFactory {
   const factory: StyleFactory | undefined = getModelConfig().styleFactory;
   if (factory) return factory;
-  else throw new Error('StyleFactory is not defined!');
+  else throw new MissingFactoryError();
 }

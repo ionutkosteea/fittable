@@ -4,7 +4,6 @@
   place-items: center normal;
   padding-left: 10px;
   padding-right: 10px;
-  cursor: pointer;
   font-size: 14px;
   height: 26px;
 }
@@ -22,10 +21,7 @@
   padding-left: 10px;
   padding-right: 10px;
   color: var(--toolbar-color);
-}
-
-.label-disabled {
-  color: var(--disabled-color);
+  cursor: inherit;
 }
 
 .input {

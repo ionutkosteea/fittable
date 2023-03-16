@@ -1,7 +1,7 @@
 import { LineRange, createLineRange } from '../line-range.js';
 
 export class LineRangeList {
-  private ranges: LineRange[] = [];
+  constructor(private ranges: LineRange[] = []) {}
 
   public sort(): this {
     this.ranges = this.ranges.sort((i1, i2) => compareTo(i1, i2));

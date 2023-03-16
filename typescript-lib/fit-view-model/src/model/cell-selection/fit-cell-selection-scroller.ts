@@ -1,7 +1,7 @@
 import {
   CellSelectionScroller,
   CellSelectionScrollerFactory,
-  TableScroller,
+  ScrollContainer,
   TableViewer,
 } from 'fit-core/view-model/index.js';
 
@@ -14,7 +14,7 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
 
   constructor(
     private tableViewer: TableViewer,
-    private tableScroller: TableScroller
+    private tableScroller: ScrollContainer
   ) {}
 
   public setRowId(rowId: number): this {
@@ -66,7 +66,7 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
   }
 
   private scrollDown(): number {
-    const numberOfRows: number = this.tableViewer.getTable().getNumberOfRows();
+    const numberOfRows: number = this.tableViewer.getNumberOfRows();
     if (this.rowId === numberOfRows - 1) return -1;
     const scrollTop: number = this.tableScroller.getTop();
     const clientHeight: number = this.tableScroller.getHeight();
@@ -104,7 +104,7 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
   }
 
   private scrollRight(): number {
-    const numberOfCols: number = this.tableViewer.getTable().getNumberOfCols();
+    const numberOfCols: number = this.tableViewer.getNumberOfCols();
     if (this.colId === numberOfCols - 1) return -1;
     const scrollLeft: number = this.tableScroller.getLeft();
     const clientWidth: number = this.tableScroller.getWidth();
@@ -135,7 +135,7 @@ export class FitCellSelectionScrollerFactory
 {
   public createCellSelectionScroller(
     viewer: TableViewer,
-    scroller: TableScroller
+    scroller: ScrollContainer
   ): CellSelectionScroller {
     return new FitCellSelectionScroller(viewer, scroller);
   }

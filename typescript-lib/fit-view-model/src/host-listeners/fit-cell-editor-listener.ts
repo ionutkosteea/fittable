@@ -1,12 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 
 import { implementsTKeys } from 'fit-core/common/index.js';
-import {
-  CellCoord,
-  CellRange,
-  createCellCoord,
-  Value,
-} from 'fit-core/model/index.js';
+import { CellCoord, CellRange, Value } from 'fit-core/model/index.js';
 import {
   CellEditor,
   CellEditorListener,
@@ -18,6 +13,8 @@ import {
   InputControl,
   NeighborCells,
 } from 'fit-core/view-model/index.js';
+
+import { FitElement, getCellCoord } from '../model/common/fit-element.js';
 
 type ActionKey =
   | 'Enter'
@@ -32,75 +29,73 @@ type ActionKey =
   | 'Meta';
 
 export class FitCellEditorListener implements CellEditorListener {
-  private cellEditor!: CellEditor;
   private enableControlKeys = false;
   private enableControlEdit = false;
   private cellValue?: Value;
   private newCellValue?: string;
-  private selectedCellsFn: () => CellRange[] = () => [];
   private selectedCells: CellRange[] = [];
   private isMouseDown = false;
+  private isGlobalMouseDown = false;
   private contextMenu$: Subject<FitMouseEvent> = new Subject();
 
-  public setCellEditor(cellEditor: CellEditor): this {
-    this.cellEditor = cellEditor;
-    return this;
-  }
+  constructor(
+    public readonly cellEditor: CellEditor,
+    private readonly selectedCellsFn: () => CellRange[]
+  ) {}
 
-  public getCellEditor(): CellEditor {
-    return this.cellEditor;
-  }
-
-  public setSelectedCells(selectedCellsFn: () => CellRange[]): this {
-    this.selectedCellsFn = selectedCellsFn;
-    return this;
-  }
-
-  public onShow(cellCoord: CellCoord, event?: FitMouseEvent): void {
-    event?.preventDefault();
-    if (event?.shiftKey) {
+  public onShow(event: FitMouseEvent): void {
+    event.preventDefault();
+    if (event.shiftKey) {
       this.enableControlEdit && this.enableControlEditAndKeys(false);
-      this.cellEditor.getCellControl().focus$.next(true);
+      this.setInputFocus(true);
       return;
     }
-    if (event?.button !== 0) {
+    const cellCoord: CellCoord = getCellCoord(event.target as FitElement);
+    if (event.button !== 0) {
       for (const cellRange of this.selectedCells) {
         const rowId: number = cellCoord.getRowId();
         const cellId: number = cellCoord.getColId();
-        if (cellRange.hasCell(rowId, cellId)) return;
+        if (cellRange.hasCell(rowId, cellId)) {
+          this.setInputFocus(false);
+          return;
+        }
       }
     }
     this.applyNewCellValue();
     this.moveCellEditor(cellCoord);
-    if (event?.button !== 0) {
-      this.cellEditor.getCellControl().focus$.next(false);
-    }
-  }
-
-  public onInit(): void {
-    this.moveCellEditor(createCellCoord(0, 0));
+    if (event.button !== 0) this.setInputFocus(false);
   }
 
   public onMouseEnter(): void {
-    if (!this.isMouseDown) return;
+    if (!this.isGlobalMouseDown) return;
+    // Disable pointer events for 50 ms, for enabling underlying mouse events.
     this.cellEditor.setPointerEvents(false);
     setTimeout(() => this.cellEditor.setPointerEvents(true), 50);
   }
 
   public onMouseDown(event: FitMouseEvent): void {
+    this.isMouseDown = true;
     if (this.enableControlKeys) return;
-    if (event.button !== 0) return;
+    if (event.button !== 0) {
+      this.setInputFocus(false);
+      return;
+    }
     this.enableControlEditAndKeys(true);
-    this.cellEditor.getCellControl().scrollToEnd$?.next();
+    this.cellEditor.getCellControl().scrollToEnd();
   }
 
   public onGlobalMouseDown(): void {
-    this.isMouseDown = true;
+    this.isGlobalMouseDown = true;
   }
 
   public onGlobalMouseUp(): void {
-    this.isMouseDown = false;
-    this.selectedCells = this.selectedCellsFn();
+    if (this.isMouseDown) {
+      this.isMouseDown = false;
+    } else {
+      this.enableControlEditAndKeys(false);
+      this.selectedCells = this.selectedCellsFn();
+      this.isGlobalMouseDown = false;
+    }
   }
 
   public onKeyDown(event: FitKeyboardEvent): void {
@@ -115,21 +110,21 @@ export class FitCellEditorListener implements CellEditorListener {
     else if (key === 'ArrowRight') this.arrowDown(origin.getRightCell(), event);
     else if (key === 'ArrowDown') this.arrowDown(origin.getBottomCell(), event);
     else if (key === 'Meta') event.preventDefault();
-    else if (key !== 'Shift' && key !== 'Control') this.regularKeyDown();
+    else if (key !== 'Shift' && key !== 'Control') this.regularKeyDown(event);
   }
 
   private enterDown(event: FitKeyboardEvent): void {
     event.preventDefault();
     if (this.enableControlEdit) {
       if (event.ctrlKey) {
-        this.cellEditor.getCellControl().ctrlEnter$?.next();
+        this.cellEditor.getCellControl().ctrlEnter();
       } else {
         this.applyNewCellValue();
         this.moveCellEditor(this.cellEditor.getNeighborCells().getBottomCell());
       }
     } else {
       this.enableControlEditAndKeys(true);
-      this.cellEditor.getCellControl().scrollToEnd$?.next();
+      this.cellEditor.getCellControl().scrollToEnd();
     }
   }
 
@@ -140,6 +135,7 @@ export class FitCellEditorListener implements CellEditorListener {
     const inputValue: string =
       this.cellValue === undefined ? '' : '' + this.cellValue;
     if (htmlInput) htmlInput.value = inputValue;
+    this.cellEditor.setCell(this.cellEditor.getCell()); // Trigger setCell event.
     this.enableControlEditAndKeys(false);
     this.newCellValue = undefined;
   }
@@ -157,7 +153,8 @@ export class FitCellEditorListener implements CellEditorListener {
     this.moveCellEditor(cellCoord);
   }
 
-  private regularKeyDown(): void {
+  private regularKeyDown(event: FitKeyboardEvent): void {
+    if (event.metaKey) return;
     if (this.enableControlEdit) return;
     this.enableControlEdit = true;
     this.cellEditor.getCellControl().setTextCursor(true);
@@ -193,16 +190,21 @@ export class FitCellEditorListener implements CellEditorListener {
     this.cellEditor.setCell(cell);
     const inputControl: InputControl = this.cellEditor.getCellControl();
     this.cellValue = inputControl.getValue();
-    inputControl.forceValue$?.next(this.cellValue);
-    inputControl.focus$.next(true);
+    this.setInputFocus(true);
     this.enableControlEditAndKeys(false);
   }
 
+  private setInputFocus(focus: boolean): void {
+    setTimeout((): void => {
+      this.cellEditor.getCellControl().setFocus(focus);
+    });
+  }
+
   private enableControlEditAndKeys(enable: boolean): void {
+    this.cellEditor.hasFocus() !== enable && this.cellEditor.setFocus(enable);
     this.enableControlEdit = enable;
     this.cellEditor.getCellControl().setTextCursor(enable);
     this.enableControlKeys = enable;
-    this.cellEditor.setFocus(enable);
   }
 
   private getHtmlInput(event: FitEvent): FitHTMLInputElement | undefined {
@@ -213,7 +215,10 @@ export class FitCellEditorListener implements CellEditorListener {
 }
 
 export class FitCellEditorListenerFactory implements CellEditorListenerFactory {
-  public createCellEditorListener(): CellEditorListener {
-    return new FitCellEditorListener();
+  public createCellEditorListener(
+    cellEditor: CellEditor,
+    selectedCellsFn: () => CellRange[]
+  ): CellEditorListener {
+    return new FitCellEditorListener(cellEditor, selectedCellsFn);
   }
 }

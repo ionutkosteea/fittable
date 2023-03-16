@@ -1,19 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
-import {
-  CssStyle,
-  createCellCoord,
-  CellRange,
-  CellCoord,
-  Style,
-} from 'fit-core/model';
+import { CssStyle, CellRange } from 'fit-core/model';
 import {
   ViewModel,
-  Rectangle,
-  HostListeners,
   CellEditorListener,
+  createCellEditorListener,
   CellSelectionRanges,
-  CellEditor,
+  FitMouseEvent,
+  createWindowListener,
+  CellSelectionListener,
 } from 'fit-core/view-model';
 
 import { TableCommon } from '../common/table-common.model';
@@ -23,60 +19,58 @@ import { TableCommon } from '../common/table-common.model';
   templateUrl: './table-center.component.html',
   styleUrls: ['../common/css/table-common.css', './table-center.component.css'],
 })
-export class TableCenterComponent extends TableCommon {
+export class TableCenterComponent
+  extends TableCommon
+  implements OnInit, OnDestroy
+{
   @Input() viewModel!: ViewModel;
-  @Input() hostListeners!: HostListeners;
+  @Input() cellSelectionListener?: CellSelectionListener;
 
-  public getContainerPosition(): CssStyle {
-    const left: number = this.getRowHeaderWidth() + this.getOffsetX();
-    const top: number = this.getColHeaderHeight() + this.getOffsetY();
-    return { transform: 'translate3d(' + left + 'px,' + top + 'px,0px)' };
+  public cellEditorListener?: CellEditorListener;
+  private readonly subscriptions: Set<Subscription | undefined> = new Set();
+
+  public ngOnInit(): void {
+    this.cellEditorListener = this.createCellEditorListener();
+    this.subscriptions.add(this.openCellEditorContextMenu$());
   }
+
+  private createCellEditorListener(): CellEditorListener | undefined {
+    return (
+      this.viewModel.cellEditor &&
+      createCellEditorListener(
+        this.viewModel.cellEditor,
+        (): CellRange[] => this.viewModel.cellSelection?.body.getRanges() ?? []
+      )
+    );
+  }
+
+  private openCellEditorContextMenu$(): Subscription | undefined {
+    return (
+      this.viewModel.contextMenu &&
+      this.cellEditorListener
+        ?.onContextMenu$()
+        .subscribe((event: FitMouseEvent): void => {
+          createWindowListener(this.viewModel.contextMenu!).onShow(event);
+        })
+    );
+  }
+
+  public readonly getTableOffset = (): CssStyle =>
+    this.viewModel.mobileLayout.bodyOffset;
 
   public readonly getCellSelectionRanges = ():
     | CellSelectionRanges
     | undefined => this.viewModel.cellSelection?.body;
 
-  public getCellSelectionStyle(): CssStyle[] {
-    const styles: CssStyle[] = [];
-    this.viewModel.cellSelectionPainter?.body
-      .getRectangles()
-      .forEach((rect: Rectangle): void => {
-        styles.push({
-          'left.px': rect.left - 2,
-          'top.px': rect.top - 2,
-          'width.px': rect.width,
-          'height.px': rect.height,
-        });
-      });
-    return styles;
-  }
-
-  public hasCellEditor(): boolean {
-    return this.hostListeners.cellEditorListener?.getCellEditor() !== undefined;
-  }
-
-  public readonly getCellEditor = (): CellEditor =>
-    this.viewModel.cellEditor as CellEditor;
-
   public readonly getSelectedCells = (): CellRange[] =>
     this.viewModel.cellSelection?.body.getRanges() ?? [];
 
-  public readonly showCellEditor = (
-    rowId: number,
-    colId: number,
-    event: MouseEvent
-  ): void =>
-    this.getCellEditorListener()?.onShow(createCellCoord(rowId, colId), event);
+  public readonly getCellSelectionRectangles = (): CssStyle[] =>
+    this.viewModel.mobileLayout.bodySelectionRectangles;
 
-  public readonly getCellEditorListener = (): CellEditorListener =>
-    this.hostListeners.cellEditorListener as CellEditorListener;
-
-  public getCellEditorStyle(): Style | undefined {
-    const cellCoord: CellCoord = this.getCellEditor().getCell();
-    return this.viewModel.tableViewer.getCellStyle(
-      cellCoord.getRowId(),
-      cellCoord.getColId()
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach((s: Subscription | undefined): void =>
+      s?.unsubscribe()
     );
   }
 }

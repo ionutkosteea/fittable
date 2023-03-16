@@ -24,7 +24,7 @@ export class CellCopyOperationDtoFactory implements OperationDtoFactory {
   ): CellCopyOperationStepDto {
     return {
       id: 'cell-copy',
-      selectedCellRange: args.selectedCells[0].getDto(),
+      cellRange: args.selectedCells[0].getDto(),
     };
   }
 }

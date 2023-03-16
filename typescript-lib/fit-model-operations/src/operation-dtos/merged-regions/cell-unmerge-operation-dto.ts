@@ -41,7 +41,7 @@ export class CellUnmergeOperationDtoBuilder {
 
   private removeExistingRegions(): void {
     for (const cellRange of this.args.selectedCells) {
-      this.table.forEachRegion((rowId: number, colId: number): void => {
+      this.table.forEachMergedCell((rowId: number, colId: number): void => {
         if (!cellRange.hasCell(rowId, colId)) return;
         this.mergedRegionsStep.removeRegions!.push({ rowId, colId });
         this.undoMergedRegionsStep.createRegions!.push({

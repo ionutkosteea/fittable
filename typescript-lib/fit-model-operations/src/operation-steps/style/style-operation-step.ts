@@ -13,13 +13,13 @@ import {
 } from 'fit-core/operations/index.js';
 
 export type CellStyleNameDto = {
-  updatableCellRanges: unknown[];
+  cellRanges: unknown[];
   styleName?: string;
 };
 
 export type StyleEntryDto = { styleName: string; style: unknown };
 
-export type StyleOperationStepDto = OperationId<'style'> & {
+export type StyleOperationStepDto = OperationId<'style-changes'> & {
   cellStyleNames: CellStyleNameDto[];
   createStyles: StyleEntryDto[];
   updateStyles: StyleEntryDto[];
@@ -43,11 +43,11 @@ export class StyleOperationStep implements OperationStep {
     for (const cellStyleNameDto of this.stepDto.cellStyleNames) {
       if (cellStyleNameDto.styleName) {
         this.updateDefinedStyleName(
-          cellStyleNameDto.updatableCellRanges,
+          cellStyleNameDto.cellRanges,
           cellStyleNameDto.styleName
         );
       } else {
-        this.updateUndefinedStyleName(cellStyleNameDto.updatableCellRanges);
+        this.updateUndefinedStyleName(cellStyleNameDto.cellRanges);
       }
     }
   }

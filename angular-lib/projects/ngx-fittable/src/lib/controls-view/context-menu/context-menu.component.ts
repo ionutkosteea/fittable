@@ -9,13 +9,14 @@ import {
 
 import { CssStyle } from 'fit-core/model';
 import {
+  Control,
   Window,
   WindowListener,
-  InputControlListener,
-  Control,
+  createWindowListener,
 } from 'fit-core/view-model';
 
-import { ControlType, createWindowStyle } from '../common/control-utils.model';
+import { ControlType } from '../common/control-type.model';
+import { createWindowStyle } from '../common/style-functions.model';
 
 @Component({
   selector: 'fit-context-menu',
@@ -24,15 +25,16 @@ import { ControlType, createWindowStyle } from '../common/control-utils.model';
 })
 export class ContextMenuComponent implements AfterViewInit {
   @Input() window!: Window;
-  @Input() windowListener!: WindowListener;
-  @Input() inputControlListener?: InputControlListener;
   @ViewChild('main') menuRef!: ElementRef;
+
+  private windowListener!: WindowListener;
 
   public ngAfterViewInit(): void {
     const htmlMenu: HTMLElement = this.menuRef.nativeElement;
     this.window
       .setWidth((): number => htmlMenu.clientWidth)
       .setHeight((): number => htmlMenu.clientHeight);
+    this.windowListener = createWindowListener(this.window);
   }
 
   public readonly getMenuStyle = (): CssStyle => createWindowStyle(this.window);
@@ -49,17 +51,11 @@ export class ContextMenuComponent implements AfterViewInit {
     this.window.setVisible(false);
   };
 
-  public readonly hasWindowListener = (): boolean =>
-    this.windowListener !== undefined;
-
-  public readonly getWindowListener = (): WindowListener =>
-    this.windowListener as WindowListener;
-
   @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
-    this.windowListener.setWindow(this.window).onMouseDown(event);
+    this.windowListener.onMouseDown(event);
   }
 
   @HostListener('window:mousedown') onGlobalMouseDown(): void {
-    this.windowListener.setWindow(this.window).onGlobalMouseDown();
+    this.windowListener.onGlobalMouseDown();
   }
 }

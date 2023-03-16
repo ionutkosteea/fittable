@@ -1,4 +1,4 @@
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
@@ -7,7 +7,7 @@ import {
   createTable4Dto,
   registerModelConfig,
 } from 'fit-core/model';
-import { Operation, registerOperationConfig } from 'fit-core/operations';
+import { OperationDto, registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
@@ -40,6 +40,7 @@ export class RemoveCellsComponent
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'remove-cells-ts-01.jpg' },
     { image: 'remove-cells-ts-02.jpg' },
+    { image: 'remove-cells-ts-03.jpg' },
   ];
   public readonly buttonText = 'Remove cells B2, C2';
   public fit!: FittableDesigner;
@@ -66,13 +67,18 @@ export class RemoveCellsComponent
       },
     };
     this.fit = createFittableDesigner(createTable4Dto(tableDto));
-    const afterRun$: Subject<Operation> = new Subject();
-    this.subscription = afterRun$.subscribe((operation: Operation): void => {
-      this.consoleText += 'Operation id: ' + operation.id + '\n';
-    });
-    this.fit.operationExecutor?.addListener({
-      onAfterRun$: (): Subject<Operation> => afterRun$,
-    });
+
+    this.subscription = this.writeToConsole$();
+  }
+
+  private writeToConsole$(): Subscription {
+    return this.fit
+      .operationExecutor!.onAfterRun$()
+      .subscribe((operationDto: OperationDto): void => {
+        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
+        this.consoleText +=
+          'Operation steps: ' + JSON.stringify(operationDto.steps, null, 2);
+      });
   }
 
   public runOperation(): void {

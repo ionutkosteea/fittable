@@ -8,7 +8,7 @@ import {
   getViewModelConfig,
   registerViewModelConfig,
   Scrollbar,
-  TableScroller,
+  ScrollContainer,
   ViewModelConfig,
 } from 'fit-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fit-model';
@@ -69,7 +69,7 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
     });
     this.fit = createFittableDesigner(table);
 
-    const tableScroller: TableScroller = this.fit.viewModel.tableScroller;
+    const tableScroller: ScrollContainer = this.fit.viewModel.tableScroller;
     this.verticalScrollbar = tableScroller.getVerticalScrollbar();
     this.horizontalScrollbar = tableScroller.getHorizontalScrollbar();
     this.createButtons();
@@ -93,7 +93,7 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
       run: (): void => {
         const config: ViewModelConfig = getViewModelConfig();
         config.disableVirtualRows = !config.disableVirtualRows;
-        const tableScroller: TableScroller = this.fit.viewModel.tableScroller;
+        const tableScroller: ScrollContainer = this.fit.viewModel.tableScroller;
         if (config.disableVirtualRows) {
           tableScroller.setVerticalScrollbar();
           this.virtualColsButton!.disabled = 'disabled';
@@ -115,7 +115,7 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
       run: (): void => {
         const config: ViewModelConfig = getViewModelConfig();
         config.disableVirtualCols = !config.disableVirtualCols;
-        const tableScroller: TableScroller = this.fit.viewModel.tableScroller;
+        const tableScroller: ScrollContainer = this.fit.viewModel.tableScroller;
         if (config.disableVirtualCols) {
           tableScroller.setHorizontalScrollbar();
           this.virtualRowsButton!.disabled = 'disabled';

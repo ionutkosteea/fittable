@@ -11,7 +11,7 @@
   width: 100%;
   height: 50px;
   background-color: white;
-  z-index: 2;
+  z-index: 5;
   border-bottom: 2px solid rgba(96, 96, 96, 0.1);
 }
 

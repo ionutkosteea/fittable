@@ -5,37 +5,39 @@ import {
   CellSelectionRanges,
 } from 'fit-core/view-model';
 
-import { getCellCoord } from '../../controls-view/common/control-utils.model';
-
 @Directive({ selector: '[fitCellSelection]' })
 export class CellSelectionDirective {
   @Input() cellSelectionListener?: CellSelectionListener;
   @Input() cellSelectionRanges?: CellSelectionRanges;
 
-  @HostListener('mousedown', ['$event', '$event.target']) onMouseDown(
-    event: MouseEvent,
-    htmlCell: HTMLElement
-  ): void {
+  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
     this.cellSelectionListener
       ?.setCellSelectionRanges(this.getCellSelectionRanges())
-      .onMouseDown(getCellCoord(htmlCell), event);
+      .onMouseDown(event);
   }
 
-  @HostListener('mousemove', ['$event', '$event.target']) onMouseMove(
-    event: MouseEvent,
-    htmlCell: HTMLElement
-  ): void {
+  @HostListener('mousemove', ['$event']) onMouseMove(event: MouseEvent): void {
     this.cellSelectionListener
       ?.setCellSelectionRanges(this.getCellSelectionRanges())
-      .onMouseMove(getCellCoord(htmlCell), event);
+      .onMouseMove(event);
   }
 
   @HostListener('mouseleave') onMouseLeave(): void {
-    this.cellSelectionListener?.onMouseLeave();
+    this.cellSelectionListener
+      ?.setCellSelectionRanges(this.getCellSelectionRanges())
+      .onMouseLeave();
   }
 
   @HostListener('mouseenter') onMouseEnter(): void {
-    this.cellSelectionListener?.onMouseEnter();
+    this.cellSelectionListener
+      ?.setCellSelectionRanges(this.getCellSelectionRanges())
+      .onMouseEnter();
+  }
+
+  @HostListener('window:mousedown') onGlobalMouseDown(): void {
+    this.cellSelectionListener
+      ?.setCellSelectionRanges(this.getCellSelectionRanges())
+      .onGlobalMouseDown();
   }
 
   @HostListener('window:mouseup', ['$event']) onGlobalMouseUp(
@@ -52,12 +54,6 @@ export class CellSelectionDirective {
     this.cellSelectionListener
       ?.setCellSelectionRanges(this.getCellSelectionRanges())
       .onGlobalKeyDown(event);
-  }
-
-  @HostListener('window:keyup', ['$event']) onGlobalKeyUp(): void {
-    this.cellSelectionListener
-      ?.setCellSelectionRanges(this.getCellSelectionRanges())
-      .onGlobalKeyUp();
   }
 
   private getCellSelectionRanges(): CellSelectionRanges {

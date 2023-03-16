@@ -1,7 +1,8 @@
-<div class="menu-item" (mousedown)="onMouseDown()" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+<div class="menu-item" [ngStyle]="getToggleStyle()" (mousedown)="onMouseDown()" (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
   <div class="icon" [ngStyle]="{backgroundImage:getIcon()}">&nbsp;</div>
-  <div [class]="getLabelClass()">{{getLabel()}}</div>
-  <input *ngIf="hasValue()" #input class="input" [value]="getValue()" (mouseenter)="onInputMouseEnter()"
-    (mouseleave)="onInputMouseLeave()" (mousedown)="onInputMouseDown()" (keydown)="onInputKeyDown($event)"
-    (input)="onInputChange()" type="number" min="1" />
+  <div class="label" [ngStyle]="getIsValidStyle()">{{getLabel()}}</div>
+  <input *ngIf="hasValue()" #input class="input" [value]="getValue()" [disabled]="isDisabled() ? 'disabled' : null"
+    (mouseenter)="onInputMouseEnter()" (mouseleave)="onInputMouseLeave()" (mousedown)="onInputMouseDown()"
+    (keydown)="onInputKeyDown($event)" (input)="onInputChange()" type="number" min="1" />
 </div>

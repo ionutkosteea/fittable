@@ -18,7 +18,7 @@ import {
   LineInsertOperationStepDto,
   RowInsertOperationStepDto,
   ColInsertOperationStepDto,
-  MovableLinesDto,
+  MoveLinesDto,
 } from '../../operation-steps/line/line-insert-operation-step.js';
 import {
   LineRemoveOperationStepDto,
@@ -29,15 +29,15 @@ import { MergedRegionsOperationStepDto } from '../../operation-steps/merged-regi
 
 type LineInsertOperationDtoArgs = {
   selectedLines: LineRange[];
-  numberOfInsertableLines: number;
-  canInsertAfter?: boolean;
+  numberOfNewLines: number;
+  insertAfter?: boolean;
 };
 
 abstract class LineInsertOperationDtoBuilder {
   protected readonly lineInsertStepDto: LineInsertOperationStepDto = {
     numberOfNewLines: 0,
-    selectedLineRanges: [],
-    movableLines: [],
+    lineRanges: [],
+    moveLines: [],
   };
   protected readonly mergedRegionsStepDto: MergedRegionsOperationStepDto = {
     id: 'merged-regions',
@@ -45,8 +45,8 @@ abstract class LineInsertOperationDtoBuilder {
     increaseRegions: [],
   };
   protected readonly undoLineRemoveStepDto: LineRemoveOperationStepDto = {
-    removableLineRanges: [],
-    movableLineRanges: [],
+    lineRanges: [],
+    moveLines: [],
   };
   protected readonly undoMergedRegionsStepDto: MergedRegionsOperationStepDto = {
     id: 'merged-regions',
@@ -72,14 +72,14 @@ abstract class LineInsertOperationDtoBuilder {
   protected abstract increaseRegion(rowId: number, colId: number): void;
 
   protected insertLines(): void {
-    if (this.args.canInsertAfter) {
+    if (this.args.insertAfter) {
       this.selectedLines = this.createInsertAfterLineRanges(this.selectedLines);
     }
-    this.lineInsertStepDto.selectedLineRanges = createDto4LineRangeList(
+    this.lineInsertStepDto.lineRanges = createDto4LineRangeList(
       this.selectedLines
     );
-    this.lineInsertStepDto.movableLines = this.createMovableLinesDto();
-    this.lineInsertStepDto.numberOfNewLines = this.args.numberOfInsertableLines;
+    this.lineInsertStepDto.moveLines = this.createMovableLinesDto();
+    this.lineInsertStepDto.numberOfNewLines = this.args.numberOfNewLines;
   }
 
   private createInsertAfterLineRanges(selectedLines: LineRange[]): LineRange[] {
@@ -95,30 +95,30 @@ abstract class LineInsertOperationDtoBuilder {
     return newLineRanges;
   }
 
-  private createMovableLinesDto(): MovableLinesDto[] {
-    const movableLinesDto: MovableLinesDto[] = [];
-    let move: number = this.args.numberOfInsertableLines;
+  private createMovableLinesDto(): MoveLinesDto[] {
+    const movableLinesDto: MoveLinesDto[] = [];
+    let move: number = this.args.numberOfNewLines;
     const numberOfLines: number = this.getNumberOfLines();
     for (let i = 0; i < this.selectedLines.length; i++) {
       const lineRange: LineRange = this.selectedLines[i];
       if (lineRange.getFrom() >= numberOfLines) continue;
-      movableLinesDto.push({ updatableLineRange: lineRange.getDto(), move });
+      movableLinesDto.push({ lineRange: lineRange.getDto(), move });
       move++;
       if (i > 0) {
         const previousLineRange: LineRange = this.selectedLines[i - 1].clone();
         previousLineRange.setFrom(previousLineRange.getFrom() - 1);
-        movableLinesDto[i - 1].updatableLineRange = previousLineRange.getDto();
+        movableLinesDto[i - 1].lineRange = previousLineRange.getDto();
       }
     }
     if (movableLinesDto.length > 0) {
-      const lastMovableLines: MovableLinesDto =
+      const lastMovableLines: MoveLinesDto =
         movableLinesDto[movableLinesDto.length - 1];
       const lastLineRange: LineRange = createLineRange4Dto(
-        lastMovableLines.updatableLineRange
+        lastMovableLines.lineRange
       ).clone();
       if (lastLineRange.getFrom() < numberOfLines - 1) {
         lastLineRange.setTo(numberOfLines - 1);
-        lastMovableLines.updatableLineRange = lastLineRange.getDto();
+        lastMovableLines.lineRange = lastLineRange.getDto();
       }
     }
     return movableLinesDto;
@@ -131,23 +131,23 @@ abstract class LineInsertOperationDtoBuilder {
 
   private removeInsertedLines(): void {
     const lineRanges: LineRange[] = createLineRangeList4Dto(
-      this.lineInsertStepDto.selectedLineRanges
+      this.lineInsertStepDto.lineRanges
     );
     const from: number = lineRanges[0].getFrom();
     const to: number = from + this.lineInsertStepDto.numberOfNewLines - 1;
     const lineRangeDto: unknown = createLineRange(from, to).getDto();
-    this.undoLineRemoveStepDto.removableLineRanges.push(lineRangeDto);
+    this.undoLineRemoveStepDto.lineRanges.push(lineRangeDto);
   }
 
   public revertMovedLines(): void {
-    this.lineInsertStepDto.movableLines.forEach(
-      (movableLines: MovableLinesDto): void => {
-        const lineRangeDto: unknown = movableLines.updatableLineRange;
+    this.lineInsertStepDto.moveLines.forEach(
+      (movableLines: MoveLinesDto): void => {
+        const lineRangeDto: unknown = movableLines.lineRange;
         const lineRange: LineRange = createLineRange4Dto(lineRangeDto);
         const from: number = lineRange.getFrom() + movableLines.move;
         const to: number = lineRange.getTo() + movableLines.move;
-        this.undoLineRemoveStepDto.movableLineRanges.push({
-          updatableLineRange: createLineRange(from, to).getDto(),
+        this.undoLineRemoveStepDto.moveLines.push({
+          lineRange: createLineRange(from, to).getDto(),
           move: movableLines.move,
         });
       }
@@ -155,7 +155,7 @@ abstract class LineInsertOperationDtoBuilder {
   }
 
   protected updateMergedRegions(): void {
-    this.mergedRegionsTable?.forEachRegion(
+    this.mergedRegionsTable?.forEachMergedCell(
       (rowId: number, colId: number): void => {
         for (const lineRange of this.selectedLines) {
           const selectedFrom: number = lineRange.getFrom() - 1;
@@ -187,7 +187,7 @@ export class RowInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
   }
 
   public build(): OperationDto {
-    if (this.args.numberOfInsertableLines <= 0) {
+    if (this.args.numberOfNewLines <= 0) {
       throw new Error('Number of inserted rows must be greater than 0!');
     }
     this.insertLines();
@@ -226,13 +226,13 @@ export class RowInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
     this.mergedRegionsStepDto.moveRegions!.push({
       rowId,
       colId,
-      moveRow: this.args.numberOfInsertableLines,
+      moveRow: this.args.numberOfNewLines,
       moveCol: 0,
     });
     this.undoMergedRegionsStepDto.moveRegions!.push({
-      rowId: rowId + this.args.numberOfInsertableLines,
+      rowId: rowId + this.args.numberOfNewLines,
       colId,
-      moveRow: -this.args.numberOfInsertableLines,
+      moveRow: -this.args.numberOfNewLines,
       moveCol: 0,
     });
   }
@@ -241,13 +241,13 @@ export class RowInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
     this.mergedRegionsStepDto.increaseRegions!.push({
       rowId,
       colId,
-      increaseRow: this.args.numberOfInsertableLines,
+      increaseRow: this.args.numberOfNewLines,
       increaseCol: 0,
     });
     this.undoMergedRegionsStepDto.increaseRegions!.push({
       rowId,
       colId,
-      increaseRow: -this.args.numberOfInsertableLines,
+      increaseRow: -this.args.numberOfNewLines,
       increaseCol: 0,
     });
   }
@@ -278,7 +278,7 @@ export class ColInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
   }
 
   public build(): OperationDto {
-    if (this.args.numberOfInsertableLines <= 0) {
+    if (this.args.numberOfNewLines <= 0) {
       throw new Error('Number of inserted columns must be greater than 0!');
     }
     this.insertLines();
@@ -314,13 +314,13 @@ export class ColInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
       rowId,
       colId,
       moveRow: 0,
-      moveCol: this.args.numberOfInsertableLines,
+      moveCol: this.args.numberOfNewLines,
     });
     this.undoMergedRegionsStepDto.moveRegions!.push({
       rowId,
-      colId: colId + this.args.numberOfInsertableLines,
+      colId: colId + this.args.numberOfNewLines,
       moveRow: 0,
-      moveCol: -this.args.numberOfInsertableLines,
+      moveCol: -this.args.numberOfNewLines,
     });
   }
 
@@ -329,13 +329,13 @@ export class ColInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
       rowId,
       colId,
       increaseRow: 0,
-      increaseCol: this.args.numberOfInsertableLines,
+      increaseCol: this.args.numberOfNewLines,
     });
     this.undoMergedRegionsStepDto.increaseRegions!.push({
       rowId,
       colId,
       increaseRow: 0,
-      increaseCol: -this.args.numberOfInsertableLines,
+      increaseCol: -this.args.numberOfNewLines,
     });
   }
 }

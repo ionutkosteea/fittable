@@ -22,7 +22,7 @@
   left: -6px;
   background-color: var(--toolbar-background-color);
   border-left: 1px solid var(--toolbar-border-color);
-  z-index: 2;
+  z-index: 10;
   float: left;
   padding: 3px;
   width: 96px;

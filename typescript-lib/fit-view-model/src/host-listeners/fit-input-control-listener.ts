@@ -1,4 +1,3 @@
-import { Value } from 'fit-core/model/index.js';
 import {
   InputControlListener,
   InputControlListenerFactory,
@@ -8,19 +7,10 @@ import {
 } from 'fit-core/view-model/index.js';
 
 export class FitInputControlListener implements InputControlListener {
-  private inputControl!: InputControl;
+  constructor(private readonly inputControl: InputControl) {}
 
   private isMouseOver = false;
   private canRevertValueOnClick = false;
-
-  public setInputControl(input: InputControl): this {
-    this.inputControl = input;
-    return this;
-  }
-
-  public getInputControl(): InputControl {
-    return this.inputControl;
-  }
 
   public onMouseEnter(): void {
     this.isMouseOver = true;
@@ -34,9 +24,7 @@ export class FitInputControlListener implements InputControlListener {
     if (this.isMouseOver) {
       this.canRevertValueOnClick = true;
     } else if (this.canRevertValueOnClick) {
-      const oldValue: Value | undefined = this.inputControl.getValue();
-      this.inputControl.forceValue$?.next(oldValue);
-      this.inputControl.focus$.next(false);
+      this.inputControl.setFocus(false);
       this.canRevertValueOnClick = false;
     }
   }
@@ -44,9 +32,10 @@ export class FitInputControlListener implements InputControlListener {
   public onKeyDown(event: FitKeyboardEvent): void {
     if (event.key !== 'Enter') return;
     event.preventDefault();
+    event.stopPropagation();
     const htmlInput: FitHTMLInputElement = event.target as FitHTMLInputElement;
     this.inputControl.setValue(Number(htmlInput.value)).run();
-    this.inputControl.focus$.next(false);
+    this.inputControl.setFocus(false);
     this.canRevertValueOnClick = false;
   }
 }
@@ -54,7 +43,9 @@ export class FitInputControlListener implements InputControlListener {
 export class FitInputControlListenerFactory
   implements InputControlListenerFactory
 {
-  public createInputControlListener(): InputControlListener {
-    return new FitInputControlListener();
+  public createInputControlListener(
+    inputControl: InputControl
+  ): InputControlListener {
+    return new FitInputControlListener(inputControl);
   }
 }

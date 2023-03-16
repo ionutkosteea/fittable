@@ -1,15 +1,17 @@
 import { CellCoord } from 'fit-core/model/index.js';
 import {
   CellSelection,
-  CellSelectionRanges,
   CellSelectionListener,
   CellSelectionListenerFactory,
+  CellSelectionRanges,
   CellSelectionScroller,
-  ScrollDirection,
-  NeighborCells,
-  FitMouseEvent,
   FitKeyboardEvent,
+  FitMouseEvent,
+  NeighborCells,
+  ScrollDirection,
 } from 'fit-core/view-model/index.js';
+
+import { FitElement, getCellCoord } from '../model/common/fit-element.js';
 
 type ActionKey = 'Enter' | 'ArrowLeft' | 'ArrowUp' | 'ArrowRight' | 'ArrowDown';
 
@@ -17,14 +19,13 @@ export class FitCellSelectionListener implements CellSelectionListener {
   private selectionRanges: CellSelectionRanges;
   private selectedCell?: CellCoord;
   private isMouseDown = false;
-  private isMouseLeave = false;
+  private isMouseEnter = false;
 
   constructor(
     private readonly cellSelection: CellSelection,
     private readonly cellSelectionScroller?: CellSelectionScroller
   ) {
     this.selectionRanges = cellSelection.body;
-    this.selectionRanges.setFocus(true);
   }
 
   public setCellSelectionRanges(ranges: CellSelectionRanges): this {
@@ -32,17 +33,18 @@ export class FitCellSelectionListener implements CellSelectionListener {
     return this;
   }
 
-  public onMouseDown(cellCoord: CellCoord, event?: FitMouseEvent): void {
-    event?.preventDefault();
+  public onMouseDown(event: FitMouseEvent): void {
+    event.preventDefault();
     if (!this.selectionRanges.hasFocus()) {
       this.selectionRanges.setFocus(true);
-      if (event?.shiftKey) return;
+      if (event.shiftKey) return;
     }
-    if (event?.button !== 0 && this.selectionRanges.hasCell(cellCoord)) return;
-    if (event?.shiftKey) {
+    const cellCoord: CellCoord = getCellCoord(event.target as FitElement);
+    if (event.button !== 0 && this.selectionRanges.hasCell(cellCoord)) return;
+    if (event.shiftKey) {
       this.selectionRanges.removePreviousRanges();
     } else {
-      !event?.metaKey && this.cellSelection.clear();
+      !event.metaKey && this.cellSelection.clear();
       this.selectionRanges.createRange();
     }
     this.selectionRanges.addCell(cellCoord);
@@ -50,34 +52,41 @@ export class FitCellSelectionListener implements CellSelectionListener {
     this.isMouseDown = true;
   }
 
-  public onMouseMove(cellCoord: CellCoord, event?: FitMouseEvent): void {
-    event?.preventDefault();
+  public onMouseMove(event: FitMouseEvent): void {
+    event.preventDefault();
+    if (!this.selectionRanges.hasFocus()) {
+      this.isMouseDown && this.endSelection();
+      return;
+    }
     if (!this.isMouseDown) return;
+    const cellCoord: CellCoord = getCellCoord(event.target as FitElement);
     if (cellCoord.equals(this.selectedCell)) return;
+    this.selectionRanges.getRanges().length <= 0 &&
+      this.selectionRanges.createRange();
     this.selectionRanges.addCell(cellCoord);
     this.selectedCell = cellCoord;
   }
 
   public onMouseEnter(): void {
-    this.isMouseLeave = false;
+    this.isMouseEnter = true;
   }
 
   public onMouseLeave(): void {
-    this.isMouseLeave = true;
+    this.isMouseEnter = false;
   }
 
-  public onGlobalMouseUp(): void {
-    if (this.isMouseDown) {
-      this.endSelection();
-      this.isMouseDown = false;
-    } else if (this.isMouseLeave) {
+  public onGlobalMouseDown(): void {
+    !this.isMouseEnter &&
+      this.selectionRanges.hasFocus() &&
       this.selectionRanges.setFocus(false);
-    }
   }
 
-  private endSelection(): void {
-    this.selectionRanges.end();
-    this.selectedCell = undefined;
+  public onGlobalMouseUp(event?: MouseEvent): void {
+    if (this.selectionRanges.hasFocus()) {
+      this.isMouseDown && this.endSelection();
+    } else {
+      event?.button !== 0 && this.isMouseDown && this.endSelection();
+    }
   }
 
   public onGlobalKeyDown(event: FitKeyboardEvent): void {
@@ -146,7 +155,11 @@ export class FitCellSelectionListener implements CellSelectionListener {
     return nextCell;
   }
 
-  public onGlobalKeyUp(): void {}
+  private endSelection(): void {
+    this.selectionRanges.end();
+    this.selectedCell = undefined;
+    this.isMouseDown = false;
+  }
 }
 
 export class FitCellSelectionListenerFactory

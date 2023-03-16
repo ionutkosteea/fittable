@@ -1,4 +1,12 @@
-import { CellRange, createCellCoord, Table } from 'fit-core/model/index.js';
+import { MissingFactoryError } from 'fit-core/common/index.js';
+import {
+  asTableColFilter,
+  CellRange,
+  createCellCoord,
+  Table,
+  TableBasics,
+  TableColFilter,
+} from 'fit-core/model/index.js';
 import { OperationExecutor } from 'fit-core/operations/index.js';
 import {
   ViewModel,
@@ -13,8 +21,8 @@ import {
   ViewModelFactory,
   CellSelectionPainter,
   createCellSelectionPainter,
-  TableScroller,
-  createTableScroller,
+  ScrollContainer,
+  createScrollContainer,
   createImageRegistry,
   createLanguageDictionary,
   ImageRegistry,
@@ -30,6 +38,10 @@ import {
   createSettingsBar,
   ViewModelConfig,
   getViewModelConfig,
+  ColFilters,
+  createColFilters,
+  MobileLayout,
+  createMobileLayout,
 } from 'fit-core/view-model/index.js';
 
 import {
@@ -38,6 +50,10 @@ import {
   setCssVariable,
   setCssVariables,
 } from './common/css-variables.js';
+import {
+  HorizontalScrollbar,
+  VerticalScrollbar,
+} from './scroll-container/table-scrollbars.js';
 import { OperationSubscriptions } from './view-model-subscriptions/operation-subscriptions.js';
 import { ViewModelSubscriptions } from './view-model-subscriptions/view-model-subscriptions.js';
 
@@ -45,7 +61,8 @@ export class FitViewModel implements ViewModel {
   public readonly dictionary: LanguageDictionary;
   public readonly imageRegistry: ImageRegistry;
   public readonly tableViewer: TableViewer;
-  public readonly tableScroller: TableScroller;
+  public readonly tableScroller: ScrollContainer;
+  public readonly mobileLayout: MobileLayout;
   public readonly cellSelection?: CellSelection;
   public readonly cellSelectionPainter?: CellSelectionPainter;
   public readonly cellSelectionScroller?: CellSelectionScroller;
@@ -55,6 +72,7 @@ export class FitViewModel implements ViewModel {
   public readonly statusbar?: Statusbar;
   public readonly themeSwitcher?: ThemeSwitcher;
   public readonly settingsBar?: Container;
+  public readonly colFilters?: ColFilters;
 
   private config: ViewModelConfig = getViewModelConfig();
   private viewModelSubscriptions!: ViewModelSubscriptions;
@@ -64,7 +82,7 @@ export class FitViewModel implements ViewModel {
     public table: Table,
     public readonly operationExecutor?: OperationExecutor
   ) {
-    this.loadTable(table);
+    operationExecutor?.setTable(table);
     this.dictionary = createLanguageDictionary();
     this.imageRegistry = createImageRegistry();
     this.tableViewer = this.createTableViewer();
@@ -72,14 +90,15 @@ export class FitViewModel implements ViewModel {
     this.cellSelection = this.createCellSelection();
     this.cellSelectionScroller = this.createCellSelectionScroller();
     this.cellSelectionPainter = this.createCellSelectionPainter();
-    this.selectFirstCell();
     this.cellEditor = this.createCellEditor();
     this.contextMenu = this.createContextMenu();
-    this.toolbar = this.createToolbar();
     this.statusbar = this.createStatusbar();
     this.themeSwitcher = this.createThemeSwitcher();
     this.settingsBar = this.createSettingsBar();
-
+    this.colFilters = this.createColFilters();
+    this.mobileLayout = this.createMobileLayout();
+    this.selectFirstCell();
+    this.toolbar = this.createToolbar();
     this.addSubscriptions();
   }
 
@@ -87,8 +106,11 @@ export class FitViewModel implements ViewModel {
     return createTableViewer(this.table);
   }
 
-  private createTableScroller(): TableScroller {
-    const tableScroller: TableScroller = createTableScroller(this.tableViewer);
+  private createTableScroller(): ScrollContainer {
+    const tableScroller: ScrollContainer = //
+      createScrollContainer(this.tableViewer)
+        .setHorizontalScrollbar(new HorizontalScrollbar(this.tableViewer))
+        .setVerticalScrollbar(new VerticalScrollbar(this.tableViewer));
     this.config.disableVirtualRows && tableScroller.setVerticalScrollbar();
     this.config.disableVirtualCols && tableScroller.setHorizontalScrollbar();
     return tableScroller;
@@ -97,8 +119,9 @@ export class FitViewModel implements ViewModel {
   private createCellSelectionScroller(): CellSelectionScroller | undefined {
     try {
       return createCellSelectionScroller(this.tableViewer, this.tableScroller);
-    } catch {
-      return undefined;
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
     }
   }
 
@@ -108,16 +131,18 @@ export class FitViewModel implements ViewModel {
         this.operationExecutor &&
         createCellEditor(this.operationExecutor, this.tableViewer)
       );
-    } catch {
-      return undefined;
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
     }
   }
 
   private createCellSelection(): CellSelection | undefined {
     try {
       return createCellSelection(this.tableViewer);
-    } catch {
-      return undefined;
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
     }
   }
 
@@ -125,10 +150,15 @@ export class FitViewModel implements ViewModel {
     try {
       return (
         this.cellSelection &&
-        createCellSelectionPainter(this.tableViewer, this.cellSelection)
+        createCellSelectionPainter({
+          tableViewer: this.tableViewer,
+          tableScroller: this.tableScroller,
+          cellSelection: this.cellSelection,
+        })
       );
-    } catch {
-      return undefined;
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
     }
   }
 
@@ -144,8 +174,9 @@ export class FitViewModel implements ViewModel {
           getSelectedCells: this.getSelectedCells,
         })
       );
-    } catch {
-      return undefined;
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
     }
   }
 
@@ -163,7 +194,9 @@ export class FitViewModel implements ViewModel {
           imageRegistry: this.imageRegistry,
           getSelectedCells: this.getSelectedCells,
         });
-    } catch {}
+    } catch (error) {
+      if (!(error instanceof MissingFactoryError)) console.error(error);
+    }
     if (toolbar) {
       const defaultHeight: string = FIT_CSS_UNIT_VARIABLES['--toolbar-height'];
       setCssVariable('--toolbar-height', defaultHeight);
@@ -182,7 +215,9 @@ export class FitViewModel implements ViewModel {
         tableViewer: this.tableViewer,
         tableScroller: this.tableScroller,
       });
-    } catch {}
+    } catch (error) {
+      if (!(error instanceof MissingFactoryError)) console.error(error);
+    }
     if (statusbar) {
       const defaultHeight: string =
         FIT_CSS_UNIT_VARIABLES['--statusbar-height'];
@@ -196,9 +231,10 @@ export class FitViewModel implements ViewModel {
   private createThemeSwitcher(): ThemeSwitcher | undefined {
     try {
       return createThemeSwitcher(this.imageRegistry);
-    } catch {
+    } catch (error) {
       setCssVariables(FIT_CSS_COLOR_VARIABLES);
-      return undefined;
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
     }
   }
 
@@ -209,17 +245,49 @@ export class FitViewModel implements ViewModel {
         imageRegistry: this.imageRegistry,
         themeSwitcher: this.themeSwitcher,
       });
-    } catch {
-      return undefined;
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
     }
   }
 
-  private selectFirstCell(): void {
-    this.cellSelection?.body.createRange().addCell(createCellCoord(0, 0));
+  private createColFilters(): ColFilters | undefined {
+    try {
+      const filterTable: (TableBasics & TableColFilter) | undefined =
+        asTableColFilter(this.table);
+      return (
+        filterTable &&
+        this.operationExecutor &&
+        createColFilters({
+          dictionary: this.dictionary,
+          imageRegistry: this.imageRegistry,
+          operationExecutor: this.operationExecutor,
+        })
+      );
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
+    }
+  }
+
+  private createMobileLayout(): MobileLayout {
+    return createMobileLayout({
+      tableViewer: this.tableViewer,
+      tableScroller: this.tableScroller,
+      cellSelectionPainter: this.cellSelectionPainter,
+    });
   }
 
   private addSubscriptions(): void {
-    this.viewModelSubscriptions = new ViewModelSubscriptions(this);
+    this.viewModelSubscriptions = new ViewModelSubscriptions({
+      tableScroller: this.tableScroller,
+      cellEditor: this.cellEditor,
+      cellSelection: this.cellSelection,
+      toolbar: this.toolbar,
+      contextMenu: this.contextMenu,
+      colFilters: this.colFilters,
+      settingsBar: this.settingsBar,
+    });
     this.viewModelSubscriptions.init();
     if (this.operationExecutor) {
       this.operationSubscriptions = new OperationSubscriptions({
@@ -229,27 +297,58 @@ export class FitViewModel implements ViewModel {
         cellEditor: this.cellEditor,
         cellSelection: this.cellSelection,
         cellSelectionPainter: this.cellSelectionPainter,
+        colFilters: this.colFilters,
+        loadTableFn: this.loadTableWithoutFilters,
+        toolbar: this.toolbar,
+        contextMenu: this.contextMenu,
       });
       this.operationSubscriptions.init();
     }
   }
 
   public loadTable(table: Table): void {
-    this.operationExecutor?.setTable(table);
-    this.tableViewer?.setTable(table);
-    this.tableScroller
-      ?.resizeViewportWidth()
-      .resizeViewportHeight()
-      .renderTable();
+    this.operationExecutor?.clearOperations();
+    this.loadTableWithoutFilters(table);
+    if (this.colFilters) {
+      const filterTable: (TableBasics & TableColFilter) | undefined =
+        asTableColFilter(table);
+      if (filterTable) this.colFilters.filterExecutor.table = filterTable;
+    }
+  }
+
+  private readonly loadTableWithoutFilters = (table: Table): void => {
     this.table = table;
-    this.cellEditor?.setCell(this.cellEditor.getCell());
+    this.operationExecutor?.setTable(table);
+    this.tableViewer.loadTable(table);
+    this.tableScroller.scrollTo(0, 0);
+    this.tableScroller
+      .resizeViewportWidth()
+      .resizeViewportHeight()
+      .renderModel();
+    this.selectFirstCell();
+  };
+
+  private selectFirstCell(): void {
+    if (this.table.getNumberOfRows() && this.table.getNumberOfCols()) {
+      this.cellEditor?.setVisible(true).setCell(createCellCoord(0, 0));
+      this.cellSelection?.body
+        .removeRanges()
+        .createRange()
+        .addCell(createCellCoord(0, 0))
+        .end();
+    } else {
+      this.cellEditor?.setVisible(false);
+      this.cellSelection?.body.removeRanges().end();
+    }
   }
 
   public destroy(): void {
     this.cellSelection?.destroy();
     this.cellSelectionPainter?.destroy();
+    this.colFilters?.destroy();
     this.viewModelSubscriptions.destroy();
     this.operationSubscriptions?.destroy();
+    this.mobileLayout.destroy();
   }
 }
 

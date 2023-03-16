@@ -1,4 +1,5 @@
 import { implementsTKeys } from '../common/core-functions.js';
+import { MissingFactoryMethodError } from '../common/factory-error.js';
 import { getModelConfig } from './model-config.js';
 import { Style } from './style.js';
 
@@ -52,7 +53,7 @@ export interface TableMergedRegions {
   setRowSpan(rowId: number, colId: number, rowSpan?: number): this;
   getColSpan(rowId: number, colId: number): number | undefined;
   setColSpan(rowId: number, colId: number, colSpan?: number): this;
-  forEachRegion(cellFn: (rowId: number, colId: number) => void): void;
+  forEachMergedCell(cellFn: (rowId: number, colId: number) => void): void;
   moveRegion(
     rowId: number,
     colId: number,
@@ -69,8 +70,28 @@ export interface TableMergedRegions {
   removeColRegions(colId: number): this;
 }
 
+export type ColConditionFn = (
+  rowId: number,
+  colId: number,
+  value?: Value
+) => boolean;
+
+export interface TableColFilter {
+  filterByCol(
+    colId: number,
+    conditionFn: ColConditionFn
+  ): TableBasics & TableColFilter;
+}
+
 export type Table = TableBasics &
-  (TableStyles | TableRows | TableCols | TableMergedRegions | {});
+  (
+    | TableStyles
+    | TableRows
+    | TableCols
+    | TableMergedRegions
+    | TableColFilter
+    | {}
+  );
 
 export interface TableFactory {
   createTable(): Table;
@@ -85,7 +106,7 @@ export function createTable<T extends Table>(): T {
 export function createTable4Dto<T extends Table>(dto: unknown): T {
   const factory: TableFactory = getModelConfig().tableFactory;
   if (factory.createTable4Dto) return factory.createTable4Dto(dto) as T;
-  else throw new Error('TableFactory.createTable4Dto is not defined!');
+  else throw new MissingFactoryMethodError();
 }
 
 export function asTableStyles(
@@ -117,5 +138,13 @@ export function asTableMergedRegions(
 ): (TableBasics & TableMergedRegions) | undefined {
   return implementsTKeys<TableMergedRegions>(table, ['getRowSpan'])
     ? (table as TableBasics & TableMergedRegions)
+    : undefined;
+}
+
+export function asTableColFilter(
+  table?: Table
+): (TableBasics & TableColFilter) | undefined {
+  return implementsTKeys<TableColFilter>(table, ['filterByCol'])
+    ? (table as TableBasics & TableColFilter)
     : undefined;
 }

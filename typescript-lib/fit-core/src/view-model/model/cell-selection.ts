@@ -1,14 +1,17 @@
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
+import { MissingFactoryError } from '../../common/factory-error.js';
 import { CellCoord } from '../../model/cell-coord.js';
 import { CellRange } from '../../model/cell-range.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { NeighborCells } from './common/neighbor-cells.js';
 import { Rectangle } from './common/rectangle.js';
 import { FocusableObject } from './controls.js';
+import { ScrollContainer } from './scroll-container.js';
 import { TableViewer } from './table-viewer.js';
 
 export interface CellSelectionRanges extends FocusableObject {
+  name: string;
   createRange(): this;
   addRange(firstCell: CellCoord, lastCell?: CellCoord): this;
   getRanges(): CellRange[];
@@ -21,7 +24,7 @@ export interface CellSelectionRanges extends FocusableObject {
   getLastCell(): CellCoord | undefined;
   getNeighborCells(): NeighborCells;
   end(): this;
-  addOnEnd$(onEnd$: Subject<CellRange[]>): this;
+  onEnd$(): Observable<CellRange[]>;
 }
 
 export interface CellSelection {
@@ -41,11 +44,12 @@ export function createCellSelection(tableViewer: TableViewer): CellSelection {
   const factory: CellSelectionFactory | undefined =
     getViewModelConfig().cellSelectionFactory;
   if (factory) return factory.createCellSelection(tableViewer);
-  else throw new Error('CellSelectionFactory is not defined!');
+  else throw new MissingFactoryError();
 }
 
 export interface CellSelectionRectangles {
   paint(cellSelection: CellSelectionRanges): this;
+  onAfterPaint$(): Observable<void>;
   getRectangles(): Rectangle[];
 }
 
@@ -58,22 +62,23 @@ export interface CellSelectionPainter {
   destroy(): void;
 }
 
+export type CellSelectionPainterArgs = {
+  tableViewer: TableViewer;
+  tableScroller: ScrollContainer;
+  cellSelection: CellSelection;
+};
+
 export interface CellSelectionPainterFactory {
   createCellSelectionPainter(
-    tableViewer: TableViewer,
-    cellSelection: CellSelection
+    args: CellSelectionPainterArgs
   ): CellSelectionPainter;
 }
 
 export function createCellSelectionPainter(
-  tableViewer: TableViewer,
-  cellSelection: CellSelection
+  args: CellSelectionPainterArgs
 ): CellSelectionPainter {
   const factory: CellSelectionPainterFactory | undefined =
     getViewModelConfig().cellSelectionPainterFactory;
-  if (factory) {
-    return factory.createCellSelectionPainter(tableViewer, cellSelection);
-  } else {
-    throw new Error('CellSelectionPainterFactory is not defined!');
-  }
+  if (factory) return factory.createCellSelectionPainter(args);
+  else throw new MissingFactoryError();
 }

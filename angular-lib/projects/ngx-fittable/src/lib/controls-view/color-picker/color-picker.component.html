@@ -1,5 +1,5 @@
 <div class="color-picker">
-  <div class="button" (click)="showOptionsWindow()" [ngStyle]="{backgroundImage:getIcon()}">&nbsp;</div>
+  <div class="button" (click)="showOptionsWindow()" [ngStyle]="getButtonStyle()">&nbsp;</div>
   <hr class="picked-color" (click)="showOptionsWindow()" [ngStyle]="{backgroundColor:getSelectedValue()}" />
   <div class="options" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">

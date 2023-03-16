@@ -16,7 +16,7 @@ import {
 } from 'fit-core/operations/index.js';
 
 export type CellCopyOperationStepDto = OperationId<'cell-copy'> & {
-  selectedCellRange: unknown;
+  cellRange: unknown;
 };
 
 export class CellCopyOperationStep implements OperationStep {
@@ -43,9 +43,7 @@ export class CellCopyOperationStep implements OperationStep {
 
   private createCliboardText(): string {
     let text = '<table>';
-    const cellRange: CellRange = createCellRange4Dto(
-      this.stepDto.selectedCellRange
-    );
+    const cellRange: CellRange = createCellRange4Dto(this.stepDto.cellRange);
     const fromRowId: number = cellRange.getFrom().getRowId();
     const fromColId: number = cellRange.getFrom().getColId();
     const toRowId: number = cellRange.getTo().getRowId();
@@ -88,7 +86,7 @@ export class CellCopyOperationStep implements OperationStep {
   private isMergedHiddenCell(rowId: number, colId: number): boolean {
     let isHiddenCell = false;
     if (this.mergedRegionsTable) {
-      this.mergedRegionsTable.forEachRegion(
+      this.mergedRegionsTable.forEachMergedCell(
         (row: number, col: number): void => {
           if (isHiddenCell) return;
           if (row === rowId && col === colId) return;

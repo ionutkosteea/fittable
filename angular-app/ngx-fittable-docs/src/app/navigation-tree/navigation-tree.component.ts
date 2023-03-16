@@ -84,6 +84,7 @@ function createTree(): Composite[] {
         'Unmerge cells',
         'Operation DTO',
         'Custom operation',
+        'Table interoperability',
       ],
     },
     {
@@ -94,6 +95,8 @@ function createTree(): Composite[] {
         'Column header',
         'Row heights',
         'Column widths',
+        'Column filters (1/2)',
+        'Column filters (2/2)',
         'Cell selection',
         'Cell editor',
         'Table scroller',

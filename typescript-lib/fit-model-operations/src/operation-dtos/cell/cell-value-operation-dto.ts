@@ -60,7 +60,7 @@ export class CellValueOperationDtoBuilder {
       });
     }
     this.cellValueStepDto.values.push({
-      updatableCellRanges: createDto4CellRangeList(updatableCells.getRanges()),
+      cellRanges: createDto4CellRangeList(updatableCells.getRanges()),
       value: this.args.value,
     });
   }
@@ -69,7 +69,7 @@ export class CellValueOperationDtoBuilder {
     const undoValues: CellRangeAddressObjects<Value | undefined> =
       new CellRangeAddressObjects();
     for (const values of this.cellValueStepDto.values) {
-      for (const cellRangeDto of values.updatableCellRanges)
+      for (const cellRangeDto of values.cellRanges)
         createCellRange4Dto(cellRangeDto).forEachCell(
           (rowId: number, colId: number): void => {
             undoValues.set(this.table.getCellValue(rowId, colId), rowId, colId);
@@ -79,7 +79,7 @@ export class CellValueOperationDtoBuilder {
     undoValues.forEach(
       (value: Value | undefined, address: CellRange[]): void => {
         this.undoCellValueStepDto.values.push({
-          updatableCellRanges: createDto4CellRangeList(address),
+          cellRanges: createDto4CellRangeList(address),
           value,
         });
       }

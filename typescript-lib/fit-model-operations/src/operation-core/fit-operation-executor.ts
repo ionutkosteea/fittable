@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import { Table } from 'fit-core/model/index.js';
 import {
   OperationExecutor,
@@ -6,11 +8,9 @@ import {
   OperationDto,
   OperationStep,
   OperationId,
-  OperationExecutorListener,
 } from 'fit-core/operations/index.js';
 
 import { OperationStackExecutor } from './operation-stack-executor.js';
-import { FitOperationFactory, FitOperation } from './fit-operation.js';
 import {
   FitOperationDtoId,
   FitOperationStepId,
@@ -18,8 +18,7 @@ import {
 } from './fit-operation-executor-args.js';
 
 export class FitOperationExecutor implements OperationExecutor {
-  private readonly executor: OperationStackExecutor =
-    new OperationStackExecutor();
+  private readonly executor: OperationStackExecutor;
   private operationDtoFactories: {
     [operationId in FitOperationDtoId]?: OperationDtoFactoryClass;
   } = {};
@@ -27,6 +26,23 @@ export class FitOperationExecutor implements OperationExecutor {
     [stepId in FitOperationStepId]?: OperationStepFactoryClass;
   } = {};
   private table?: Table;
+
+  constructor() {
+    this.executor = new OperationStackExecutor(this.createOperationStepFn);
+  }
+
+  private readonly createOperationStepFn = (
+    stepDto: OperationId<string>
+  ): OperationStep => {
+    const Factory: OperationStepFactoryClass | undefined =
+      this.operationStepFactories[stepDto.id as FitOperationStepId];
+    if (Factory) {
+      if (!this.table) throw new Error('Table property hast to be set!');
+      return new Factory().createStep(this.table, stepDto);
+    } else {
+      throw new Error('Invalid operation step id: ' + stepDto);
+    }
+  };
 
   public bindOperationDtoFactory(
     operationId: FitOperationDtoId,
@@ -61,7 +77,6 @@ export class FitOperationExecutor implements OperationExecutor {
   }
 
   public setTable(table: Table): this {
-    this.executor.reset();
     this.table = table;
     return this;
   }
@@ -70,13 +85,10 @@ export class FitOperationExecutor implements OperationExecutor {
     return this.table;
   }
 
-  public addListener(listener: OperationExecutorListener): this {
-    this.executor.addListener(listener);
-    return this;
-  }
-
-  public clearListeners(): this {
-    this.executor.clearListeners();
+  public run(args: FitOperationDtoArgs): this {
+    const operationDto: OperationDto | Promise<OperationDto> =
+      this.createOperationDto(args);
+    this.runOperationDto(operationDto);
     return this;
   }
 
@@ -98,50 +110,23 @@ export class FitOperationExecutor implements OperationExecutor {
   ): this {
     if (operationDto instanceof Promise) {
       operationDto
-        .then((dto: OperationDto): void => this.runDto(dto))
+        .then((dto: OperationDto): void => {
+          this.executor.run(dto);
+        })
         .catch((error: Error): void => console.error(error.message));
     } else {
-      this.runDto(operationDto);
+      this.executor.run(operationDto);
     }
     return this;
   }
 
-  private readonly runDto = (operationDto: OperationDto): void => {
-    const operation: FitOperation = this.createOperation(operationDto);
-    this.runOperation(operation);
-  };
-
-  public createOperation(operationDto: OperationDto): FitOperation {
-    const factory: FitOperationFactory = new FitOperationFactory(
-      this.createOperationStep
-    );
-    return factory.createOperation(operationDto);
+  public onBeforeRun$(): Observable<OperationDto> {
+    return this.executor.beforeRun$.asObservable();
   }
 
-  public runOperation(operation: FitOperation): this {
-    this.executor.run(operation);
-    return this;
+  public onAfterRun$(): Observable<OperationDto> {
+    return this.executor.afterRun$.asObservable();
   }
-
-  public run(args: FitOperationDtoArgs): this {
-    const operationDto: OperationDto | Promise<OperationDto> =
-      this.createOperationDto(args);
-    this.runOperationDto(operationDto);
-    return this;
-  }
-
-  private readonly createOperationStep = (
-    stepDto: OperationId<string>
-  ): OperationStep => {
-    const Factory: OperationStepFactoryClass | undefined =
-      this.operationStepFactories[stepDto.id as FitOperationStepId];
-    if (Factory) {
-      if (!this.table) throw new Error('Table property hast to be set!');
-      return new Factory().createStep(this.table, stepDto);
-    } else {
-      throw new Error('Invalid operation step id: ' + stepDto);
-    }
-  };
 
   public canUndo(): boolean {
     return this.executor.canUndo();
@@ -150,6 +135,14 @@ export class FitOperationExecutor implements OperationExecutor {
   public undo(): this {
     this.executor.undo();
     return this;
+  }
+
+  public onBeforeUndo$(): Observable<OperationDto> {
+    return this.executor.beforeUndo$.asObservable();
+  }
+
+  public onAfterUndo$(): Observable<OperationDto> {
+    return this.executor.afterUndo$.asObservable();
   }
 
   public canRedo(): boolean {
@@ -161,8 +154,16 @@ export class FitOperationExecutor implements OperationExecutor {
     return this;
   }
 
-  public reset(): this {
-    this.executor.reset();
+  public onBeforeRedo$(): Observable<OperationDto> {
+    return this.executor.beforeRedo$.asObservable();
+  }
+
+  public onAfterRedo$(): Observable<OperationDto> {
+    return this.executor.afterRedo$.asObservable();
+  }
+
+  public clearOperations(): this {
+    this.executor.clearOperations();
     return this;
   }
 }

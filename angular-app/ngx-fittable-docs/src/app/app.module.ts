@@ -48,6 +48,9 @@ import { ContextMenuComponent } from './topics/table-designer/context-menu.compo
 import { StatusbarComponent } from './topics/table-designer/statusbar.component';
 import { CustomViewModelComponent } from './topics/table-designer/custom-view-model.component';
 import { ArchitectureComponent } from './topics/getting-started/architecture/architecture.component';
+import { ColFiltersComponent } from './topics/table-designer/col-filters.component';
+import { ColFilterExecutorComponent } from './topics/table-designer/col-filter-executor.component';
+import { TableInteroperabilityComponent } from './topics/table-operations/table-interoperability/table-interoperability.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +88,8 @@ import { ArchitectureComponent } from './topics/getting-started/architecture/arc
     ColHeaderComponent,
     RowHeightsComponent,
     ColWidthtsComponent,
+    ColFiltersComponent,
+    ColFilterExecutorComponent,
     TableScrollerComponent,
     CellSelectionComponent,
     CellEditorComponent,
@@ -96,6 +101,7 @@ import { ArchitectureComponent } from './topics/getting-started/architecture/arc
     ContextMenuComponent,
     StatusbarComponent,
     CustomViewModelComponent,
+    TableInteroperabilityComponent,
   ],
   imports: [BrowserModule, NgxFittableModule],
   providers: [],

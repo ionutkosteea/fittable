@@ -10,9 +10,9 @@ import {
 import { FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
-import { CodeSnippet } from '../common/code-snippet.model';
 
 import { TopicTitle } from '../../common/topic-title.model';
+import { CodeSnippet } from '../common/code-snippet.model';
 import { SimpleTopic } from '../common/simple-topic.model';
 
 @Component({
@@ -38,7 +38,7 @@ export class ColHeaderComponent implements SimpleTopic, OnInit {
       createFitViewModelConfig({
         colHeader: true,
         colHeaderHeight: 42, // default 21
-        getColHeaderText: (colId: number) => 'C' + (colId + 1), // default increment letter
+        colHeaderTextFn: (colId: number) => 'C' + (colId + 1), // default increment letter
       })
     );
 

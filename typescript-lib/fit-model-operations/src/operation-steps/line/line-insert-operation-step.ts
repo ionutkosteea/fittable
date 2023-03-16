@@ -11,12 +11,12 @@ import {
   OperationId,
 } from 'fit-core/operations/index.js';
 
-export type MovableLinesDto = { updatableLineRange: unknown; move: number };
+export type MoveLinesDto = { lineRange: unknown; move: number };
 
 export type LineInsertOperationStepDto = {
-  selectedLineRanges: unknown[];
+  lineRanges: unknown[];
   numberOfNewLines: number;
-  movableLines: MovableLinesDto[];
+  moveLines: MoveLinesDto[];
 };
 
 abstract class LineInsertOperationStep implements OperationStep {
@@ -38,21 +38,19 @@ abstract class LineInsertOperationStep implements OperationStep {
 
   private countSelectedLines(): void {
     this.numberOfSelectedLines = 0;
-    for (const lineRangeDto of this.stepDto.selectedLineRanges) {
-      createLineRange4Dto(lineRangeDto).forEachLine(
-        () => this.numberOfSelectedLines++
-      );
+    for (const lineRangeDto of this.stepDto.lineRanges) {
+      createLineRange4Dto(lineRangeDto).forEachLine((): void => {
+        this.numberOfSelectedLines++;
+      });
     }
     this.numberOfSelectedLines *= this.stepDto.numberOfNewLines;
   }
 
   private moveLines(): void {
-    const mlDtos: MovableLinesDto[] = this.stepDto.movableLines;
+    const mlDtos: MoveLinesDto[] = this.stepDto.moveLines;
     for (let i = mlDtos.length - 1; i >= 0; i--) {
-      const mlDto: MovableLinesDto = mlDtos[i];
-      const lineRange: LineRange = createLineRange4Dto(
-        mlDto.updatableLineRange
-      );
+      const mlDto: MoveLinesDto = mlDtos[i];
+      const lineRange: LineRange = createLineRange4Dto(mlDto.lineRange);
       for (let i = lineRange.getTo(); i >= lineRange.getFrom(); i--) {
         this.moveLine(i, mlDto.move);
       }

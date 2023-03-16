@@ -1,10 +1,9 @@
+import { MissingFactoryError } from '../../common/factory-error.js';
 import { InputControl } from '../model/controls.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { FitKeyboardEvent, FitMouseEvent } from './custom-events.js';
 
 export interface InputControlListener {
-  setInputControl(control: InputControl): this;
-  getInputControl(): InputControl;
   onMouseEnter(event?: FitMouseEvent): void;
   onMouseLeave(event?: FitMouseEvent): void;
   onGlobalMouseDown(event?: FitMouseEvent): void;
@@ -12,15 +11,14 @@ export interface InputControlListener {
 }
 
 export interface InputControlListenerFactory {
-  createInputControlListener(): InputControlListener;
+  createInputControlListener(inputControl: InputControl): InputControlListener;
 }
 
-export function createInputControlListener(): InputControlListener {
+export function createInputControlListener(
+  inputControl: InputControl
+): InputControlListener {
   const factory: InputControlListenerFactory | undefined =
     getViewModelConfig().inputControlListenerFactory;
-  if (factory) {
-    return factory.createInputControlListener();
-  } else {
-    throw new Error('ToolbarInputListenerFactory is not defined!');
-  }
+  if (factory) return factory.createInputControlListener(inputControl);
+  else throw new MissingFactoryError();
 }

@@ -1,4 +1,4 @@
-import { CellCoord } from '../../model/cell-coord.js';
+import { MissingFactoryError } from '../../common/factory-error.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { CellSelection, CellSelectionRanges } from '../model/cell-selection.js';
 import { CellSelectionScroller } from '../model/cell-selection-scroller.js';
@@ -6,13 +6,13 @@ import { FitKeyboardEvent, FitMouseEvent } from './custom-events.js';
 
 export interface CellSelectionListener {
   setCellSelectionRanges(ranges: CellSelectionRanges): this;
-  onMouseDown(cellCoord: CellCoord, event?: FitMouseEvent): void;
-  onMouseMove(cellCoord: CellCoord, event?: FitMouseEvent): void;
+  onMouseDown(event: FitMouseEvent): void;
+  onMouseMove(event: FitMouseEvent): void;
   onMouseEnter(event?: FitMouseEvent): void;
   onMouseLeave(event?: FitMouseEvent): void;
+  onGlobalMouseDown(event?: FitMouseEvent): void;
   onGlobalMouseUp(event?: FitMouseEvent): void;
   onGlobalKeyDown(event?: FitKeyboardEvent): void;
-  onGlobalKeyUp(event?: FitKeyboardEvent): void;
 }
 
 export interface CellSelectionListenerFactory {
@@ -34,6 +34,6 @@ export function createCellSelectionListener(
       cellSelectionScroller
     );
   } else {
-    throw new Error('CellSelectionListenerFactory is not defined!');
+    throw new MissingFactoryError();
   }
 }

@@ -2,14 +2,12 @@ import { RangeIterator } from 'fit-core/common';
 import { CssStyle, Value } from 'fit-core/model';
 import {
   ViewModel,
-  HostListeners,
-  CellSelectionListener,
   getViewModelConfig,
+  createWindowListener,
 } from 'fit-core/view-model';
 
 export abstract class TableCommon {
   protected abstract viewModel: ViewModel;
-  protected abstract hostListeners: HostListeners;
 
   public readonly hasColHeader = (): boolean =>
     this.viewModel.tableViewer.hasColHeader();
@@ -17,17 +15,17 @@ export abstract class TableCommon {
   public readonly getColLabel = (
     colId: number
   ): string | number | undefined => {
-    const getLabel: ((colId: number) => string | number) | undefined =
-      getViewModelConfig().getColHeaderText;
-    return getLabel && getLabel(colId);
+    const labelFn: ((colId: number) => string | number) | undefined =
+      getViewModelConfig().colHeaderTextFn;
+    return labelFn && labelFn(colId);
   };
 
   public readonly getRowLabel = (
     rowId: number
   ): string | number | undefined => {
-    const getLabel: ((rowId: number) => string | number) | undefined =
-      getViewModelConfig().getRowHeaderText;
-    return getLabel && getLabel(rowId);
+    const labelFn: ((rowId: number) => string | number) | undefined =
+      getViewModelConfig().rowHeaderTextFn;
+    return labelFn && labelFn(rowId);
   };
 
   public readonly hasRowHeader = (): boolean =>
@@ -54,10 +52,10 @@ export abstract class TableCommon {
     this.viewModel.tableViewer.getColSpan(rowId, colId);
 
   public readonly getRowIds = (): RangeIterator =>
-    this.viewModel.tableScroller.getTableRowIds();
+    this.viewModel.tableScroller.getRenderableRows();
 
   public readonly getColIds = (): RangeIterator =>
-    this.viewModel.tableScroller.getTableColIds();
+    this.viewModel.tableScroller.getRenderableCols();
 
   public readonly getColWidth = (colId: number): number =>
     this.viewModel.tableViewer.getColWidth(colId);
@@ -65,14 +63,9 @@ export abstract class TableCommon {
   public readonly getRowHeight = (rowId: number): number =>
     this.viewModel.tableViewer.getRowHeight(rowId);
 
-  public getCellSelectionListener = (): CellSelectionListener | undefined =>
-    this.hostListeners.cellSelectionListener;
-
   public readonly showContextMenu = (event: MouseEvent): void =>
     this.viewModel.contextMenu &&
-    this.hostListeners.windowListener
-      ?.setWindow(this.viewModel.contextMenu)
-      .onShow(event);
+    createWindowListener(this.viewModel.contextMenu).onShow(event);
 
   protected readonly getScrollLeft = (): number =>
     this.viewModel.tableScroller.getLeft();
@@ -81,10 +74,10 @@ export abstract class TableCommon {
     this.viewModel.tableScroller.getTop();
 
   protected readonly getOffsetX = (): number =>
-    this.viewModel?.tableScroller.getHorizontalScrollbar()?.getOffset() ?? 0;
+    this.viewModel.tableScroller.getOffsetX();
 
   protected readonly getOffsetY = (): number =>
-    this.viewModel.tableScroller.getVerticalScrollbar()?.getOffset() ?? 0;
+    this.viewModel.tableScroller.getOffsetY();
 
   protected readonly getRowHeaderWidth = (): number =>
     this.viewModel.tableViewer.getRowHeaderWidth();

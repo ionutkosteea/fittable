@@ -17,15 +17,18 @@ import {
 } from 'fit-core/view-model/index.js';
 
 import { FitInputControl } from '../common/controls/fit-input-control.js';
-import { FitOperationArgs } from '../operation-executor/operation-args.js';
+import { FitUIOperationArgs } from '../operation-executor/operation-args.js';
 import { FitNeighborCells } from '../common/fit-neighbor-cells.js';
 
 export class FitCellEditor implements CellEditor {
   private cellCoord: CellCoord = createCellCoord(0, 0);
+  private readonly afterSetCell$: Subject<CellCoord> = new Subject();
   private cellControl: InputControl;
-  private cellRectangle!: Rectangle;
-  private visible = true;
+  private cellRectangle?: Rectangle;
+  private visible = false;
+  private readonly afterSetVisible$: Subject<boolean> = new Subject();
   private pointerEvents = true;
+  private readonly afterSetPointerEvents$: Subject<boolean> = new Subject();
   private focus = false;
   private readonly afterSetFocus$: Subject<boolean> = new Subject();
 
@@ -34,7 +37,6 @@ export class FitCellEditor implements CellEditor {
     private readonly tableViewer: TableViewer
   ) {
     this.cellControl = this.createCellControl();
-    this.update();
   }
 
   private createCellControl(): InputControl {
@@ -42,7 +44,7 @@ export class FitCellEditor implements CellEditor {
     input //
       .setLabel(() => 'Cell Editor')
       .setRun((): void => {
-        const args: FitOperationArgs = {
+        const args: FitUIOperationArgs = {
           id: 'cell-value',
           selectedCells: [createCellRange(this.cellCoord)],
           value: input.getValue(),
@@ -62,7 +64,12 @@ export class FitCellEditor implements CellEditor {
 
   public setVisible(visible: boolean): this {
     this.visible = visible;
+    this.afterSetVisible$.next(visible);
     return this;
+  }
+
+  public onAfterSetVisible$(): Observable<boolean> {
+    return this.afterSetVisible$.asObservable();
   }
 
   public getCell(): CellCoord {
@@ -72,7 +79,12 @@ export class FitCellEditor implements CellEditor {
   public setCell(cellCoord: CellCoord): this {
     this.cellCoord = cellCoord;
     this.update();
+    this.afterSetCell$.next(cellCoord);
     return this;
+  }
+
+  public onAfterSetCell$(): Observable<CellCoord> {
+    return this.afterSetCell$.asObservable();
   }
 
   private update(): void {
@@ -82,17 +94,17 @@ export class FitCellEditor implements CellEditor {
   }
 
   private tableHasRowsAndCols(): boolean {
-    const rowNum: number = this.tableViewer.getTable().getNumberOfRows();
-    const colNum: number = this.tableViewer.getTable().getNumberOfCols();
+    const rowNum: number = this.tableViewer.getNumberOfRows();
+    const colNum: number = this.tableViewer.getNumberOfCols();
     return rowNum > 0 && colNum > 0;
   }
 
   private getTableCellValue(cellCoord: CellCoord): Value {
-    return (
-      this.tableViewer
-        .getTable()
-        .getCellValue(cellCoord.getRowId(), cellCoord.getColId()) ?? ''
-    );
+    const rowId: number = cellCoord.getRowId();
+    const colId: number = cellCoord.getColId();
+    const value: Value | undefined = //
+      this.tableViewer.getCellValue(rowId, colId);
+    return value === undefined ? '' : value;
   }
 
   private createCellRectangle(cellCoord: CellCoord): Rectangle {
@@ -127,7 +139,7 @@ export class FitCellEditor implements CellEditor {
 
   public getNeighborCells(): NeighborCells {
     return new FitNeighborCells()
-      .setTable(this.tableViewer.getTable())
+      .setTableViewer(this.tableViewer)
       .setCell(this.cellCoord);
   }
 
@@ -151,7 +163,12 @@ export class FitCellEditor implements CellEditor {
 
   public setPointerEvents(events: boolean): this {
     this.pointerEvents = events;
+    this.afterSetPointerEvents$.next(events);
     return this;
+  }
+
+  public onAfterSetPointerEvents$(): Observable<boolean> {
+    return this.afterSetPointerEvents$.asObservable();
   }
 }
 

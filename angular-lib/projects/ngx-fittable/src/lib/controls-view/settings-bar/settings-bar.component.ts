@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 
 import {
   Container,
-  WindowListener,
   Control,
   OptionsControl,
   asOptionsControl,
@@ -15,7 +14,6 @@ import {
 })
 export class SettingsBarComponent {
   @Input() model!: Container;
-  @Input() windowListener!: WindowListener;
 
   public readonly getControlIds = (): string[] => this.model.getControlIds();
 

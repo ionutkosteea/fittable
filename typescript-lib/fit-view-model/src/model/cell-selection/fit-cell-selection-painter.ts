@@ -1,13 +1,11 @@
-import { Subscription, Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import { CellRange } from 'fit-core/model/cell-range.js';
 import {
   CellSelectionPainter,
-  TableViewer,
-  CellSelection,
   CellSelectionRectangles,
   CellSelectionPainterFactory,
   CellSelectionRanges,
+  CellSelectionPainterArgs,
 } from 'fit-core/view-model/index.js';
 
 import {
@@ -25,156 +23,164 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
 
   private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
-  constructor(
-    private readonly tableViewer: TableViewer,
-    private readonly cellSelection: CellSelection
-  ) {
+  constructor(private readonly args: CellSelectionPainterArgs) {
     this.body = this.createBodyPainterRanges();
     this.pageHeader = this.createPageHeaderPainterRanges();
     this.rowHeader = this.createRowHeaderPainterRanges();
     this.colHeader = this.createColHeaderPainterRanges();
     this.subscribeToCellSelection();
+    this.subscribeToTableScroller();
   }
 
   private createBodyPainterRanges(): CellSelectionRectangles {
-    return new BodySelectionRectangles(this.tableViewer);
+    return new BodySelectionRectangles(
+      this.args.tableViewer,
+      this.args.tableScroller
+    );
   }
 
   private createPageHeaderPainterRanges(): CellSelectionRectangles | undefined {
     return (
-      this.cellSelection.pageHeader &&
-      new PageHeaderCellSelectionRectangles(this.tableViewer)
+      this.args.cellSelection.pageHeader &&
+      new PageHeaderCellSelectionRectangles(
+        this.args.tableViewer,
+        this.args.tableScroller
+      )
     );
   }
 
   private createRowHeaderPainterRanges(): CellSelectionRectangles | undefined {
     return (
-      this.cellSelection.rowHeader &&
-      new RowHeaderSelectionRectangles(this.tableViewer)
+      this.args.cellSelection.rowHeader &&
+      new RowHeaderSelectionRectangles(
+        this.args.tableViewer,
+        this.args.tableScroller
+      )
     );
   }
 
   private createColHeaderPainterRanges(): CellSelectionRectangles | undefined {
     return (
-      this.cellSelection.colHeader &&
-      new ColHeaderSelectionRectangles(this.tableViewer)
+      this.args.cellSelection.colHeader &&
+      new ColHeaderSelectionRectangles(
+        this.args.tableViewer,
+        this.args.tableScroller
+      )
     );
   }
 
   private subscribeToCellSelection(): void {
-    this.subscriptions.add(this.onAfterSelectBodyCell());
-    this.subscriptions.add(this.onEndSelectBody());
-    this.subscriptions.add(this.onAfterSelectPageHeaderCell());
-    this.subscriptions.add(this.onEndSelectPageHeader());
-    this.subscriptions.add(this.onAfterSelectRowHeaderCell());
-    this.subscriptions.add(this.onEndSelectRowHeader());
-    this.subscriptions.add(this.onAfterSelectColHeaderCell());
-    this.subscriptions.add(this.onEndSelectColHeader());
+    this.subscriptions.add(this.onAfterSelectBodyCell$());
+    this.subscriptions.add(this.onEndSelectBody$());
+    this.subscriptions.add(this.onAfterSelectPageHeaderCell$());
+    this.subscriptions.add(this.onEndSelectPageHeader$());
+    this.subscriptions.add(this.onAfterSelectRowHeaderCell$());
+    this.subscriptions.add(this.onEndSelectRowHeader$());
+    this.subscriptions.add(this.onAfterSelectColHeaderCell$());
+    this.subscriptions.add(this.onEndSelectColHeader$());
   }
 
-  private onAfterSelectBodyCell(): Subscription {
-    return this.cellSelection.body
+  private onAfterSelectBodyCell$(): Subscription {
+    return this.args.cellSelection.body
       .onAfterAddCell$()
-      .subscribe(() => this.paintAll());
+      .subscribe((): void => {
+        this.paint();
+      });
   }
 
-  private paintAll(): void {
-    this.body.paint(this.cellSelection.body);
-    this.cellSelection.rowHeader &&
-      this.rowHeader?.paint(this.cellSelection.rowHeader);
-    this.cellSelection.colHeader &&
-      this.colHeader?.paint(this.cellSelection.colHeader);
-    this.cellSelection.pageHeader &&
-      this.pageHeader?.paint(this.cellSelection.pageHeader);
+  private onEndSelectBody$(): Subscription {
+    return this.args.cellSelection.body.onEnd$().subscribe((): void => {
+      this.body.paint(this.args.cellSelection.body);
+    });
   }
 
-  private onEndSelectBody(): Subscription {
-    const onEnd: Subject<CellRange[]> = new Subject();
-    this.cellSelection.body.addOnEnd$(onEnd);
-    return onEnd.subscribe(() => this.body.paint(this.cellSelection.body));
-  }
-
-  private onAfterSelectPageHeaderCell(): Subscription | undefined {
-    return this.cellSelection.pageHeader
+  private onAfterSelectPageHeaderCell$(): Subscription | undefined {
+    return this.args.cellSelection.pageHeader
       ?.onAfterAddCell$()
-      .subscribe(() =>
+      .subscribe((): void => {
         this.pageHeader?.paint(
-          this.cellSelection.pageHeader as CellSelectionRanges
-        )
-      );
+          this.args.cellSelection.pageHeader as CellSelectionRanges
+        );
+      });
   }
 
-  private onEndSelectPageHeader(): Subscription | undefined {
-    if (this.cellSelection.pageHeader) {
-      const onEnd: Subject<CellRange[]> = new Subject();
-      this.cellSelection.pageHeader.addOnEnd$(onEnd);
-      return onEnd.subscribe(() =>
+  private onEndSelectPageHeader$(): Subscription | undefined {
+    if (this.args.cellSelection.pageHeader) {
+      return this.args.cellSelection.pageHeader.onEnd$().subscribe((): void => {
         this.pageHeader?.paint(
-          this.cellSelection.pageHeader as CellSelectionRanges
-        )
-      );
+          this.args.cellSelection.pageHeader as CellSelectionRanges
+        );
+      });
     } else {
       return undefined;
     }
   }
 
-  private onAfterSelectRowHeaderCell(): Subscription | undefined {
-    return this.cellSelection.rowHeader
+  private onAfterSelectRowHeaderCell$(): Subscription | undefined {
+    return this.args.cellSelection.rowHeader
       ?.onAfterAddCell$()
-      .subscribe(() =>
+      .subscribe((): void => {
         this.rowHeader?.paint(
-          this.cellSelection.rowHeader as CellSelectionRanges
-        )
-      );
+          this.args.cellSelection.rowHeader as CellSelectionRanges
+        );
+      });
   }
 
-  private onEndSelectRowHeader(): Subscription | undefined {
-    if (this.cellSelection.rowHeader) {
-      const onEnd: Subject<CellRange[]> = new Subject();
-      this.cellSelection.rowHeader.addOnEnd$(onEnd);
-      return onEnd.subscribe(() =>
+  private onEndSelectRowHeader$(): Subscription | undefined {
+    if (this.args.cellSelection.rowHeader) {
+      return this.args.cellSelection.rowHeader.onEnd$().subscribe((): void => {
         this.rowHeader?.paint(
-          this.cellSelection.rowHeader as CellSelectionRanges
-        )
-      );
+          this.args.cellSelection.rowHeader as CellSelectionRanges
+        );
+      });
     } else {
       return undefined;
     }
   }
 
-  private onAfterSelectColHeaderCell(): Subscription | undefined {
-    return this.cellSelection.colHeader
+  private onAfterSelectColHeaderCell$(): Subscription | undefined {
+    return this.args.cellSelection.colHeader
       ?.onAfterAddCell$()
-      .subscribe(() =>
+      .subscribe((): void => {
         this.colHeader?.paint(
-          this.cellSelection.colHeader as CellSelectionRanges
-        )
-      );
+          this.args.cellSelection.colHeader as CellSelectionRanges
+        );
+      });
   }
 
-  private onEndSelectColHeader(): Subscription | undefined {
-    if (this.cellSelection.colHeader) {
-      const onEnd: Subject<CellRange[]> = new Subject();
-      this.cellSelection.colHeader.addOnEnd$(onEnd);
-      return onEnd.subscribe(() =>
+  private onEndSelectColHeader$(): Subscription | undefined {
+    if (this.args.cellSelection.colHeader) {
+      return this.args.cellSelection.colHeader.onEnd$().subscribe((): void => {
         this.colHeader?.paint(
-          this.cellSelection.colHeader as CellSelectionRanges
-        )
-      );
+          this.args.cellSelection.colHeader as CellSelectionRanges
+        );
+      });
     } else {
       return undefined;
     }
   }
 
   public paint(): this {
-    this.body.paint(this.cellSelection.body);
-    this.cellSelection.rowHeader &&
-      this.rowHeader?.paint(this.cellSelection.rowHeader);
-    this.cellSelection.colHeader &&
-      this.colHeader?.paint(this.cellSelection.colHeader);
-    this.cellSelection.pageHeader &&
-      this.pageHeader?.paint(this.cellSelection.pageHeader);
+    this.body.paint(this.args.cellSelection.body);
+    this.paintHeaders();
     return this;
+  }
+
+  private subscribeToTableScroller(): void {
+    this.subscriptions.add(
+      this.args.tableScroller.onAfterRenderModel$().subscribe((): void => {
+        this.paintHeaders();
+      })
+    );
+  }
+
+  private paintHeaders(): void {
+    this.args.cellSelection.rowHeader &&
+      this.rowHeader?.paint(this.args.cellSelection.rowHeader);
+    this.args.cellSelection.colHeader &&
+      this.colHeader?.paint(this.args.cellSelection.colHeader);
+    this.args.cellSelection.pageHeader &&
+      this.pageHeader?.paint(this.args.cellSelection.pageHeader);
   }
 
   public destroy(): void {
@@ -186,9 +192,8 @@ export class FitCellSelectionPainterFactory
   implements CellSelectionPainterFactory
 {
   public createCellSelectionPainter(
-    tableViewer: TableViewer,
-    cellSelection: CellSelection
+    args: CellSelectionPainterArgs
   ): CellSelectionPainter {
-    return new FitCellSelectionPainter(tableViewer, cellSelection);
+    return new FitCellSelectionPainter(args);
   }
 }

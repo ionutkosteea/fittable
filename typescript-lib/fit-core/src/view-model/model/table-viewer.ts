@@ -4,8 +4,9 @@ import { Table } from '../../model/table.js';
 import { getViewModelConfig } from '../view-model-config.js';
 
 export interface TableViewer {
-  setTable(table: Table): this;
-  getTable(): Table;
+  loadTable(table: Table): this;
+  getNumberOfRows(): number;
+  getNumberOfCols(): number;
   hasRowHeader(): boolean;
   getRowHeaderWidth(): number;
   hasColHeader(): boolean;
@@ -23,6 +24,7 @@ export interface TableViewer {
   isHiddenCell(rowId: number, colId: number): boolean;
   hasHiddenCells4Row(rowId: number): boolean;
   hasHiddenCells4Col(colId: number): boolean;
+  forEachMergedCell(cell: (rowId: number, colId: number) => void): void;
   getCellStyle(rowId: number, colId: number): Style | undefined;
   getCellValue(rowId: number, colId: number): Value | undefined;
   resetRowProperties(): this;

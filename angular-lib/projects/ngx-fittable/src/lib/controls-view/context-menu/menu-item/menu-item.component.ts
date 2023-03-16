@@ -9,13 +9,16 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { Value } from 'fit-core/model';
+import { Value, CssStyle } from 'fit-core/model';
 import {
   Control,
   InputControl,
   asInputControl,
   InputControlListener,
+  createInputControlListener,
 } from 'fit-core/view-model';
+
+import { createToggleStyle } from '../../common/style-functions.model';
 
 @Component({
   selector: 'fit-menu-item',
@@ -24,35 +27,43 @@ import {
 })
 export class MenuItemComponent implements OnInit, OnDestroy {
   @Input() model!: Control;
-  @Input() inputControlListener?: InputControlListener;
   @Input() hideMenu!: () => void;
   @ViewChild('input') inputRef?: ElementRef;
 
-  private inputControl?: InputControl;
+  private inputControl!: InputControl;
+  private inputControlListener!: InputControlListener;
 
   private isInputMouseDown = false;
   private subscription?: Subscription;
 
   public ngOnInit(): void {
-    this.inputControl = asInputControl(this.model);
+    this.inputControl = asInputControl(this.model) as InputControl;
+    this.inputControlListener = createInputControlListener(this.inputControl);
     this.subscription = this.onInputControlFocus$();
   }
 
   private onInputControlFocus$(): Subscription | undefined {
-    return this.inputControl?.focus$.subscribe((focus: boolean): void => {
-      const htmlInput: HTMLInputElement = this.inputRef
-        ?.nativeElement as HTMLInputElement;
-      if (focus) htmlInput.focus();
-      else htmlInput.blur();
-    });
+    return this.inputControl
+      ?.onSetFocus$()
+      .subscribe((focus: boolean): void => {
+        const htmlInput: HTMLInputElement = this.inputRef
+          ?.nativeElement as HTMLInputElement;
+        if (focus) htmlInput.focus();
+        else htmlInput.blur();
+      });
   }
+
+  public readonly getToggleStyle = (): CssStyle =>
+    createToggleStyle(this.model);
+
+  public readonly getIsValidStyle = (): CssStyle | null =>
+    this.model.isValid() ? null : { opacity: 0.4, cursor: 'default' };
+
+  public readonly isDisabled = (): boolean => this.model.isDisabled();
 
   public readonly getIcon = (): string | undefined => this.model.getIcon();
 
   public readonly getLabel = (): string | undefined => this.model.getLabel();
-
-  public readonly getLabelClass = (): string =>
-    this.model.isValid() ? 'label' : 'label label-disabled';
 
   public readonly hasValue = (): boolean => this.inputControl !== undefined;
 
@@ -62,10 +73,7 @@ export class MenuItemComponent implements OnInit, OnDestroy {
   }
 
   public readonly onMouseEnter = (): void =>
-    this.inputControl &&
-    this.inputControlListener
-      ?.setInputControl(this.inputControl)
-      .onMouseEnter();
+    this.inputControl && this.inputControlListener.onMouseEnter();
 
   public readonly onMouseLeave = (): void =>
     this.inputControlListener?.onMouseLeave();
@@ -73,7 +81,7 @@ export class MenuItemComponent implements OnInit, OnDestroy {
   public onMouseDown(): void {
     if (this.isInputMouseDown) {
       this.isInputMouseDown = false;
-    } else {
+    } else if (!this.model.isDisabled()) {
       this.model.run();
       this.hideMenu();
     }
@@ -95,10 +103,8 @@ export class MenuItemComponent implements OnInit, OnDestroy {
 
   public onInputKeyDown(event: KeyboardEvent): void {
     if (!this.inputControl) return;
-    this.inputControlListener
-      ?.setInputControl(this.inputControl)
-      .onKeyDown(event);
-    setTimeout(() => event.key === 'Enter' && this.hideMenu(), 50);
+    this.inputControlListener.onKeyDown(event);
+    event.key === 'Enter' && this.hideMenu();
   }
 
   @HostListener('window:mousedown', ['event']) onGlobalMouseDown(

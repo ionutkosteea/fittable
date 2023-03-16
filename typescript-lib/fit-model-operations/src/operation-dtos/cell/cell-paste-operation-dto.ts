@@ -35,7 +35,7 @@ export class CellPasteOperationDtoBuilder {
     values: [],
   };
   public readonly styleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
@@ -46,7 +46,7 @@ export class CellPasteOperationDtoBuilder {
     values: [],
   };
   public readonly undoStyleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
@@ -329,7 +329,7 @@ export class CellPasteOperationDtoBuilder {
         {
           id: 'style-update',
           selectedCells,
-          style,
+          styleSnippet: style,
         },
         this.maxStyleNameUid
       );

@@ -1,4 +1,4 @@
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import {
@@ -8,7 +8,7 @@ import {
   createTable,
   registerModelConfig,
 } from 'fit-core/model';
-import { Operation, registerOperationConfig } from 'fit-core/operations';
+import { OperationDto, registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
@@ -41,6 +41,7 @@ export class UpdateStyleComponent
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'update-style-ts-01.jpg' },
     { image: 'update-style-ts-02.jpg' },
+    { image: 'update-style-ts-03.jpg' },
   ];
   public readonly buttonText = 'Update style for B2:D4';
   public fit!: FittableDesigner;
@@ -56,13 +57,18 @@ export class UpdateStyleComponent
     );
 
     this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
-    const afterRun$: Subject<Operation> = new Subject();
-    this.subscription = afterRun$.subscribe((operation: Operation): void => {
-      this.consoleText += 'Operation id: ' + operation.id + '\n';
-    });
-    this.fit.operationExecutor?.addListener({
-      onAfterRun$: (): Subject<Operation> => afterRun$,
-    });
+
+    this.subscription = this.writeToConsole$();
+  }
+
+  private writeToConsole$(): Subscription {
+    return this.fit
+      .operationExecutor!.onAfterRun$()
+      .subscribe((operationDto: OperationDto): void => {
+        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
+        this.consoleText +=
+          'Operation steps: ' + JSON.stringify(operationDto.steps, null, 2);
+      });
   }
 
   public runOperation(): void {
@@ -71,7 +77,7 @@ export class UpdateStyleComponent
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(3, 3)),
       ],
-      style: createStyle<FitStyle>().set('background-color', 'red'),
+      styleSnippet: createStyle<FitStyle>().set('background-color', 'red'),
     };
     this.fit.operationExecutor?.run(args);
   }

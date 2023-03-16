@@ -34,10 +34,10 @@ export class CellRemoveOperationDtoBuilder {
 
   public readonly cellRemoveStepDto: CellRemoveOperationStepDto = {
     id: 'cell-remove',
-    removableCellRanges: [],
+    cellRanges: [],
   };
   public readonly styleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
@@ -48,7 +48,7 @@ export class CellRemoveOperationDtoBuilder {
     values: [],
   };
   public readonly undoStyleStepDto: StyleOperationStepDto = {
-    id: 'style',
+    id: 'style-changes',
     createStyles: [],
     updateStyles: [],
     removeStyles: [],
@@ -90,14 +90,14 @@ export class CellRemoveOperationDtoBuilder {
       });
     }
     removableCells.getRanges().forEach((cellRange: CellRange) => {
-      this.cellRemoveStepDto.removableCellRanges.push(cellRange.getDto());
+      this.cellRemoveStepDto.cellRanges.push(cellRange.getDto());
     });
   }
 
   private undoCellValues(): void {
     const oldValues: CellRangeAddressObjects<Value | undefined> =
       new CellRangeAddressObjects();
-    for (const cellRangeDto of this.cellRemoveStepDto.removableCellRanges) {
+    for (const cellRangeDto of this.cellRemoveStepDto.cellRanges) {
       createCellRange4Dto(cellRangeDto).forEachCell(
         (rowId: number, colId: number): void => {
           const value: Value | undefined = //
@@ -109,7 +109,7 @@ export class CellRemoveOperationDtoBuilder {
     oldValues.forEach((value: Value | undefined, address: CellRange[]) => {
       this.undoCellValueStepDto.values.push({
         value,
-        updatableCellRanges: createDto4CellRangeList(address),
+        cellRanges: createDto4CellRangeList(address),
       });
     });
   }
@@ -117,7 +117,7 @@ export class CellRemoveOperationDtoBuilder {
   private undoStyleNames(): void {
     const oldStyleNames: CellRangeAddressObjects<string | undefined> =
       new CellRangeAddressObjects();
-    for (const cellRangeDto of this.cellRemoveStepDto.removableCellRanges) {
+    for (const cellRangeDto of this.cellRemoveStepDto.cellRanges) {
       createCellRange4Dto(cellRangeDto).forEachCell(
         (rowId: number, colId: number) => {
           const styleName: string | undefined = //
@@ -130,11 +130,8 @@ export class CellRemoveOperationDtoBuilder {
     }
     oldStyleNames.forEach(
       (styleName: string | undefined, address: CellRange[]) => {
-        const updatableCellRanges: unknown[] = createDto4CellRangeList(address);
-        this.undoStyleStepDto.cellStyleNames.push({
-          updatableCellRanges,
-          styleName,
-        });
+        const cellRanges: unknown[] = createDto4CellRangeList(address);
+        this.undoStyleStepDto.cellStyleNames.push({ cellRanges, styleName });
       }
     );
   }
@@ -144,7 +141,7 @@ export class CellRemoveOperationDtoBuilder {
     const allCellsCnt: Map<string, number> = countAllCellStyleNames(styleTable);
     const selectedCellsCnt: Map<string, number> = countSelectedCellStyleNames(
       styleTable,
-      createCellRangeList4Dto(this.cellRemoveStepDto.removableCellRanges)
+      createCellRangeList4Dto(this.cellRemoveStepDto.cellRanges)
     );
     selectedCellsCnt.forEach(
       (numOfSelectedCells: number, styleName?: string) => {

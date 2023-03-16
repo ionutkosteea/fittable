@@ -6,7 +6,7 @@ import {
 } from 'fit-core/operations/index.js';
 
 export type CellRemoveOperationStepDto = OperationId<'cell-remove'> & {
-  removableCellRanges: unknown[];
+  cellRanges: unknown[];
 };
 
 export class CellRemoveOperationStep implements OperationStep {
@@ -20,7 +20,7 @@ export class CellRemoveOperationStep implements OperationStep {
   }
 
   private removeCells(): void {
-    for (const cellRangeDto of this.stepDto.removableCellRanges) {
+    for (const cellRangeDto of this.stepDto.cellRanges) {
       const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
       const fromRowId: number = cellRange.getFrom().getRowId();
       const toRowId: number = cellRange.getTo().getRowId();
