@@ -6,6 +6,9 @@ import {
   createCellCoord,
   Table,
   createCellRange,
+  createCellRangeList4Dto,
+  createCellCoord4Dto,
+  createDto4CellRangeList,
 } from 'fit-core/model/index.js';
 import { OperationDto, OperationExecutor } from 'fit-core/operations/index.js';
 import {
@@ -23,20 +26,12 @@ import {
 
 import { FitUIOperationId } from '../operation-executor/operation-args.js';
 import { ColFilterOperationSubscriptions } from '../col-filters/col-filter-operation-subscriptions.js';
+import {
+  FitUIOperationFocus,
+  FitUIOperationProperties,
+  FitUIOperationScroll,
+} from '../operation-executor/operation-properties.js';
 
-type Focus =
-  | 'Body'
-  | 'RowHeader'
-  | 'ColHeader'
-  | 'PageHeader'
-  | 'CellEditor'
-  | 'ColFilter';
-type UndoState = {
-  focus?: Focus;
-  selectedCells?: CellRange[];
-  cellEditor?: CellCoord;
-  scroll?: { left: number; top: number };
-};
 type LastLines = {
   lastRow: number;
   lastCol: number;
@@ -60,7 +55,7 @@ export class OperationSubscriptions {
   private selectedBodyCells: CellRange[] = [
     createCellRange(createCellCoord(0, 0)),
   ];
-  private currentFocus?: Focus = 'Body';
+  private currentFocus?: FitUIOperationFocus = 'Body';
   private filterSubscriptions?: ColFilterOperationSubscriptions;
   private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
@@ -96,7 +91,10 @@ export class OperationSubscriptions {
     );
   }
 
-  private setObjectFocus(object?: FocusableObject, focus?: Focus): void {
+  private setObjectFocus(
+    object?: FocusableObject,
+    focus?: FitUIOperationFocus
+  ): void {
     this.subscriptions.add(
       object?.onAfterSetFocus$().subscribe((isFocused: boolean): void => {
         if (isFocused) this.currentFocus = focus;
@@ -115,62 +113,82 @@ export class OperationSubscriptions {
       this.args.operationExecutor
         .onAfterRun$()
         .subscribe((operationDto: OperationDto): void => {
-          this.createUndoState(operationDto);
+          if (!operationDto.properties) operationDto.properties = {};
           this.markCurrentFocus(operationDto);
           this.markSelectedCells(operationDto);
+          this.markCellEditorVisibility(operationDto);
           this.markCellEditorCoord(operationDto);
           this.markScrollPosition(operationDto);
         })
     );
   }
 
-  private createUndoState(operationDto: OperationDto): void {
-    if (!operationDto.undoOperation) return;
-    if (!operationDto.properties) operationDto.properties = {};
-    operationDto.properties['undoState'] = {};
-  }
-
-  private getUndoState(operationDto: OperationDto): UndoState | undefined {
-    const undoState: unknown =
-      operationDto.properties && operationDto.properties['undoState'];
-    return undoState ? (undoState as UndoState) : undefined;
-  }
-
   private markCurrentFocus(operationDto: OperationDto): void {
-    const undoState: UndoState | undefined = this.getUndoState(operationDto);
-    if (undoState) undoState.focus = this.currentFocus;
+    const properties: FitUIOperationProperties =
+      this.getOperationProperties(operationDto)!;
+    if (properties.focus) return;
+    properties.focus = this.currentFocus;
   }
 
   private markSelectedCells(operationDto: OperationDto): void {
     if (!this.args.cellSelection) return;
-    const undoState: UndoState | undefined = this.getUndoState(operationDto);
-    if (!undoState) return;
-    const operationId: FitUIOperationId = operationDto.id as FitUIOperationId;
-    if (operationId === 'style-name') {
-      undoState.selectedCells = this.args.cellSelection.body.getRanges();
+    const properties: FitUIOperationProperties =
+      this.getOperationProperties(operationDto)!;
+    if (properties.bodyCellRanges) {
+      this.setSelectedCells(operationDto);
     } else {
-      undoState.selectedCells = this.selectedBodyCells;
+      const operationId: FitUIOperationId = operationDto.id as FitUIOperationId;
+      if (operationId === 'style-name') {
+        properties.bodyCellRanges = //
+          createDto4CellRangeList(this.args.cellSelection.body.getRanges());
+      } else {
+        properties.bodyCellRanges = //
+          createDto4CellRangeList(this.selectedBodyCells);
+      }
+    }
+  }
+
+  private markCellEditorVisibility(operationDto: OperationDto): void {
+    if (!this.args.cellEditor) return;
+    const properties: FitUIOperationProperties =
+      this.getOperationProperties(operationDto)!;
+    if (properties.cellEditorVisibility === undefined) {
+      const isVisible: boolean = this.args.cellEditor.isVisible();
+      properties.cellEditorVisibility = isVisible;
+    } else {
+      this.setCellEditorVisibility(operationDto);
     }
   }
 
   private markCellEditorCoord(operationDto: OperationDto): void {
-    if (!this.args.cellEditor?.isVisible()) return;
-    const cellCoord: CellCoord = this.args.cellEditor.getCell();
-    const undoState: UndoState | undefined = this.getUndoState(operationDto);
-    if (undoState) undoState.cellEditor = cellCoord;
+    if (!this.args.cellEditor) return;
+    const properties: FitUIOperationProperties =
+      this.getOperationProperties(operationDto)!;
+    if (properties.cellEditorCoord) {
+      this.setCellEditorCoord(operationDto);
+    } else {
+      const cellCoord: CellCoord = this.args.cellEditor.getCell();
+      properties.cellEditorCoord = cellCoord.getDto();
+    }
   }
 
   private markScrollPosition(operationDto: OperationDto): void {
-    const top: number = this.args.tableScroller.getTop();
-    const left: number = this.args.tableScroller.getLeft();
-    const undoState: UndoState | undefined = this.getUndoState(operationDto);
-    if (undoState) undoState.scroll = { left, top };
+    const properties: FitUIOperationProperties =
+      this.getOperationProperties(operationDto)!;
+    if (properties.scroll) {
+      this.setScrollPosition(operationDto);
+    } else {
+      const top: number = this.args.tableScroller.getTop();
+      const left: number = this.args.tableScroller.getLeft();
+      if (properties) properties.scroll = { left, top };
+    }
   }
 
   private afterUndoRedo(operation$: Observable<OperationDto>): void {
     this.subscriptions.add(
       operation$.subscribe((operationDto: OperationDto): void => {
         this.setSelectedCells(operationDto);
+        this.setCellEditorVisibility(operationDto);
         this.setCellEditorCoord(operationDto);
         this.setScrollPosition(operationDto);
       })
@@ -179,9 +197,12 @@ export class OperationSubscriptions {
 
   private setSelectedCells(operationDto: OperationDto): void {
     if (!this.args.cellSelection) return;
-    const undoState: UndoState | undefined = this.getUndoState(operationDto);
-    if (!undoState) return;
-    const selectedCells: CellRange[] | undefined = undoState.selectedCells;
+    const properties: FitUIOperationProperties | undefined =
+      this.getOperationProperties(operationDto);
+    if (!properties) return;
+    const selectedCellsDto: unknown[] | undefined = properties.bodyCellRanges;
+    const selectedCells: CellRange[] | undefined =
+      selectedCellsDto && createCellRangeList4Dto(selectedCellsDto);
     if (!selectedCells) return;
     this.args.cellSelection.body.removeRanges();
     this.args.cellSelection.rowHeader?.removeRanges();
@@ -204,24 +225,32 @@ export class OperationSubscriptions {
     this.args.cellSelection.colHeader?.end();
   }
 
+  private setCellEditorVisibility(operationDto: OperationDto): void {
+    if (!this.args.cellEditor) return;
+    const properties: FitUIOperationProperties | undefined =
+      this.getOperationProperties(operationDto);
+    if (!properties) return;
+    const visibility: boolean | undefined = properties.cellEditorVisibility;
+    visibility !== undefined && this.args.cellEditor.setVisible(visibility);
+  }
+
   private setCellEditorCoord(operationDto: OperationDto): void {
     if (!this.args.cellEditor) return;
-    const undoState: UndoState | undefined = this.getUndoState(operationDto);
-    if (!undoState) return;
-    const cellCoord: CellCoord | undefined = undoState.cellEditor;
-    const isVisible: boolean = this.args.cellEditor.isVisible();
-    if (cellCoord) {
-      !isVisible && this.args.cellEditor.setVisible(true);
-      this.args.cellEditor.setCell(cellCoord);
-    } else if (isVisible) {
-      this.args.cellEditor.setVisible(false);
-    }
+    const properties: FitUIOperationProperties | undefined =
+      this.getOperationProperties(operationDto);
+    if (!properties) return;
+    const cellCoordDto: unknown | undefined = properties.cellEditorCoord;
+    const cellCoord: CellCoord | undefined = cellCoordDto
+      ? createCellCoord4Dto(cellCoordDto)
+      : undefined;
+    cellCoord && this.args.cellEditor.setCell(cellCoord);
   }
 
   private setScrollPosition(operationDto: OperationDto): void {
-    const undoState: UndoState | undefined = this.getUndoState(operationDto);
-    if (!undoState) return;
-    const scroll: UndoState['scroll'] = undoState.scroll;
+    const properties: FitUIOperationProperties | undefined =
+      this.getOperationProperties(operationDto);
+    if (!properties) return;
+    const scroll: FitUIOperationScroll | undefined = properties.scroll;
     if (!scroll) return;
     this.args.tableScroller.scrollTo(scroll.left, scroll.top);
   }
@@ -270,7 +299,7 @@ export class OperationSubscriptions {
             this.refreshMergedRegions();
             break;
         }
-        if (operationDto.preventFocus) {
+        if (this.getOperationProperties(operationDto)?.preventFocus) {
           this.args.cellEditor?.setCell(this.args.cellEditor.getCell());
         } else {
           if (id === 'style-name-copy') {
@@ -283,33 +312,6 @@ export class OperationSubscriptions {
         }
       })
     );
-  }
-
-  private focus(operationDto: OperationDto): void {
-    const undoState: UndoState | undefined = this.getUndoState(operationDto);
-    if (!undoState) return;
-    let cellSelection: CellSelectionRanges | undefined;
-    const focus: Focus | undefined = undoState.focus;
-    if (focus === 'Body' || focus === 'CellEditor' || focus === 'ColFilter') {
-      cellSelection = this.args.cellSelection?.body;
-      this.focusCellEditorControl();
-    } else if (focus === 'RowHeader') {
-      cellSelection = this.args.cellSelection?.rowHeader;
-    } else if (focus === 'ColHeader') {
-      cellSelection = this.args.cellSelection?.colHeader;
-    } else if (focus === 'PageHeader') {
-      cellSelection = this.args.cellSelection?.pageHeader;
-    }
-    !cellSelection?.hasFocus() && cellSelection?.setFocus(true);
-  }
-
-  private focusCellEditorControl(): void {
-    setTimeout((): void => {
-      const cellEditor: CellEditor | undefined = this.args.cellEditor;
-      cellEditor?.setCell(cellEditor.getCell());
-      cellEditor?.hasFocus() && cellEditor.setFocus(false);
-      cellEditor?.getCellControl().setFocus(true);
-    });
   }
 
   private refreshIfSelectionExceedsRows(): void {
@@ -381,6 +383,43 @@ export class OperationSubscriptions {
     this.args.tableViewer.resetMergedRegions();
     this.args.tableScroller.renderMergedRegions();
     this.args.cellEditor?.setCell(this.args.cellEditor?.getCell());
+  }
+
+  private focus(operationDto: OperationDto): void {
+    const undoState: FitUIOperationProperties | undefined =
+      this.getOperationProperties(operationDto);
+    if (!undoState) return;
+    let cellSelection: CellSelectionRanges | undefined;
+    const focus: FitUIOperationFocus | undefined = undoState.focus;
+    if (focus === 'Body' || focus === 'CellEditor' || focus === 'ColFilter') {
+      cellSelection = this.args.cellSelection?.body;
+      this.focusCellEditorControl();
+    } else if (focus === 'RowHeader') {
+      cellSelection = this.args.cellSelection?.rowHeader;
+    } else if (focus === 'ColHeader') {
+      cellSelection = this.args.cellSelection?.colHeader;
+    } else if (focus === 'PageHeader') {
+      cellSelection = this.args.cellSelection?.pageHeader;
+    }
+    !cellSelection?.hasFocus() && cellSelection?.setFocus(true);
+  }
+
+  private getOperationProperties(
+    operationDto: OperationDto
+  ): FitUIOperationProperties | undefined {
+    return (
+      operationDto.properties &&
+      (operationDto.properties as FitUIOperationProperties)
+    );
+  }
+
+  private focusCellEditorControl(): void {
+    setTimeout((): void => {
+      const cellEditor: CellEditor | undefined = this.args.cellEditor;
+      cellEditor?.setCell(cellEditor.getCell());
+      cellEditor?.hasFocus() && cellEditor.setFocus(false);
+      cellEditor?.getCellControl().setFocus(true);
+    });
   }
 
   private createFilterSubscriptions(): void {

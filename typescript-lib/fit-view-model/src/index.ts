@@ -25,5 +25,6 @@ export {
   FitUIOperationArgs,
   FitUIOperationId,
 } from './model/operation-executor/operation-args.js';
+export { FitUIOperationProperties } from './model/operation-executor/operation-properties.js';
 export * from './model/fit-view-model.js';
 export * from './fit-view-model-config.js';

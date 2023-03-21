@@ -2,11 +2,7 @@ import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { createTable, registerModelConfig, Table } from 'fit-core/model';
-import {
-  OperationDto,
-  OperationId,
-  registerOperationConfig,
-} from 'fit-core/operations';
+import { OperationDto, registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
@@ -14,10 +10,17 @@ import {
 } from 'fit-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
-import { FIT_VIEW_MODEL_CONFIG } from 'fit-view-model';
+import {
+  FitUIOperationProperties,
+  FIT_VIEW_MODEL_CONFIG,
+} from 'fit-view-model';
 
 import { TopicTitle } from '../../../common/topic-title.model';
 import { CodeSnippet } from '../../common/code-snippet.model';
+
+type OperationProperties = FitUIOperationProperties & {
+  stopPropagation: boolean;
+};
 
 @Component({
   selector: 'table-interoperability',
@@ -58,41 +61,69 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   }
 
   private linkTables(fit1: FittableDesigner, fit2: FittableDesigner): void {
-    const afterRun$: Subscription = fit1
+    this.subscriptions.push(this.afterRun$(fit1, fit2));
+    this.subscriptions.push(this.afterUndo$(fit1, fit2));
+    this.subscriptions.push(this.afterRedo$(fit1, fit2));
+  }
+
+  private afterRun$(
+    fit1: FittableDesigner,
+    fit2: FittableDesigner
+  ): Subscription {
+    return fit1
       .operationExecutor!.onAfterRun$()
       .subscribe((dto: OperationDto): void => {
-        if (dto.properties && dto.properties['stopPropagation']) return;
+        let properties: OperationProperties =
+          dto.properties as OperationProperties;
+        if (properties.stopPropagation) return;
+        properties = { stopPropagation: true, preventFocus: true };
         fit2.operationExecutor?.runOperationDto({
           id: dto.id,
           steps: dto.steps,
-          preventFocus: true,
-          properties: { stopPropagation: true },
+          properties,
         });
       });
-    this.subscriptions.push(afterRun$);
-    const afterUndo$: Subscription = fit1
+  }
+
+  private afterUndo$(
+    fit1: FittableDesigner,
+    fit2: FittableDesigner
+  ): Subscription {
+    return fit1
       .operationExecutor!.onAfterUndo$()
       .subscribe((dto: OperationDto): void => {
-        const steps: OperationId<string>[] | undefined =
-          dto.undoOperation?.steps;
-        steps &&
-          fit2.operationExecutor?.runOperationDto({
-            id: dto.id,
-            steps,
-            preventFocus: true,
-          });
+        if (!dto.undoOperation) return;
+        const properties: OperationProperties = {
+          ...dto.properties,
+        } as OperationProperties;
+        properties.stopPropagation = true;
+        properties.preventFocus = true;
+        fit2.operationExecutor?.runOperationDto({
+          id: dto.id,
+          steps: dto.undoOperation.steps,
+          properties,
+        });
       });
-    this.subscriptions.push(afterUndo$);
-    const afterRedo$: Subscription = fit1
+  }
+
+  private afterRedo$(
+    fit1: FittableDesigner,
+    fit2: FittableDesigner
+  ): Subscription {
+    return fit1
       .operationExecutor!.onAfterRedo$()
       .subscribe((dto: OperationDto): void => {
+        const properties: OperationProperties = {
+          ...dto.properties,
+        } as OperationProperties;
+        properties.stopPropagation = true;
+        properties.preventFocus = true;
         fit2.operationExecutor?.runOperationDto({
           id: dto.id,
           steps: dto.steps,
-          preventFocus: true,
+          properties,
         });
       });
-    this.subscriptions.push(afterRedo$);
   }
 
   public ngOnDestroy(): void {

@@ -33,7 +33,9 @@ class RowResizeMenuItem extends FitInputControl {
       args.imageRegistry.getImageUrl('height')
     );
     this.setValid((): boolean =>
-      this.height === undefined ? true : this.height > 0
+      this.height === undefined
+        ? true
+        : this.height > 0 && this.height < 1000 && Number.isInteger(this.height)
     );
     this.setRun(this.createRunFn);
   }
@@ -86,7 +88,7 @@ export function createRowInsertAboveMenuItem(
       args.imageRegistry.getImageUrl('insertAbove')
     )
     .setValue(1);
-  control.setValid((): boolean => (control.getValue() ?? 0) > 0);
+  control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
     if (control.isValid()) {
       const operationArgs: FitUIOperationArgs = {
@@ -115,7 +117,7 @@ export function createRowInsertBelowMenuItem(
       args.imageRegistry.getImageUrl('insertBelow')
     )
     .setValue(1);
-  control.setValid((): boolean => (control.getValue() ?? 0) > 0);
+  control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
     if (control.isValid()) {
       const operationArgs: FitUIOperationArgs = {
@@ -167,4 +169,10 @@ function getFirstLine(lineRanges: LineRange[]): LineRange[] {
   const firstRange: LineRange | undefined = lineRanges[0];
   firstRange && resultLine.push(createLineRange(firstRange.getFrom()));
   return resultLine;
+}
+
+function isPositiveInteger(value?: Value): boolean {
+  return value === undefined
+    ? false
+    : Number.isInteger(value) && value > 0 && value <= 1000000;
 }

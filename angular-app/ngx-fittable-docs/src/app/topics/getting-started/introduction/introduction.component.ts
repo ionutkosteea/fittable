@@ -27,7 +27,7 @@ import { TableViewComponent } from 'ngx-fittable';
 
 import { TopicTitle } from '../../../common/topic-title.model';
 
-const FIT_TABLE_DTO: FitTableDto = {
+const getFitTableDto = (): FitTableDto => ({
   numberOfRows: 100,
   numberOfCols: 20,
   styles: {
@@ -70,7 +70,7 @@ const FIT_TABLE_DTO: FitTableDto = {
     },
     14: { 1: { value: 'Merged cells' } },
   },
-};
+});
 
 @Component({
   selector: 'introduction',
@@ -92,7 +92,7 @@ export class IntroductionComponent implements OnInit, AfterViewInit {
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-    this.fit = createFittableDesigner(createTable4Dto(FIT_TABLE_DTO));
+    this.fit = createFittableDesigner(createTable4Dto(getFitTableDto()));
   }
 
   public ngAfterViewInit(): void {
@@ -242,7 +242,7 @@ export class IntroductionComponent implements OnInit, AfterViewInit {
   private run(configDef: FitViewModelConfigDef): void {
     const srcConfig: ViewModelConfig = getViewModelConfig();
     registerViewModelConfig(createFitViewModelConfig(configDef, srcConfig));
-    this.fit = createFittableDesigner(createTable4Dto(FIT_TABLE_DTO));
+    this.fit = createFittableDesigner(createTable4Dto(getFitTableDto()));
     this.updateFittableComponent();
   }
 

@@ -9,7 +9,6 @@ export type OperationId<T extends string> = { id: T };
 export type BaseOperationDto = {
   steps: OperationId<string>[];
   undoOperation?: BaseOperationDto;
-  preventFocus?: boolean;
 };
 
 export type OperationDto = OperationId<string> &

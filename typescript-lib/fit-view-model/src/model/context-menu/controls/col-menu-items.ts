@@ -33,7 +33,9 @@ class ColResizeMenuItem extends FitInputControl {
       args.imageRegistry.getImageUrl('width')
     );
     this.setValid((): boolean =>
-      this.width === undefined ? true : this.width > 0
+      this.width === undefined
+        ? true
+        : this.width > 0 && this.width < 1000 && Number.isInteger(this.width)
     );
     this.setRun(this.createRunFn);
   }
@@ -85,7 +87,7 @@ export function createColInsertLeftMenuItem(
       args.imageRegistry.getImageUrl('insertLeft')
     )
     .setValue(1);
-  control.setValid((): boolean => (control.getValue() ?? 0) > 0);
+  control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
     if (control.isValid()) {
       const operationArgs: FitUIOperationArgs = {
@@ -114,7 +116,7 @@ export function createColInsertRightMenuItem(
       args.imageRegistry.getImageUrl('insertRight')
     )
     .setValue(1);
-  control.setValid((): boolean => (control.getValue() ?? 0) > 0);
+  control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
     if (control.isValid()) {
       const operationArgs: FitUIOperationArgs = {
@@ -166,4 +168,10 @@ function getFirstLine(lineRanges: LineRange[]): LineRange[] {
   const firstRange: LineRange | undefined = lineRanges[0];
   firstRange && resultLine.push(createLineRange(firstRange.getFrom()));
   return resultLine;
+}
+
+function isPositiveInteger(value?: Value): boolean {
+  return value === undefined
+    ? false
+    : Number.isInteger(value) && value > 0 && value <= 1000000;
 }
