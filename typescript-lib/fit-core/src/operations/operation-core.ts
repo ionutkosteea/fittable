@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs';
 
-import { MissingFactoryError } from '../common/factory-error.js';
 import { Table } from '../model/table.js';
 import { getOperationConfig } from './operation-config.js';
 
@@ -80,8 +79,5 @@ export interface OperationExecutorFactory {
 }
 
 export function createOperationExecutor(): OperationExecutor {
-  const factory: OperationExecutorFactory | undefined =
-    getOperationConfig().operationExecutorFactory;
-  if (factory) return factory.createOperationExecutor();
-  else throw new MissingFactoryError();
+  return getOperationConfig().operationExecutorFactory.createOperationExecutor();
 }

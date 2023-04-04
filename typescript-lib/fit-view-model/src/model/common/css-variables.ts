@@ -82,10 +82,12 @@ export function setCssVariable(
   name: keyof FitCssColorVariables | keyof FitCssUnitVariables,
   value: string
 ): void {
+  if (typeof document === 'undefined') return;
   document.body.style.setProperty(name, value);
 }
 
 export function setCssVariables(cssVariables: CssVariables): void {
+  if (typeof document === 'undefined') return;
   for (const key of Reflect.ownKeys(cssVariables)) {
     const varName: string = key as string;
     const varValue: string = Reflect.get(cssVariables, key);

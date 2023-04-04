@@ -11,6 +11,7 @@ import {
   FitUIOperationId,
 } from '../../operation-executor/operation-args.js';
 import { PushButton } from '../controls/common/push-button.js';
+import { ControlUpdater } from './common/control-updater.js';
 import { FitControlArgs } from './common/fit-control-args.js';
 
 export function createPaintFormatButton(args: FitControlArgs): PushButton {
@@ -19,7 +20,7 @@ export function createPaintFormatButton(args: FitControlArgs): PushButton {
 
 const operationId: FitUIOperationId = 'style-name-copy';
 
-class PaintFormatButton extends PushButton {
+class PaintFormatButton extends PushButton implements ControlUpdater {
   private pushed = false;
   private styleName?: string;
 

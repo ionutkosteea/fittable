@@ -91,15 +91,16 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
           : 'Disable virtual rows';
       },
       run: (): void => {
+        if (!this.virtualColsButton) throw new Error('Button is not defined.');
         const config: ViewModelConfig = getViewModelConfig();
         config.disableVirtualRows = !config.disableVirtualRows;
         const tableScroller: ScrollContainer = this.fit.viewModel.tableScroller;
         if (config.disableVirtualRows) {
           tableScroller.setVerticalScrollbar();
-          this.virtualColsButton!.disabled = 'disabled';
+          this.virtualColsButton.disabled = 'disabled';
         } else {
           tableScroller.setVerticalScrollbar(this.verticalScrollbar);
-          this.virtualColsButton!.disabled = undefined;
+          this.virtualColsButton.disabled = undefined;
         }
       },
     };
@@ -113,15 +114,16 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
           : 'Disable virtual columns';
       },
       run: (): void => {
+        if (!this.virtualRowsButton) throw new Error('Button is not defined.');
         const config: ViewModelConfig = getViewModelConfig();
         config.disableVirtualCols = !config.disableVirtualCols;
         const tableScroller: ScrollContainer = this.fit.viewModel.tableScroller;
         if (config.disableVirtualCols) {
           tableScroller.setHorizontalScrollbar();
-          this.virtualRowsButton!.disabled = 'disabled';
+          this.virtualRowsButton.disabled = 'disabled';
         } else {
           tableScroller.setHorizontalScrollbar(this.horizontalScrollbar);
-          this.virtualRowsButton!.disabled = undefined;
+          this.virtualRowsButton.disabled = undefined;
         }
       },
     };

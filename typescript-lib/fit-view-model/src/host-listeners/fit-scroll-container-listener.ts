@@ -14,7 +14,7 @@ export class FitScrollContainerListener implements ScrollContainerListener {
   }
 
   public onScroll(): void {
-    this.scroller?.renderModel();
+    this.scroller.renderModel();
   }
 }
 

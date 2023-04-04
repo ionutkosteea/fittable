@@ -214,22 +214,22 @@ export class RowInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
     return this.table.getNumberOfRows();
   }
 
-  protected getRegionLineId(rowId: number, colId: number): number {
+  protected getRegionLineId(rowId: number): number {
     return rowId;
   }
 
   protected getLineSpan(rowId: number, colId: number): number {
-    return this.mergedRegionsTable!.getRowSpan(rowId, colId) ?? 0;
+    return this.mergedRegionsTable?.getRowSpan(rowId, colId) ?? 0;
   }
 
   protected moveRegion(rowId: number, colId: number): void {
-    this.mergedRegionsStepDto.moveRegions!.push({
+    this.mergedRegionsStepDto.moveRegions?.push({
       rowId,
       colId,
       moveRow: this.args.numberOfNewLines,
       moveCol: 0,
     });
-    this.undoMergedRegionsStepDto.moveRegions!.push({
+    this.undoMergedRegionsStepDto.moveRegions?.push({
       rowId: rowId + this.args.numberOfNewLines,
       colId,
       moveRow: -this.args.numberOfNewLines,
@@ -238,13 +238,13 @@ export class RowInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
   }
 
   protected increaseRegion(rowId: number, colId: number): void {
-    this.mergedRegionsStepDto.increaseRegions!.push({
+    this.mergedRegionsStepDto.increaseRegions?.push({
       rowId,
       colId,
       increaseRow: this.args.numberOfNewLines,
       increaseCol: 0,
     });
-    this.undoMergedRegionsStepDto.increaseRegions!.push({
+    this.undoMergedRegionsStepDto.increaseRegions?.push({
       rowId,
       colId,
       increaseRow: -this.args.numberOfNewLines,
@@ -306,17 +306,17 @@ export class ColInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
   }
 
   protected getLineSpan(rowId: number, colId: number): number {
-    return this.mergedRegionsTable!.getColSpan(rowId, colId) ?? 0;
+    return this.mergedRegionsTable?.getColSpan(rowId, colId) ?? 0;
   }
 
   protected moveRegion(rowId: number, colId: number): void {
-    this.mergedRegionsStepDto.moveRegions!.push({
+    this.mergedRegionsStepDto.moveRegions?.push({
       rowId,
       colId,
       moveRow: 0,
       moveCol: this.args.numberOfNewLines,
     });
-    this.undoMergedRegionsStepDto.moveRegions!.push({
+    this.undoMergedRegionsStepDto.moveRegions?.push({
       rowId,
       colId: colId + this.args.numberOfNewLines,
       moveRow: 0,
@@ -325,13 +325,13 @@ export class ColInsertOperationDtoBuilder extends LineInsertOperationDtoBuilder 
   }
 
   protected increaseRegion(rowId: number, colId: number): void {
-    this.mergedRegionsStepDto.increaseRegions!.push({
+    this.mergedRegionsStepDto.increaseRegions?.push({
       rowId,
       colId,
       increaseRow: 0,
       increaseCol: this.args.numberOfNewLines,
     });
-    this.undoMergedRegionsStepDto.increaseRegions!.push({
+    this.undoMergedRegionsStepDto.increaseRegions?.push({
       rowId,
       colId,
       increaseRow: 0,

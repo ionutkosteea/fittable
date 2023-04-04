@@ -26,5 +26,6 @@ export {
   FitUIOperationId,
 } from './model/operation-executor/operation-args.js';
 export { FitUIOperationProperties } from './model/operation-executor/operation-properties.js';
+export { FitColFiltersControlId } from './model/col-filters/fit-col-filters.js';
 export * from './model/fit-view-model.js';
 export * from './fit-view-model-config.js';

@@ -72,7 +72,8 @@ export class SettingsBarComponent implements SimpleTopic, OnInit {
 
   private getSettingsButtonWindow(): Window {
     const settingsButtonId: FitSettingsBarControlId = 'settings-button';
-    const settingsBar: Container = this.fit.viewModel.settingsBar!;
+    const settingsBar: Container | undefined = this.fit.viewModel.settingsBar;
+    if (!settingsBar) throw new Error('Settings bar is not defined.');
     const control: Control = settingsBar.getControl(settingsButtonId);
     const options: OptionsControl | undefined = asOptionsControl(control);
     if (!options) throw new Error('Settings button has no pop-up menu.');

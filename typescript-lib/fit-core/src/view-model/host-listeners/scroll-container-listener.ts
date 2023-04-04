@@ -1,6 +1,6 @@
 import { ScrollContainer, ScrollElement } from '../model/scroll-container.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { FitEvent } from './custom-events.js';
+import { FitEvent } from './html-mockups.js';
 
 export interface ScrollContainerListener {
   onScroll(event?: FitEvent): void;

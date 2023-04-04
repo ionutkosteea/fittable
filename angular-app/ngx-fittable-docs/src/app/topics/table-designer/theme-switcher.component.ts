@@ -92,8 +92,12 @@ export class ThemeSwitcherComponent implements ConsoleTopic, OnInit {
   }
 
   public getConsoleText(): string {
-    const themeSwitcher: ThemeSwitcher = this.fit.viewModel.themeSwitcher!;
-    const currentThemeName: string = themeSwitcher.getCurrentThemeName()!;
+    const themeSwitcher: ThemeSwitcher | undefined =
+      this.fit.viewModel.themeSwitcher;
+    if (!themeSwitcher) throw new Error('Theme switcher is not defined.');
+    const currentThemeName: string | undefined =
+      themeSwitcher.getCurrentThemeName();
+    if (!currentThemeName) throw new Error('Current theme is not defined.');
     return JSON.stringify(
       themeSwitcher.getTheme(currentThemeName)?.cssVariables,
       null,

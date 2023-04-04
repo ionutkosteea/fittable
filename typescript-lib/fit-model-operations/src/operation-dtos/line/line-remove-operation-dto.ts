@@ -132,12 +132,12 @@ abstract class LineRemoveOperationDtoBuilder {
   ): void;
 
   protected removeRegion(rowId: number, colId: number): void {
-    this.mergedRegionsStepDto.removeRegions!.push({ rowId, colId });
-    this.undoMergedRegionsStepDto.createRegions!.push({
+    this.mergedRegionsStepDto.removeRegions?.push({ rowId, colId });
+    this.undoMergedRegionsStepDto.createRegions?.push({
       rowId,
       colId,
-      rowSpan: this.mergedRegionsTable!.getRowSpan(rowId, colId),
-      colSpan: this.mergedRegionsTable!.getColSpan(rowId, colId),
+      rowSpan: this.mergedRegionsTable?.getRowSpan(rowId, colId),
+      colSpan: this.mergedRegionsTable?.getColSpan(rowId, colId),
     });
   }
 
@@ -374,7 +374,7 @@ abstract class LineRemoveOperationDtoBuilder {
   }
 
   private adjustUndoMergedRegionsWithMoveFactor(): void {
-    for (const mr of this.mergedRegionsStepDto.moveRegions!) {
+    for (const mr of this.mergedRegionsStepDto.moveRegions ?? []) {
       this.undoMergedRegionsStepDto.moveRegions?.forEach(
         (umr: MoveRegion): void => {
           if (mr.rowId === umr.rowId && mr.colId === umr.colId) {
@@ -441,7 +441,7 @@ export class RowRemoveOperationDtoBuilder extends LineRemoveOperationDtoBuilder 
     return new TableRowsHelper(this.table);
   }
 
-  protected getRegionLineId(rowId: number, colId: number): number {
+  protected getRegionLineId(rowId: number): number {
     return rowId;
   }
 
@@ -450,13 +450,13 @@ export class RowRemoveOperationDtoBuilder extends LineRemoveOperationDtoBuilder 
   }
 
   protected moveRegion(rowId: number, colId: number, moveRow: number): void {
-    this.mergedRegionsStepDto.moveRegions!.push({
+    this.mergedRegionsStepDto.moveRegions?.push({
       rowId,
       colId,
       moveRow,
       moveCol: 0,
     });
-    this.undoMergedRegionsStepDto.moveRegions!.push({
+    this.undoMergedRegionsStepDto.moveRegions?.push({
       rowId,
       colId,
       moveRow: -moveRow,
@@ -469,13 +469,13 @@ export class RowRemoveOperationDtoBuilder extends LineRemoveOperationDtoBuilder 
     colId: number,
     increaseRow: number
   ): void {
-    this.mergedRegionsStepDto.increaseRegions!.push({
+    this.mergedRegionsStepDto.increaseRegions?.push({
       rowId,
       colId,
       increaseRow,
       increaseCol: 0,
     });
-    this.undoMergedRegionsStepDto.increaseRegions!.push({
+    this.undoMergedRegionsStepDto.increaseRegions?.push({
       rowId,
       colId,
       increaseRow: -increaseRow,
@@ -548,13 +548,13 @@ export class ColRemoveOperationDtoBuilder extends LineRemoveOperationDtoBuilder 
   }
 
   protected moveRegion(rowId: number, colId: number, moveCol: number): void {
-    this.mergedRegionsStepDto.moveRegions!.push({
+    this.mergedRegionsStepDto.moveRegions?.push({
       rowId,
       colId,
       moveRow: 0,
       moveCol,
     });
-    this.undoMergedRegionsStepDto.moveRegions!.push({
+    this.undoMergedRegionsStepDto.moveRegions?.push({
       rowId,
       colId: colId + moveCol,
       moveRow: 0,
@@ -567,13 +567,13 @@ export class ColRemoveOperationDtoBuilder extends LineRemoveOperationDtoBuilder 
     colId: number,
     increaseCol: number
   ): void {
-    this.mergedRegionsStepDto.increaseRegions!.push({
+    this.mergedRegionsStepDto.increaseRegions?.push({
       rowId,
       colId,
       increaseRow: 0,
       increaseCol,
     });
-    this.undoMergedRegionsStepDto.increaseRegions!.push({
+    this.undoMergedRegionsStepDto.increaseRegions?.push({
       rowId,
       colId,
       increaseRow: 0,

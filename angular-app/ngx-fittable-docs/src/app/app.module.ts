@@ -6,6 +6,7 @@ import { NgxFittableModule } from 'ngx-fittable';
 import { AppComponent } from './app.component';
 import { NavigationTreeComponent } from './navigation-tree/navigation-tree.component';
 import { IntroductionComponent } from './topics/getting-started/introduction/introduction.component';
+import { PlaygroundComponent } from './topics/getting-started/playground/playground.component';
 import { RowHeightComponent } from './topics/table-model/row-height.component';
 import { ColWidthtComponent } from './topics/table-model/col-width.component';
 import { CellValueComponent } from './topics/table-model/cell-value.component';
@@ -57,6 +58,7 @@ import { TableInteroperabilityComponent } from './topics/table-operations/table-
     AppComponent,
     NavigationTreeComponent,
     IntroductionComponent,
+    PlaygroundComponent,
     ArchitectureComponent,
     RowHeightComponent,
     ColWidthtComponent,

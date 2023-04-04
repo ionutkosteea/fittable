@@ -17,6 +17,7 @@ import {
   createCellRange,
   createCellCoord,
   TableCols,
+  TableMergedRegions,
 } from 'fit-core/model/index.js';
 import {
   OperationExecutor,
@@ -33,7 +34,11 @@ import {
   BorderStyle,
 } from '../../dist/index.js';
 
-export type TstTable = Table & TableStyles & TableRows & TableCols;
+export type TstTable = Table &
+  TableStyles &
+  TableRows &
+  TableCols &
+  TableMergedRegions;
 
 export class TableOperationExecutor {
   private table: TstTable;
@@ -104,6 +109,24 @@ export class TableOperationExecutor {
 
   public getCellValue(rowId: number, colId: number): Value | undefined {
     return this.table.getCellValue(rowId, colId);
+  }
+
+  public setRowSpan(rowId: number, colId: number, rowSpan?: number): this {
+    this.table.setRowSpan(rowId, colId, rowSpan);
+    return this;
+  }
+
+  public getRowSpan(rowId: number, colId: number): number | undefined {
+    return this.table.getRowSpan(rowId, colId);
+  }
+
+  public setColSpan(rowId: number, colId: number, colSpan?: number): this {
+    this.table.setColSpan(rowId, colId, colSpan);
+    return this;
+  }
+
+  public getColSpan(rowId: number, colId: number): number | undefined {
+    return this.table.getColSpan(rowId, colId);
   }
 
   public selectCell(rowId: number, colId: number): this {
@@ -302,6 +325,25 @@ export class TableOperationExecutor {
   public runCellPasteValue(): this {
     const args: FitOperationDtoArgs = {
       id: 'cell-paste',
+      selectedCells: this.getSelectedCells(),
+    };
+    this.executor.run(args);
+    return this;
+  }
+
+  public runMergeCells(): this {
+    const args: FitOperationDtoArgs = {
+      id: 'cell-merge',
+      selectedCells: this.getSelectedCells(),
+    };
+
+    this.executor.run(args);
+    return this;
+  }
+
+  public runUnmergeCells(): this {
+    const args: FitOperationDtoArgs = {
+      id: 'cell-unmerge',
       selectedCells: this.getSelectedCells(),
     };
     this.executor.run(args);

@@ -7,27 +7,43 @@
     needs.
   </p>
   <p class="description">
-    The main module of Fittable is developed in Angular, which provides a responsive and interactive view for the
-    application. Meanwhile, the view model and other essential modules are written in Typescript, without any dependency
-    on a GUI framework, making it possible to use the component on the server-side as well.
+    The main module of Fittable is developed in Angular, which presents a responsive and interactive view for the
+    application. The view model and other essential modules are written in Typescript, without any dependency on a GUI
+    framework, making it possible to use the component on the server-side as well.
   </p>
   <p class="description">
     Fittable's modules are highly adaptable, with a range of configurable options that allow you to customize the
     component to match your application's requirements.
   </p>
   <p class="description">
-    The key functionalities of Fittable can be approached below.
+    Currently, the following features are available in Fittable:
   </p>
-  <div class="preview">
-    <div class="left-navigation">
-      <div *ngFor="let item of navigation" class="control"
-        [ngStyle]="{backgroundImage:item.isChecked()?'url(../../../assets/icons/outline-check-circle.svg)':undefined}"
-        (click)="item.run()">
-        {{item.label}}
-      </div>
-    </div>
-    <div class="fittable">
-      <ng-template #content></ng-template>
-    </div>
+  <div class="features">
+    <span class="feature">Row resize</span>
+    <span class="feature">Row insert</span>
+    <span class="feature">Row remove</span>
+    <span class="feature">Row header</span>
+    <span class="feature">Column resize</span>
+    <span class="feature">Column insert</span>
+    <span class="feature">Column remove</span>
+    <span class="feature">Column header</span>
+    <span class="feature">Column filter</span>
+    <span class="feature">Cell editor</span>
+    <span class="feature">Cell selection</span>
+    <span class="feature">Cell style</span>
+    <span class="feature">Cell merge/unmerge</span>
+    <span class="feature">Cell cut/copy/paste</span>
+    <span class="feature">Undo/Redo</span>
+    <span class="feature">Virtual scrolling</span>
+    <span class="feature">Language dictionary</span>
+    <span class="feature">Image registry</span>
+    <span class="feature">Theme switcher</span>
+    <span class="feature">Toolbar</span>
+    <span class="feature">Context menu</span>
+    <span class="feature">Statusbar</span>
+    <span class="feature">JSON interoperability</span>
+    <span class="feature">Custom operation support</span>
+    <span class="feature">Custom table support</span>
+    <span class="feature">Custom views support</span>
   </div>
 </div>

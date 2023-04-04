@@ -7,6 +7,7 @@
   </div>
   <div class="content">
     <introduction *ngIf="activeContent==='Introduction'"></introduction>
+    <playground *ngIf="activeContent==='Playground'"></playground>
     <architecture *ngIf="activeContent==='Architecture'"></architecture>
     <row-height *ngIf="activeContent==='Row height'"></row-height>
     <column-width *ngIf="activeContent==='Column width'"></column-width>

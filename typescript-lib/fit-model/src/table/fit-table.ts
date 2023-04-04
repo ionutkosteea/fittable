@@ -16,6 +16,7 @@ import {
   FitCellDto,
   FitColDto,
   FitMapDto,
+  FitMatrixDto,
   FitMergedCellDto,
   FitRowDto,
   FitTableDto,
@@ -63,10 +64,10 @@ export class FitTable
   public setCellValue(rowId: number, colId: number, value?: Value): this {
     if (value !== undefined) {
       this.createMatrixCell('cells', rowId, colId);
-      this.dto.cells![rowId][colId]['value'] = value;
+      this.getCells()[rowId][colId]['value'] = value;
     } else if (this.hasMatrixCell('cells', rowId, colId)) {
-      delete this.dto.cells![rowId][colId]['value'];
-      !this.hasCell(rowId, colId) && delete this.dto.cells![rowId][colId];
+      delete this.getCells()[rowId][colId]['value'];
+      !this.hasCell(rowId, colId) && delete this.getCells()[rowId][colId];
     }
     return this;
   }
@@ -209,12 +210,12 @@ export class FitTable
   public setRowSpan(rowId: number, colId: number, rowSpan?: number): this {
     if (rowSpan) {
       this.createMatrixCell('mergedCells', rowId, colId);
-      this.dto.mergedCells![rowId][colId]['rowSpan'] = rowSpan;
+      this.getMergedCells()[rowId][colId]['rowSpan'] = rowSpan;
     } else if (this.hasMatrixCell('mergedCells', rowId, colId)) {
-      if (this.dto.mergedCells![rowId][colId]['colSpan']) {
-        delete this.dto.mergedCells![rowId][colId]['rowSpan'];
+      if (this.getMergedCells()[rowId][colId]['colSpan']) {
+        delete this.getMergedCells()[rowId][colId]['rowSpan'];
       } else {
-        delete this.dto.mergedCells![rowId][colId];
+        delete this.getMergedCells()[rowId][colId];
       }
     }
     return this;
@@ -227,12 +228,12 @@ export class FitTable
   public setColSpan(rowId: number, colId: number, colSpan?: number): this {
     if (colSpan) {
       this.createMatrixCell('mergedCells', rowId, colId);
-      this.dto.mergedCells![rowId][colId]['colSpan'] = colSpan;
+      this.getMergedCells()[rowId][colId]['colSpan'] = colSpan;
     } else if (this.hasMatrixCell('mergedCells', rowId, colId)) {
-      if (this.dto.mergedCells![rowId][colId]['rowSpan']) {
-        delete this.dto.mergedCells![rowId][colId]['colSpan'];
+      if (this.getMergedCells()[rowId][colId]['rowSpan']) {
+        delete this.getMergedCells()[rowId][colId]['colSpan'];
       } else {
-        delete this.dto.mergedCells![rowId][colId];
+        delete this.getMergedCells()[rowId][colId];
       }
     }
     return this;
@@ -255,9 +256,9 @@ export class FitTable
     moveRow: number,
     moveCol: number
   ): this {
-    let rowSpan: number | undefined = this.getRowSpan(rowId, colId);
-    let colSpan: number | undefined = this.getColSpan(rowId, colId);
-    delete this.dto.mergedCells![rowId][colId];
+    const rowSpan: number | undefined = this.getRowSpan(rowId, colId);
+    const colSpan: number | undefined = this.getColSpan(rowId, colId);
+    delete this.getMergedCells()[rowId][colId];
     this.setRowSpan(rowId + moveRow, colId + moveCol, rowSpan);
     this.setColSpan(rowId + moveRow, colId + moveCol, colSpan);
     return this;
@@ -269,9 +270,9 @@ export class FitTable
     increaseRow: number,
     increaseCol: number
   ): this {
-    let rowSpan: number | undefined = this.getRowSpan(rowId, colId);
+    const rowSpan: number | undefined = this.getRowSpan(rowId, colId);
     this.setRowSpan(rowId, colId, rowSpan ? rowSpan + increaseRow : undefined);
-    let colSpan: number | undefined = this.getColSpan(rowId, colId);
+    const colSpan: number | undefined = this.getColSpan(rowId, colId);
     this.setColSpan(rowId, colId, colSpan ? colSpan + increaseCol : undefined);
     return this;
   }
@@ -317,17 +318,17 @@ export class FitTable
   public setCellStyleName(rowId: number, colId: number, name?: string): this {
     if (name) {
       this.createMatrixCell('cells', rowId, colId);
-      this.dto.cells![rowId][colId]['styleName'] = name;
+      this.getCells()[rowId][colId]['styleName'] = name;
     } else if (this.hasMatrixCell('cells', rowId, colId)) {
-      delete this.dto.cells![rowId][colId]['styleName'];
-      !this.hasCell(rowId, colId) && delete this.dto.cells![rowId][colId];
+      delete this.getCells()[rowId][colId]['styleName'];
+      !this.hasCell(rowId, colId) && delete this.getCells()[rowId][colId];
     }
     return this;
   }
 
   private getCellDto(rowId: number, colId: number): FitCellDto | undefined {
     return (
-      this.dto.cells && this.dto.cells![rowId] && this.dto.cells[rowId][colId]
+      this.dto.cells && this.getCells()[rowId] && this.dto.cells[rowId][colId]
     );
   }
 
@@ -337,8 +338,8 @@ export class FitTable
   ): FitMergedCellDto | undefined {
     return (
       this.dto.mergedCells &&
-      this.dto.mergedCells![rowId] &&
-      this.dto.mergedCells[rowId][colId]
+      this.getMergedCells()[rowId] &&
+      this.getMergedCells()[rowId][colId]
     );
   }
 
@@ -347,9 +348,12 @@ export class FitTable
     rowId: number,
     colId: number
   ): void {
-    if (!this.dto[dtoKey]) this.dto[dtoKey] = {};
-    if (!this.dto[dtoKey]![rowId]) this.dto[dtoKey]![rowId] = {};
-    if (!this.dto[dtoKey]![rowId][colId]) this.dto[dtoKey]![rowId][colId] = {};
+    let cells: FitMatrixDto<object> | undefined = this.dto[dtoKey];
+    if (!cells) cells = this.dto[dtoKey] = {};
+    let rows: FitMapDto<object> | undefined = cells[rowId];
+    if (!rows) rows = cells[rowId] = {};
+    let cell: object | undefined = rows[colId];
+    if (!cell) cell = rows[colId] = {};
   }
 
   private hasMatrixCell(
@@ -357,11 +361,10 @@ export class FitTable
     rowId: number,
     colId: number
   ): boolean {
-    return this.dto[dtoKey] &&
-      this.dto[dtoKey]![rowId] &&
-      this.dto[dtoKey]![rowId][colId]
-      ? true
-      : false;
+    const cells: FitMatrixDto<object> | undefined = this.dto[dtoKey];
+    if (!cells) return false;
+    const rows: FitMapDto<object> | undefined = cells[rowId];
+    return rows && rows[colId] ? true : false;
   }
 
   public filterByCol(colId: number, conditionFn: ColConditionFn): FitTable {
@@ -371,22 +374,32 @@ export class FitTable
       numberOfCols: this.dto.numberOfCols,
       styles: this.dto.styles,
       cols: this.dto.cols,
-      rows: {},
-      cells: {},
     };
+    filterDto.cells = {};
+    filterDto.rows = {};
     for (let rowId = 0; rowId < this.getNumberOfRows(); rowId++) {
       const value: Value | undefined = this.getCellValue(rowId, colId);
       if (!conditionFn(rowId, colId, value)) continue;
-      if (this.dto.cells![rowId!]) {
-        filterDto.cells![numberOfRows] = this.dto.cells![rowId!];
+      if (this.getCells()[rowId]) {
+        filterDto.cells[numberOfRows] = this.getCells()[rowId];
       }
-      if (this.dto.rows && this.dto.rows[rowId!]) {
-        filterDto.rows![numberOfRows] = this.dto.rows[rowId!];
+      if (this.dto.rows && this.dto.rows[rowId]) {
+        filterDto.rows[numberOfRows] = this.dto.rows[rowId];
       }
       numberOfRows++;
     }
     filterDto.numberOfRows = numberOfRows;
     return new FitTable(filterDto);
+  }
+
+  private getCells(): FitMatrixDto<FitCellDto> {
+    if (this.dto.cells) return this.dto.cells;
+    else throw new Error('Cells are not defined!');
+  }
+
+  private getMergedCells(): FitMatrixDto<FitMergedCellDto> {
+    if (this.dto.mergedCells) return this.dto.mergedCells;
+    else throw new Error('Merged cells are not defined!');
   }
 }
 

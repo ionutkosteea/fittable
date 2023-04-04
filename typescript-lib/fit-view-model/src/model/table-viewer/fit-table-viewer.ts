@@ -168,7 +168,7 @@ export class FitTableViewer implements TableViewer {
 
   public isHiddenCell(rowId: number, colId: number): boolean {
     if (!this.hiddenCells) this.calculateHiddenCells();
-    return this.hiddenCells!.get(rowId, colId) ?? false;
+    return this.hiddenCells?.get(rowId, colId) ?? false;
   }
 
   public hasHiddenCells4Row(rowId: number): boolean {
@@ -178,9 +178,9 @@ export class FitTableViewer implements TableViewer {
 
   public hasHiddenCells4Col(colId: number): boolean {
     if (!this.hiddenCells) this.calculateHiddenCells();
-    for (const key of this.hiddenCells!.keys()) {
+    for (const key of this.hiddenCells?.keys() ?? []) {
       const rowId: number = key as unknown as number;
-      const value: boolean | undefined = this.hiddenCells!.get(rowId, colId);
+      const value: boolean | undefined = this.hiddenCells?.get(rowId, colId);
       if (value) return true;
     }
     return false;
@@ -191,10 +191,10 @@ export class FitTableViewer implements TableViewer {
     this.mergedRegionsTable?.forEachMergedCell(
       (rowId: number, colId: number): void => {
         const rowSpan: number | undefined = //
-          this.mergedRegionsTable!.getRowSpan(rowId, colId);
+          this.mergedRegionsTable?.getRowSpan(rowId, colId);
         const toRowId: number = rowSpan ? rowId + rowSpan - 1 : rowId;
         const colSpan: number | undefined = //
-          this.mergedRegionsTable!.getColSpan(rowId, colId);
+          this.mergedRegionsTable?.getColSpan(rowId, colId);
         const toColId: number = colSpan ? colId + colSpan - 1 : colId;
         for (let i = rowId; i <= toRowId; i++) {
           for (let j = colId; j <= toColId; j++) {
@@ -236,7 +236,7 @@ export class FitTableViewer implements TableViewer {
   }
 
   public getCellStyle(rowId: number, colId: number): Style | undefined {
-    let styleName: string | undefined = //
+    const styleName: string | undefined = //
       this.styledTable?.getCellStyleName(rowId, colId);
     if (styleName) return asTableStyles(this.table)?.getStyle(styleName);
     else return undefined;

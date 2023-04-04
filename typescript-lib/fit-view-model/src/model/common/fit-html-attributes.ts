@@ -1,12 +1,7 @@
 import { CellCoord, createCellCoord } from 'fit-core/model/index.js';
+import { FitHtmlElement } from 'fit-core/view-model/index.js';
 
-export type FitElement = {
-  parentElement: FitElement | null;
-  tagName: string;
-  getAttribute(name: string): string | null;
-};
-
-export function getCellCoord(htmlCell: FitElement): CellCoord {
+export function getCellCoord(htmlCell: FitHtmlElement): CellCoord {
   const rowId: string | undefined = getAttValue(htmlCell, 'rowId');
   const colId: string | undefined = getAttValue(htmlCell, 'colId');
   if (rowId && colId) return createCellCoord(Number(rowId), Number(colId));
@@ -17,7 +12,7 @@ export function getCellCoord(htmlCell: FitElement): CellCoord {
 }
 
 function getAttValue(
-  element: FitElement | null,
+  element: FitHtmlElement | null,
   attName: string
 ): string | undefined {
   if (!element) return undefined;

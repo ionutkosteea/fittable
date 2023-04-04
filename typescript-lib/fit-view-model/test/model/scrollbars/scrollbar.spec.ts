@@ -11,12 +11,12 @@ import {
   ViewModelConfig,
 } from 'fit-core/view-model/index.js';
 
-import { FIT_MODEL_CONFIG } from '../../../fit-model/dist/index.js';
+import { FIT_MODEL_CONFIG } from '../../../../fit-model/dist/index.js';
 
-import { VirtualScrollbar } from '../../dist/model/scroll-container/fit-scrollbar.js';
+import { VirtualScrollbar } from '../../../dist/model/scroll-container/fit-scrollbar.js';
 
-import { TST_VIEW_MODEL_CONFIG } from '../model/tst-view-model-config.js';
-import { ScrollbarBuilder } from '../model/scrollbar-builder.js';
+import { TST_VIEW_MODEL_CONFIG } from '../../tst-view-model-config.js';
+import { ScrollbarBuilder } from './scrollbar-builder.js';
 
 let config: ViewModelConfig;
 

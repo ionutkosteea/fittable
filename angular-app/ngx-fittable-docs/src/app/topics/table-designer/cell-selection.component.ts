@@ -78,8 +78,8 @@ export class CellSelectionComponent implements ConsoleTopic, OnInit, OnDestroy {
   }
 
   private writeCellSelectionToConsole(): void {
-    this.subscription = this.fit.viewModel
-      .cellSelection!.body.onEnd$()
+    this.subscription = this.fit.viewModel.cellSelection?.body
+      .onEnd$()
       .subscribe((cellRanges: CellRange[]): void => {
         this.consoleText = '';
         for (const cellRange of cellRanges) {

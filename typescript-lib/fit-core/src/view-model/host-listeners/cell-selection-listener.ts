@@ -2,7 +2,7 @@ import { MissingFactoryError } from '../../common/factory-error.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { CellSelection, CellSelectionRanges } from '../model/cell-selection.js';
 import { CellSelectionScroller } from '../model/cell-selection-scroller.js';
-import { FitKeyboardEvent, FitMouseEvent } from './custom-events.js';
+import { FitKeyboardEvent, FitMouseEvent } from './html-mockups.js';
 
 export interface CellSelectionListener {
   setCellSelectionRanges(ranges: CellSelectionRanges): this;

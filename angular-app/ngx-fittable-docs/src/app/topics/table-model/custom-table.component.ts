@@ -88,12 +88,16 @@ class MatrixValueTable implements TableBasics {
     return row ? row[colId] : undefined;
   };
   setCellValue = (rowId: number, colId: number, value?: Value): this => {
-    if (!this.dto[rowId]) this.dto[rowId] = [];
-    this.dto[rowId][colId] = value;
+    if (value) {
+      if (!this.dto[rowId]) this.dto[rowId] = [];
+      this.dto[rowId][colId] = value;
+    } else if (this.dto[rowId] && this.dto[rowId][colId]) {
+      this.dto[rowId][colId] = undefined;
+    }
     return this;
   };
   hasCell = (rowId: number, colId: number): boolean =>
-    this.getCellValue(rowId, colId) !== undefined;
+    rowId in this.dto && colId in this.dto[rowId];
   removeCell = (rowId: number, colId: number): this => {
     this.setCellValue(rowId, colId);
     return this;
@@ -106,11 +110,11 @@ class MatrixValueTable implements TableBasics {
     }
   };
   removeRowCells = (rowId: number): this => {
-    delete this.dto[rowId];
+    this.dto[rowId] = [];
     return this;
   };
   moveRowCells = (rowId: number, move: number): this => {
-    this.dto[rowId + move] = { ...this.dto[rowId] };
+    this.dto[rowId + move] = this.dto[rowId];
     delete this.dto[rowId];
     return this;
   };

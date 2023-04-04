@@ -1,7 +1,7 @@
 import { MissingFactoryError } from '../../common/factory-error.js';
 import { Window } from '../model/controls.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { FitMouseEvent } from './custom-events.js';
+import { FitMouseEvent } from './html-mockups.js';
 
 export interface WindowListener {
   onShow(event?: FitMouseEvent): void;

@@ -52,7 +52,8 @@ export class ToolbarComponent implements SimpleTopic, OnInit {
   }
 
   private replaceUndoButton(): void {
-    const toolbar: Container = this.fit.viewModel.toolbar!;
+    const toolbar: Container | undefined = this.fit.viewModel.toolbar;
+    if (!toolbar) throw new Error('Toolbar is not defined.');
     const undoControlType: FitControlType = 'push-button';
     const undoControlId: FitToolbarControlId = 'undo';
     const controlMap: ControlMap = {};

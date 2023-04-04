@@ -27,8 +27,7 @@ export class FitStyle implements Style {
     const value: unknown = Reflect.get(this.dto, name);
     if (value) {
       const stringValue: string = value as string;
-      const numberValue: Number = new Number(stringValue);
-      const result: number = numberValue.valueOf();
+      const result: number = Number(stringValue).valueOf();
       return isNaN(result) ? stringValue : result;
     } else {
       return undefined;

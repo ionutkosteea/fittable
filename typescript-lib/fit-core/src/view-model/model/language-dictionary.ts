@@ -16,9 +16,6 @@ export interface LanguageDictionaryFactory {
   createDictionary(): LanguageDictionary;
 }
 
-export function createLanguageDictionary<
-  LanguageCode extends string,
-  TextKey extends string
->(): LanguageDictionary {
+export function createLanguageDictionary(): LanguageDictionary {
   return getViewModelConfig().languageDictionaryFactory.createDictionary();
 }

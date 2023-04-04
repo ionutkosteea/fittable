@@ -1,15 +1,15 @@
 import { CellRange, CellRangeList } from 'fit-core/model/index.js';
 
-export class CellRangeAddressObjects<Object> {
-  private objectMap: Map<Object, CellRangeList> = new Map();
+export class CellRangeAddressObjects<Obj> {
+  private objectMap: Map<Obj, CellRangeList> = new Map();
 
-  public set(obj: Object, rowId: number, colId: number): this {
+  public set(obj: Obj, rowId: number, colId: number): this {
     if (!this.objectMap.has(obj)) this.objectMap.set(obj, new CellRangeList());
     this.objectMap.get(obj)?.addCell(rowId, colId);
     return this;
   }
 
-  public append(other: CellRangeAddressObjects<Object>): this {
+  public append(other: CellRangeAddressObjects<Obj>): this {
     for (const value of other.getAllObjects()) {
       const address: CellRange[] = other.getAddress(value) ?? [];
       for (const cellRange of address) {
@@ -21,11 +21,11 @@ export class CellRangeAddressObjects<Object> {
     return this;
   }
 
-  public getAddress(obj: Object): CellRange[] | undefined {
+  public getAddress(obj: Obj): CellRange[] | undefined {
     return this.objectMap.get(obj)?.getRanges();
   }
 
-  public getAllObjects(): IterableIterator<Object> {
+  public getAllObjects(): IterableIterator<Obj> {
     return this.objectMap.keys();
   }
 
@@ -37,7 +37,7 @@ export class CellRangeAddressObjects<Object> {
     return addresses;
   }
 
-  public forEach(entryFn: (obj: Object, address: CellRange[]) => void): void {
+  public forEach(entryFn: (obj: Obj, address: CellRange[]) => void): void {
     for (const obj of this.getAllObjects()) {
       const address: CellRange[] | undefined = this.getAddress(obj);
       if (address) {

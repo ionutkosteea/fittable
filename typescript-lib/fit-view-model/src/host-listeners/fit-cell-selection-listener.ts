@@ -9,9 +9,10 @@ import {
   FitMouseEvent,
   NeighborCells,
   ScrollDirection,
+  FitHtmlElement,
 } from 'fit-core/view-model/index.js';
 
-import { FitElement, getCellCoord } from '../model/common/fit-element.js';
+import { getCellCoord } from '../model/common/fit-html-attributes.js';
 
 type ActionKey = 'Enter' | 'ArrowLeft' | 'ArrowUp' | 'ArrowRight' | 'ArrowDown';
 
@@ -39,7 +40,7 @@ export class FitCellSelectionListener implements CellSelectionListener {
       this.selectionRanges.setFocus(true);
       if (event.shiftKey) return;
     }
-    const cellCoord: CellCoord = getCellCoord(event.target as FitElement);
+    const cellCoord: CellCoord = getCellCoord(event.target as FitHtmlElement);
     if (event.button !== 0 && this.selectionRanges.hasCell(cellCoord)) return;
     if (event.shiftKey) {
       this.selectionRanges.removePreviousRanges();
@@ -59,7 +60,7 @@ export class FitCellSelectionListener implements CellSelectionListener {
       return;
     }
     if (!this.isMouseDown) return;
-    const cellCoord: CellCoord = getCellCoord(event.target as FitElement);
+    const cellCoord: CellCoord = getCellCoord(event.target as FitHtmlElement);
     if (cellCoord.equals(this.selectedCell)) return;
     this.selectionRanges.getRanges().length <= 0 &&
       this.selectionRanges.createRange();

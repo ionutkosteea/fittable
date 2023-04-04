@@ -71,9 +71,9 @@ export class ClearCellsComponent
     this.subscription = this.writeToConsole$();
   }
 
-  private writeToConsole$(): Subscription {
-    return this.fit
-      .operationExecutor!.onAfterRun$()
+  private writeToConsole$(): Subscription | undefined {
+    return this.fit.operationExecutor
+      ?.onAfterRun$()
       .subscribe((operationDto: OperationDto): void => {
         this.consoleText = 'Operation id: ' + operationDto.id + '\n';
         this.consoleText +=

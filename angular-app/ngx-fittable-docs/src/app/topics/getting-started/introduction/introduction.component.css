@@ -1,36 +1,17 @@
-.preview {
-  float: left;
-}
-
-.left-navigation {
-  float: left;
-  width: 140px;
-  border: 2px solid rgba(96, 96, 96, 0.1);
-  border-radius: 6px;
-  padding-top: 8px;
-  padding-left: 4px;
-  padding-right: 4px;
-  height: 462px;
-}
-
-.control {
-  font-size: 14px;
-  line-height: 30px;
-  color: #606060;
-  background-position: center right;
-  background-repeat: no-repeat;
-}
-
-.control:hover {
-  cursor: pointer;
-  background-color: rgba(96, 96, 96, 0.1);
-}
-
-.fittable {
-  float: left;
-  margin-left: 4px;
-  width: calc(800px - 140px - 8px - 4px - 4px - 8px);
-  height: 470px;
+.features {
+  text-align: center;
   border: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 6px;
+}
+
+.feature {
+  display: inline-block;
+  color: #606060;
+  font-size: 16px;
+  margin: 5px;
+  line-height: 24px;
+  padding-left: 18px;
+  background-image: url(../../../../assets//icons//feature.svg);
+  background-repeat: no-repeat;
+  background-position: left center;
 }

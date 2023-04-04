@@ -129,9 +129,13 @@ export class FitCellSelectionRanges implements CellSelectionRanges {
   }
 
   public getNeighborCells(): NeighborCells {
-    return new FitNeighborCells()
-      .setTableViewer(this.tableViewer)
-      .setCell(this.getFirstCell()!);
+    const cellCoord: CellCoord | undefined = this.getFirstCell();
+    return cellCoord
+      ? new FitNeighborCells() //
+          .setTableViewer(this.tableViewer)
+          .setCell(cellCoord)
+      : new FitNeighborCells() //
+          .setTableViewer(this.tableViewer);
   }
 
   public end(): this {
@@ -182,10 +186,11 @@ export class CellSelectionRange {
   }
 
   private includeMergedCells(): void {
-    const leftTopCoord: CellCoord = this.range!.getFrom();
-    const rightTopCoord: CellCoord = this.getRightTopCoord(this.range!);
-    const rightBottomCoord: CellCoord = this.range!.getTo();
-    const leftBottomCoord: CellCoord = this.getLeftBottomCoord(this.range!);
+    if (!this.range) throw new Error('Range is not defined!');
+    const leftTopCoord: CellCoord = this.range.getFrom();
+    const rightTopCoord: CellCoord = this.getRightTopCoord(this.range);
+    const rightBottomCoord: CellCoord = this.range.getTo();
+    const leftBottomCoord: CellCoord = this.getLeftBottomCoord(this.range);
     const maxToRowId: number = Math.max(
       this.rowIdPlusRowSpan(leftTopCoord),
       this.rowIdPlusRowSpan(rightTopCoord),
@@ -199,7 +204,7 @@ export class CellSelectionRange {
       this.colIdPlusColSpan(leftBottomCoord)
     );
     if (maxToRowId > 1 || maxToColId > 1) {
-      this.range!.setTo(createCellCoord(maxToRowId, maxToColId));
+      this.range.setTo(createCellCoord(maxToRowId, maxToColId));
     }
   }
 

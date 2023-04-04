@@ -2,7 +2,9 @@ import {} from 'jasmine';
 
 import {
   createCellCoord,
+  createCellCoord4Dto,
   createCellRange,
+  createCellRange4Dto,
   createLineRange,
   createStyle,
   createTable,
@@ -23,6 +25,7 @@ import {
   FitStyleDto,
   FitCellDto,
   FitMergedCellDto,
+  FitCellRangeDto,
 } from '../../dist/index.js';
 
 describe('Test FitTable', () => {
@@ -181,10 +184,10 @@ describe('Test FitTable', () => {
   });
 
   it('FitCellRange', () => {
-    const cellRange: FitCellRange = createCellRange<FitCellRange>(
-      createCellCoord(1, 1),
-      createCellCoord(0, 0)
-    ).clone();
+    const start: FitCellCoord = createCellCoord(1, 1);
+    const end: FitCellCoord = createCellCoord(0, 0);
+    const cellRange: FitCellRange = //
+      createCellRange<FitCellRange>(start, end).clone();
     expect(cellRange.getFrom().getRowId() === 0).toBeTruthy();
     expect(cellRange.getFrom().getColId() === 0).toBeTruthy();
     expect(cellRange.getTo().getRowId() === 1).toBeTruthy();
@@ -194,12 +197,26 @@ describe('Test FitTable', () => {
     expect(cellRange.hasCell(0, 1)).toBeTruthy();
     expect(cellRange.hasCell(1, 1)).toBeTruthy();
     expect(cellRange.getNumberOfCells() === 4).toBeTruthy();
+    expect(cellRange.getDto().from.rowId === 0).toBeTruthy();
+    expect(cellRange.getDto().from.colId === 0).toBeTruthy();
+    expect(cellRange.getDto().to?.rowId === 1).toBeTruthy();
+    expect(cellRange.getDto().to?.colId === 1).toBeTruthy();
+    const dto: FitCellRangeDto = {
+      from: { rowId: 0, colId: 0 },
+      to: { rowId: 1, colId: 1 },
+    };
+    const newCellRange = createCellRange4Dto<FitCellRange>(dto);
+    expect(cellRange.equals(newCellRange)).toBeTruthy();
   });
 
   it('FitLineRange', () => {
     const lineRange: FitLineRange = createLineRange<FitLineRange>(0, 2).clone();
+    expect(lineRange.getFrom() === 0).toBeTruthy();
+    expect(lineRange.getTo() === 2).toBeTruthy();
     expect(lineRange.equals(createLineRange<FitLineRange>(0, 2))).toBeTruthy();
     expect(lineRange.contains(createLineRange(1))).toBeTruthy();
     expect(lineRange.getNumberOfLines() === 3).toBeTruthy();
+    expect(lineRange.getDto().from === 0).toBeTruthy();
+    expect(lineRange.getDto().to === 2).toBeTruthy();
   });
 });

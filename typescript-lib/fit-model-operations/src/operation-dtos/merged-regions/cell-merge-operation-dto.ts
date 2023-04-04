@@ -46,8 +46,8 @@ export class CellMergeOperationDtoBuilder {
     for (const cellRange of this.args.selectedCells) {
       this.table.forEachMergedCell((rowId: number, colId: number): void => {
         if (!cellRange.hasCell(rowId, colId)) return;
-        this.mergedRegionsStep.removeRegions!.push({ rowId, colId });
-        this.undoMergedRegionsStep.createRegions!.push({
+        this.mergedRegionsStep.removeRegions?.push({ rowId, colId });
+        this.undoMergedRegionsStep.createRegions?.push({
           rowId,
           colId,
           rowSpan: this.table.getRowSpan(rowId, colId),
@@ -65,13 +65,13 @@ export class CellMergeOperationDtoBuilder {
       rowSpan = rowSpan === 0 ? undefined : rowSpan + 1;
       let colSpan: number | undefined = cellRange.getTo().getColId() - colId;
       colSpan = colSpan === 0 ? undefined : colSpan + 1;
-      this.mergedRegionsStep.createRegions!.push({
+      this.mergedRegionsStep.createRegions?.push({
         rowId,
         colId,
         rowSpan,
         colSpan,
       });
-      this.undoMergedRegionsStep.removeRegions!.push({ rowId, colId });
+      this.undoMergedRegionsStep.removeRegions?.push({ rowId, colId });
     }
   }
 }

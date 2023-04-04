@@ -99,7 +99,7 @@ export class StyleUpdateOperationDtoBuilder {
   ): void => {
     let existingStyleName: string | undefined;
     if (oldStyleName) {
-      let newStyle: Style = this.createNewStyle(oldStyleName);
+      const newStyle: Style = this.createNewStyle(oldStyleName);
       if (newStyle.hasProperties()) {
         existingStyleName = this.findName4Style(newStyle);
       }

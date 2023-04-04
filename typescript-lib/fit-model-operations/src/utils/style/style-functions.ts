@@ -90,13 +90,11 @@ export function getMaxStyleNameUid(table: Table & TableStyles): number {
   let styleNameUid = -1;
   for (const styleName of table.getStyleNames()) {
     try {
-      const uid: number = Number(styleName.substring(1, styleName.length));
-      if (styleNameUid < uid) {
-        styleNameUid = uid;
-      }
+      const uid = Number(styleName.substring(1, styleName.length));
+      if (styleNameUid < uid) styleNameUid = uid;
     } catch {
       throw Error(
-        'Style name text has to be composed by one letter followd by a number'
+        'Style name text has to be composed by a letter followd by a number'
       );
     }
   }
@@ -113,8 +111,8 @@ export function styleByCss(cssStyle: string): Style {
   for (const property of properties) {
     const nameAndValue: string[] = property.split(':');
     if (nameAndValue?.length === 2) {
-      let name: string = nameAndValue[0].trim() as string;
-      let value: string | number = nameAndValue[1].trim();
+      const name: string = nameAndValue[0].trim() as string;
+      const value: string | number = nameAndValue[1].trim();
       style.set(name, value);
     }
   }

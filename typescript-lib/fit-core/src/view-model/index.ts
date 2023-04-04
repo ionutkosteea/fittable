@@ -16,7 +16,7 @@ export * from './model/view-model.js';
 export * from './model/theme-switcher.js';
 export * from './model/col-filters.js';
 export * from './model/mobile-layout.js';
-export * from './host-listeners/custom-events.js';
+export * from './host-listeners/html-mockups.js';
 export * from './host-listeners/cell-editor-listener.js';
 export * from './host-listeners/cell-selection-listener.js';
 export * from './host-listeners/window-listener.js';

@@ -32,11 +32,11 @@ import {
 } from './controls/cell-menu-items.js';
 
 export type FitContextMenuControlId =
-  | 'row-width'
+  | 'row-height'
   | 'row-insert-before'
   | 'row-insert-after'
   | 'row-remove'
-  | 'column-height'
+  | 'column-width'
   | 'column-insert-before'
   | 'column-insert-after'
   | 'column-remove'
@@ -53,7 +53,7 @@ export class FitContextMenuFactory implements ContextMenuFactory {
   public createContextMenu(args: FitControlArgs): Window {
     const window: FitWindow<FitContextMenuControlId> = new FitWindow();
     if (asTableRows(args.operationExecutor.getTable()) !== undefined) {
-      window.addControl('row-width', createRowResizeMenuItem(args));
+      window.addControl('row-height', createRowResizeMenuItem(args));
     }
     window
       .addControl('row-insert-before', createRowInsertAboveMenuItem(args))
@@ -61,7 +61,7 @@ export class FitContextMenuFactory implements ContextMenuFactory {
       .addControl('row-remove', createRowRemoveMenuItem(args))
       .addControl('separator1', new FitSeparator());
     if (asTableCols(args.operationExecutor.getTable()) !== undefined) {
-      window.addControl('column-height', createColResizeMenuItem(args));
+      window.addControl('column-width', createColResizeMenuItem(args));
     }
     window
       .addControl('column-insert-before', createColInsertLeftMenuItem(args))

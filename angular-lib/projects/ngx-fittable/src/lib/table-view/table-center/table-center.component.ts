@@ -50,7 +50,8 @@ export class TableCenterComponent
       this.cellEditorListener
         ?.onContextMenu$()
         .subscribe((event: FitMouseEvent): void => {
-          createWindowListener(this.viewModel.contextMenu!).onShow(event);
+          this.viewModel.contextMenu &&
+            createWindowListener(this.viewModel.contextMenu).onShow(event);
         })
     );
   }

@@ -16,8 +16,11 @@ import {
   unregisterViewModelConfig,
 } from 'fit-core/view-model/index.js';
 
-import { FIT_MODEL_CONFIG, FitTable } from '../../../fit-model/dist/index.js';
-import { FIT_VIEW_MODEL_CONFIG } from '../../dist/index.js';
+import {
+  FIT_MODEL_CONFIG,
+  FitTable,
+} from '../../../../fit-model/dist/index.js';
+import { FIT_VIEW_MODEL_CONFIG } from '../../../dist/index.js';
 
 const table: Table = new FitTable({
   numberOfRows: 2,

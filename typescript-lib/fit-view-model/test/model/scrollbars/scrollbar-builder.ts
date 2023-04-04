@@ -6,11 +6,11 @@ import {
 } from 'fit-core/model/index.js';
 import { TableViewer, createTableViewer } from 'fit-core/view-model/index.js';
 
-import { VirtualScrollbar } from '../../dist/model/scroll-container/fit-scrollbar.js';
+import { VirtualScrollbar } from '../../../dist/model/scroll-container/fit-scrollbar.js';
 import {
   VerticalScrollbar,
   HorizontalScrollbar,
-} from '../../dist/model/scroll-container/table-scrollbars.js';
+} from '../../../dist/model/scroll-container/table-scrollbars.js';
 
 export type ScrollbarType = 'vertical' | 'horizontal';
 

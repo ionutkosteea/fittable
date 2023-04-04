@@ -14,21 +14,19 @@ export type ModelConfig = {
   colFilterExecutorFactory?: ColFilterExecutorFactory;
 };
 
-declare global {
-  var fitModelConfig: ModelConfig | undefined;
-}
+let fitModelConfig: ModelConfig | undefined;
 
 export function registerModelConfig(config: ModelConfig): void {
-  globalThis.fitModelConfig = { ...config };
+  fitModelConfig = { ...config };
 }
 
 export function unregisterModelConfig(): void {
-  globalThis.fitModelConfig = undefined;
+  fitModelConfig = undefined;
 }
 
 export function getModelConfig(): ModelConfig {
-  if (globalThis.fitModelConfig) {
-    return globalThis.fitModelConfig;
+  if (fitModelConfig) {
+    return fitModelConfig;
   } else {
     throw new Error(
       'The model configuration has to be registered via the registerModelConfig function!'

@@ -72,10 +72,10 @@ export class CustomOperationComponent extends ConsoleTopic implements OnInit {
       cellCoord: createCellCoord(1, 1),
       value: 'Dummy value',
     };
-    const operationDto: OperationDto = this.fit //
-      .operationExecutor!.createOperationDto(args) as OperationDto;
+    const operationDto: OperationDto = this.fit.operationExecutor //
+      ?.createOperationDto(args) as OperationDto;
     this.consoleText = JSON.stringify(operationDto, null, 2);
-    this.fit.operationExecutor!.runOperationDto(operationDto);
+    this.fit.operationExecutor?.runOperationDto(operationDto);
   }
 }
 
@@ -117,7 +117,7 @@ class DummyOperationDtoBuilder {
   private undoDummyOperationStepDto: DummyOperationStepDto = {
     id: 'dummy-step',
   };
-  private operationDto!: OperationDto;
+  private operationDto: OperationDto;
 
   constructor(private table: Table, private args: DummyOperationDtoArgs) {
     this.operationDto = {

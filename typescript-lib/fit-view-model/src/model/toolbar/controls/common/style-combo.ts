@@ -27,8 +27,9 @@ export class StyleCombo
   private readonly createRunFn = (): void => {
     if (!this.styleAttName) throw new Error('Style attribute is not defined!');
     const selectedCells: CellRange[] = this.args.getSelectedCells();
-    const selectedOption: ValueControl = //
-      this.getValueControl(this.getSelectedControl()!);
+    const id: string | undefined = this.getSelectedControl();
+    if (!id) throw new Error('Control ID is not defined!');
+    const selectedOption: ValueControl = this.getValueControl(id); //
     const style: Style = createStyle() //
       .set(this.styleAttName, selectedOption.getValue());
     const args: FitUIOperationArgs = {

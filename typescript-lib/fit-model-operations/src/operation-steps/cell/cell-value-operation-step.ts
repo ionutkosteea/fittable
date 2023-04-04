@@ -30,8 +30,8 @@ export class CellValueOperationStep implements OperationStep {
   }
 
   private updateCells(): void {
-    for (let cellValueDto of this.stepDto.values) {
-      for (let cellRangeDto of cellValueDto.cellRanges) {
+    for (const cellValueDto of this.stepDto.values) {
+      for (const cellRangeDto of cellValueDto.cellRanges) {
         const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
         const fromRowId: number = cellRange.getFrom().getRowId();
         const toRowId: number = cellRange.getTo().getRowId();

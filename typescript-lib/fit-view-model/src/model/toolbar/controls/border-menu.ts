@@ -76,8 +76,7 @@ class BorderMenuBuilder {
       .setRun((): void => {
         const parts: string[] = value.split(' ');
         this.borderStyle.type = parts[0] as BorderType;
-        const numberValue: Number = new Number(parts[1]);
-        this.borderStyle.thickness = numberValue.valueOf();
+        this.borderStyle.thickness = Number(parts[1]).valueOf();
       });
   }
 

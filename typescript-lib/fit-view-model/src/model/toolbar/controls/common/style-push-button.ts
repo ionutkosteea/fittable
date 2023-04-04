@@ -33,7 +33,7 @@ export class StylePushButton extends PushButton implements ControlUpdater {
 
   private readonly getUndefinedStyle = (): Style => {
     const undefinedStyle: Style = createStyle();
-    this.style!.forEach((name: string): boolean => {
+    this.style?.forEach((name: string): boolean => {
       undefinedStyle.set(name);
       return true;
     });

@@ -1,4 +1,4 @@
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { MissingFactoryError } from '../../common/factory-error.js';
 import { CellCoord } from '../../model/cell-coord.js';

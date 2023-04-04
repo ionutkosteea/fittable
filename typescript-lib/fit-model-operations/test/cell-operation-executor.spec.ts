@@ -156,4 +156,31 @@ describe('Cell Operation Executor', () => {
     expect(executor.getStyle('s0')).toBeFalsy();
     expect(executor.getCellStyleName(0, 0)).toBeFalsy();
   });
+
+  it('merge cells', () => {
+    executor //
+      .createTable(5, 5)
+      .selectCell(1, 1)
+      .selectCell(1, 2)
+      .selectCell(1, 3)
+      .selectCell(2, 1)
+      .selectCell(2, 2)
+      .selectCell(2, 3)
+      .runMergeCells();
+
+    expect(executor.getRowSpan(1, 1) === 2).toBeTruthy();
+    expect(executor.getColSpan(1, 1) === 3).toBeTruthy();
+  });
+
+  it('unmerge cells', () => {
+    executor //
+      .createTable(5, 5)
+      .setRowSpan(1, 1, 2)
+      .setColSpan(1, 1, 3)
+      .selectCell(1, 1)
+      .runUnmergeCells();
+
+    expect(executor.getRowSpan(1, 1)).toBeUndefined();
+    expect(executor.getColSpan(1, 1)).toBeUndefined();
+  });
 });

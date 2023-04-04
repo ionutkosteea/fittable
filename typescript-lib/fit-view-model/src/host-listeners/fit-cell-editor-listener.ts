@@ -7,14 +7,15 @@ import {
   CellEditorListener,
   CellEditorListenerFactory,
   FitEvent,
-  FitHTMLInputElement,
+  FitHtmlElement,
+  FitHtmlInputElement,
   FitKeyboardEvent,
   FitMouseEvent,
   InputControl,
   NeighborCells,
 } from 'fit-core/view-model/index.js';
 
-import { FitElement, getCellCoord } from '../model/common/fit-element.js';
+import { getCellCoord } from '../model/common/fit-html-attributes.js';
 
 type ActionKey =
   | 'Enter'
@@ -50,7 +51,7 @@ export class FitCellEditorListener implements CellEditorListener {
       this.setInputFocus(true);
       return;
     }
-    const cellCoord: CellCoord = getCellCoord(event.target as FitElement);
+    const cellCoord: CellCoord = getCellCoord(event.target as FitHtmlElement);
     if (event.button !== 0) {
       for (const cellRange of this.selectedCells) {
         const rowId: number = cellCoord.getRowId();
@@ -70,13 +71,15 @@ export class FitCellEditorListener implements CellEditorListener {
     if (!this.isGlobalMouseDown) return;
     // Disable pointer events for 50 ms, for enabling underlying mouse events.
     this.cellEditor.setPointerEvents(false);
-    setTimeout(() => this.cellEditor.setPointerEvents(true), 50);
+    setTimeout((): void => {
+      this.cellEditor.setPointerEvents(true);
+    }, 50);
   }
 
-  public onMouseDown(event: FitMouseEvent): void {
+  public onMouseDown(event?: FitMouseEvent): void {
     this.isMouseDown = true;
     if (this.enableControlKeys) return;
-    if (event.button !== 0) {
+    if (event?.button !== 0) {
       this.setInputFocus(false);
       return;
     }
@@ -131,7 +134,7 @@ export class FitCellEditorListener implements CellEditorListener {
   private escapeDown(event: FitKeyboardEvent): void {
     event.preventDefault();
     this.cellEditor.getCellControl().setValue(this.cellValue);
-    const htmlInput: FitHTMLInputElement | undefined = this.getHtmlInput(event);
+    const htmlInput: FitHtmlInputElement | undefined = this.getHtmlInput(event);
     const inputValue: string =
       this.cellValue === undefined ? '' : '' + this.cellValue;
     if (htmlInput) htmlInput.value = inputValue;
@@ -207,8 +210,8 @@ export class FitCellEditorListener implements CellEditorListener {
     this.enableControlKeys = enable;
   }
 
-  private getHtmlInput(event: FitEvent): FitHTMLInputElement | undefined {
-    return implementsTKeys<FitHTMLInputElement>(event.target, ['value'])
+  private getHtmlInput(event: FitEvent): FitHtmlInputElement | undefined {
+    return implementsTKeys<FitHtmlInputElement>(event.target, ['value'])
       ? event.target
       : undefined;
   }

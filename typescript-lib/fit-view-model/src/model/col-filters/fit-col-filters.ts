@@ -104,7 +104,7 @@ export class FitColFilters implements ColFilters {
           this.isSearchMode = true;
           const searchList: FitOptionsControl<string> =
             this.createValueCheckList();
-          const origWindow: FitWindow<string> = origList!.getWindow();
+          const origWindow: FitWindow<string> = origList.getWindow();
           let counter = 0;
           for (const id of origWindow.getControlIds()) {
             const checkBox = origWindow.getControl(id) as FitCheckBoxControl;

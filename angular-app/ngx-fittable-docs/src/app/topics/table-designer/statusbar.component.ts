@@ -42,7 +42,8 @@ export class StatusbarComponent implements SimpleTopic, OnInit {
   }
 
   private changeText(): void {
-    this.fit.viewModel.statusbar!.getText = (): string =>
+    if (!this.fit.viewModel.statusbar) return;
+    this.fit.viewModel.statusbar.getText = (): string =>
       'New statusbar text...';
   }
 }

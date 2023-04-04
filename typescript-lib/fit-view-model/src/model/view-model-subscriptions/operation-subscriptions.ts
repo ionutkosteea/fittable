@@ -125,7 +125,7 @@ export class OperationSubscriptions {
 
   private markCurrentFocus(operationDto: OperationDto): void {
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto)!;
+      this.getOperationProperties(operationDto);
     if (properties.focus) return;
     properties.focus = this.currentFocus;
   }
@@ -133,7 +133,7 @@ export class OperationSubscriptions {
   private markSelectedCells(operationDto: OperationDto): void {
     if (!this.args.cellSelection) return;
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto)!;
+      this.getOperationProperties(operationDto);
     if (properties.bodyCellRanges) {
       this.setSelectedCells(operationDto);
     } else {
@@ -151,7 +151,7 @@ export class OperationSubscriptions {
   private markCellEditorVisibility(operationDto: OperationDto): void {
     if (!this.args.cellEditor) return;
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto)!;
+      this.getOperationProperties(operationDto);
     if (properties.cellEditorVisibility === undefined) {
       const isVisible: boolean = this.args.cellEditor.isVisible();
       properties.cellEditorVisibility = isVisible;
@@ -163,7 +163,7 @@ export class OperationSubscriptions {
   private markCellEditorCoord(operationDto: OperationDto): void {
     if (!this.args.cellEditor) return;
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto)!;
+      this.getOperationProperties(operationDto);
     if (properties.cellEditorCoord) {
       this.setCellEditorCoord(operationDto);
     } else {
@@ -174,7 +174,7 @@ export class OperationSubscriptions {
 
   private markScrollPosition(operationDto: OperationDto): void {
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto)!;
+      this.getOperationProperties(operationDto);
     if (properties.scroll) {
       this.setScrollPosition(operationDto);
     } else {
@@ -347,7 +347,7 @@ export class OperationSubscriptions {
     if (cellRanges.length === 0) return undefined;
     let lastSelectedRow = 0;
     let lastSelectedCol = 0;
-    for (let cellRange of cellRanges) {
+    for (const cellRange of cellRanges) {
       const createRow4Dto: number = cellRange.getTo().getRowId();
       if (lastSelectedRow < createRow4Dto) lastSelectedRow = createRow4Dto;
       const toCol: number = cellRange.getTo().getColId();
@@ -406,11 +406,12 @@ export class OperationSubscriptions {
 
   private getOperationProperties(
     operationDto: OperationDto
-  ): FitUIOperationProperties | undefined {
-    return (
-      operationDto.properties &&
-      (operationDto.properties as FitUIOperationProperties)
-    );
+  ): FitUIOperationProperties {
+    if (operationDto.properties) {
+      return operationDto.properties as FitUIOperationProperties;
+    } else {
+      throw new Error('Missing operation DTO properties!');
+    }
   }
 
   private focusCellEditorControl(): void {

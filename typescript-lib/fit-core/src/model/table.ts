@@ -83,15 +83,16 @@ export interface TableColFilter {
   ): TableBasics & TableColFilter;
 }
 
-export type Table = TableBasics &
-  (
-    | TableStyles
-    | TableRows
-    | TableCols
-    | TableMergedRegions
-    | TableColFilter
-    | {}
-  );
+export type Table =
+  | TableBasics
+  | (TableBasics &
+      (
+        | TableStyles
+        | TableRows
+        | TableCols
+        | TableMergedRegions
+        | TableColFilter
+      ));
 
 export interface TableFactory {
   createTable(): Table;

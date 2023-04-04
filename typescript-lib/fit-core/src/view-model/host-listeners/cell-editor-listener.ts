@@ -4,7 +4,7 @@ import { MissingFactoryError } from '../../common/factory-error.js';
 import { CellRange } from '../../model/cell-range.js';
 import { CellEditor } from '../model/cell-editor.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { FitEvent, FitKeyboardEvent, FitMouseEvent } from './custom-events.js';
+import { FitEvent, FitKeyboardEvent, FitMouseEvent } from './html-mockups.js';
 
 export interface CellEditorListener {
   readonly cellEditor: CellEditor;

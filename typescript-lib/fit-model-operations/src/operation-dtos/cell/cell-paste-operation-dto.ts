@@ -101,7 +101,7 @@ export class CellPasteOperationDtoBuilder {
       htmlCell: HTMLTableCellElement
     ) => void
   ): Promise<void> {
-    let data: Promise<Blob>;
+    let data: Promise<Blob> = Promise.resolve(new Blob());
     await navigator.clipboard
       .read()
       .then((items: ClipboardItem[]): void => {
@@ -110,13 +110,13 @@ export class CellPasteOperationDtoBuilder {
         }
       })
       .catch((message): void => console.error(message));
-    let text: Promise<string>;
-    await data!
+    let text: Promise<string> = Promise.resolve('');
+    await data
       .then((blobData: Blob): void => {
         text = blobData.text();
       })
       .catch((message): void => console.error(message));
-    await text!
+    await text
       .then((htmlText: string): void => {
         const htmlTable: HTMLTableElement = this.createHtmlTable(htmlText);
         this.visitHtmlTableRows(
@@ -322,10 +322,11 @@ export class CellPasteOperationDtoBuilder {
     cssStyle: string,
     selectedCells: CellRange[]
   ): StyleUpdateOperationDtoBuilder {
+    if (!this.styledTable) throw new Error('Table styles are not defined!');
     const style: Style | undefined = styleByCss(cssStyle);
     const builder: StyleUpdateOperationDtoBuilder =
       new StyleUpdateOperationDtoBuilder(
-        this.styledTable!,
+        this.styledTable,
         {
           id: 'style-update',
           selectedCells,

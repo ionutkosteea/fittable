@@ -32,8 +32,10 @@ export class ViewModelSubscriptions {
   constructor(private args: ViewModelSubscriptionsArgs) {}
 
   public init(): void {
-    window?.addEventListener('resize', this.onWindowResize);
-    window?.addEventListener('keydown', this.onWindowKeyDown);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', this.onWindowResize);
+      window.addEventListener('keydown', this.onWindowKeyDown);
+    }
     this.updateToolbarByCellSelection();
     this.focusActiveObject();
     this.focusBodyOnCellEditorMove();
@@ -74,7 +76,7 @@ export class ViewModelSubscriptions {
   }
 
   private focusOutOthers$(object: FocusableObject): Subscription {
-    let other: FocusableObject[] = this.getFocusableObjects();
+    const other: FocusableObject[] = this.getFocusableObjects();
     const subscription: Subscription = this.ifObjectIsFocusedFocusOutOthers$(
       object,
       other.filter((obj: FocusableObject): boolean => obj !== object)
@@ -150,7 +152,10 @@ export class ViewModelSubscriptions {
   }
 
   public destroy(): void {
-    window?.removeEventListener('resize', this.onWindowResize);
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onWindowResize);
+      window.removeEventListener('keydown', this.onWindowKeyDown);
+    }
     this.subscriptions.forEach((s?: Subscription): void => s?.unsubscribe());
   }
 }

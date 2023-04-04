@@ -58,9 +58,9 @@ export class OperationDtoComponent extends ConsoleTopic implements OnInit {
       selectedCells: [createCellRange(createCellCoord(1, 1))],
       value: 'Check console',
     };
-    const operationDto: OperationDto = this.fit //
-      .operationExecutor!.createOperationDto(args) as OperationDto;
+    const operationDto: OperationDto = this.fit.operationExecutor //
+      ?.createOperationDto(args) as OperationDto;
     this.consoleText = JSON.stringify(operationDto, null, 2);
-    this.fit.operationExecutor!.runOperationDto(operationDto);
+    this.fit.operationExecutor?.runOperationDto(operationDto);
   }
 }

@@ -173,5 +173,7 @@ function getFirstLine(lineRanges: LineRange[]): LineRange[] {
 function isPositiveInteger(value?: Value): boolean {
   return value === undefined
     ? false
-    : Number.isInteger(value) && value > 0 && value <= 1000000;
+    : Number.isInteger(value) &&
+        (value as number) > 0 &&
+        (value as number) <= 1000000;
 }

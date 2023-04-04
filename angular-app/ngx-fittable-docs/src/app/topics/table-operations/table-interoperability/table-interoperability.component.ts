@@ -42,7 +42,7 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
 
   public fit1!: FittableDesigner;
   public fit2!: FittableDesigner;
-  private readonly subscriptions: Subscription[] = [];
+  private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
   public ngOnInit(): void {
     // The register functions should be called, in most cases, from the Angular main module.
@@ -61,17 +61,17 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   }
 
   private linkTables(fit1: FittableDesigner, fit2: FittableDesigner): void {
-    this.subscriptions.push(this.afterRun$(fit1, fit2));
-    this.subscriptions.push(this.afterUndo$(fit1, fit2));
-    this.subscriptions.push(this.afterRedo$(fit1, fit2));
+    this.subscriptions.add(this.afterRun$(fit1, fit2));
+    this.subscriptions.add(this.afterUndo$(fit1, fit2));
+    this.subscriptions.add(this.afterRedo$(fit1, fit2));
   }
 
   private afterRun$(
     fit1: FittableDesigner,
     fit2: FittableDesigner
-  ): Subscription {
-    return fit1
-      .operationExecutor!.onAfterRun$()
+  ): Subscription | undefined {
+    return fit1.operationExecutor
+      ?.onAfterRun$()
       .subscribe((dto: OperationDto): void => {
         let properties: OperationProperties =
           dto.properties as OperationProperties;
@@ -88,9 +88,9 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   private afterUndo$(
     fit1: FittableDesigner,
     fit2: FittableDesigner
-  ): Subscription {
-    return fit1
-      .operationExecutor!.onAfterUndo$()
+  ): Subscription | undefined {
+    return fit1.operationExecutor
+      ?.onAfterUndo$()
       .subscribe((dto: OperationDto): void => {
         if (!dto.undoOperation) return;
         const properties: OperationProperties = {
@@ -109,9 +109,9 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   private afterRedo$(
     fit1: FittableDesigner,
     fit2: FittableDesigner
-  ): Subscription {
-    return fit1
-      .operationExecutor!.onAfterRedo$()
+  ): Subscription | undefined {
+    return fit1.operationExecutor
+      ?.onAfterRedo$()
       .subscribe((dto: OperationDto): void => {
         const properties: OperationProperties = {
           ...dto.properties,
@@ -127,6 +127,6 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+    this.subscriptions.forEach((s?: Subscription): void => s?.unsubscribe());
   }
 }

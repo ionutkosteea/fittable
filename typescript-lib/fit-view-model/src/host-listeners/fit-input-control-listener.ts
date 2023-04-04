@@ -3,7 +3,7 @@ import {
   InputControlListenerFactory,
   InputControl,
   FitKeyboardEvent,
-  FitHTMLInputElement,
+  FitHtmlInputElement,
 } from 'fit-core/view-model/index.js';
 
 export class FitInputControlListener implements InputControlListener {
@@ -33,7 +33,7 @@ export class FitInputControlListener implements InputControlListener {
     if (event.key !== 'Enter') return;
     event.preventDefault();
     event.stopPropagation();
-    const htmlInput: FitHTMLInputElement = event.target as FitHTMLInputElement;
+    const htmlInput: FitHtmlInputElement = event.target as FitHtmlInputElement;
     this.inputControl.setValue(Number(htmlInput.value)).run();
     this.inputControl.setFocus(false);
     this.canRevertValueOnClick = false;

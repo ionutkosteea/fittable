@@ -46,7 +46,7 @@ function createTree(): Composite[] {
     {
       label: 'Getting started',
       isExpended: true,
-      leafs: ['Introduction', 'Architecture', 'Installation'],
+      leafs: ['Introduction', 'Playground', 'Architecture', 'Installation'],
     },
     {
       label: 'Table model',

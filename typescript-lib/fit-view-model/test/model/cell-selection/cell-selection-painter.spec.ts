@@ -14,10 +14,10 @@ import {
   ViewModelConfig,
 } from 'fit-core/view-model/index.js';
 
-import { FIT_MODEL_CONFIG } from '../../../fit-model/dist/index.js';
+import { FIT_MODEL_CONFIG } from '../../../../fit-model/dist/index.js';
 
-import { TST_VIEW_MODEL_CONFIG } from '../model/tst-view-model-config.js';
-import { CellSelectionPainterBuilder } from '../model/cell-selection-painter-builder.js';
+import { TST_VIEW_MODEL_CONFIG } from '../../tst-view-model-config.js';
+import { CellSelectionPainterBuilder } from './cell-selection-painter-builder.js';
 
 let config: ViewModelConfig | undefined;
 

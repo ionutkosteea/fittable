@@ -50,7 +50,7 @@ export class CellCutOperationDtoFactory implements OperationDtoFactory {
     cellRemoveOperationDto.steps.forEach((step: OperationId<string>): void => {
       cellCutOperationDto.steps.push(step);
     });
-    cellRemoveOperationDto.undoOperation!.steps.forEach(
+    cellRemoveOperationDto.undoOperation?.steps.forEach(
       (step: OperationId<string>): void => {
         cellCutOperationDto.undoOperation?.steps.push(step);
       }

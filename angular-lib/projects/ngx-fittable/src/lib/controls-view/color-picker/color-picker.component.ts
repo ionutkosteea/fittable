@@ -98,7 +98,9 @@ export class ColorPickerComponent
         getIcon = () => undefined;
         getType = () => undefined;
         isDisabled = () => false;
-        run = () => {};
+        run = (): void => {
+          // Do nothing!
+        };
       })()
     );
   }

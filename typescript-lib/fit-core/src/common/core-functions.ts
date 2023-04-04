@@ -16,7 +16,7 @@ export function incrementLetter(value?: number): string {
   return result;
 }
 
-export function implementsTKeys<T>(obj: unknown, keys: (keyof T)[]): obj is T {
+export function implementsTKeys<T>(obj: any, keys: (keyof T)[]): obj is T {
   if (!obj || !Array.isArray(keys)) {
     return false;
   }

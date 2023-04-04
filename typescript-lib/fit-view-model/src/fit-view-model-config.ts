@@ -143,7 +143,7 @@ function updateCellSelectionConfig(
   cfg.cellSelectionPainterFactory = srcCfg?.cellSelectionPainterFactory;
   cfg.cellSelectionScrollerFactory = srcCfg?.cellSelectionScrollerFactory;
   cfg.cellSelectionListenerFactory = srcCfg?.cellSelectionListenerFactory;
-  if (!cfg.cellSelectionFactory) cfg.contextMenuFactory = undefined;
+  if (!cfg.cellSelectionFactory) delete cfg.contextMenuFactory;
 }
 
 function updateContextMenuConfig(
@@ -182,8 +182,8 @@ function updateToolbarConfig(
     cfg.fontFamily = def.fontFamily ?? FIT_VIEW_MODEL_CONFIG.fontFamily;
     cfg.colorPalette = def.colorPalette ?? FIT_VIEW_MODEL_CONFIG.colorPalette;
   } else {
-    cfg.colorPalette = undefined;
-    cfg.fontFamily = undefined;
+    delete cfg.colorPalette;
+    delete cfg.fontFamily;
   }
 }
 
@@ -198,8 +198,8 @@ function updateHeaderConfig(
       cfg.rowHeaderWidth =
         def.rowHeaderWidth ?? FIT_VIEW_MODEL_CONFIG.rowHeaderWidth;
     } else {
-      cfg.rowHeaderTextFn = undefined;
-      cfg.rowHeaderWidth = undefined;
+      delete cfg.rowHeaderTextFn;
+      delete cfg.rowHeaderWidth;
     }
   }
 
@@ -210,8 +210,8 @@ function updateHeaderConfig(
       cfg.colHeaderHeight =
         def.colHeaderHeight ?? FIT_VIEW_MODEL_CONFIG.colHeaderHeight;
     } else {
-      cfg.colHeaderTextFn = undefined;
-      cfg.colHeaderHeight = undefined;
+      delete cfg.colHeaderTextFn;
+      delete cfg.colHeaderHeight;
     }
   }
 }
@@ -234,8 +234,8 @@ function updateSettingsBarConfig(
     if (def.settingsBar) {
       cfg.settingsBarFactory = FIT_VIEW_MODEL_CONFIG.settingsBarFactory;
     } else {
-      cfg.settingsBarFactory = undefined;
-      cfg.themeSwitcherFactory = undefined;
+      delete cfg.settingsBarFactory;
+      delete cfg.themeSwitcherFactory;
     }
   }
   if (def.themeSwitcher !== undefined) {
@@ -257,7 +257,7 @@ function updateColFiltersConfig(
         : undefined;
     }
   } else {
-    cfg.colFiltersFactory = undefined;
+    delete cfg.colFiltersFactory;
   }
 }
 

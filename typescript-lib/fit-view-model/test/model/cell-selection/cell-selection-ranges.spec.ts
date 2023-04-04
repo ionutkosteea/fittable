@@ -1,5 +1,4 @@
 import {} from 'jasmine';
-import { Subject } from 'rxjs';
 
 import {
   registerModelConfig,
@@ -8,17 +7,16 @@ import {
   CellCoord,
   createCellCoord,
   unregisterModelConfig,
-  CellRange,
 } from 'fit-core/model/index.js';
 import {
   registerViewModelConfig,
   unregisterViewModelConfig,
 } from 'fit-core/view-model/index.js';
-import { FIT_MODEL_CONFIG } from '../../../fit-model/dist/index.js';
-import { FIT_VIEW_MODEL_CONFIG } from '../../../fit-view-model/dist/index.js';
+import { FIT_MODEL_CONFIG } from '../../../../fit-model/dist/index.js';
+import { FIT_VIEW_MODEL_CONFIG } from '../../../../fit-view-model/dist/index.js';
 
-import { FitTableViewer } from '../../dist/model/table-viewer/fit-table-viewer.js';
-import { FitCellSelection } from '../../dist/model/cell-selection/fit-cell-selection.js';
+import { FitTableViewer } from '../../../dist/model/table-viewer/fit-table-viewer.js';
+import { FitCellSelection } from '../../../dist/model/cell-selection/fit-cell-selection.js';
 
 describe('Test CellSelectionRanges', () => {
   beforeAll((): void => {

@@ -59,21 +59,19 @@ export interface ViewModelConfig {
   inputControlListenerFactory?: InputControlListenerFactory;
 }
 
-declare global {
-  var fitViewModelConfig: ViewModelConfig | undefined;
-}
+let fitViewModelConfig: ViewModelConfig | undefined;
 
 export function registerViewModelConfig(config: ViewModelConfig): void {
-  globalThis.fitViewModelConfig = { ...config };
+  fitViewModelConfig = { ...config };
 }
 
 export function unregisterViewModelConfig(): void {
-  globalThis.fitViewModelConfig = undefined;
+  fitViewModelConfig = undefined;
 }
 
 export function getViewModelConfig(): ViewModelConfig {
-  if (globalThis.fitViewModelConfig) {
-    return globalThis.fitViewModelConfig;
+  if (fitViewModelConfig) {
+    return fitViewModelConfig;
   } else {
     throw new Error(
       'The view model configuration has to be registered via the registerViewModelConfig function!'

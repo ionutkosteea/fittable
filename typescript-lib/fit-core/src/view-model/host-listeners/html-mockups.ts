@@ -1,4 +1,10 @@
-export interface FitHTMLInputElement {
+export interface FitHtmlElement {
+  parentElement: FitHtmlElement | null;
+  tagName: string;
+  getAttribute(name: string): string | null;
+}
+
+export interface FitHtmlInputElement extends FitHtmlElement {
   value: string;
 }
 

@@ -33,5 +33,8 @@ export class TableTopComponent extends TableCommon {
     getModelConfig().colFilterExecutorFactory !== undefined &&
     this.viewModel.colFilters !== undefined;
 
-  public readonly getColFilters = (): ColFilters => this.viewModel.colFilters!;
+  public readonly getColFilters = (): ColFilters => {
+    if (this.viewModel.colFilters) return this.viewModel.colFilters;
+    else throw new Error('Column filters are not defined!');
+  };
 }

@@ -14,9 +14,11 @@
 }
 
 .description {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   margin-bottom: 20px;
+  color: #606060;
+  text-align: justify;
 }
 
 .subtitle {

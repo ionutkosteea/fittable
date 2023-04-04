@@ -79,8 +79,8 @@ export class ColFilterOperationSubscriptions {
         const stepDto: ColFilterOperationStepDto = operationDto
           .steps[0] as ColFilterOperationStepDto;
         const condition: ValueCondition | undefined = stepDto.valueCondition;
-        if (this.hasCondition(condition)) {
-          this.args.colFilters.getValueConditions()[stepDto.colId] = condition!;
+        if (condition && !this.isSelectAll(condition)) {
+          this.args.colFilters.getValueConditions()[stepDto.colId] = condition;
         } else if (stepDto.colId in this.args.colFilters.getValueConditions()) {
           delete this.args.colFilters.getValueConditions()[stepDto.colId];
         }
@@ -94,10 +94,11 @@ export class ColFilterOperationSubscriptions {
       .subscribe((operationDto: OperationDto): void => {
         const id: FitUIOperationId = 'column-filter';
         if (operationDto.id !== id) return;
+        if (!operationDto.undoOperation) return;
         const stepDto: ColFilterOperationStepDto = operationDto
           .steps[0] as ColFilterOperationStepDto;
-        const undoStepDto: ColFilterOperationStepDto =
-          operationDto.undoOperation!.steps[0] as ColFilterOperationStepDto;
+        const undoStepDto: ColFilterOperationStepDto = operationDto
+          .undoOperation.steps[0] as ColFilterOperationStepDto;
         const conditions: { [colId: number]: ValueCondition } =
           this.args.colFilters.getValueConditions();
         delete conditions[stepDto.colId];
@@ -114,29 +115,30 @@ export class ColFilterOperationSubscriptions {
       .subscribe((operationDto: OperationDto): void => {
         const id: FitUIOperationId = 'column-filter';
         if (operationDto.id !== id) return;
+        if (!operationDto.undoOperation) return;
         const stepDto: ColFilterOperationStepDto = operationDto
           .steps[0] as ColFilterOperationStepDto;
-        const undoStepDto: ColFilterOperationStepDto =
-          operationDto.undoOperation!.steps[0] as ColFilterOperationStepDto;
+        const undoStepDto: ColFilterOperationStepDto = operationDto
+          .undoOperation.steps[0] as ColFilterOperationStepDto;
         const conditions: { [colId: number]: ValueCondition } =
           this.args.colFilters.getValueConditions();
         delete conditions[undoStepDto.colId];
-        if (this.hasCondition(stepDto.valueCondition)) {
-          conditions[stepDto.colId] = stepDto.valueCondition!;
+        const condition: ValueCondition | undefined = stepDto.valueCondition;
+        if (condition && !this.isSelectAll(condition)) {
+          conditions[stepDto.colId] = condition;
         }
         this.applyFilter();
       });
   }
 
-  private readonly hasCondition = (condition?: ValueCondition): boolean =>
-    condition !== undefined &&
-    !(condition.mode === 'Select all' && condition.values.length === 0);
+  private readonly isSelectAll = (condition: ValueCondition): boolean =>
+    condition.mode === 'Select all' && condition.values.length === 0;
 
   private applyFilter(): void {
     const filterExecutor: ColFilterExecutor =
       this.args.colFilters.filterExecutor.clearConditions();
     for (const key of Object.keys(this.args.colFilters.getValueConditions())) {
-      const colId: number = Number(key);
+      const colId = Number(key);
       filterExecutor.addCondition(colId, this.getValueCondition);
     }
     const table: FitTable | undefined = filterExecutor.run().getFilteredTable();

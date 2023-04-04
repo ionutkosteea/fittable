@@ -1,5 +1,6 @@
 export type TopicTitle =
   | 'Introduction'
+  | 'Playground'
   | 'Architecture'
   | 'Installation'
   | 'Row height'

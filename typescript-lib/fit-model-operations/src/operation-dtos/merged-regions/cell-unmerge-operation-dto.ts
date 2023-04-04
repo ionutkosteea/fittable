@@ -43,8 +43,8 @@ export class CellUnmergeOperationDtoBuilder {
     for (const cellRange of this.args.selectedCells) {
       this.table.forEachMergedCell((rowId: number, colId: number): void => {
         if (!cellRange.hasCell(rowId, colId)) return;
-        this.mergedRegionsStep.removeRegions!.push({ rowId, colId });
-        this.undoMergedRegionsStep.createRegions!.push({
+        this.mergedRegionsStep.removeRegions?.push({ rowId, colId });
+        this.undoMergedRegionsStep.createRegions?.push({
           rowId,
           colId,
           rowSpan: this.table.getRowSpan(rowId, colId),

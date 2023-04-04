@@ -1,19 +1,19 @@
 import { LineRange, LineRangeList } from 'fit-core/model/index.js';
 
-export class LineRangeAddressObjects<Object> {
-  private objectMap: Map<Object, LineRangeList> = new Map();
+export class LineRangeAddressObjects<Obj> {
+  private objectMap: Map<Obj, LineRangeList> = new Map();
 
-  public set(obj: Object, address: LineRange): this {
+  public set(obj: Obj, address: LineRange): this {
     if (!this.objectMap.has(obj)) this.objectMap.set(obj, new LineRangeList());
     this.objectMap.get(obj)?.add(address);
     return this;
   }
 
-  public getAddress(obj: Object): LineRange[] | undefined {
+  public getAddress(obj: Obj): LineRange[] | undefined {
     return this.objectMap.get(obj)?.sort().getRanges();
   }
 
-  public getAllObjects(): IterableIterator<Object> {
+  public getAllObjects(): IterableIterator<Obj> {
     return this.objectMap.keys();
   }
 
@@ -25,7 +25,7 @@ export class LineRangeAddressObjects<Object> {
     return addresses;
   }
 
-  public forEach(entryFn: (obj: Object, address?: LineRange[]) => void): void {
+  public forEach(entryFn: (obj: Obj, address?: LineRange[]) => void): void {
     for (const obj of this.getAllObjects()) {
       entryFn(obj, this.getAddress(obj));
     }
