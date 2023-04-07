@@ -16,6 +16,7 @@ import {
 import { FIT_MODEL_CONFIG } from 'fit-model';
 import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { FIT_VIEW_MODEL_CONFIG } from 'fit-view-model';
+
 import { TopicTitle } from '../../common/topic-title.model';
 import { CodeSnippet } from '../common/code-snippet.model';
 import { ConsoleTopic } from './common/console-topic.model';
@@ -72,14 +73,13 @@ class MatrixValueTable implements TableBasics {
   getNumberOfCols = (): number => {
     let numberOfCols = 0;
     for (const row of this.dto) {
-      if (numberOfCols < row?.length) numberOfCols = row.length;
+      if (row && numberOfCols < row.length) numberOfCols = row.length;
     }
     return numberOfCols;
   };
   setNumberOfCols = (numberOfCols: number): this => {
     for (const row of this.dto) {
-      if (!row) continue;
-      row.length = numberOfCols;
+      if (row) row.length = numberOfCols;
     }
     return this;
   };
@@ -120,12 +120,13 @@ class MatrixValueTable implements TableBasics {
   };
   removeColCells = (colId: number): this => {
     for (const row of this.dto) {
-      delete row[colId];
+      row && delete row[colId];
     }
     return this;
   };
   moveColCells = (colId: number, move: number): this => {
     for (const row of this.dto) {
+      if (!row) continue;
       row[colId + move] = row[colId];
       delete row[colId];
     }

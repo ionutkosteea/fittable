@@ -68,7 +68,8 @@ export const FIT_CSS_COLOR_VARIABLES: FitCssColorVariables = {
 export type FitCssUnitVariable =
   | '--toolbar-height'
   | '--statusbar-height'
-  | '--font-size';
+  | '--font-size'
+  | '--font-family';
 
 export type FitCssUnitVariables = { [name in FitCssUnitVariable]: string };
 
@@ -76,6 +77,7 @@ export const FIT_CSS_UNIT_VARIABLES: FitCssUnitVariables = {
   '--toolbar-height': '36px',
   '--statusbar-height': '20px',
   '--font-size': '0px',
+  '--font-family': '',
 };
 
 export function setCssVariable(

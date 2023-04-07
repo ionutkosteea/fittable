@@ -18,7 +18,6 @@ import {
 } from 'fit-core/operations';
 import {
   createFittableDesigner,
-  FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fit-model';
@@ -26,7 +25,6 @@ import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
-import { CodeSnippet } from '../common/code-snippet.model';
 import { ConsoleTopic } from './common/console-topic.model';
 
 @Component({
@@ -36,22 +34,19 @@ import { ConsoleTopic } from './common/console-topic.model';
 })
 export class CustomOperationComponent extends ConsoleTopic implements OnInit {
   public readonly title: TopicTitle = 'Custom operation';
-  public readonly htmlCode: CodeSnippet[] = [
-    { image: 'fittable-component-html.jpg' },
-  ];
-  public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'custom-operation-ts-01.jpg' },
-    { image: 'custom-operation-ts-02.jpg' },
-    { image: 'custom-operation-ts-03.jpg' },
-    { image: 'custom-operation-ts-04.jpg' },
-    { image: 'custom-operation-ts-05.jpg' },
-    { image: 'custom-operation-ts-06.jpg' },
-  ];
   public readonly buttonText = 'Add value to cell B2';
-  public fit!: FittableDesigner;
-  public consoleText = '';
 
-  public ngOnInit(): void {
+  constructor() {
+    super();
+    this.typescriptCode = [
+      { image: 'custom-operation-ts-01.jpg' },
+      { image: 'custom-operation-ts-02.jpg' },
+      { image: 'custom-operation-ts-03.jpg' },
+      { image: 'custom-operation-ts-04.jpg' },
+    ];
+  }
+
+  public override ngOnInit(): void {
     // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
@@ -84,10 +79,8 @@ type DummyOperationStepDto = OperationId<'dummy-step'> & {
   colId?: number;
   value?: Value;
 };
-
 class DummyOperationStep implements OperationStep {
   constructor(private table: Table, private stepDto: DummyOperationStepDto) {}
-
   run(): void {
     const rowId: number | undefined = this.stepDto.rowId;
     const colId: number | undefined = this.stepDto.colId;
@@ -95,8 +88,7 @@ class DummyOperationStep implements OperationStep {
     this.table.setCellValue(rowId, colId, this.stepDto.value);
   }
 }
-
-export class DummyOperationStepFactory implements OperationStepFactory {
+class DummyOperationStepFactory implements OperationStepFactory {
   public createStep(
     table: Table,
     stepDto: DummyOperationStepDto
@@ -109,7 +101,6 @@ type DummyOperationDtoArgs = OperationId<'dummy-operation'> & {
   cellCoord: CellCoord;
   value: Value;
 };
-
 class DummyOperationDtoBuilder {
   private dummyOperationStepDto: DummyOperationStepDto = {
     id: 'dummy-step',
@@ -118,7 +109,6 @@ class DummyOperationDtoBuilder {
     id: 'dummy-step',
   };
   private operationDto: OperationDto;
-
   constructor(private table: Table, private args: DummyOperationDtoArgs) {
     this.operationDto = {
       id: args.id,
@@ -126,7 +116,6 @@ class DummyOperationDtoBuilder {
       undoOperation: { steps: [this.undoDummyOperationStepDto] },
     };
   }
-
   build(): OperationDto {
     if (this.getOldValue() !== this.args.value) {
       this.prepareUpdate();
@@ -134,13 +123,11 @@ class DummyOperationDtoBuilder {
     }
     return this.operationDto;
   }
-
   private prepareUpdate(): void {
     this.dummyOperationStepDto.rowId = this.args.cellCoord.getRowId();
     this.dummyOperationStepDto.colId = this.args.cellCoord.getColId();
     this.dummyOperationStepDto.value = this.args.value;
   }
-
   private prepareUndo(): void {
     const rowId: number = this.args.cellCoord.getRowId();
     const colId: number = this.args.cellCoord.getColId();
@@ -148,14 +135,12 @@ class DummyOperationDtoBuilder {
     this.undoDummyOperationStepDto.colId = colId;
     this.undoDummyOperationStepDto.value = this.getOldValue();
   }
-
   private getOldValue(): Value | undefined {
     const rowId: number = this.args.cellCoord.getRowId();
     const colId: number = this.args.cellCoord.getColId();
     return this.table.getCellValue(rowId, colId);
   }
 }
-
 class DummyOperationDtoFactory implements OperationDtoFactory {
   createOperationDto(
     table: Table,

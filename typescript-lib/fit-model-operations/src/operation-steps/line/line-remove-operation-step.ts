@@ -59,7 +59,7 @@ abstract class LineRemoveOperationStep implements OperationStep {
   private moveLines(): void {
     for (const movableLine of this.stepDto.moveLines) {
       createLineRange4Dto(movableLine.lineRange).forEachLine((lineId): void => {
-        this.moveLine(lineId, -1 * movableLine.move);
+        this.moveLine(lineId, movableLine.move);
       });
     }
   }

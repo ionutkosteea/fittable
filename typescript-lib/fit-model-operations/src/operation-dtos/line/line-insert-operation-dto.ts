@@ -148,7 +148,7 @@ abstract class LineInsertOperationDtoBuilder {
         const to: number = lineRange.getTo() + movableLines.move;
         this.undoLineRemoveStepDto.moveLines.push({
           lineRange: createLineRange(from, to).getDto(),
-          move: movableLines.move,
+          move: -1 * movableLines.move,
         });
       }
     );

@@ -14,10 +14,7 @@ export function createColorMenu(args: FitControlArgs): StyleCombo {
     .setLabel((): string => args.dictionary.getText('Text color'))
     .setIcon((): string | undefined => args.imageRegistry.getImageUrl('color'))
     .setStyleAttName('color');
-  if (Object.keys(colorControls).length <= 0) {
-    colorControls = createColorControls(args);
-  }
-  combo.getWindow().setControls(colorControls);
+  combo.getWindow().setControls(createColorControls(args));
   return combo;
 }
 
@@ -29,14 +26,9 @@ export function createBackgroundColorMenu(args: FitControlArgs): StyleCombo {
       args.imageRegistry.getImageUrl('backgroundColor')
     )
     .setStyleAttName('background-color');
-  if (Object.keys(colorControls).length <= 0) {
-    colorControls = createColorControls(args);
-  }
-  combo.getWindow().setControls(colorControls);
+  combo.getWindow().setControls(createColorControls(args));
   return combo;
 }
-
-export let colorControls: ControlMap = {};
 
 export function createColorControls(args: FitControlArgs): ControlMap {
   const colorMap: ControlMap = {};
@@ -53,8 +45,4 @@ export function createColorControls(args: FitControlArgs): ControlMap {
     colorMap[color.label] = colorControl;
   }
   return colorMap;
-}
-
-export function setColorControls(controls: ControlMap): void {
-  colorControls = controls;
 }

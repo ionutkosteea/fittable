@@ -12,11 +12,7 @@ import { FitWindow } from '../../common/controls/fit-window.js';
 import { FitValueControl } from '../../common/controls/fit-value-control.js';
 import { FitImageId } from '../../image-registry/fit-image-ids.js';
 import { FitSeparator } from '../../common/controls/fit-separator.js';
-import {
-  colorControls,
-  createColorControls,
-  setColorControls,
-} from './color-menus.js';
+import { createColorControls } from './color-menus.js';
 import { FitControlArgs } from './common/fit-control-args.js';
 
 export function createBorderMenu(
@@ -81,11 +77,8 @@ class BorderMenuBuilder {
   }
 
   private createColorPickerMenu(): FitOptionsControl<string> {
-    if (Object.keys(colorControls).length <= 0) {
-      setColorControls(createColorControls(this.args));
-    }
     const window: FitWindow<string> = new FitWindow();
-    window.setControls(colorControls);
+    window.setControls(createColorControls(this.args));
     const optionsControl: FitOptionsControl<string> =
       new FitOptionsControl<string>(window)
         .setType('color-picker')

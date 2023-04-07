@@ -60,6 +60,7 @@ export class ViewModelSubscriptions {
   private updateToolbarByCellSelection(): void {
     for (const control of this.args.toolbar?.getControls() ?? []) {
       if (implementsTKeys<ControlUpdater>(control, ['updateByCellSelection'])) {
+        control.updateByCellSelection();
         const subscription: Subscription | undefined =
           this.args.cellSelection?.body
             .onEnd$()

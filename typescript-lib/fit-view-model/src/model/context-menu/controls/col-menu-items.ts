@@ -175,5 +175,5 @@ function isPositiveInteger(value?: Value): boolean {
     ? false
     : Number.isInteger(value) &&
         (value as number) > 0 &&
-        (value as number) <= 1000000;
+        (value as number) <= 80000;
 }

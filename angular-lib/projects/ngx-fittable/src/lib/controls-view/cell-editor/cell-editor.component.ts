@@ -1,5 +1,6 @@
 import { Subscription } from 'rxjs';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   Input,
@@ -21,7 +22,7 @@ import {
   templateUrl: './cell-editor.component.html',
   styleUrls: ['./cell-editor.component.css'],
 })
-export class CellEditorComponent implements OnInit, OnDestroy {
+export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() cellEditorListener!: CellEditorListener;
   @Input() getCellStyle!: (rowId: number, colId: number) => CssStyle | null;
   @ViewChild('textArea') textAreaRef!: ElementRef;
@@ -36,6 +37,13 @@ export class CellEditorComponent implements OnInit, OnDestroy {
     this.createCellEditorInputSubscriptions();
   }
 
+  public ngAfterViewInit(): void {
+    this.updateTextAreaDimensions();
+    this.updateTextAreaValue(
+      this.cellEditorListener.cellEditor.getCellControl().getValue()
+    );
+  }
+
   private initCellEditor(): void {
     this.updateCellEditorVisibility(true);
     this.updateCellEditorRectangle();
@@ -48,6 +56,7 @@ export class CellEditorComponent implements OnInit, OnDestroy {
       cellEditor.onAfterSetCell$().subscribe((): void => {
         this.updateCellEditorRectangle();
         this.updateTextAreaCellStyle();
+        this.updateTextAreaDimensions();
       })
     );
     this.subscriptions.push(
@@ -84,7 +93,7 @@ export class CellEditorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       inputControl
         .onSetValue$()
-        .subscribe((value?: Value): void => this.textAreaValue(value))
+        .subscribe((value?: Value): void => this.updateTextAreaValue(value))
     );
     this.subscriptions.push(
       inputControl.onSetTextCursor$().subscribe((cursor: boolean): void => {
@@ -137,6 +146,16 @@ export class CellEditorComponent implements OnInit, OnDestroy {
     }
   }
 
+  private updateTextAreaDimensions(): void {
+    const rect: Rectangle | undefined =
+      this.cellEditorListener.cellEditor.getCellRectangle();
+    if (!rect) return;
+    this.textAreaRef.nativeElement.style['min-height'] = rect.height + 'px';
+    this.textAreaRef.nativeElement.style['min-width'] = rect.width + 'px';
+    this.textAreaRef.nativeElement.style.height = rect.height + 'px';
+    this.textAreaRef.nativeElement.style.width = rect.width + 'px';
+  }
+
   private textAreaScrollToEnd(): void {
     const textArea: HTMLTextAreaElement = this.getTextArea();
     textArea.scrollTop = textArea.scrollHeight;
@@ -152,17 +171,12 @@ export class CellEditorComponent implements OnInit, OnDestroy {
     textArea.selectionEnd = textCursor + 1;
   }
 
-  private textAreaValue(value?: Value): void {
+  private updateTextAreaValue(value?: Value): void {
     this.getTextArea().value = value === undefined ? '' : '' + value;
   }
 
   private getTextArea(): HTMLTextAreaElement {
     return this.textAreaRef.nativeElement as HTMLTextAreaElement;
-  }
-
-  public getTextAreaValue(): string {
-    const value: Value | undefined = this.getInputControl().getValue();
-    return value === undefined ? '' : '' + value;
   }
 
   private readonly getInputControl = (): InputControl =>

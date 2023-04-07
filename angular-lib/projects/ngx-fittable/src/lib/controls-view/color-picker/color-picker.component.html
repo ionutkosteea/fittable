@@ -17,10 +17,13 @@
     </div>
     <div class="add-color-panel">
       <div class="add-color-combo">
-        <input class="add-color-picker" #colorPicker [value]="getSelectedValue()" type="color" />
+        <input class="add-color-picker" #colorPicker [value]="getSelectedValue()" type="color"
+          (input)="onSelectCustomColor()" />
         <div class='arrow-down'>▼</div>
       </div>
-      <button class="add-btn" (click)="addCustomColor()">+</button>
+      <button class="add-btn"
+        [ngStyle]="{backgroundColor: isColorPickerVisible?'var(--highlight-color)':'var(--context-menu-color)'}"
+        (click)="addCustomColor()">+</button>
     </div>
   </div>
 </div>

@@ -57,8 +57,8 @@ export class CellStyleComponent implements SimpleTopic, OnInit {
             .set('border-right', '2px solid blue')
             .set('border-bottom', '2px solid gray')
         )
-        .setCellValue(1, 1, 'Styled text')
-        .setCellStyleName(1, 1, 's0')
+        .setCellValue(0, 0, 'Styled text')
+        .setCellStyleName(0, 0, 's0')
     );
   }
 }

@@ -112,8 +112,8 @@ export class FitCellEditorListener implements CellEditorListener {
     else if (key === 'ArrowUp') this.arrowDown(origin.getTopCell(), event);
     else if (key === 'ArrowRight') this.arrowDown(origin.getRightCell(), event);
     else if (key === 'ArrowDown') this.arrowDown(origin.getBottomCell(), event);
-    else if (key === 'Meta') event.preventDefault();
-    else if (key !== 'Shift' && key !== 'Control') this.regularKeyDown(event);
+    else if (key === 'Meta' || key === 'Control') event.preventDefault();
+    else if (key !== 'Shift') this.regularKeyDown(event);
   }
 
   private enterDown(event: FitKeyboardEvent): void {
@@ -121,6 +121,7 @@ export class FitCellEditorListener implements CellEditorListener {
     if (this.enableControlEdit) {
       if (event.ctrlKey) {
         this.cellEditor.getCellControl().ctrlEnter();
+        this.newCellValue = this.getHtmlInput(event)?.value ?? '';
       } else {
         this.applyNewCellValue();
         this.moveCellEditor(this.cellEditor.getNeighborCells().getBottomCell());
@@ -165,7 +166,7 @@ export class FitCellEditorListener implements CellEditorListener {
   }
 
   public onInput(event: FitEvent): void {
-    this.newCellValue = this.getHtmlInput(event)?.value;
+    this.newCellValue = this.getHtmlInput(event)?.value ?? '';
     this.selectedCells = this.selectedCellsFn();
   }
 

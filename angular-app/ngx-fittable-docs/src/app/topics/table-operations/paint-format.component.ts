@@ -1,5 +1,4 @@
-import { Subscription } from 'rxjs';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {
   createCellCoord,
@@ -8,10 +7,9 @@ import {
   createTable,
   registerModelConfig,
 } from 'fit-core/model';
-import { OperationDto, registerOperationConfig } from 'fit-core/operations';
+import { registerOperationConfig } from 'fit-core/operations';
 import {
   createFittableDesigner,
-  FittableDesigner,
   registerViewModelConfig,
 } from 'fit-core/view-model';
 import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
@@ -22,7 +20,6 @@ import {
 import { createFitViewModelConfig } from 'fit-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
-import { CodeSnippet } from '../common/code-snippet.model';
 import { ConsoleTopic } from './common/console-topic.model';
 
 @Component({
@@ -30,25 +27,21 @@ import { ConsoleTopic } from './common/console-topic.model';
   templateUrl: './common/console-topic.html',
   styleUrls: ['./common/console-topic.css', '../common/common.css'],
 })
-export class PaintFormatComponent
-  extends ConsoleTopic
-  implements OnInit, OnDestroy
-{
+export class PaintFormatComponent extends ConsoleTopic implements OnInit {
   public readonly title: TopicTitle = 'Paint format';
-  public readonly htmlCode: CodeSnippet[] = [
-    { image: 'fittable-component-html.jpg' },
-  ];
-  public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'paint-format-ts-01.jpg' },
-    { image: 'paint-format-ts-02.jpg' },
-    { image: 'paint-format-ts-03.jpg' },
-  ];
   public readonly buttonText = 'Copy A1 style to B2:D4';
-  public fit!: FittableDesigner;
-  public consoleText = '';
-  private subscription?: Subscription;
 
-  public ngOnInit(): void {
+  constructor() {
+    super();
+    this.typescriptCode = [
+      { image: 'paint-format-ts-01.jpg' },
+      { image: 'console-operation-ts-02.jpg' },
+      { image: 'paint-format-ts-02.jpg' },
+      { image: 'console-operation-ts-03.jpg' },
+    ];
+  }
+
+  public override ngOnInit(): void {
     // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
@@ -62,17 +55,9 @@ export class PaintFormatComponent
         .setCellStyleName(0, 0, 's0')
     );
 
-    this.subscription = this.writeToConsole$();
-  }
-
-  private writeToConsole$(): Subscription | undefined {
-    return this.fit.operationExecutor
-      ?.onAfterRun$()
-      .subscribe((operationDto: OperationDto): void => {
-        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
-        this.consoleText +=
-          'Operation steps: ' + JSON.stringify(operationDto.steps, null, 2);
-      });
+    this.subscriptions.add(this.writeToConsoleAfterRun$());
+    this.subscriptions.add(this.writeToConsoleAfterUndo$());
+    this.subscriptions.add(this.writeToConsoleAfterRedo$());
   }
 
   public runOperation(): void {
@@ -84,9 +69,5 @@ export class PaintFormatComponent
       styleName: 's0',
     };
     this.fit.operationExecutor?.run(args);
-  }
-
-  public ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
   }
 }

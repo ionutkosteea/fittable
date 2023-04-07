@@ -1,5 +1,10 @@
-import { getViewModelConfig, Control } from 'fit-core/view-model/index.js';
-import { Window } from 'fit-core/view-model/index.js';
+import { Value } from 'fit-core/model/index.js';
+import {
+  getViewModelConfig,
+  Control,
+  Option,
+  Window,
+} from 'fit-core/view-model/index.js';
 
 import { FitValueControl } from '../../common/controls/fit-value-control.js';
 import { StyleCombo } from './common/style-combo.js';
@@ -18,10 +23,13 @@ export function createFontFamilyCombo(args: FitControlArgs): StyleCombo {
 }
 
 function createControls(window: Window): void {
-  for (const font of getViewModelConfig().fontFamily ?? []) {
+  const fonts: Option[] = getViewModelConfig().fontFamily ?? [];
+  for (const font of fonts) {
     const fontControl: Control = new FitValueControl()
       .setLabel((): string => font.label)
-      .setValue(font.value);
+      .setValueFn((): Value | undefined => {
+        return font.value === fonts[0].value ? undefined : font.value;
+      });
     window.addControl(font.label, fontControl);
   }
 }

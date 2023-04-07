@@ -23,7 +23,10 @@ class FontSizeInput extends FitInputControl implements ControlUpdater {
     this.setType('input');
     this.setLabel((): string => args.dictionary.getText('Font size'));
     this.setRun(this.createRunFn);
-    this.setValid((): boolean => this.getValue() > 0);
+    this.setValid((): boolean => {
+      const value: number | undefined = this.getValue();
+      return value === undefined || value > 0;
+    });
   }
 
   private createRunFn = (): void => {
@@ -62,8 +65,8 @@ class FontSizeInput extends FitInputControl implements ControlUpdater {
     return fontSize ? (fontSize as number) : this.config.fontSize ?? 0;
   };
 
-  public override getValue(): number {
-    return this.size ?? this.config.fontSize ?? 0;
+  public override getValue(): number | undefined {
+    return this.size;
   }
 
   public override setValue(size?: number): this {

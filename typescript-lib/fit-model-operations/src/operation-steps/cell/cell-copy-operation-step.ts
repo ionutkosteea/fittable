@@ -34,10 +34,16 @@ export class CellCopyOperationStep implements OperationStep {
   public run(): void {
     const text: string = this.createCliboardText();
     const htmlText: Blob = new Blob([text], { type: 'text/html' });
-    const data = [new ClipboardItem({ 'text/html': htmlText })];
+    const data: ClipboardItem[] = [
+      new ClipboardItem({ 'text/html': htmlText }),
+    ];
     navigator.clipboard.write(data).then(
-      () => console.log('Copied to clipboard successfully!'),
-      (error) => console.error('Unable to write to clipboard!', error)
+      (): void => {
+        console.log('Copied to clipboard successfully!');
+      },
+      (error: unknown): void => {
+        console.error('Unable to write to clipboard!', error);
+      }
     );
   }
 

@@ -5,7 +5,7 @@ export interface FitHtmlElement {
 }
 
 export interface FitHtmlInputElement extends FitHtmlElement {
-  value: string;
+  value: string | null;
 }
 
 export interface FitEvent {

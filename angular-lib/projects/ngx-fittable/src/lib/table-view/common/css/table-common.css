@@ -41,7 +41,8 @@
   margin: 0px;
   padding: 0px;
   overflow: scroll;
-  white-space: pre-line;
+  white-space: break-spaces;
+  word-break: break-all;
   display: grid;
   place-items: inherit;
   text-decoration: inherit;

@@ -166,7 +166,7 @@ abstract class LineRemoveOperationDtoBuilder {
       const from: number = sortedLines[i].getTo() + 1;
       if (from < numberOfLines) {
         const lineRangeDto: unknown = createLineRange(from).getDto();
-        moveLinesDto.push({ lineRange: lineRangeDto, move });
+        moveLinesDto.push({ lineRange: lineRangeDto, move: -1 * move });
       }
       if (i > 0) {
         const lineRangeDto: unknown = moveLinesDto[i - 1].lineRange;
@@ -267,11 +267,12 @@ abstract class LineRemoveOperationDtoBuilder {
       (movableLines: MoveLinesDto): void => {
         const lineRange: LineRange = //
           createLineRange4Dto(movableLines.lineRange);
-        const from: number = lineRange.getFrom() - movableLines.move;
-        const to: number = lineRange.getTo() - movableLines.move;
+        const move: number = -1 * movableLines.move;
+        const from: number = lineRange.getFrom() - move;
+        const to: number = lineRange.getTo() - move;
         this.undoLineInsertStepDto.moveLines.push({
           lineRange: createLineRange(from, to).getDto(),
-          move: movableLines.move,
+          move,
         });
       }
     );
