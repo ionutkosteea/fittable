@@ -30,7 +30,7 @@ import { FIT_MODEL_CONFIG } from '../../../fit-model/dist/index.js';
 
 import {
   FIT_OPERATION_CONFIG,
-  FitOperationDtoArgs,
+  FitOperationArgs,
   BorderStyle,
 } from '../../dist/index.js';
 
@@ -182,7 +182,7 @@ export class TableOperationExecutor {
     const styleSnippet: Style = isBold
       ? createStyle().set('font-weight', 'bold')
       : createStyle().set('font-weight', undefined);
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'style-update',
       selectedCells: this.getSelectedCells(),
       styleSnippet,
@@ -192,7 +192,7 @@ export class TableOperationExecutor {
   }
 
   public runPaintBorder(borderStyle: BorderStyle): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'style-border',
       selectedCells: this.getSelectedCells(),
       borderStyle,
@@ -202,7 +202,7 @@ export class TableOperationExecutor {
   }
 
   public runRemoveCells(): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-remove',
       selectedCells: this.getSelectedCells(),
     };
@@ -211,7 +211,7 @@ export class TableOperationExecutor {
   }
 
   public runInsertRowsBefore(numberOfRows: number): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'row-insert',
       selectedLines: this.getSelectedRows(),
       numberOfNewLines: numberOfRows,
@@ -221,7 +221,7 @@ export class TableOperationExecutor {
   }
 
   public runInsertRowsAfter(numberOfRows: number): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'row-insert',
       selectedLines: this.getSelectedRows(),
       numberOfNewLines: numberOfRows,
@@ -232,7 +232,7 @@ export class TableOperationExecutor {
   }
 
   public runRemoveRows(): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'row-remove',
       selectedLines: this.getSelectedRows(),
     };
@@ -241,7 +241,7 @@ export class TableOperationExecutor {
   }
 
   public runResizeRows(height: number): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'row-height',
       selectedLines: this.getSelectedRows(),
       dimension: height,
@@ -251,7 +251,7 @@ export class TableOperationExecutor {
   }
 
   public runInsertColsBefore(numberOfCols: number): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'column-insert',
       selectedLines: this.getSelectedCols(),
       numberOfNewLines: numberOfCols,
@@ -261,7 +261,7 @@ export class TableOperationExecutor {
   }
 
   public runInsertColsAfter(numberOfCols: number): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'column-insert',
       selectedLines: this.getSelectedCols(),
       numberOfNewLines: numberOfCols,
@@ -272,7 +272,7 @@ export class TableOperationExecutor {
   }
 
   public runRemoveCols(): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'column-remove',
       selectedLines: this.getSelectedCols(),
     };
@@ -281,7 +281,7 @@ export class TableOperationExecutor {
   }
 
   public runResizeCols(width: number): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'column-width',
       selectedLines: this.getSelectedCols(),
       dimension: width,
@@ -291,7 +291,7 @@ export class TableOperationExecutor {
   }
 
   public runRemoveCellStyles(): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'style-remove',
       selectedCells: this.getSelectedCells(),
     };
@@ -304,7 +304,7 @@ export class TableOperationExecutor {
     colId: number,
     value: string | number | undefined
   ): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-value',
       selectedCells: [createCellRange(createCellCoord(rowId, colId))],
       value,
@@ -314,7 +314,7 @@ export class TableOperationExecutor {
   }
 
   public runCellCopyValue(): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-copy',
       selectedCells: this.getSelectedCells(),
     };
@@ -323,7 +323,7 @@ export class TableOperationExecutor {
   }
 
   public runCellPasteValue(): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-paste',
       selectedCells: this.getSelectedCells(),
     };
@@ -332,7 +332,7 @@ export class TableOperationExecutor {
   }
 
   public runMergeCells(): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-merge',
       selectedCells: this.getSelectedCells(),
     };
@@ -342,7 +342,7 @@ export class TableOperationExecutor {
   }
 
   public runUnmergeCells(): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-unmerge',
       selectedCells: this.getSelectedCells(),
     };
@@ -351,7 +351,7 @@ export class TableOperationExecutor {
   }
 
   public runPaintFormat(sourceStyleName?: string): this {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'style-name',
       selectedCells: this.getSelectedCells(),
       styleName: sourceStyleName,

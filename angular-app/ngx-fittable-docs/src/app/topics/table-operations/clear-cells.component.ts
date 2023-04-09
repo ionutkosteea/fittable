@@ -12,10 +12,7 @@ import {
   registerViewModelConfig,
 } from 'fit-core/view-model';
 import { FitTableDto, FIT_MODEL_CONFIG } from 'fit-model';
-import {
-  FitOperationDtoArgs,
-  FIT_OPERATION_CONFIG,
-} from 'fit-model-operations';
+import { FitOperationArgs, FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
@@ -67,7 +64,7 @@ export class ClearCellsComponent extends ConsoleTopic implements OnInit {
   }
 
   public runOperation(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-value',
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(1, 2)),

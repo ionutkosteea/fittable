@@ -14,7 +14,7 @@ import { OperationStackExecutor } from './operation-stack-executor.js';
 import {
   FitOperationDtoId,
   FitOperationStepId,
-  FitOperationDtoArgs,
+  FitOperationArgs,
 } from './fit-operation-executor-args.js';
 
 export class FitOperationExecutor implements OperationExecutor {
@@ -85,7 +85,7 @@ export class FitOperationExecutor implements OperationExecutor {
     return this.table;
   }
 
-  public run(args: FitOperationDtoArgs): this {
+  public run(args: FitOperationArgs): this {
     const operationDto: OperationDto | Promise<OperationDto> =
       this.createOperationDto(args);
     this.runOperationDto(operationDto);
@@ -93,7 +93,7 @@ export class FitOperationExecutor implements OperationExecutor {
   }
 
   public createOperationDto(
-    args: FitOperationDtoArgs
+    args: FitOperationArgs
   ): OperationDto | Promise<OperationDto> {
     const Factory: OperationDtoFactoryClass | undefined =
       this.operationDtoFactories[args.id as FitOperationDtoId];

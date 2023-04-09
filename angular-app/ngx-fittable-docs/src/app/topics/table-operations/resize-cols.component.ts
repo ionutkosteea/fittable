@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { createLineRange } from 'fit-core/model';
-import { FitOperationDtoArgs } from 'fit-model-operations';
+import { FitOperationArgs } from 'fit-model-operations';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { ConsoleTopic } from './common/console-topic.model';
@@ -21,7 +21,7 @@ export class ResizeColsComponent extends ConsoleTopic {
   }
 
   public runOperation(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'column-width',
       selectedLines: [createLineRange(1, 2)],
       dimension: 50,

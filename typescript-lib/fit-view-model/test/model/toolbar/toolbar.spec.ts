@@ -34,7 +34,7 @@ import {
 
 import { FIT_MODEL_CONFIG } from '../../../../fit-model/dist/index.js';
 import {
-  FitOperationDtoArgs,
+  FitOperationArgs,
   FIT_OPERATION_CONFIG,
 } from '../../../../fit-model-operations/dist/index.js';
 import {
@@ -69,7 +69,7 @@ describe('Toolbar', (): void => {
       ],
     });
 
-    const operationArgs: FitOperationDtoArgs = {
+    const operationArgs: FitOperationArgs = {
       id: 'cell-value',
       selectedCells: [createCellRange(createCellCoord(0, 0))],
       value: 1000,

@@ -13,10 +13,7 @@ import {
   registerViewModelConfig,
 } from 'fit-core/view-model';
 import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
-import {
-  FitOperationDtoArgs,
-  FIT_OPERATION_CONFIG,
-} from 'fit-model-operations';
+import { FitOperationArgs, FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
@@ -61,7 +58,7 @@ export class PaintFormatComponent extends ConsoleTopic implements OnInit {
   }
 
   public runOperation(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'style-name',
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(3, 3)),

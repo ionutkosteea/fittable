@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { createCellCoord, createCellRange } from 'fit-core/model';
-import { FitOperationDtoArgs } from 'fit-model-operations';
+import { FitOperationArgs } from 'fit-model-operations';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { ConsoleTopic } from './common/console-topic.model';
@@ -21,7 +21,7 @@ export class CellValuesComponent extends ConsoleTopic {
   }
 
   public runOperation(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-value',
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(1, 2)),

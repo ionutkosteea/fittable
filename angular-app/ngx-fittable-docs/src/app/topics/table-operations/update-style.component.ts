@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { createCellCoord, createCellRange, createStyle } from 'fit-core/model';
 import { FitStyle } from 'fit-model';
-import { FitOperationDtoArgs } from 'fit-model-operations';
+import { FitOperationArgs } from 'fit-model-operations';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { ConsoleTopic } from './common/console-topic.model';
@@ -22,7 +22,7 @@ export class UpdateStyleComponent extends ConsoleTopic {
   }
 
   public runOperation(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'style-update',
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(3, 3)),

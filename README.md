@@ -14,7 +14,7 @@ Fittable's modules are highly adaptable, with a range of configurable options th
 ## Preview
 
 <div align="center">
-  <img src="https://github.com/ionutkosteea/fittable/blob/main/fittable-preview.jpg" alt="Preview" />
+  <img src="https://github.com/ionutkosteea/fittable/blob/main/fittable-preview.jpg" alt="Preview" width="800" />
 </div>
 
 ## Documentation
@@ -24,10 +24,10 @@ Fittable's modules are highly adaptable, with a range of configurable options th
 ## Installation
 
 ```bash
-npm install fittable
+npm install ngx-fittable
 ```
 
-## Angular Code
+## API Overview
 
 ### HTML
 
@@ -52,10 +52,7 @@ import {
   createFittableDesigner,
 } from 'fit-core/view-model';
 import { FIT_MODEL_CONFIG, FitTable, FitStyle } from 'fit-model';
-import {
-  FIT_OPERATION_CONFIG,
-  FitOperationDtoArgs,
-} from 'fit-model-operations';
+import { FIT_OPERATION_CONFIG, FitOperationArgs } from 'fit-model-operations';
 import { FIT_VIEW_MODEL_CONFIG } from 'fit-view-model';
 
 // Register plugins
@@ -77,7 +74,7 @@ const table: FitTable = createTable<FitTable>()
 const fit: FittableDesigner = createFittableDesigner(table);
 
 // Run operations
-const args: FitOperationDtoArgs = {
+const args: FitOperationArgs = {
   id: 'cell-value',
   selectedCells: [
     createCellRange(createCellCoord(1, 1), createCellCoord(1, 2)),

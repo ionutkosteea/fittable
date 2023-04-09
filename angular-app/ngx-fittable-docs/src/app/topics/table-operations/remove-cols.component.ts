@@ -12,10 +12,7 @@ import {
   registerViewModelConfig,
 } from 'fit-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fit-model';
-import {
-  FitOperationDtoArgs,
-  FIT_OPERATION_CONFIG,
-} from 'fit-model-operations';
+import { FitOperationArgs, FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
@@ -60,7 +57,7 @@ export class RemoveColsComponent extends ConsoleTopic implements OnInit {
   }
 
   public runOperation(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'column-remove',
       selectedLines: [createLineRange(1, 2)],
     };

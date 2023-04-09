@@ -12,10 +12,7 @@ import {
   registerViewModelConfig,
 } from 'fit-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fit-model';
-import {
-  FitOperationDtoArgs,
-  FIT_OPERATION_CONFIG,
-} from 'fit-model-operations';
+import { FitOperationArgs, FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
@@ -51,7 +48,7 @@ export class OperationDtoComponent extends ConsoleTopic implements OnInit {
   }
 
   public runOperation(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-value',
       selectedCells: [createCellRange(createCellCoord(1, 1))],
       value: 'Check console',

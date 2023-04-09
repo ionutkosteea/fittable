@@ -40,7 +40,7 @@ import { MergedRegionsOperationStepDto } from '../operation-steps/merged-regions
 import { CellMergeOperationDtoArgs } from '../operation-dtos/merged-regions/cell-merge-operation-dto.js';
 import { CellUnmergeOperationDtoArgs } from '../operation-dtos/merged-regions/cell-unmerge-operation-dto.js';
 
-export type FitOperationDtoArgs =
+export type FitOperationArgs =
   | CellCutOperationDtoArgs
   | CellCopyOperationDtoArgs
   | CellPasteOperationDtoArgs

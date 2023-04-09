@@ -13,10 +13,7 @@ import {
   registerViewModelConfig,
 } from 'fit-core/view-model';
 import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fit-model';
-import {
-  FitOperationDtoArgs,
-  FIT_OPERATION_CONFIG,
-} from 'fit-model-operations';
+import { FitOperationArgs, FIT_OPERATION_CONFIG } from 'fit-model-operations';
 import { createFitViewModelConfig } from 'fit-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
@@ -75,7 +72,7 @@ export class CopyPasteCellsComponent extends ConsoleTopic implements OnInit {
   }
 
   private runCopy(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-copy',
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(2, 1)),
@@ -85,7 +82,7 @@ export class CopyPasteCellsComponent extends ConsoleTopic implements OnInit {
   }
 
   private runPaste(): void {
-    const args: FitOperationDtoArgs = {
+    const args: FitOperationArgs = {
       id: 'cell-paste',
       selectedCells: [createCellRange(createCellCoord(1, 2))],
     };
