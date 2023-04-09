@@ -55,20 +55,22 @@ import { FIT_MODEL_CONFIG, FitTable, FitStyle } from 'fit-model';
 import { FIT_OPERATION_CONFIG, FitOperationArgs } from 'fit-model-operations';
 import { FIT_VIEW_MODEL_CONFIG } from 'fit-view-model';
 
-// Register plugins
+// Register functionalities
 registerModelConfig(FIT_MODEL_CONFIG);
 registerOperationConfig(FIT_OPERATION_CONFIG);
 registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
 // Create table model
 const table: FitTable = createTable<FitTable>()
+  .setNumberOfRows(100)
+  .setNumberOfCols(10)
+  .setRowHeight(0, 42)
+  .setColWidth(0, 50)
   .addStyle('s0', createStyle<FitStyle>().set('font-weight', 'bold'))
   .setCellStyleName(0, 0, 's0')
   .setCellValue(0, 0, 1000)
   .setRowSpan(0, 0, 2)
-  .setColSpan(0, 0, 3)
-  .setRowHeight(0, 42)
-  .setColWidth(0, 50);
+  .setColSpan(0, 0, 3);
 
 // Create table designer
 const fit: FittableDesigner = createFittableDesigner(table);
