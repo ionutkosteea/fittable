@@ -23,7 +23,7 @@ import {
   FitViewModelConfigDef,
   FIT_VIEW_MODEL_CONFIG,
 } from 'fit-view-model';
-import { TableViewComponent } from 'ngx-fittable';
+import { TableViewComponent } from 'ngx-fit-view';
 
 import { TopicTitle } from '../../../common/topic-title.model';
 

@@ -25,7 +25,7 @@
 ## Installation
 
 ```bash
-npm install @fittable/ngx-fittable
+npm install @fittable/ngx-fit-view
 ```
 
 ## API Overview

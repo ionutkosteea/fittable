@@ -6,8 +6,8 @@
     "start": "ng serve",
     "link": "npm link fit-core fit-model fit-model-operations fit-view-model",
     "clean": "rm -r ./dist & rm -r -f ./.angular/cache",
-    "build": "ng build ngx-fittable && cp ./projects/ngx-fittable/LICENSE ./dist/ngx-fittable",
-    "watch": "ng build ngx-fittable --watch --configuration development",
+    "build": "ng build ngx-fit-view && cp ./projects/ngx-fit-view/LICENSE ./dist/ngx-fit-view",
+    "watch": "ng build ngx-fit-view --watch --configuration development",
     "test": "ng test",
     "lint": "npx eslint ./projects/**/src"
   },

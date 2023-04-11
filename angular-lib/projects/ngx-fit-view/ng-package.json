@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/ngx-fittable",
+  "dest": "../../dist/ngx-fit-view",
   "lib": {
     "entryFile": "src/public-api.ts"
   }

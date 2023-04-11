@@ -22,9 +22,9 @@
       "./node_modules/fit-model",
       "./node_modules/fit-model/index"
     ],
-    "ngx-fittable": [
-      "./node_modules/ngx-fittable/ngx-fittable",
-      "./node_modules/ngx-fittable"
+    "ngx-fit-view": [
+      "./node_modules/ngx-fit-view/ngx-fit-view",
+      "./node_modules/ngx-fit-view"
     ]
   },
   "angularCompilerOptions": {

@@ -34,23 +34,23 @@
         }
       }
     },
-    "ngx-fittable": {
+    "ngx-fit-view": {
       "projectType": "library",
-      "root": "projects/ngx-fittable",
-      "sourceRoot": "projects/ngx-fittable/src",
+      "root": "projects/ngx-fit-view",
+      "sourceRoot": "projects/ngx-fit-view/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/ngx-fittable/ng-package.json"
+            "project": "projects/ngx-fit-view/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngx-fittable/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngx-fit-view/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/ngx-fittable/tsconfig.lib.json"
+              "tsConfig": "projects/ngx-fit-view/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -58,9 +58,9 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-fittable/src/test.ts",
-            "tsConfig": "projects/ngx-fittable/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-fittable/karma.conf.js"
+            "main": "projects/ngx-fit-view/src/test.ts",
+            "tsConfig": "projects/ngx-fit-view/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-fit-view/karma.conf.js"
           }
         }
       }
