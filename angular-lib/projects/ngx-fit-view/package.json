@@ -17,15 +17,13 @@
     "url": "https://github.com/ionutkosteea/fittable/issues"
   },
   "peerDependencies": {
-    "@angular/common": "^14.2.0",
-    "@angular/core": "^14.2.0",
-    "fit-model": "^1.0.0",
-    "fit-model-operations": "^1.0.0",
-    "fit-view-model": "^1.0.0"
+    "@angular/common": "^15.2.0",
+    "@angular/core": "^15.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
+  "sideEffects": false,
   "keywords": [
     "table",
     "grid",

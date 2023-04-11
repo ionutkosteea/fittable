@@ -35,7 +35,6 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "rxjs": "^7.8.0",
-    "fit-core": "^1.0.0"
+    "rxjs": "^7.8.0"
   }
 }
