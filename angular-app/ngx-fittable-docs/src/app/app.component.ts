@@ -21,6 +21,10 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
+  public onContactClick(): void {
+    window.open('mailto:ionut.kosteea@gmail.com');
+  }
+
   public ngOnDestroy(): void {
     this.subscription?.unsubscribe();
   }

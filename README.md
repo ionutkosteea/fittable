@@ -3,12 +3,13 @@
 ## Introduction
 
 <p>
-Fittable is a powerful software component that provides advanced capabilities for managing large tables with spreadsheet-like functionality. Built using Angular and Typescript, it offers a dynamic table model, a robust operation execution mechanism, and a flexible user interface that can be easily customized to meet your specific needs.
-
-The main module of Fittable is developed in Angular, which presents a responsive and interactive view for the application. The view model and other essential modules are written in Typescript, without any dependency on a GUI framework, making it possible to use the component on the server-side as well.
-
-Fittable's modules are highly adaptable, with a range of configurable options that allow you to customize each functionality to match your application's requirements.
-
+  Fittable is a flexible and easy-to-use software component optimized for handling large table structures with spreadsheet-like capabilities. Built using Angular and TypeScript, it offers a dynamic table model, a robust operation execution mechanism, and an adjustable user interface that can be easily customized to meet your specific needs.
+</p>
+<p>
+  The main module of Fittable is developed in Angular, which presents a responsive and interactive view for the application. The view model and other essential modules are written in TypeScript without any dependency on a GUI framework, making it possible to use the component on the server-side as well.
+</p>
+<p>
+  Fittable's modules are highly adaptable, with a range of configurable options that allow you to customize each functionality to match your application's requirements.
 </p>
 
 ## Preview
@@ -24,7 +25,7 @@ Fittable's modules are highly adaptable, with a range of configurable options th
 ## Installation
 
 ```bash
-npm install ngx-fittable
+npm install @fittable/ngx-fittable
 ```
 
 ## API Overview
@@ -32,18 +33,19 @@ npm install ngx-fittable
 ### HTML
 
 ```html
+<!-- Angular component -->
 <fittable [designer]="fit"></fittable>
 ```
 
-### Typescript
+### TypeScript
 
 ```typescript
-// Typescript modules
+// TypeScript modules
 import {
   registerModelConfig,
+  Table,
   createTable,
-  createCellRange,
-  createCellCoord,
+  CellRange,
 } from 'fit-core/model';
 import { registerOperationConfig } from 'fit-core/operations';
 import {
@@ -60,8 +62,8 @@ registerModelConfig(FIT_MODEL_CONFIG);
 registerOperationConfig(FIT_OPERATION_CONFIG);
 registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-// Create table model
-const table: FitTable = createTable<FitTable>()
+// Build table model
+const table: Table = createTable<FitTable>()
   .setNumberOfRows(100)
   .setNumberOfCols(10)
   .setRowHeight(0, 42)
@@ -75,20 +77,17 @@ const table: FitTable = createTable<FitTable>()
 // Create table designer
 const fit: FittableDesigner = createFittableDesigner(table);
 
-// Run operations
-const args: FitOperationArgs = {
-  id: 'cell-value',
-  selectedCells: [
-    createCellRange(createCellCoord(1, 1), createCellCoord(1, 2)),
-  ],
-  value: 'operation text',
-};
-fit.operationExecutor?.run(args);
-
 // Access view model
-fit.viewModel.cellSelection?.body
-  .removeRanges()
-  .addRange(createCellCoord(0, 0), createCellCoord(1, 1))
-  .addRange(createCellCoord(1, 1), createCellCoord(3, 3))
-  .end();
+const selectedCells: CellRange[] | undefined =
+  fit.viewModel.cellSelection?.body.getRanges();
+
+// Run operations
+if (selectedCells) {
+  const args: FitOperationArgs = {
+    id: 'cell-value',
+    selectedCells,
+    value: 100,
+  };
+  fit.operationExecutor?.run(args);
+}
 ```

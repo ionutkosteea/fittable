@@ -29,6 +29,27 @@
   padding-left: 6px;
 }
 
+.contact {
+  position: absolute;
+  right: 11px;
+  top: 11px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 24px;
+  color: #606060;
+  padding-left: 30px;
+  padding-right: 6px;
+  background-image: url(../assets/icons/email.svg);
+  background-repeat: no-repeat;
+  background-position: left center;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+
+.contact:hover {
+  background-color: rgba(96, 96, 96, 0.1);
+}
+
 .navigation {
   position: fixed;
   left: 0px;

@@ -52,6 +52,7 @@ import { ArchitectureComponent } from './topics/getting-started/architecture/arc
 import { ColFiltersComponent } from './topics/table-designer/col-filters.component';
 import { ColFilterExecutorComponent } from './topics/table-designer/col-filter-executor.component';
 import { TableInteroperabilityComponent } from './topics/table-operations/table-interoperability/table-interoperability.component';
+import { InstallationComponent } from './topics/getting-started/installation/installation.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { TableInteroperabilityComponent } from './topics/table-operations/table-
     IntroductionComponent,
     PlaygroundComponent,
     ArchitectureComponent,
+    InstallationComponent,
     RowHeightComponent,
     ColWidthtComponent,
     CellValueComponent,

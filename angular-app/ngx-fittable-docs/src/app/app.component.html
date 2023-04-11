@@ -1,6 +1,7 @@
 <div class="main">
   <div class="top">
     <div class="logo">#Fittable</div>
+    <div class="contact" (click)="onContactClick()">CONTACT</div>
   </div>
   <div class="navigation">
     <navigation-tree [clickedLeaf$]="activeContent$"></navigation-tree>
@@ -9,6 +10,7 @@
     <introduction *ngIf="activeContent==='Introduction'"></introduction>
     <playground *ngIf="activeContent==='Playground'"></playground>
     <architecture *ngIf="activeContent==='Architecture'"></architecture>
+    <installation *ngIf="activeContent==='Installation'"></installation>
     <row-height *ngIf="activeContent==='Row height'"></row-height>
     <column-width *ngIf="activeContent==='Column width'"></column-width>
     <cell-value *ngIf="activeContent==='Cell value'"></cell-value>

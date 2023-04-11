@@ -1,18 +1,25 @@
 {
   "name": "fit-core",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Fittable core",
-  "author": "@costar",
-  "license": "ISC",
+  "author": {
+    "name": "Ionut Costea",
+    "email": "ionut.kosteea@gmail.com"
+  },
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ionutkosteea/fittable.git"
+  },
+  "type": "module",
   "scripts": {
     "clean": "rm -r ./dist && mkdir ./dist",
-    "build": "tsc -p tsconfig.json && cp ./package.json ./dist",
+    "build": "tsc -p tsconfig.json && cp ./package.json ./dist && cp ./LICENSE ./dist",
     "watch": "tsc -p tsconfig.json --watch",
     "test": "ts-node jasmine.ts",
     "coverage": "c8 npm test",
     "lint": "npx eslint ./src"
   },
-  "type": "module",
   "devDependencies": {
     "@types/jasmine": "^4.3.1",
     "@types/node": "^18.15.5",
