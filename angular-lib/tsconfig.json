@@ -1,0 +1,57 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "paths": {
+      "fittable-core/*": [
+        "./node_modules/fittable-core/*",
+        "./node_modules/fittable-core/*/index"
+      ],
+      "fit-model": [
+        "./node_modules/fit-model",
+        "./node_modules/fit-model/index"
+      ],
+      "fit-model-operations": [
+        "./node_modules/fit-model-operations",
+        "./node_modules/fit-model-operations/index"
+      ],
+      "fit-view-model": [
+        "./node_modules/fit-view-model",
+        "./node_modules/fit-view-model/index"
+      ],
+      "ngx-fit-view": [
+        "./dist/ngx-fit-view"
+      ],
+      "ngx-fittable": [
+        "dist/ngx-fittable"
+      ]
+    },
+    "declaration": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": [
+      "ES2022",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

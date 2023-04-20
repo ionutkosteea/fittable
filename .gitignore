@@ -48,9 +48,6 @@ Thumbs.db
 **/*.d.ts
 **/bundle.js
 
-# Workspace specific
-tsconfig.json
-
 # Test Coverage
 **/.nyc_output
 **/coverage
