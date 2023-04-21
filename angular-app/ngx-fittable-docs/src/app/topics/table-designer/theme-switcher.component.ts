@@ -1,26 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 
-import { createTable, registerModelConfig, Table } from 'fit-core/model';
-import { registerOperationConfig } from 'fit-core/operations';
+import { createTable, registerModelConfig, Table } from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
   Theme,
   ThemeSwitcher,
-} from 'fit-core/view-model';
-import { FIT_MODEL_CONFIG } from 'fit-model';
-import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 import {
   FitThemeName,
   FIT_IMAGES,
   FIT_VIEW_MODEL_CONFIG,
   toSvgUrl,
-} from 'fit-view-model';
+} from 'fittable-view-model';
 import {
   FitCssColorVariables,
   FIT_CSS_COLOR_VARIABLES,
-} from 'fit-view-model/model/common/css-variables';
+} from 'fittable-view-model/model/common/css-variables';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { CodeSnippet } from '../common/code-snippet.model';

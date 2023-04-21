@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --watch",
-    "link": "npm link fit-core fit-model fit-model-operations fit-view-model ngx-fit-view",
+    "link": "npm link fittable-core fittable-model fittable-model-operations fittable-view-model fittable-angular",
     "clean": "rm -r ./dist & rm -r -f ./.angular/cache",
     "build": "ng build  && cp ./LICENSE ./dist/ngx-fittable-docs",
     "watch": "ng build --watch --configuration development",

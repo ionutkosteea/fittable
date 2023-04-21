@@ -46,16 +46,19 @@ import {
   Table,
   createTable,
   CellRange,
-} from 'fit-core/model';
-import { registerOperationConfig } from 'fit-core/operations';
+} from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
 import {
   registerViewModelConfig,
   FittableDesigner,
   createFittableDesigner,
-} from 'fit-core/view-model';
-import { FIT_MODEL_CONFIG, FitTable, FitStyle } from 'fit-model';
-import { FIT_OPERATION_CONFIG, FitOperationArgs } from 'fit-model-operations';
-import { FIT_VIEW_MODEL_CONFIG } from 'fit-view-model';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG, FitTable, FitStyle } from 'fittable-model';
+import {
+  FIT_OPERATION_CONFIG,
+  FitOperationArgs,
+} from 'fittable-model-operations';
+import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
 
 // Register functionalities
 registerModelConfig(FIT_MODEL_CONFIG);

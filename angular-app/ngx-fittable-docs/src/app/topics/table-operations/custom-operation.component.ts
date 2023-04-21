@@ -7,7 +7,7 @@ import {
   registerModelConfig,
   Table,
   Value,
-} from 'fit-core/model';
+} from 'fittable-core/model';
 import {
   OperationId,
   OperationDto,
@@ -15,14 +15,14 @@ import {
   OperationStep,
   OperationStepFactory,
   registerOperationConfig,
-} from 'fit-core/operations';
+} from 'fittable-core/operations';
 import {
   createFittableDesigner,
   registerViewModelConfig,
-} from 'fit-core/view-model';
-import { FIT_MODEL_CONFIG } from 'fit-model';
-import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
-import { createFitViewModelConfig } from 'fit-view-model';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
+import { createFitViewModelConfig } from 'fittable-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { ConsoleTopic } from './common/console-topic.model';

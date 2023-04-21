@@ -4,10 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "link": "npm link fit-core",
+    "link": "npm link fittable-core",
     "clean": "rm -r ./dist & rm -r -f ./.angular/cache",
-    "build": "ng build ngx-fit-view && cp ./projects/ngx-fit-view/LICENSE ./dist/ngx-fit-view",
-    "watch": "ng build ngx-fit-view --watch --configuration development",
+    "build": "ng build fittable-angular && cp ./projects/fittable-angular/LICENSE ./dist/fittable-angular",
+    "watch": "ng build fittable-angular --watch --configuration development",
     "test": "ng test",
     "lint": "npx eslint ./projects/**/src"
   },

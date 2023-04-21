@@ -3,23 +3,23 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-fit-view": {
+    "fittable-angular": {
       "projectType": "library",
-      "root": "projects/ngx-fit-view",
-      "sourceRoot": "projects/ngx-fit-view/src",
+      "root": "projects/fittable-angular",
+      "sourceRoot": "projects/fittable-angular/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/ngx-fit-view/ng-package.json"
+            "project": "projects/fittable-angular/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngx-fit-view/tsconfig.lib.prod.json"
+              "tsConfig": "projects/fittable-angular/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/ngx-fit-view/tsconfig.lib.json"
+              "tsConfig": "projects/fittable-angular/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -27,7 +27,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "projects/ngx-fit-view/tsconfig.spec.json",
+            "tsConfig": "projects/fittable-angular/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"

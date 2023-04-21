@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 
-import { createCellCoord, createCellRange, createStyle } from 'fit-core/model';
-import { FitStyle } from 'fit-model';
-import { FitOperationArgs } from 'fit-model-operations';
+import {
+  createCellCoord,
+  createCellRange,
+  createStyle,
+} from 'fittable-core/model';
+import { FitStyle } from 'fittable-model';
+import { FitOperationArgs } from 'fittable-model-operations';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { ConsoleTopic } from './common/console-topic.model';

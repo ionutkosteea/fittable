@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { createLineRange } from 'fit-core/model';
-import { FitOperationArgs } from 'fit-model-operations';
+import { createLineRange } from 'fittable-core/model';
+import { FitOperationArgs } from 'fittable-model-operations';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { ConsoleTopic } from './common/console-topic.model';

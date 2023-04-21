@@ -1,15 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
-import { createTable4Dto, registerModelConfig } from 'fit-core/model';
-import { registerOperationConfig } from 'fit-core/operations';
+import { createTable4Dto, registerModelConfig } from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
-} from 'fit-core/view-model';
-import { FitTableDto, FIT_MODEL_CONFIG } from 'fit-model';
-import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
-import { FIT_VIEW_MODEL_CONFIG } from 'fit-view-model';
+} from 'fittable-core/view-model';
+import { FitTableDto, FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
+import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { CodeSnippet } from '../common/code-snippet.model';

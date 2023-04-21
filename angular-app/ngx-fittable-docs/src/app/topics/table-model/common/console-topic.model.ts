@@ -1,8 +1,8 @@
 import { ElementRef } from '@angular/core';
 
-import { createTable4Dto } from 'fit-core/model';
-import { FittableDesigner } from 'fit-core/view-model';
-import { FitTableDto } from 'fit-model';
+import { createTable4Dto } from 'fittable-core/model';
+import { FittableDesigner } from 'fittable-core/view-model';
+import { FitTableDto } from 'fittable-model';
 
 import { TopicTitle } from '../../../common/topic-title.model';
 import { CodeSnippet } from '../../common/code-snippet.model';

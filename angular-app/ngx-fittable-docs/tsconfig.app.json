@@ -13,17 +13,17 @@
   ],
   "paths": {
     "@angular/*": ["./node_modules/@angular/*"],
-    "fit-core/*": [
-      "./node_modules/fit-core/*",
-      "./node_modules/fit-core/*/index"
+    "fittable-core/*": [
+      "./node_modules/fittable-core/*",
+      "./node_modules/fittable-core/*/index"
     ],
-    "fit-model": [
-      "./node_modules/fit-model",
-      "./node_modules/fit-model/index"
+    "fittable-model": [
+      "./node_modules/fittable-model",
+      "./node_modules/fittable-model/index"
     ],
-    "ngx-fit-view": [
-      "./node_modules/ngx-fit-view/ngx-fit-view",
-      "./node_modules/ngx-fit-view"
+    "fittable-angular": [
+      "./node_modules/fittable-angular/fittable-angular",
+      "./node_modules/fittable-angular"
     ]
   },
   "angularCompilerOptions": {

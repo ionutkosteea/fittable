@@ -1,19 +1,22 @@
 import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { createTable, registerModelConfig, Table } from 'fit-core/model';
-import { OperationDto, registerOperationConfig } from 'fit-core/operations';
+import { createTable, registerModelConfig, Table } from 'fittable-core/model';
+import {
+  OperationDto,
+  registerOperationConfig,
+} from 'fittable-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
-} from 'fit-core/view-model';
-import { FIT_MODEL_CONFIG } from 'fit-model';
-import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 import {
   FitUIOperationProperties,
   FIT_VIEW_MODEL_CONFIG,
-} from 'fit-view-model';
+} from 'fittable-view-model';
 
 import { TopicTitle } from '../../../common/topic-title.model';
 import { CodeSnippet } from '../../common/code-snippet.model';

@@ -16,23 +16,8 @@
         "./node_modules/fittable-core/*",
         "./node_modules/fittable-core/*/index"
       ],
-      "fit-model": [
-        "./node_modules/fit-model",
-        "./node_modules/fit-model/index"
-      ],
-      "fit-model-operations": [
-        "./node_modules/fit-model-operations",
-        "./node_modules/fit-model-operations/index"
-      ],
-      "fit-view-model": [
-        "./node_modules/fit-view-model",
-        "./node_modules/fit-view-model/index"
-      ],
-      "ngx-fit-view": [
-        "./dist/ngx-fit-view"
-      ],
-      "ngx-fittable": [
-        "dist/ngx-fittable"
+      "fittable-angular": [
+        "dist/fittable-angular"
       ]
     },
     "declaration": true,

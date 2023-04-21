@@ -1,4 +1,4 @@
-import { FittableDesigner } from 'fit-core/view-model';
+import { FittableDesigner } from 'fittable-core/view-model';
 
 import { CodeSnippet } from './code-snippet.model';
 import { TopicTitle } from '../../common/topic-title.model';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { createTable, registerModelConfig, Table } from 'fit-core/model';
-import { registerOperationConfig } from 'fit-core/operations';
+import { createTable, registerModelConfig, Table } from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
@@ -10,10 +10,10 @@ import {
   Scrollbar,
   ScrollContainer,
   ViewModelConfig,
-} from 'fit-core/view-model';
-import { FIT_MODEL_CONFIG } from 'fit-model';
-import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
-import { createFitViewModelConfig } from 'fit-view-model';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
+import { createFitViewModelConfig } from 'fittable-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { CodeSnippet } from '../common/code-snippet.model';

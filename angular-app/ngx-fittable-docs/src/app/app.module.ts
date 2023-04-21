@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { NgxFittableModule } from 'ngx-fit-view';
+import { NgxFittableModule } from 'fittable-angular';
 
 import { AppComponent } from './app.component';
 import { NavigationTreeComponent } from './navigation-tree/navigation-tree.component';

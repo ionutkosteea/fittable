@@ -7,23 +7,23 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 
-import { createTable4Dto, registerModelConfig } from 'fit-core/model';
-import { registerOperationConfig } from 'fit-core/operations';
+import { createTable4Dto, registerModelConfig } from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   getViewModelConfig,
   registerViewModelConfig,
   ViewModelConfig,
-} from 'fit-core/view-model';
-import { FitTableDto, FIT_MODEL_CONFIG } from 'fit-model';
-import { FIT_OPERATION_CONFIG } from 'fit-model-operations';
+} from 'fittable-core/view-model';
+import { FitTableDto, FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 import {
   createFitViewModelConfig,
   FitViewModelConfigDef,
   FIT_VIEW_MODEL_CONFIG,
-} from 'fit-view-model';
-import { TableViewComponent } from 'ngx-fit-view';
+} from 'fittable-view-model';
+import { TableViewComponent } from 'fittable-angular';
 
 import { TopicTitle } from '../../../common/topic-title.model';
 

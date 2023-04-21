@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/ngx-fit-view-docs",
+    "public": "dist/fittable-angular-docs",
     "ignore": [
       "firebase.json",
       "**/.*",
