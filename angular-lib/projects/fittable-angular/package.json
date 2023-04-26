@@ -29,6 +29,9 @@
     "grid",
     "spreadsheet",
     "editable-table",
-    "styled-table"
+    "styled-table",
+    "grid-editor",
+    "data-grid",
+    "excel"
   ]
 }

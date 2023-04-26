@@ -14,7 +14,7 @@
   "type": "module",
   "scripts": {
     "clean": "rm -r ./dist && mkdir ./dist",
-    "build": "tsc -p tsconfig.json && cp ./package.json ./dist && cp ./LICENSE ./dist",
+    "build": "tsc -p tsconfig.json && cp ./package.json ./dist && cp ./LICENSE ./dist && cp ./README.md ./dist",
     "watch": "tsc -p tsconfig.json --watch",
     "test": "ts-node jasmine.ts",
     "coverage": "c8 npm test",

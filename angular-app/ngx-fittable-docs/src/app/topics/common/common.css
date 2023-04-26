@@ -66,8 +66,7 @@
   background-color: #1e1e1e;
   width: 100%;
   max-height: 400px;
-  overflow: scroll;
-  overflow: scroll;
+  overflow: auto;
   border: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 6px;
   margin-bottom: 10px;

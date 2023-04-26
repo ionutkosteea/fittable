@@ -6,7 +6,7 @@
   <div class="navigation">
     <navigation-tree [clickedLeaf$]="activeContent$"></navigation-tree>
   </div>
-  <div class="content">
+  <div #content class="content">
     <introduction *ngIf="activeContent==='Introduction'"></introduction>
     <playground *ngIf="activeContent==='Playground'"></playground>
     <architecture *ngIf="activeContent==='Architecture'"></architecture>

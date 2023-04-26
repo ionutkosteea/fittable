@@ -152,7 +152,7 @@ export class FitCellEditorListener implements CellEditorListener {
 
   private arrowDown(cellCoord: CellCoord, event: FitKeyboardEvent): void {
     if (this.enableControlKeys) return;
-    if (event.shiftKey) return;
+    if (event.shiftKey || event.ctrlKey || event.metaKey) return;
     this.applyNewCellValue();
     this.moveCellEditor(cellCoord);
   }

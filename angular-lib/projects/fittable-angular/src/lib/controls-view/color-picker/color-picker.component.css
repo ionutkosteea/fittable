@@ -144,3 +144,7 @@
   cursor: pointer;
   padding: 0px;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

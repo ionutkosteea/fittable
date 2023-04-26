@@ -53,3 +53,7 @@
 .option:hover {
   background-color: var(--toolbar-background-hover-color);
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

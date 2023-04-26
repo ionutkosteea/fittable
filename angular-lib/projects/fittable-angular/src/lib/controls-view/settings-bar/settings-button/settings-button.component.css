@@ -50,3 +50,7 @@
   background-position: center;
   background-repeat: 'no-repeat';
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

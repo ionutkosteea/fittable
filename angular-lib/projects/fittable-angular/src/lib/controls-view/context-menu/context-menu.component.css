@@ -23,3 +23,7 @@
   border-bottom: none;
   position: relative;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

@@ -1,5 +1,11 @@
 import { Subject, Subscription } from 'rxjs';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 
 import { TopicTitle } from './common/topic-title.model';
 
@@ -13,10 +19,13 @@ export class AppComponent implements OnInit, OnDestroy {
   public activeContent: TopicTitle = 'Introduction';
   private subscription?: Subscription;
 
+  @ViewChild('content') htmlContent!: ElementRef;
+
   public ngOnInit(): void {
     this.subscription = this.activeContent$.subscribe(
       (content: TopicTitle): void => {
         this.activeContent = content;
+        this.htmlContent.nativeElement.scrollTop = 0;
       }
     );
   }

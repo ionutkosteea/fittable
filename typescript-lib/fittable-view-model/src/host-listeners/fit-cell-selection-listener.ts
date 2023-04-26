@@ -45,7 +45,7 @@ export class FitCellSelectionListener implements CellSelectionListener {
     if (event.shiftKey) {
       this.selectionRanges.removePreviousRanges();
     } else {
-      !event.metaKey && this.cellSelection.clear();
+      !event.metaKey && !event.ctrlKey && this.cellSelection.clear();
       this.selectionRanges.createRange();
     }
     this.selectionRanges.addCell(cellCoord);
@@ -92,7 +92,7 @@ export class FitCellSelectionListener implements CellSelectionListener {
 
   public onGlobalKeyDown(event: FitKeyboardEvent): void {
     if (!this.selectionRanges.hasFocus()) return;
-    if ((event.key as ActionKey) === 'Enter' && event.ctrlKey) return;
+    if (event.ctrlKey || event.metaKey) return;
     this.selectNextCell(event);
   }
 

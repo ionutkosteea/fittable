@@ -1,25 +1,112 @@
-# NgxFitView
+# Fittable
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.
+## Introduction
 
-## Code scaffolding
+<p>
+  Fittable is a flexible and easy-to-use software component optimized for handling large table structures with spreadsheet-like capabilities. Built using Angular and TypeScript, it offers a dynamic table model, a robust operation execution mechanism, and an adjustable user interface that can be easily customized to meet your specific needs.
+</p>
+<p>
+  The main module of Fittable is developed in Angular, which presents a responsive and interactive view for the application. The view model and other essential modules are written in TypeScript without any dependency on a GUI framework, making it possible to use the component on the server-side as well.
+</p>
+<p>
+  Fittable's modules are highly adaptable, with a range of configurable options that allow you to customize each functionality to match your application's requirements.
+</p>
 
-Run `ng generate component component-name --project fittable-angular` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project fittable-angular`.
+## Preview
 
-> Note: Don't forget to add `--project fittable-angular` or else it will be added to the default project in your `angular.json` file.
+<div align="center">
+  <img src="https://github.com/ionutkosteea/fittable/blob/main/fittable-preview.jpg" alt="Preview" width="800" />
+</div>
 
-## Build
+## Documentation
 
-Run `ng build fittable-angular` to build the project. The build artifacts will be stored in the `dist/` directory.
+- [User Docs](https://fittable-499b2.web.app)
 
-## Publishing
+## Installation
 
-After building your library with `ng build fittable-angular`, go to the dist folder `cd dist/fittable-angular` and run `npm publish`.
+```bash
+npm install fittable-angular
+```
 
-## Running unit tests
+## API Overview
 
-Run `ng test fittable-angular` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### HTML
 
-## Further help
+```html
+<div style="width:100%;height:300px;">
+  <!-- Angular component -->
+  <fittable [designer]="fit"></fittable>
+</div>
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### TypeScript
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+
+// TypeScript modules
+import {
+  CellRange,
+  createStyle,
+  createTable,
+  registerModelConfig,
+  Table,
+} from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
+import {
+  createFittableDesigner,
+  FittableDesigner,
+  registerViewModelConfig,
+} from 'fittable-core/view-model';
+import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fittable-model';
+import {
+  FitOperationArgs,
+  FIT_OPERATION_CONFIG,
+} from 'fittable-model-operations';
+import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
+
+@Component({
+  selector: 'sample',
+  templateUrl: './sample.component.html',
+  styleUrls: ['.sample/common.css'],
+})
+export class SampleComponent implements OnInit {
+  public fit!: FittableDesigner;
+
+  public ngOnInit(): void {
+    // Register functionalities
+    registerModelConfig(FIT_MODEL_CONFIG);
+    registerOperationConfig(FIT_OPERATION_CONFIG);
+    registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
+
+    // Build table model
+    const table: Table = createTable<FitTable>()
+      .setNumberOfRows(100)
+      .setNumberOfCols(10)
+      .setRowHeight(0, 42)
+      .setColWidth(0, 50)
+      .addStyle('s0', createStyle<FitStyle>().set('font-weight', 'bold'))
+      .setCellStyleName(0, 0, 's0')
+      .setCellValue(0, 0, 1000)
+      .setRowSpan(0, 0, 2)
+      .setColSpan(0, 0, 3);
+
+    // Create table designer
+    this.fit = createFittableDesigner(table);
+
+    // Access view model
+    const selectedCells: CellRange[] | undefined =
+      this.fit.viewModel.cellSelection?.body.getRanges();
+
+    // Run operations
+    if (selectedCells) {
+      const args: FitOperationArgs = {
+        id: 'cell-value',
+        selectedCells,
+        value: 100,
+      };
+      this.fit.operationExecutor?.run(args);
+    }
+  }
+}
+```
