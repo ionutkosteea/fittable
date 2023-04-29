@@ -4,39 +4,28 @@ import {
   InputControl,
   FitKeyboardEvent,
   FitHtmlInputElement,
+  FitEvent,
 } from 'fittable-core/view-model/index.js';
 
 export class FitInputControlListener implements InputControlListener {
   constructor(private readonly inputControl: InputControl) {}
 
-  private isMouseOver = false;
-  private canRevertValueOnClick = false;
-
-  public onMouseEnter(): void {
-    this.isMouseOver = true;
-  }
-
-  public onMouseLeave(): void {
-    this.isMouseOver = false;
-  }
-
-  public onGlobalMouseDown(): void {
-    if (this.isMouseOver) {
-      this.canRevertValueOnClick = true;
-    } else if (this.canRevertValueOnClick) {
-      this.inputControl.setFocus(false);
-      this.canRevertValueOnClick = false;
-    }
+  public onInput(event: FitEvent): void {
+    const htmlInput: FitHtmlInputElement = event.target as FitHtmlInputElement;
+    this.inputControl.setValue(Number(htmlInput.value));
   }
 
   public onKeyDown(event: FitKeyboardEvent): void {
     if (event.key !== 'Enter') return;
     event.preventDefault();
     event.stopPropagation();
-    const htmlInput: FitHtmlInputElement = event.target as FitHtmlInputElement;
-    this.inputControl.setValue(Number(htmlInput.value)).run();
+    this.inputControl.run();
     this.inputControl.setFocus(false);
-    this.canRevertValueOnClick = false;
+  }
+
+  public onFocusOut(): void {
+    this.inputControl.setValue();
+    this.inputControl.setFocus(false);
   }
 }
 

@@ -49,7 +49,9 @@ export class InputComponent implements OnInit, OnDestroy {
 
   private onForceValue$(): Subscription {
     return this.model.onSetValue$().subscribe((value?: Value): void => {
-      this.getHtmlInput().value = value ? '' + value : '';
+      this.getHtmlInput().value = value
+        ? '' + value
+        : '' + this.model.getValue();
     });
   }
 
@@ -61,22 +63,16 @@ export class InputComponent implements OnInit, OnDestroy {
   public readonly getDisabled = (): string | null =>
     this.model.isDisabled() ? 'disabled' : null;
 
-  @HostListener('mouseenter') onMouseEnter(): void {
-    this.inputControlListener.onMouseEnter();
-  }
-
-  @HostListener('mouseleave') onMouseLeave(): void {
-    this.inputControlListener.onMouseLeave();
-  }
-
-  @HostListener('window:mousedown', ['$event']) onGlobalMouseDown(
-    event: MouseEvent
-  ): void {
-    this.inputControlListener?.onGlobalMouseDown(event);
+  @HostListener('input', ['$event']) onInput(event: KeyboardEvent): void {
+    this.inputControlListener.onInput(event);
   }
 
   @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
     this.inputControlListener.onKeyDown(event);
+  }
+
+  @HostListener('focusout') onFocusOut(): void {
+    this.inputControlListener.onFocusOut();
   }
 
   public ngOnDestroy(): void {

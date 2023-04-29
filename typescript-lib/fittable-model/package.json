@@ -15,7 +15,7 @@
   "scripts": {
     "link": "npm link fittable-core",
     "clean": "rm -r ./dist && mkdir ./dist",
-    "build": "tsc -p tsconfig.json && cp ./package.json ./dist && cp ./LICENSE ./dist && cp ./README.md ./dist",
+    "build": "tsc -p tsconfig.json && cp ./package.json ./dist && cp ./LICENSE ./dist && cp ./README.md ./dist && cp ./fittable-component-diagram.jpg ./dist",
     "watch": "tsc -p tsconfig.json --watch",
     "test": "ts-node jasmine.ts",
     "coverage": "c8 npm test",

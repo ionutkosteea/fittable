@@ -67,7 +67,7 @@
 .scroller {
   position: relative;
   height: 100px;
-  overflow: scroll;
+  overflow: auto;
   margin: 0px;
   padding: 0px;
   scroll-behavior: smooth;
@@ -119,8 +119,4 @@
   margin-right: 2px;
   padding: 4px;
   cursor: pointer;
-}
-
-::-webkit-scrollbar {
-  display: none;
 }

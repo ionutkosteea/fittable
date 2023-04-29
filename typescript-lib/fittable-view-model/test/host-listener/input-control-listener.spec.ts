@@ -14,12 +14,13 @@ describe('fit-input-control-listener.ts', () => {
   beforeAll(() => registerViewModelConfig(FIT_VIEW_MODEL_CONFIG));
   afterAll(() => unregisterViewModelConfig());
 
-  it('click outside', () => {
+  it('focus out', () => {
     const inputControl: FitInputControl = new FitInputControl();
     const inputControlListener: InputControlListener =
       createInputControlListener(inputControl);
-    inputControlListener.onGlobalMouseDown();
+    inputControlListener.onFocusOut();
 
+    expect(inputControl.getValue()).toBeUndefined();
     expect(inputControl.hasFocus()).toBeFalse();
     expect(inputControl.hasTextCursor()).toBeFalse();
   });
@@ -28,33 +29,13 @@ describe('fit-input-control-listener.ts', () => {
     const inputControl: FitInputControl = new FitInputControl().setFocus(true);
     const inputControlListener: InputControlListener =
       createInputControlListener(inputControl);
-    inputControlListener.onMouseEnter();
-    inputControlListener.onGlobalMouseDown();
     const event: TstKeyboardEvent = new TstKeyboardEvent();
     event.key = 'Enter';
     const htmlElement: TstHtmlInputElement = new TstHtmlInputElement();
     htmlElement.value = '1000';
     event.target = htmlElement;
+    inputControlListener.onInput(event);
     inputControlListener.onKeyDown(event);
-
-    expect(inputControl.hasFocus()).toBeFalse();
-    expect(inputControl.getValue() === 1000).toBeTruthy();
-  });
-
-  it('revert input value', () => {
-    const inputControl: FitInputControl = new FitInputControl()
-      .setFocus(true)
-      .setValue(1000);
-    const inputControlListener: InputControlListener =
-      createInputControlListener(inputControl);
-    inputControlListener.onMouseEnter();
-    inputControlListener.onGlobalMouseDown();
-    const event: TstKeyboardEvent = new TstKeyboardEvent();
-    event.key = '1';
-    event.target = new TstHtmlInputElement();
-    inputControlListener.onKeyDown(event);
-    inputControlListener.onMouseLeave();
-    inputControlListener.onGlobalMouseDown();
 
     expect(inputControl.hasFocus()).toBeFalse();
     expect(inputControl.getValue() === 1000).toBeTruthy();

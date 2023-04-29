@@ -34,7 +34,7 @@
   z-index: 15;
   padding: 5px;
   width: 132px;
-  overflow-x: scroll;
+  overflow: auto;
   max-height: 80vh;
 }
 
@@ -143,8 +143,4 @@
   color: white;
   cursor: pointer;
   padding: 0px;
-}
-
-::-webkit-scrollbar {
-  display: none;
 }

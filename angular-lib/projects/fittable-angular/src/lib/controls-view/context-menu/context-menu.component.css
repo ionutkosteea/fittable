@@ -10,7 +10,7 @@
   -moz-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
   box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
   max-height: 90vh;
-  overflow: scroll;
+  overflow: auto;
   padding-top: 10px;
   padding-bottom: 10px;
   z-index: 15;
@@ -22,8 +22,4 @@
   border-top: 1px solid var(--context-menu-border-color);
   border-bottom: none;
   position: relative;
-}
-
-::-webkit-scrollbar {
-  display: none;
 }

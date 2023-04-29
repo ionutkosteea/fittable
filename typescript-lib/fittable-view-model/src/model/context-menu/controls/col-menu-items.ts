@@ -86,7 +86,7 @@ export function createColInsertLeftMenuItem(
     .setIcon((): string | undefined =>
       args.imageRegistry.getImageUrl('insertLeft')
     )
-    .setValue(1);
+    .setValueFn(() => 1);
   control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
     if (control.isValid()) {
@@ -115,7 +115,7 @@ export function createColInsertRightMenuItem(
     .setIcon((): string | undefined =>
       args.imageRegistry.getImageUrl('insertRight')
     )
-    .setValue(1);
+    .setValueFn(() => 1);
   control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
     if (control.isValid()) {

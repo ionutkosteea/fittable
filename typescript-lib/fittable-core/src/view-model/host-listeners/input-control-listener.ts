@@ -1,13 +1,12 @@
 import { MissingFactoryError } from '../../common/factory-error.js';
 import { InputControl } from '../model/controls.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { FitKeyboardEvent, FitMouseEvent } from './html-mockups.js';
+import { FitEvent, FitKeyboardEvent } from './html-mockups.js';
 
 export interface InputControlListener {
-  onMouseEnter(event?: FitMouseEvent): void;
-  onMouseLeave(event?: FitMouseEvent): void;
-  onGlobalMouseDown(event?: FitMouseEvent): void;
+  onInput(event?: FitEvent): void;
   onKeyDown(event?: FitKeyboardEvent): void;
+  onFocusOut(event?: FitEvent): void;
 }
 
 export interface InputControlListenerFactory {

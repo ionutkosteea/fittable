@@ -37,9 +37,9 @@
   background-color: var(--toolbar-background-color);
   border-left: 1px solid var(--toolbar-border-color);
   z-index: 10;
-  overflow-x: scroll;
+  overflow: auto;
   width: 158px;
-  max-height: 70vh;
+  max-height: 300px;
 }
 
 .option {
@@ -52,8 +52,4 @@
 
 .option:hover {
   background-color: var(--toolbar-background-hover-color);
-}
-
-::-webkit-scrollbar {
-  display: none;
 }

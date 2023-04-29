@@ -87,7 +87,7 @@ export function createRowInsertAboveMenuItem(
     .setIcon((): string | undefined =>
       args.imageRegistry.getImageUrl('insertAbove')
     )
-    .setValue(1);
+    .setValueFn(() => 1);
   control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
     if (control.isValid()) {
@@ -116,7 +116,7 @@ export function createRowInsertBelowMenuItem(
     .setIcon((): string | undefined =>
       args.imageRegistry.getImageUrl('insertBelow')
     )
-    .setValue(1);
+    .setValueFn(() => 1);
   control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
     if (control.isValid()) {

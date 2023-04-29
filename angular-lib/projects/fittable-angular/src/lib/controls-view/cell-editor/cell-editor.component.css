@@ -10,7 +10,7 @@
 }
 
 .cell-editor-input {
-  position: relative;
+  position: absolute;
   margin: 0px;
   padding: 0px;
   font-size: var(--font-size);
@@ -33,22 +33,22 @@
   outline: none;
 }
 
-::-webkit-scrollbar {
+.cell-editor-input::-webkit-scrollbar {
   background-color: var(--cell-editor-background-color);
 }
 
-::-webkit-scrollbar-thumb {
+.cell-editor-input::-webkit-scrollbar-thumb {
   background-color: var(--cell-editor-background-color);
 }
 
-::-webkit-scrollbar-track {
+.cell-editor-input::-webkit-scrollbar-track {
   background-color: var(--cell-editor-background-color);
 }
 
-::-webkit-scrollbar-corner {
+.cell-editor-input::-webkit-scrollbar-corner {
   background-color: var(--cell-editor-background-color);
 }
 
-::-webkit-resizer {
+.cell-editor-input::-webkit-resizer {
   border: none;
 }

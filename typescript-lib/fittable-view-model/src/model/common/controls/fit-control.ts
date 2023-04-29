@@ -56,8 +56,7 @@ export class FitControl implements Control {
   }
 
   public run(): void {
-    if (this.isValid()) this.runFn && this.runFn();
-    else throw new Error('Control is not valid!');
+    this.runFn && this.runFn();
   }
 
   public setRun(runFn?: () => void): this {

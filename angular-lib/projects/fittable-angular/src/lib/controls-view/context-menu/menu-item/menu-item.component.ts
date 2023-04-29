@@ -2,7 +2,6 @@ import { Subscription } from 'rxjs';
 import {
   Component,
   ElementRef,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -72,12 +71,6 @@ export class MenuItemComponent implements OnInit, OnDestroy {
     return value ? (value as number) : undefined;
   }
 
-  public readonly onMouseEnter = (): void =>
-    this.inputControl && this.inputControlListener.onMouseEnter();
-
-  public readonly onMouseLeave = (): void =>
-    this.inputControlListener?.onMouseLeave();
-
   public onMouseDown(): void {
     if (this.isInputMouseDown) {
       this.isInputMouseDown = false;
@@ -87,31 +80,21 @@ export class MenuItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  public readonly onInputMouseEnter = (): void =>
-    this.inputControlListener?.onMouseEnter();
-
-  public readonly onInputMouseLeave = (): void =>
-    this.inputControlListener?.onMouseLeave();
-
   public onInputMouseDown(): void {
     this.isInputMouseDown = true;
   }
 
-  public readonly onInputChange = () =>
-    this.inputRef &&
-    this.inputControl?.setValue(Number(this.inputRef.nativeElement.value));
+  public onInputChange(event: Event): void {
+    this.inputControlListener.onInput(event);
+  }
 
   public onInputKeyDown(event: KeyboardEvent): void {
-    if (!this.inputControl) return;
     this.inputControlListener.onKeyDown(event);
     event.key === 'Enter' && this.hideMenu();
   }
 
-  @HostListener('window:mousedown', ['event']) onGlobalMouseDown(
-    event: MouseEvent
-  ): void {
-    this.inputControlListener?.onGlobalMouseDown(event);
-  }
+  public readonly onInputFocusOut = (): void =>
+    this.inputControlListener.onFocusOut();
 
   public readonly ngOnDestroy = (): void => this.subscription?.unsubscribe();
 }

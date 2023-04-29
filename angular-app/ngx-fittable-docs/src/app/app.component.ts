@@ -30,7 +30,15 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  public onContactClick(): void {
+  public onNpmJs(): void {
+    window.open('https://www.npmjs.com', '_blank');
+  }
+
+  public onGitHub(): void {
+    window.open('https://github.com/ionutkosteea/fittable', '_blank');
+  }
+
+  public onContact(): void {
     window.open('mailto:ionut.kosteea@gmail.com');
   }
 

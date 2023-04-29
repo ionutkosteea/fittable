@@ -110,10 +110,10 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     const rect: Rectangle | undefined =
       this.cellEditorListener.cellEditor.getCellRectangle();
     if (!rect) return;
-    this.cellEditorStyle['left.px'] = rect.left;
-    this.cellEditorStyle['top.px'] = rect.top;
-    this.cellEditorStyle['width.px'] = rect.width;
-    this.cellEditorStyle['height.px'] = rect.height;
+    this.cellEditorStyle['left'] = rect.left + 'px';
+    this.cellEditorStyle['top'] = rect.top + 'px';
+    this.cellEditorStyle['width'] = rect.width + 'px';
+    this.cellEditorStyle['height'] = rect.height + 'px';
   }
 
   private updateCellEditorPointerEvents(events: boolean): void {

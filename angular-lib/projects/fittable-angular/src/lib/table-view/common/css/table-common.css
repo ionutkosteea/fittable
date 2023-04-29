@@ -40,15 +40,18 @@
   bottom: 0px;
   margin: 0px;
   padding: 0px;
-  overflow: scroll;
-  white-space: break-spaces;
-  word-break: break-all;
   display: grid;
   place-items: inherit;
   text-decoration: inherit;
   box-sizing: border-box;
+  white-space: break-spaces;
+  word-break: break-all;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-scrollbar-width: none;
 }
 
-::-webkit-scrollbar {
+.cell-text::-webkit-scrollbar {
   display: none;
 }

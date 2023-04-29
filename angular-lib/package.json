@@ -6,7 +6,7 @@
     "start": "ng serve",
     "link": "npm link fittable-core",
     "clean": "rm -r ./dist & rm -r -f ./.angular/cache",
-    "build": "ng build fittable-angular && cp ./projects/fittable-angular/LICENSE ./dist/fittable-angular && cp ./projects/fittable-angular/README.md ./dist/fittable-angular",
+    "build": "ng build fittable-angular && cp ./projects/fittable-angular/LICENSE ./dist/fittable-angular && cp ./projects/fittable-angular/README.md ./dist/fittable-angular && cp ./projects/fittable-angular/fittable-component-diagram.jpg ./dist/fittable-angular",
     "watch": "ng build fittable-angular --watch --configuration development",
     "test": "ng test",
     "lint": "npx eslint ./projects/**/src"

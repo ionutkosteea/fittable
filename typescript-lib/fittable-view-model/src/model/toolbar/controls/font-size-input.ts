@@ -37,7 +37,7 @@ class FontSizeInput extends FitInputControl implements ControlUpdater {
   private createRunFn = (): void => {
     if (this.isValid()) {
       const selectedCells: CellRange[] = this.args.getSelectedCells();
-      const style: Style = createStyle().set('font-size.px', this.getValue());
+      const style: Style = createStyle().set('font-size.px', this.size);
       const args: FitUIOperationArgs = {
         id: 'style-update',
         selectedCells,
@@ -67,16 +67,21 @@ class FontSizeInput extends FitInputControl implements ControlUpdater {
     const selectedCells: CellRange[] = this.args.getSelectedCells();
     const style: Style | undefined = getFirstCellStyle(table, selectedCells);
     const fontSize: string | number | undefined = style?.get('font-size.px');
-    return fontSize ? (fontSize as number) : this.config.fontSize ?? 0;
+    return fontSize ? (fontSize as number) : this.config.fontSize;
   };
 
-  public override getValue(): number | undefined {
-    return this.size;
+  public override getValue(): number {
+    return this.size ?? this.getStyleFontSize();
   }
 
   public override setValue(size?: number): this {
     if (size === this.config.fontSize) this.size = undefined;
     else this.size = size;
     return this;
+  }
+
+  public override isValid(): boolean {
+    const value: number = this.getValue();
+    return Number.isInteger(value) && value > 0 && value <= 100;
   }
 }
