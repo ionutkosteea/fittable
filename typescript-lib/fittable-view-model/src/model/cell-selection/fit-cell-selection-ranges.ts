@@ -5,12 +5,12 @@ import {
   CellRange,
   createCellCoord,
   createCellRange,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   CellSelectionRanges,
   NeighborCells,
   TableViewer,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitNeighborCells } from '../common/fit-neighbor-cells.js';
 

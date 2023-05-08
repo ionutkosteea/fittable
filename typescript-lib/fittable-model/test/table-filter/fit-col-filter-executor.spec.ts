@@ -1,6 +1,6 @@
 import {} from 'jasmine';
 
-import { Value } from 'fittable-core/model/index.js';
+import { Value } from 'fittable-core/model';
 
 import { FitTable, FitColFilterExecutor } from '../../dist/index.js';
 

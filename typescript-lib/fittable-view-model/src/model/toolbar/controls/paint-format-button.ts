@@ -1,10 +1,10 @@
-import { asTableStyles, CellCoord, Table } from 'fittable-core/model/index.js';
+import { asTableStyles, CellCoord, Table } from 'fittable-core/model';
 import {
   OperationDto,
   OperationDtoFactory,
   OperationStep,
   OperationStepFactory,
-} from 'fittable-core/operations/operation-core.js';
+} from 'fittable-core/operations';
 
 import {
   FitUIOperationArgs,

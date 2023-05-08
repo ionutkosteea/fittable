@@ -4,7 +4,7 @@ import {
   OperationDto,
   OperationId,
   OperationStep,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import { FitOperation, FitOperationFactory } from './fit-operation.js';
 

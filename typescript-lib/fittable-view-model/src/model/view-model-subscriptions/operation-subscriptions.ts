@@ -9,11 +9,8 @@ import {
   createCellRangeList4Dto,
   createCellCoord4Dto,
   createDto4CellRangeList,
-} from 'fittable-core/model/index.js';
-import {
-  OperationDto,
-  OperationExecutor,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/model';
+import { OperationDto, OperationExecutor } from 'fittable-core/operations';
 import {
   ScrollContainer,
   CellEditor,
@@ -25,7 +22,7 @@ import {
   Window,
   FocusableObject,
   CellSelectionRanges,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitUIOperationId } from '../operation-executor/operation-args.js';
 import { ColFilterOperationSubscriptions } from '../col-filters/col-filter-operation-subscriptions.js';

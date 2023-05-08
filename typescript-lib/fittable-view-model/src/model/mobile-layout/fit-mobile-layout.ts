@@ -1,12 +1,12 @@
 import { Subscription } from 'rxjs';
 
-import { CssStyle } from 'fittable-core/model/index.js';
+import { CssStyle } from 'fittable-core/model';
 import {
   MobileLayout,
   MobileLayoutArgs,
   MobileLayoutFactory,
   Rectangle,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 export class FitMobileLayout implements MobileLayout {
   public bodyOffset!: CssStyle;

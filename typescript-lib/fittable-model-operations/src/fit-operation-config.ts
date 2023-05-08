@@ -1,4 +1,4 @@
-import { OperationConfig } from 'fittable-core/operations/index.js';
+import { OperationConfig } from 'fittable-core/operations';
 
 import { FitOperationExecutorFactory } from './operation-core/fit-operation-executor-factory.js';
 

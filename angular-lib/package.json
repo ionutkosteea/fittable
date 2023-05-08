@@ -6,7 +6,7 @@
     "start": "ng serve",
     "link": "npm link fittable-core",
     "clean": "rm -r ./dist & rm -r -f ./.angular/cache",
-    "build": "ng build fittable-angular && cp ./projects/fittable-angular/LICENSE ./dist/fittable-angular && cp ./projects/fittable-angular/README.md ./dist/fittable-angular && cp ./projects/fittable-angular/fittable-component-diagram.jpg ./dist/fittable-angular",
+    "build": "ng build fittable-angular && cp ./projects/fittable-angular/LICENSE ./dist/fittable-angular && cp ./projects/fittable-angular/README.md ./dist/fittable-angular && cp ./projects/fittable-angular/fittable-component-diagram.jpg ./dist/fittable-angular  && cp -r ./projects/fittable-angular/src ./dist/fittable-angular",
     "watch": "ng build fittable-angular --watch --configuration development",
     "test": "ng test",
     "lint": "npx eslint ./projects/**/src"
@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
+    "fittable-core": "file:../typescript-lib/fittable-core/fittable-core-1.0.0.tgz",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -30,10 +31,10 @@
     "@angular/cli": "~15.2.5",
     "@angular/compiler-cli": "^15.2.0",
     "@types/jasmine": "~4.3.0",
-    "jasmine-core": "~4.5.0",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "eslint": "^8.37.0",
+    "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.2.0",
@@ -41,5 +42,10 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "ng-packagr": "^15.2.2",
     "typescript": "~4.9.4"
+  },
+  "peerDependencies": {
+    "fittable-model": "file:../typescript-lib/fittable-model/fittable-model-1.0.0.tgz",
+    "fittable-model-operations": "file:../typescript-lib/fittable-model-operations/fittable-model-operations-1.0.0.tgz",
+    "fittable-view-model": "file:../typescript-lib/fittable-view-model/fittable-view-model-1.0.0.tgz"
   }
 }

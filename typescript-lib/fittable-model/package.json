@@ -2,6 +2,15 @@
   "name": "fittable-model",
   "version": "1.0.0",
   "description": "Fittable model",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "node": "./dist/index.js"
+    }
+  },
   "author": {
     "name": "Ionut Costea",
     "email": "ionut.kosteea@gmail.com"
@@ -11,11 +20,10 @@
     "type": "git",
     "url": "https://github.com/ionutkosteea/fittable.git"
   },
-  "type": "module",
   "scripts": {
     "link": "npm link fittable-core",
     "clean": "rm -r ./dist && mkdir ./dist",
-    "build": "tsc -p tsconfig.json && cp ./package.json ./dist && cp ./LICENSE ./dist && cp ./README.md ./dist && cp ./fittable-component-diagram.jpg ./dist",
+    "build": "tsc -p tsconfig.json",
     "watch": "tsc -p tsconfig.json --watch",
     "test": "ts-node jasmine.ts",
     "coverage": "c8 npm test",
@@ -33,5 +41,17 @@
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
-  }
+  },
+  "dependencies": {
+    "fittable-core": "file:../fittable-core/fittable-core-1.0.0.tgz"
+  },
+  "files": [
+    "dist",
+    "src",
+    "LICENSE",
+    "README.md",
+    "package.json",
+    "tsconfig.json",
+    "fittable-component-diagram.jpg"
+  ]
 }

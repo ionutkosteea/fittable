@@ -1,13 +1,5 @@
-import {
-  CellRange,
-  Style,
-  createStyle,
-  Table,
-} from 'fittable-core/model/index.js';
-import {
-  ViewModelConfig,
-  getViewModelConfig,
-} from 'fittable-core/view-model/index.js';
+import { CellRange, Style, createStyle, Table } from 'fittable-core/model';
+import { ViewModelConfig, getViewModelConfig } from 'fittable-core/view-model';
 
 import { FitInputControl } from '../../common/controls/fit-input-control.js';
 import { FitUIOperationArgs } from '../../operation-executor/operation-args.js';

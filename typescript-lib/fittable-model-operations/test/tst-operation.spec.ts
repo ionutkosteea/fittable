@@ -2,7 +2,7 @@ import {} from 'jasmine';
 
 import { Subscription } from 'rxjs';
 
-import { Table } from 'fittable-core/model/index.js';
+import { Table } from 'fittable-core/model';
 
 import { TableOperationExecutor } from './model/table-operation-executor.js';
 

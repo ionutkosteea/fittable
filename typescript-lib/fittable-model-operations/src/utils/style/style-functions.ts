@@ -5,7 +5,7 @@ import {
   Style,
   createStyle,
   CellRangeList,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 
 export function findUpdatableCellStyles(
   table: Table & TableStyles,

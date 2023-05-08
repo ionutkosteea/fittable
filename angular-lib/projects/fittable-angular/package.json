@@ -18,10 +18,15 @@
   },
   "peerDependencies": {
     "@angular/common": "^15.2.0",
-    "@angular/core": "^15.2.0"
+    "@angular/core": "^15.2.0",
+    "fittable-model": "file:../../../typescript-lib/fittable-model/fittable-model-1.0.0.tgz",
+    "fittable-model-operations": "file:../../../typescript-lib/fittable-model-operations/fittable-model-operations-1.0.0.tgz",
+    "fittable-view-model": "file:../../../typescript-lib/fittable-view-model/fittable-view-model-1.0.0.tgz"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "rxjs": "~7.8.0",
+    "fittable-core": "file:../../../typescript-lib/fittable-core/fittable-core-1.0.0.tgz"
   },
   "sideEffects": false,
   "keywords": [

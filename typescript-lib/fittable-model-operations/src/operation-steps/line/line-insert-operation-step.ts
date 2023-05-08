@@ -4,12 +4,12 @@ import {
   LineRange,
   asTableRows,
   asTableCols,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationStep,
   OperationStepFactory,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 export type MoveLinesDto = { lineRange: unknown; move: number };
 

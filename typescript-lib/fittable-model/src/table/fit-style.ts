@@ -1,4 +1,4 @@
-import { Style, StyleFactory, CssStyle } from 'fittable-core/model/index.js';
+import { Style, StyleFactory, CssStyle } from 'fittable-core/model';
 
 import { FitStyleDto } from './dto/fit-table-dto.js';
 

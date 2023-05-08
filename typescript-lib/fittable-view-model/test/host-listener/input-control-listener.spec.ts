@@ -5,7 +5,7 @@ import {
   InputControlListener,
   registerViewModelConfig,
   unregisterViewModelConfig,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitInputControl, FIT_VIEW_MODEL_CONFIG } from '../../dist/index.js';
 import { TstHtmlInputElement, TstKeyboardEvent } from './tst-html-mockups.js';

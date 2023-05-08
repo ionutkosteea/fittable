@@ -1,5 +1,5 @@
-import { implementsTKeys } from 'fittable-core/common/index.js';
-import { LineRange, LineRangeFactory } from 'fittable-core/model/line-range.js';
+import { implementsTKeys } from 'fittable-core/common';
+import { LineRange, LineRangeFactory } from 'fittable-core/model';
 
 import { FitLineRangeDto } from './dto/fit-table-dto.js';
 

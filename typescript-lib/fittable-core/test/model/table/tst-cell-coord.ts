@@ -1,5 +1,5 @@
 import { implementsTKeys } from '../../../dist/common/index.js';
-import { CellCoord, CellCoordFactory } from '../../../dist/model/cell-coord.js';
+import { CellCoord, CellCoordFactory } from '../../../dist/model/index.js';
 
 import { TstCellCoordDto } from './dto/tst-table-dto.js';
 

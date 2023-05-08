@@ -4,7 +4,7 @@ import {
   Window,
   WindowListener,
   WindowListenerFactory,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 export class FitWindowListener implements WindowListener {
   constructor(private readonly window: Window) {}

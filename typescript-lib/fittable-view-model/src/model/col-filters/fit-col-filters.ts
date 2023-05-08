@@ -7,8 +7,8 @@ import {
   ColFilterExecutor,
   createColFilterExecutor,
   asTableColFilter,
-} from 'fittable-core/model/index.js';
-import { OperationExecutor } from 'fittable-core/operations/index.js';
+} from 'fittable-core/model';
+import { OperationExecutor } from 'fittable-core/operations';
 import {
   ColFilters,
   ColFiltersFactory,
@@ -16,7 +16,7 @@ import {
   createScrollContainer,
   Control,
   ValueCondition,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitLanguageDictionary } from '../language-dictionary/fit-language-dictionary.js';
 import { FitImageRegistry } from '../image-registry/fit-image-registry.js';

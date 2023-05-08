@@ -1,4 +1,4 @@
-import { ModelConfig } from 'fittable-core/model/index.js';
+import { ModelConfig } from 'fittable-core/model';
 
 import { FitCellCoordFactory } from './table/fit-cell-coord.js';
 import { FitCellRangeFactory } from './table/fit-cell-range.js';

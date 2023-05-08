@@ -2,8 +2,8 @@ import {
   asTableCols,
   asTableMergedRegions,
   asTableRows,
-} from 'fittable-core/model/index.js';
-import { Window, ContextMenuFactory } from 'fittable-core/view-model/index.js';
+} from 'fittable-core/model';
+import { Window, ContextMenuFactory } from 'fittable-core/view-model';
 
 import { FitSeparator } from '../common/controls/fit-separator.js';
 import { FitWindow } from '../common/controls/fit-window.js';

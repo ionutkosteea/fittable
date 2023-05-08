@@ -1,4 +1,4 @@
-import { ValueCondition } from 'fittable-core/view-model/index.js';
+import { ValueCondition } from 'fittable-core/view-model';
 
 export type ColValueCondition = {
   mode: 'Select all' | 'Clear';

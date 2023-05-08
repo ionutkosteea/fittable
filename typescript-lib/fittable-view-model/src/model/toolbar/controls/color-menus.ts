@@ -2,7 +2,7 @@ import {
   ControlMap,
   getViewModelConfig,
   ValueControl,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitValueControl } from '../../common/controls/fit-value-control.js';
 import { StyleCombo } from './common/style-combo.js';

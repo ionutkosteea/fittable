@@ -1,6 +1,6 @@
 import {} from 'jasmine';
 
-import { implementsTKeys } from 'fittable-core/common/index.js';
+import { implementsTKeys } from 'fittable-core/common';
 import {
   asTableStyles,
   CellRange,
@@ -12,13 +12,13 @@ import {
   Table,
   TableStyles,
   unregisterModelConfig,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   createOperationExecutor,
   OperationExecutor,
   registerOperationConfig,
   unregisterOperationConfig,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 import {
   asOptionsControl,
   asValueControl,
@@ -30,13 +30,13 @@ import {
   OptionsControl,
   registerViewModelConfig,
   unregisterViewModelConfig,
-} from 'fittable-core/view-model/index.js';
-
-import { FIT_MODEL_CONFIG } from '../../../../fittable-model/dist/index.js';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
 import {
   FitOperationArgs,
   FIT_OPERATION_CONFIG,
-} from '../../../../fittable-model-operations/dist/index.js';
+} from 'fittable-model-operations';
+
 import {
   FitToolbarControlId,
   FIT_VIEW_MODEL_CONFIG,

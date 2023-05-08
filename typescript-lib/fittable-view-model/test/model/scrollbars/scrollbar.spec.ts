@@ -3,18 +3,16 @@ import {} from 'jasmine';
 import {
   registerModelConfig,
   unregisterModelConfig,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   getViewModelConfig,
   registerViewModelConfig,
   unregisterViewModelConfig,
   ViewModelConfig,
-} from 'fittable-core/view-model/index.js';
-
-import { FIT_MODEL_CONFIG } from '../../../../fittable-model/dist/index.js';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
 
 import { VirtualScrollbar } from '../../../dist/model/scroll-container/fit-scrollbar.js';
-
 import { TST_VIEW_MODEL_CONFIG } from '../../tst-view-model-config.js';
 import { ScrollbarBuilder } from './scrollbar-builder.js';
 

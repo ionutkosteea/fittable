@@ -1,9 +1,9 @@
-import { Table, CellRange } from 'fittable-core/model/index.js';
+import { Table, CellRange } from 'fittable-core/model';
 import {
   OperationId,
   OperationDto,
   OperationDtoFactory,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import { CellRemoveOperationDtoFactory } from './cell-remove-operation-dto.js';
 import { CellCopyOperationDtoFactory } from './cell-copy-operation-dto.js';

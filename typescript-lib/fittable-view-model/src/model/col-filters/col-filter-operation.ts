@@ -1,4 +1,4 @@
-import { Table } from 'fittable-core/model/index.js';
+import { Table } from 'fittable-core/model';
 import {
   OperationDto,
   OperationDtoFactory,
@@ -6,8 +6,8 @@ import {
   OperationId,
   OperationStep,
   OperationStepFactory,
-} from 'fittable-core/operations/index.js';
-import { ValueCondition } from 'fittable-core/view-model/index.js';
+} from 'fittable-core/operations';
+import { ValueCondition } from 'fittable-core/view-model';
 
 export type ColFilterOperationStepDto = OperationId<'column-filter'> & {
   colId: number;

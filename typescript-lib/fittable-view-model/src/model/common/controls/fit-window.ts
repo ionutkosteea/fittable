@@ -1,4 +1,4 @@
-import { Window, Coord } from 'fittable-core/view-model/index.js';
+import { Window, Coord } from 'fittable-core/view-model';
 
 import { FitContainer } from './fit-container.js';
 

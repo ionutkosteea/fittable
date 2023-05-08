@@ -1,4 +1,4 @@
-import { Style, CellRange, CellRangeList } from 'fittable-core/model/index.js';
+import { Style, CellRange, CellRangeList } from 'fittable-core/model';
 
 export interface AddressStyle {
   style: Style;

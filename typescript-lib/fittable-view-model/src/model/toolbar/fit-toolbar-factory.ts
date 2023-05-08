@@ -1,5 +1,5 @@
-import { asTableStyles } from 'fittable-core/model/table.js';
-import { Container, ToolbarFactory } from 'fittable-core/view-model/index.js';
+import { asTableStyles } from 'fittable-core/model';
+import { Container, ToolbarFactory } from 'fittable-core/view-model';
 
 import { FitSeparator } from '../common/controls/fit-separator.js';
 import { FitContainer } from '../common/controls/fit-container.js';

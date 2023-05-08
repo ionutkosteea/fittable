@@ -3,7 +3,7 @@ import {
   Theme,
   ThemeSwitcher,
   ThemeSwitcherFactory,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { setCssVariables } from '../common/css-variables.js';
 import { lightTheme } from './light-theme/theme.js';

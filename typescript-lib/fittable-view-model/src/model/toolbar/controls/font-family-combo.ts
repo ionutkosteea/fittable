@@ -1,10 +1,10 @@
-import { Value } from 'fittable-core/model/index.js';
+import { Value } from 'fittable-core/model';
 import {
   getViewModelConfig,
   Control,
   Option,
   Window,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitValueControl } from '../../common/controls/fit-value-control.js';
 import { StyleCombo } from './common/style-combo.js';

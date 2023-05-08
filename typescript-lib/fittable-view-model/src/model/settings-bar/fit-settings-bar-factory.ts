@@ -1,7 +1,4 @@
-import {
-  SettingsBarArgs,
-  SettingsBarFactory,
-} from 'fittable-core/view-model/index.js';
+import { SettingsBarArgs, SettingsBarFactory } from 'fittable-core/view-model';
 
 import { FitContainer } from '../common/controls/fit-container.js';
 import { FitControl } from '../common/controls/fit-control.js';

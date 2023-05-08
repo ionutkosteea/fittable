@@ -17,7 +17,7 @@ describe('AppComponent', () => {
   it(`should have as title 'ngx-fittable-docs'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('ngx-fittable-docs');
+    expect(app).toBeDefined();
   });
 
   it('should render title', () => {

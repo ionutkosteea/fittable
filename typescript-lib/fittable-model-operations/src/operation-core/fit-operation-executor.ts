@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { Table } from 'fittable-core/model/index.js';
+import { Table } from 'fittable-core/model';
 import {
   OperationExecutor,
   OperationDtoFactoryClass,
@@ -8,7 +8,7 @@ import {
   OperationDto,
   OperationStep,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import { OperationStackExecutor } from './operation-stack-executor.js';
 import {

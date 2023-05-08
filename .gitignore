@@ -45,7 +45,6 @@ testem.log
 Thumbs.db
 
 # TypeScript
-**/*.d.ts
 **/bundle.js
 
 # Test Coverage

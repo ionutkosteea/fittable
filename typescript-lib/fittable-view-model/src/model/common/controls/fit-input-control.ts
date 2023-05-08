@@ -1,6 +1,6 @@
 import { Observable, Subject } from 'rxjs';
 
-import { InputControl } from 'fittable-core/view-model/index.js';
+import { InputControl } from 'fittable-core/view-model';
 
 import { FitValueControl } from './fit-value-control.js';
 

@@ -1,6 +1,6 @@
 import { Observable, Subject } from 'rxjs';
 
-import { CheckBoxControl } from 'fittable-core/view-model/index.js';
+import { CheckBoxControl } from 'fittable-core/view-model';
 
 import { FitValueControl } from './fit-value-control.js';
 

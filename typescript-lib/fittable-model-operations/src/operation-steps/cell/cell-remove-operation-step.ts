@@ -1,13 +1,9 @@
-import {
-  Table,
-  createCellRange4Dto,
-  CellRange,
-} from 'fittable-core/model/index.js';
+import { Table, createCellRange4Dto, CellRange } from 'fittable-core/model';
 import {
   OperationStep,
   OperationStepFactory,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 export type CellRemoveOperationStepDto = OperationId<'cell-remove'> & {
   cellRanges: unknown[];

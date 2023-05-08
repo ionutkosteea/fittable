@@ -6,11 +6,8 @@ import {
   LineRangeList,
   Table,
   Value,
-} from 'fittable-core/model/index.js';
-import {
-  ViewModelConfig,
-  getViewModelConfig,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/model';
+import { ViewModelConfig, getViewModelConfig } from 'fittable-core/view-model';
 
 import { FitControl } from '../../common/controls/fit-control.js';
 import { FitInputControl } from '../../common/controls/fit-input-control.js';

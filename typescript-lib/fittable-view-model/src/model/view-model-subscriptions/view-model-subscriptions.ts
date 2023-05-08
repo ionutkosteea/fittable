@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 
-import { implementsTKeys } from 'fittable-core/common/index.js';
+import { implementsTKeys } from 'fittable-core/common';
 import {
   ScrollContainer,
   CellEditor,
@@ -11,7 +11,7 @@ import {
   ColFilters,
   Control,
   asOptionsControl,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { ControlUpdater } from '../toolbar/controls/common/control-updater.js';
 import { FitSettingsBarControlId } from '../settings-bar/fit-settings-bar-factory.js';

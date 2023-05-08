@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public onGitHub(): void {
-    window.open('https://github.com/ionutkosteea/fittable', '_blank');
+    window.open('https://github.com/ionutkosteea/fittable.git', '_blank');
   }
 
   public onContact(): void {

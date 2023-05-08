@@ -1,9 +1,9 @@
-import { implementsTKeys } from 'fittable-core/common/index.js';
+import { implementsTKeys } from 'fittable-core/common';
 import {
   CellRange,
   CellRangeFactory,
   createCellCoord4Dto,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 
 import { FitCellRangeDto } from './dto/fit-table-dto.js';
 import { FitCellCoord } from './fit-cell-coord.js';

@@ -1,4 +1,4 @@
-import { Table, CellRange, Value } from 'fittable-core/model/index.js';
+import { Table, CellRange, Value } from 'fittable-core/model';
 
 import { CellValueOperationStepDto } from '../../operation-steps/cell/cell-value-operation-step.js';
 import {

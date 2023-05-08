@@ -7,13 +7,14 @@ import {
   CellCoord,
   createCellCoord,
   unregisterModelConfig,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   registerViewModelConfig,
   unregisterViewModelConfig,
-} from 'fittable-core/view-model/index.js';
-import { FIT_MODEL_CONFIG } from '../../../../fittable-model/dist/index.js';
-import { FIT_VIEW_MODEL_CONFIG } from '../../../../fittable-view-model/dist/index.js';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
+
+import { FIT_VIEW_MODEL_CONFIG } from '../../../dist/index.js';
 
 import { FitTableViewer } from '../../../dist/model/table-viewer/fit-table-viewer.js';
 import { FitCellSelection } from '../../../dist/model/cell-selection/fit-cell-selection.js';

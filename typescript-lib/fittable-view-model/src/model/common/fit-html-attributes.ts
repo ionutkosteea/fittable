@@ -1,5 +1,5 @@
-import { CellCoord, createCellCoord } from 'fittable-core/model/index.js';
-import { FitHtmlElement } from 'fittable-core/view-model/index.js';
+import { CellCoord, createCellCoord } from 'fittable-core/model';
+import { FitHtmlElement } from 'fittable-core/view-model';
 
 export function getCellCoord(htmlCell: FitHtmlElement): CellCoord {
   const rowId: string | undefined = getAttValue(htmlCell, 'rowId');

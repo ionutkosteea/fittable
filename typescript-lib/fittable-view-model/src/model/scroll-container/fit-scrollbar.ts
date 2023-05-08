@@ -1,4 +1,4 @@
-import { Scrollbar } from 'fittable-core/view-model/index.js';
+import { Scrollbar } from 'fittable-core/view-model';
 
 export abstract class VirtualScrollbar implements Scrollbar {
   private scrollViewport = 0;

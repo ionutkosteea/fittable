@@ -1,7 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 
-import { implementsTKeys } from 'fittable-core/common/index.js';
-import { CellCoord, CellRange, Value } from 'fittable-core/model/index.js';
+import { implementsTKeys } from 'fittable-core/common';
+import { CellCoord, CellRange, Value } from 'fittable-core/model';
 import {
   CellEditor,
   CellEditorListener,
@@ -13,7 +13,7 @@ import {
   FitMouseEvent,
   InputControl,
   NeighborCells,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { getCellCoord } from '../model/common/fit-html-attributes.js';
 

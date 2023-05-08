@@ -1,4 +1,4 @@
-import { LineRange, LineRangeList } from 'fittable-core/model/index.js';
+import { LineRange, LineRangeList } from 'fittable-core/model';
 
 export class LineRangeAddressObjects<Obj> {
   private objectMap: Map<Obj, LineRangeList> = new Map();

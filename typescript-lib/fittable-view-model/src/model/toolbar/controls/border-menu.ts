@@ -1,4 +1,4 @@
-import { Window, ValueControl } from 'fittable-core/view-model/index.js';
+import { Window, ValueControl } from 'fittable-core/view-model';
 
 import {
   BorderLocation,

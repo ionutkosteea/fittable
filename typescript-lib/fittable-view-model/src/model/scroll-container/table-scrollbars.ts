@@ -1,4 +1,4 @@
-import { TableViewer } from 'fittable-core/view-model/index.js';
+import { TableViewer } from 'fittable-core/view-model';
 
 import { VirtualScrollbar } from './fit-scrollbar.js';
 

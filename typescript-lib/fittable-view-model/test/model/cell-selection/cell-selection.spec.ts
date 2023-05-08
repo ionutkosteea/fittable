@@ -7,19 +7,16 @@ import {
   CellCoord,
   CellRange,
   unregisterModelConfig,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   CellSelection,
   createCellSelection,
   createTableViewer,
   registerViewModelConfig,
   unregisterViewModelConfig,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG, FitTable } from 'fittable-model';
 
-import {
-  FIT_MODEL_CONFIG,
-  FitTable,
-} from '../../../../fittable-model/dist/index.js';
 import { FIT_VIEW_MODEL_CONFIG } from '../../../dist/index.js';
 
 const table: Table = new FitTable({

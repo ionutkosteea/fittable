@@ -5,12 +5,12 @@ import {
   createCellRange4Dto,
   createDto4CellRangeList,
   CellRangeList,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationDto,
   OperationDtoFactory,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import { CellRangeAddressObjects } from '../../utils/cell/cell-range-address-objects.js';
 import { CellValueOperationStepDto } from '../../operation-steps/cell/cell-value-operation-step.js';

@@ -1,6 +1,6 @@
 import {} from 'jasmine';
 
-import { Style } from 'fittable-core/model/index.js';
+import { Style } from 'fittable-core/model';
 
 import { TableOperationExecutor } from './model/table-operation-executor.js';
 

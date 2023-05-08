@@ -4,7 +4,7 @@ import {
   registerModelConfig,
   createCellCoord,
   unregisterModelConfig,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   registerViewModelConfig,
   CellSelectionPainter,
@@ -12,9 +12,8 @@ import {
   unregisterViewModelConfig,
   getViewModelConfig,
   ViewModelConfig,
-} from 'fittable-core/view-model/index.js';
-
-import { FIT_MODEL_CONFIG } from '../../../../fittable-model/dist/index.js';
+} from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
 
 import { TST_VIEW_MODEL_CONFIG } from '../../tst-view-model-config.js';
 import { CellSelectionPainterBuilder } from './cell-selection-painter-builder.js';

@@ -1,4 +1,4 @@
-import { DoubleKeyMap } from 'fittable-core/common/index.js';
+import { DoubleKeyMap } from 'fittable-core/common';
 import {
   Value,
   Table,
@@ -11,13 +11,13 @@ import {
   asTableCols,
   asTableMergedRegions,
   TableStyles,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   getViewModelConfig,
   TableViewer,
   TableViewerFactory,
   ViewModelConfig,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 export class FitTableViewer implements TableViewer {
   private width?: number;

@@ -1,12 +1,12 @@
 import { Subscription } from 'rxjs';
 
-import { createCellCoord, CellCoord } from 'fittable-core/model/index.js';
+import { createCellCoord, CellCoord } from 'fittable-core/model';
 import {
   CellSelection,
   CellSelectionFactory,
   TableViewer,
   getViewModelConfig,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import {
   FitCellSelectionRanges,

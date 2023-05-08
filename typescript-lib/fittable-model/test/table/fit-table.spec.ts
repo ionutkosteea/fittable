@@ -2,7 +2,6 @@ import {} from 'jasmine';
 
 import {
   createCellCoord,
-  createCellCoord4Dto,
   createCellRange,
   createCellRange4Dto,
   createLineRange,
@@ -11,7 +10,7 @@ import {
   createTable4Dto,
   registerModelConfig,
   unregisterModelConfig,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 
 import {
   FitTable,

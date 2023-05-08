@@ -1,4 +1,4 @@
-import { MissingFactoryError } from 'fittable-core/common/index.js';
+import { MissingFactoryError } from 'fittable-core/common';
 import {
   asTableColFilter,
   CellRange,
@@ -6,8 +6,8 @@ import {
   Table,
   TableBasics,
   TableColFilter,
-} from 'fittable-core/model/index.js';
-import { OperationExecutor } from 'fittable-core/operations/index.js';
+} from 'fittable-core/model';
+import { OperationExecutor } from 'fittable-core/operations';
 import {
   ViewModel,
   Window,
@@ -42,7 +42,7 @@ import {
   createColFilters,
   MobileLayout,
   createMobileLayout,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import {
   FIT_CSS_COLOR_VARIABLES,

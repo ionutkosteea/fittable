@@ -5,7 +5,7 @@ import {
   OperationDto,
   OperationId,
   BaseOperationDto,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 export class FitOperation implements Operation {
   public readonly properties: { [id in string]?: unknown } = {};

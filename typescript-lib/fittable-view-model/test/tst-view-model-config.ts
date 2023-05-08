@@ -2,7 +2,7 @@ import {
   ViewModelConfig,
   ImageRegistryFactory,
   ImageRegistry,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitViewModelFactory } from '../dist/model/fit-view-model.js';
 import { FitLanguageDictionaryFactory } from '../dist/model/language-dictionary/fit-language-dictionary.js';

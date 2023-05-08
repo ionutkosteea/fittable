@@ -1,4 +1,4 @@
-import { OperationExecutorFactory } from 'fittable-core/operations/index.js';
+import { OperationExecutorFactory } from 'fittable-core/operations';
 
 import { CellCopyOperationStepFactory } from '../operation-steps/cell/cell-copy-operation-step.js';
 import { CellRemoveOperationStepFactory } from '../operation-steps/cell/cell-remove-operation-step.js';

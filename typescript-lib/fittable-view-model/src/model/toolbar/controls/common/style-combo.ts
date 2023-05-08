@@ -1,14 +1,9 @@
-import {
-  CellRange,
-  createStyle,
-  Style,
-  Table,
-} from 'fittable-core/model/index.js';
+import { CellRange, createStyle, Style, Table } from 'fittable-core/model';
 import {
   asValueControl,
   Control,
   ValueControl,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitUIOperationArgs } from '../../../operation-executor/operation-args.js';
 import { getFirstCellStyle } from '../../../common/style-functions.js';

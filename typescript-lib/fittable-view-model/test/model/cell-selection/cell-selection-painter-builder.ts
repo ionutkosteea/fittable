@@ -7,7 +7,7 @@ import {
   createCellRange,
   createCellCoord,
   CellCoord,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   TableViewer,
   createTableViewer,
@@ -18,7 +18,7 @@ import {
   CellSelectionRanges,
   ScrollContainer,
   createScrollContainer,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 export class CellSelectionPainterBuilder {
   private numberOfRows = 0;

@@ -1,7 +1,4 @@
-import {
-  ImageRegistry,
-  ImageRegistryFactory,
-} from 'fittable-core/view-model/index.js';
+import { ImageRegistry, ImageRegistryFactory } from 'fittable-core/view-model';
 
 import { FitImageId, FitImages } from './fit-image-ids.js';
 import { FIT_IMAGES, toSvgUrl } from './fit-images.js';

@@ -1,4 +1,4 @@
-import { Control } from 'fittable-core/view-model/index.js';
+import { Control } from 'fittable-core/view-model';
 
 import { FitControlType } from './fit-control-type.js';
 

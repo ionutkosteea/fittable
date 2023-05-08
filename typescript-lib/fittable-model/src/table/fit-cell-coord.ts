@@ -1,5 +1,5 @@
-import { implementsTKeys } from 'fittable-core/common/index.js';
-import { CellCoord, CellCoordFactory } from 'fittable-core/model/index.js';
+import { implementsTKeys } from 'fittable-core/common';
+import { CellCoord, CellCoordFactory } from 'fittable-core/model';
 
 import { FitCellCoordDto } from './dto/fit-table-dto.js';
 

@@ -1,8 +1,5 @@
-import {
-  incrementLetter,
-  incrementNumber,
-} from 'fittable-core/common/index.js';
-import { Option, ViewModelConfig } from 'fittable-core/view-model/index.js';
+import { incrementLetter, incrementNumber } from 'fittable-core/common';
+import { Option, ViewModelConfig } from 'fittable-core/view-model';
 
 import { COLOR_PALETTE } from './model/common/color-palette.js';
 import { FONT_FAMILY } from './model/common/font-family.js';

@@ -1,4 +1,4 @@
-import { CellRange, CellRangeList } from 'fittable-core/model/index.js';
+import { CellRange, CellRangeList } from 'fittable-core/model';
 
 export class CellRangeAddressObjects<Obj> {
   private objectMap: Map<Obj, CellRangeList> = new Map();

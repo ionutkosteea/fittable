@@ -1,7 +1,7 @@
 import {
   LanguageDictionary,
   LanguageDictionaryFactory,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import {
   FitDictionary,

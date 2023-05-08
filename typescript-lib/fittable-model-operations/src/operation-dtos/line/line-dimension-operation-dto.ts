@@ -5,12 +5,12 @@ import {
   createDto4LineRangeList,
   createLineRange,
   TableCols,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationDto,
   OperationId,
   OperationDtoFactory,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import { LineRangeAddressObjects } from '../../utils/line/line-range-address-objects.js';
 import {

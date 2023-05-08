@@ -5,8 +5,8 @@ import {
   CellCoord,
   createCellCoord,
   createCellRange,
-} from 'fittable-core/model/index.js';
-import { OperationExecutor } from 'fittable-core/operations/index.js';
+} from 'fittable-core/model';
+import { OperationExecutor } from 'fittable-core/operations';
 import {
   CellEditor,
   CellEditorFactory,
@@ -14,7 +14,7 @@ import {
   NeighborCells,
   Rectangle,
   TableViewer,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitInputControl } from '../common/controls/fit-input-control.js';
 import { FitUIOperationArgs } from '../operation-executor/operation-args.js';

@@ -10,7 +10,7 @@ import {
   Value,
   ColConditionFn,
   TableColFilter,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 
 import {
   FitCellDto,

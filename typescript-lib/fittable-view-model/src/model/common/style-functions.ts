@@ -4,7 +4,7 @@ import {
   CellRange,
   Style,
   Table,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 
 export function getFirstCellStyle(
   table: Table,

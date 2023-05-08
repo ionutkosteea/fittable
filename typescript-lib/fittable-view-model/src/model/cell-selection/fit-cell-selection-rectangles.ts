@@ -1,13 +1,13 @@
 import { Observable, Subject } from 'rxjs';
 
-import { CellRange, CellCoord } from 'fittable-core/model/index.js';
+import { CellRange, CellCoord } from 'fittable-core/model';
 import {
   TableViewer,
   CellSelectionRanges,
   Rectangle,
   CellSelectionRectangles,
   ScrollContainer,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 abstract class FitCellSelectionRectangles implements CellSelectionRectangles {
   protected rectangles: Rectangle[] = [];

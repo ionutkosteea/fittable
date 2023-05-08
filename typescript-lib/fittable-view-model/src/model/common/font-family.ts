@@ -1,4 +1,4 @@
-import { Option } from 'fittable-core/view-model/index.js';
+import { Option } from 'fittable-core/view-model';
 
 export const FONT_FAMILY: Option[] = [
   { label: 'Arial', value: 'Arial, Helvetica, sans-serif' },

@@ -1,4 +1,4 @@
-import { OptionsControl } from 'fittable-core/view-model/index.js';
+import { OptionsControl } from 'fittable-core/view-model';
 
 import { FitControl } from './fit-control.js';
 import { FitWindow } from './fit-window.js';

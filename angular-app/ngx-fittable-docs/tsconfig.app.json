@@ -11,21 +11,6 @@
   "include": [
     "src/**/*.d.ts"
   ],
-  "paths": {
-    "@angular/*": ["./node_modules/@angular/*"],
-    "fittable-core/*": [
-      "./node_modules/fittable-core/*",
-      "./node_modules/fittable-core/*/index"
-    ],
-    "fittable-model": [
-      "./node_modules/fittable-model",
-      "./node_modules/fittable-model/index"
-    ],
-    "fittable-angular": [
-      "./node_modules/fittable-angular/fittable-angular",
-      "./node_modules/fittable-angular"
-    ]
-  },
   "angularCompilerOptions": {
     "preserveSymlinks": true
   }

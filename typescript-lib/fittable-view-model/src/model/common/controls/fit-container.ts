@@ -1,10 +1,6 @@
 import { Subject, Observable } from 'rxjs';
 
-import {
-  Container,
-  Control,
-  ControlMap,
-} from 'fittable-core/view-model/index.js';
+import { Container, Control, ControlMap } from 'fittable-core/view-model';
 
 export class FitContainer<Id extends string> implements Container {
   private controls: ControlMap = {};

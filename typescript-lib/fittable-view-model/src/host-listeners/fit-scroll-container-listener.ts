@@ -3,7 +3,7 @@ import {
   ScrollElement,
   ScrollContainerListener,
   ScrollContainerListenerFactory,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 export class FitScrollContainerListener implements ScrollContainerListener {
   constructor(

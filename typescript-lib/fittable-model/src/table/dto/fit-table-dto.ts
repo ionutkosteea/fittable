@@ -1,4 +1,4 @@
-import { Value } from 'fittable-core/model/index.js';
+import { Value } from 'fittable-core/model';
 
 export type FitMapDto<Val> = { [key: string]: Val };
 

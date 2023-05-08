@@ -1,4 +1,4 @@
-import { CssVariables } from 'fittable-core/view-model/index.js';
+import { CssVariables } from 'fittable-core/view-model';
 
 export type FitCssColorVariable =
   | '--highlight-color'

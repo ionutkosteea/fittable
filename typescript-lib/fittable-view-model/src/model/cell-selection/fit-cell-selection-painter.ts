@@ -6,7 +6,7 @@ import {
   CellSelectionPainterFactory,
   CellSelectionRanges,
   CellSelectionPainterArgs,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import {
   BodySelectionRectangles,

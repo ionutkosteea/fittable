@@ -3,5 +3,9 @@
   "dest": "../../dist/fittable-angular",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "rxjs",
+    "fittable-core"
+  ]
 }

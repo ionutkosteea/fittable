@@ -1,4 +1,4 @@
-import { Theme } from 'fittable-core/view-model/index.js';
+import { Theme } from 'fittable-core/view-model';
 
 import { toSvgUrl } from '../../image-registry/fit-images.js';
 import { cssVariables } from './css-variables.js';

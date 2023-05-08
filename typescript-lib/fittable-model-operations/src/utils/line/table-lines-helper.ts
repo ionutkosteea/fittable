@@ -3,7 +3,7 @@ import {
   LineRange,
   asTableRows,
   asTableCols,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 
 export abstract class TableLinesHelper {
   constructor(protected readonly table: Table) {}

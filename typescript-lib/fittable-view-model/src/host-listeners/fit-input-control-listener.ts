@@ -5,7 +5,7 @@ import {
   FitKeyboardEvent,
   FitHtmlInputElement,
   FitEvent,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 export class FitInputControlListener implements InputControlListener {
   constructor(private readonly inputControl: InputControl) {}

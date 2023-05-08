@@ -1,4 +1,4 @@
-import { CellCoord } from 'fittable-core/model/index.js';
+import { CellCoord } from 'fittable-core/model';
 import {
   CellSelection,
   CellSelectionListener,
@@ -10,7 +10,7 @@ import {
   NeighborCells,
   ScrollDirection,
   FitHtmlElement,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { getCellCoord } from '../model/common/fit-html-attributes.js';
 

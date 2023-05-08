@@ -9,12 +9,12 @@ import {
   createCellRangeList4Dto,
   CellRangeList,
   asTableStyles,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationDto,
   OperationDtoFactory,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import {
   countAllCellStyleNames,

@@ -4,12 +4,12 @@ import {
   createStyle,
   CellRange,
   TableStyles,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationDto,
   OperationDtoFactory,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import { appendStyleStepsDto } from '../../utils/style/style-dto-functions.js';
 import { CellRangeAddressStyles } from '../../utils/cell/cell-range-address-styles.js';

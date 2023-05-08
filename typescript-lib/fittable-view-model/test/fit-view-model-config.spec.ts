@@ -1,6 +1,6 @@
 import {} from 'jasmine';
 
-import { ViewModelConfig } from 'fittable-core/view-model/index.js';
+import { ViewModelConfig } from 'fittable-core/view-model';
 
 import {
   createFitViewModelConfig,

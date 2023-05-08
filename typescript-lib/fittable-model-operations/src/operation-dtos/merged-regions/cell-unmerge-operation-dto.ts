@@ -2,12 +2,12 @@ import {
   CellRange,
   TableBasics,
   TableMergedRegions,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationId,
   OperationDto,
   OperationDtoFactory,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import { MergedRegionsOperationStepDto } from '../../operation-steps/merged-regions/merged-regions-operation-step.js';
 

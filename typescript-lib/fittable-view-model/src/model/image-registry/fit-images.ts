@@ -1,4 +1,5 @@
-import { Images } from 'fittable-core/view-model/index.js';
+import { Images } from 'fittable-core/view-model';
+
 import { FitImages } from './fit-image-ids.js';
 
 export const FIT_IMAGES: FitImages = {

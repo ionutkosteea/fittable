@@ -4,7 +4,7 @@ import {
   FitHtmlInputElement,
   FitKeyboardEvent,
   FitMouseEvent,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 export class TstHtmlElement implements FitHtmlElement {
   public parentElement: FitHtmlElement | null = null;

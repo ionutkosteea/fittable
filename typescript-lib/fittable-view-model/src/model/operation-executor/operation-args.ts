@@ -1,10 +1,5 @@
-import {
-  CellRange,
-  Value,
-  LineRange,
-  Style,
-} from 'fittable-core/model/index.js';
-import { OperationId } from 'fittable-core/operations/index.js';
+import { CellRange, Value, LineRange, Style } from 'fittable-core/model';
+import { OperationId } from 'fittable-core/operations';
 
 import { ColFilterOperationArgs } from '../col-filters/col-filter-operation.js';
 

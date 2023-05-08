@@ -1,9 +1,9 @@
-import { Table, TableMergedRegions } from 'fittable-core/model/index.js';
+import { Table, TableMergedRegions } from 'fittable-core/model';
 import {
   OperationId,
   OperationStep,
   OperationStepFactory,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 export type RemoveRegion = { rowId: number; colId: number };
 export type CreateRegion = RemoveRegion & {

@@ -8,6 +8,8 @@ export {
   FitCssColorVariables,
   FitCssUnitVariable,
   FitCssUnitVariables,
+  FIT_CSS_COLOR_VARIABLES,
+  FIT_CSS_UNIT_VARIABLES,
 } from './model/common/css-variables.js';
 export { FitThemeName } from './model/theme-switcher/fit-theme-switcher.js';
 export { FitSettingsBarControlId } from './model/settings-bar/fit-settings-bar-factory.js';

@@ -1,6 +1,6 @@
 import { Subscription, Observable } from 'rxjs';
 
-import { implementsTKeys } from 'fittable-core/common/index.js';
+import { implementsTKeys } from 'fittable-core/common';
 import {
   CellRange,
   ColFilterExecutor,
@@ -9,12 +9,12 @@ import {
   TableBasics,
   TableColFilter,
   Value,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationDto,
   OperationExecutor,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 import {
   ColFilters,
   ValueCondition,
@@ -22,7 +22,7 @@ import {
   Window,
   Control,
   CellEditor,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitControl } from '../common/controls/fit-control.js';
 import { FitUIOperationId } from '../operation-executor/operation-args.js';

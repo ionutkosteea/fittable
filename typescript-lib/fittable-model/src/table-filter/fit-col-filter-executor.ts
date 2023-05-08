@@ -4,7 +4,7 @@ import {
   ColFilterExecutorFactory,
   TableBasics,
   TableColFilter,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 
 type FitTable = TableBasics & TableColFilter;
 

@@ -5,12 +5,12 @@ import {
   createCellRange4Dto,
   createStyle4Dto,
   CellRange,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationStep,
   OperationStepFactory,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 export type CellStyleNameDto = {
   cellRanges: unknown[];

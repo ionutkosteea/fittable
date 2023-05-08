@@ -4,7 +4,7 @@ import {
   Statusbar,
   StatusbarArgs,
   StatusbarFactory,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 import { FitTextKey } from '../language-dictionary/language-dictionary-keys.js';
 

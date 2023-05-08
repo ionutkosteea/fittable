@@ -18,15 +18,14 @@ import {
   createCellCoord,
   TableCols,
   TableMergedRegions,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationExecutor,
   createOperationExecutor,
   registerOperationConfig,
   OperationDto,
-} from 'fittable-core/operations/index.js';
-
-import { FIT_MODEL_CONFIG } from '../../../fittable-model/dist/index.js';
+} from 'fittable-core/operations';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
 
 import {
   FIT_OPERATION_CONFIG,

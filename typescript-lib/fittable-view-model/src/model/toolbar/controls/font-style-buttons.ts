@@ -1,4 +1,4 @@
-import { createStyle } from 'fittable-core/model/index.js';
+import { createStyle } from 'fittable-core/model';
 
 import { StylePushButton } from './common/style-push-button.js';
 import { FitControlArgs } from './common/fit-control-args.js';

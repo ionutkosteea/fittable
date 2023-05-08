@@ -16,11 +16,9 @@ import {
   FIT_IMAGES,
   FIT_VIEW_MODEL_CONFIG,
   toSvgUrl,
-} from 'fittable-view-model';
-import {
   FitCssColorVariables,
   FIT_CSS_COLOR_VARIABLES,
-} from 'fittable-view-model/model/common/css-variables';
+} from 'fittable-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
 import { CodeSnippet } from '../common/code-snippet.model';

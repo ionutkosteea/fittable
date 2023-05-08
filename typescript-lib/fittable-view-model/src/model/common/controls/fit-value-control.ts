@@ -1,7 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 
-import { Value } from 'fittable-core/model/index.js';
-import { ValueControl } from 'fittable-core/view-model/index.js';
+import { Value } from 'fittable-core/model';
+import { ValueControl } from 'fittable-core/view-model';
 
 import { FitControl } from './fit-control.js';
 

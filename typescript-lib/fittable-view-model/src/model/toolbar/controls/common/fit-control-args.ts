@@ -1,6 +1,6 @@
-import { CellRange } from 'fittable-core/model/index.js';
-import { OperationExecutor } from 'fittable-core/operations/index.js';
-import { ControlArgs } from 'fittable-core/view-model/index.js';
+import { CellRange } from 'fittable-core/model';
+import { OperationExecutor } from 'fittable-core/operations';
+import { ControlArgs } from 'fittable-core/view-model';
 
 import { FitImageRegistry } from '../../../image-registry/fit-image-registry.js';
 import { FitLanguageDictionary } from '../../../language-dictionary/fit-language-dictionary.js';

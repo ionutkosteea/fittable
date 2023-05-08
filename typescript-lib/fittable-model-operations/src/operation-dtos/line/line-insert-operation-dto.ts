@@ -7,12 +7,12 @@ import {
   createLineRangeList4Dto,
   asTableMergedRegions,
   TableMergedRegions,
-} from 'fittable-core/model/index.js';
+} from 'fittable-core/model';
 import {
   OperationDto,
   OperationDtoFactory,
   OperationId,
-} from 'fittable-core/operations/index.js';
+} from 'fittable-core/operations';
 
 import {
   LineInsertOperationStepDto,

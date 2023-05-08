@@ -1,6 +1,6 @@
 import { Observable, Subject } from 'rxjs';
 
-import { RangeIterator } from 'fittable-core/common/index.js';
+import { RangeIterator } from 'fittable-core/common';
 import {
   Scrollbar,
   ScrollContainer,
@@ -8,7 +8,7 @@ import {
   ScrollContainerFactory,
   TableViewer,
   ScrollContainerArgs,
-} from 'fittable-core/view-model/index.js';
+} from 'fittable-core/view-model';
 
 export class FitScrollContainer implements ScrollContainer {
   private scrollElement?: ScrollElement;
