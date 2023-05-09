@@ -28,6 +28,30 @@
 npm install fittable-angular
 ```
 
+### tsconfig.json (for non-ECMAScript module dependants)
+
+```json
+"compilerOptions": {
+  "baseUrl": "./",
+  "paths": {
+    "fittable-core/common": ["./node_modules/fittable-core/dist/common"],
+    "fittable-core/model": ["./node_modules/fittable-core/dist/model"],
+    "fittable-core/operations": [
+      "./node_modules/fittable-core/dist/operations"
+    ],
+    "fittable-core/view-model": [
+      "./node_modules/fittable-core/dist/view-model"
+    ],
+    "fittable-model": ["./node_modules/fittable-model/dist"],
+    "fittable-model-operations": [
+      "./node_modules/fittable-model-operations/dist"
+    ],
+    "fittable-view-model": ["./node_modules/fittable-view-model/dist"]
+  }
+  // ...
+}
+```
+
 ## API Overview
 
 ### HTML

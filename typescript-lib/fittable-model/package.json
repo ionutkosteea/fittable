@@ -43,7 +43,7 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "fittable-core": "file:../fittable-core/fittable-core-1.0.0.tgz"
+    "fittable-core": "^1.0.0"
   },
   "files": [
     "dist",

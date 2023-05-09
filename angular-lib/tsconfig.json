@@ -3,12 +3,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {
-      "fittable-core/common": ["./node_modules/fittable-core/dist/common"],
-      "fittable-core/model": ["./node_modules/fittable-core/dist/model"],
-      "fittable-core/operations": ["./node_modules/fittable-core/dist/operations"],
-      "fittable-core/view-model": ["./node_modules/fittable-core/dist/view-model"]
-    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -20,15 +14,17 @@
     "declaration": true,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022",
+    "module": "ESNext",
     "useDefineForClassFields": false,
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "allowJs": true,
+    "esModuleInterop": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

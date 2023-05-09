@@ -1,6 +1,7 @@
 {
   "name": "angular-lib",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,7 +22,7 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
-    "fittable-core": "file:../typescript-lib/fittable-core/fittable-core-1.0.0.tgz",
+    "fittable-core": "^1.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -44,8 +45,8 @@
     "typescript": "~4.9.4"
   },
   "peerDependencies": {
-    "fittable-model": "file:../typescript-lib/fittable-model/fittable-model-1.0.0.tgz",
-    "fittable-model-operations": "file:../typescript-lib/fittable-model-operations/fittable-model-operations-1.0.0.tgz",
-    "fittable-view-model": "file:../typescript-lib/fittable-view-model/fittable-view-model-1.0.0.tgz"
+    "fittable-model": "^1.0.0",
+    "fittable-model-operations": "^1.0.0",
+    "fittable-view-model": "^1.0.0"
   }
 }

@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public onNpmJs(): void {
-    window.open('https://www.npmjs.com', '_blank');
+    window.open('https://www.npmjs.com/package/fittable-angular', '_blank');
   }
 
   public onGitHub(): void {
