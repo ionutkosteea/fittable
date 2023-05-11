@@ -28,6 +28,8 @@
 npm install fittable-angular
 ```
 
+## Angular component example
+
 ### tsconfig.json (for non-ECMAScript module dependants)
 
 ```json
@@ -52,57 +54,86 @@ npm install fittable-angular
 }
 ```
 
-## API Overview
-
-### HTML
-
-```html
-<div style="width:100%;height:300px;">
-  <!-- Angular component -->
-  <fittable [designer]="fit"></fittable>
-</div>
-```
-
-### TypeScript
+### app.module.ts
 
 ```typescript
-import { Component, OnInit } from "@angular/core";
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
-// TypeScript modules
-import { CellRange, createStyle, createTable, registerModelConfig, Table } from "fittable-core/model";
-import { registerOperationConfig } from "fittable-core/operations";
-import { createFittableDesigner, FittableDesigner, registerViewModelConfig } from "fittable-core/view-model";
-import { FitStyle, FitTable, FIT_MODEL_CONFIG } from "fittable-model";
-import { FitOperationArgs, FIT_OPERATION_CONFIG } from "fittable-model-operations";
-import { FIT_VIEW_MODEL_CONFIG } from "fittable-view-model";
+import { registerModelConfig } from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
+import { registerViewModelConfig } from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
+import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
+import { NgxFittableModule } from 'fittable-angular';
+
+import { AppComponent } from './app.component';
+
+// Register functionalities
+registerModelConfig(FIT_MODEL_CONFIG);
+registerOperationConfig(FIT_OPERATION_CONFIG);
+registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule, NgxFittableModule],
+  providers: [],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+### app.component.ts
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+
+import {
+  CellRange,
+  createStyle,
+  createTable,
+  Table,
+} from 'fittable-core/model';
+import {
+  createFittableDesigner,
+  FittableDesigner,
+} from 'fittable-core/view-model';
+import { FitStyle, FitTable } from 'fittable-model';
+import { FitOperationArgs } from 'fittable-model-operations';
 
 @Component({
-  selector: "sample",
-  templateUrl: "./sample.component.html",
-  styleUrls: [".sample/common.css"],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
-export class SampleComponent implements OnInit {
+export class AppComponent implements OnInit {
   public fit!: FittableDesigner;
 
   public ngOnInit(): void {
-    // Register functionalities
-    registerModelConfig(FIT_MODEL_CONFIG);
-    registerOperationConfig(FIT_OPERATION_CONFIG);
-    registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
-
     // Build table model
-    const table: Table = createTable<FitTable>().setNumberOfRows(100).setNumberOfCols(10).setRowHeight(0, 42).setColWidth(0, 50).addStyle("s0", createStyle<FitStyle>().set("font-weight", "bold")).setCellStyleName(0, 0, "s0").setCellValue(0, 0, 1000).setRowSpan(0, 0, 2).setColSpan(0, 0, 3);
+    const table: Table = createTable<FitTable>()
+      .setNumberOfRows(100)
+      .setNumberOfCols(10)
+      .setRowHeight(0, 42)
+      .setColWidth(0, 50)
+      .addStyle('s0', createStyle<FitStyle>().set('font-weight', 'bold'))
+      .setCellStyleName(0, 0, 's0')
+      .setCellValue(0, 0, 1000)
+      .setRowSpan(0, 0, 2)
+      .setColSpan(0, 0, 3);
 
     // Create table designer
     this.fit = createFittableDesigner(table);
 
     // Access view model
-    const selectedCells: CellRange[] | undefined = this.fit.viewModel.cellSelection?.body.getRanges();
+    const selectedCells: CellRange[] | undefined =
+      this.fit.viewModel.cellSelection?.body.getRanges();
 
     // Run operations
     if (selectedCells) {
       const args: FitOperationArgs = {
-        id: "cell-value",
+        id: 'cell-value',
         selectedCells,
         value: 100,
       };
@@ -111,3 +142,38 @@ export class SampleComponent implements OnInit {
   }
 }
 ```
+
+### app.component.html
+
+```html
+<div class="fittable">
+  <!-- Angular component -->
+  <fittable [designer]="fit"></fittable>
+</div>
+```
+
+### app.component.css
+
+```css
+.fittable {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+```
+
+### styles.css
+
+```css
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+```
+
+<p>The demo component can be found <a href="https://github.com/ionutkosteea/fittable/tree/main/angular-app/ngx-fittable-test">here</a>.<p>

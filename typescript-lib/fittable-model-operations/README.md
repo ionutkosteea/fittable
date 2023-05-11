@@ -28,57 +28,89 @@
 npm install fittable-angular
 ```
 
-## API Overview
+## Angular component example
 
-### HTML
+### tsconfig.json (for non-ECMAScript module dependants)
 
-```html
-<div style="width:100%;height:300px;">
-  <!-- Angular component -->
-  <fittable [designer]="fit"></fittable>
-</div>
+```json
+"compilerOptions": {
+  "baseUrl": "./",
+  "paths": {
+    "fittable-core/common": ["./node_modules/fittable-core/dist/common"],
+    "fittable-core/model": ["./node_modules/fittable-core/dist/model"],
+    "fittable-core/operations": [
+      "./node_modules/fittable-core/dist/operations"
+    ],
+    "fittable-core/view-model": [
+      "./node_modules/fittable-core/dist/view-model"
+    ],
+    "fittable-model": ["./node_modules/fittable-model/dist"],
+    "fittable-model-operations": [
+      "./node_modules/fittable-model-operations/dist"
+    ],
+    "fittable-view-model": ["./node_modules/fittable-view-model/dist"]
+  }
+  // ...
+}
 ```
 
-### TypeScript
+### app.module.ts
+
+```typescript
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { registerModelConfig } from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
+import { registerViewModelConfig } from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
+import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
+import { NgxFittableModule } from 'fittable-angular';
+
+import { AppComponent } from './app.component';
+
+// Register functionalities
+registerModelConfig(FIT_MODEL_CONFIG);
+registerOperationConfig(FIT_OPERATION_CONFIG);
+registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule, NgxFittableModule],
+  providers: [],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+### app.component.ts
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
 
-// TypeScript modules
 import {
   CellRange,
   createStyle,
   createTable,
-  registerModelConfig,
   Table,
 } from 'fittable-core/model';
-import { registerOperationConfig } from 'fittable-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
-  registerViewModelConfig,
 } from 'fittable-core/view-model';
-import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fittable-model';
-import {
-  FitOperationArgs,
-  FIT_OPERATION_CONFIG,
-} from 'fittable-model-operations';
-import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
+import { FitStyle, FitTable } from 'fittable-model';
+import { FitOperationArgs } from 'fittable-model-operations';
 
 @Component({
-  selector: 'sample',
-  templateUrl: './sample.component.html',
-  styleUrls: ['.sample/common.css'],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
-export class SampleComponent implements OnInit {
+export class AppComponent implements OnInit {
   public fit!: FittableDesigner;
 
   public ngOnInit(): void {
-    // Register functionalities
-    registerModelConfig(FIT_MODEL_CONFIG);
-    registerOperationConfig(FIT_OPERATION_CONFIG);
-    registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
-
     // Build table model
     const table: Table = createTable<FitTable>()
       .setNumberOfRows(100)
@@ -110,3 +142,38 @@ export class SampleComponent implements OnInit {
   }
 }
 ```
+
+### app.component.html
+
+```html
+<div class="fittable">
+  <!-- Angular component -->
+  <fittable [designer]="fit"></fittable>
+</div>
+```
+
+### app.component.css
+
+```css
+.fittable {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+```
+
+### styles.css
+
+```css
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+```
+
+<p>The demo component can be found <a href="https://github.com/ionutkosteea/fittable/tree/main/angular-app/ngx-fittable-test">here</a>.<p>

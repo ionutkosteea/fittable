@@ -1,7 +1,8 @@
 {
   "name": "fittable-model-operations",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Fittable model operations",
+  "homepage": "https://fittable-499b2.web.app",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,6 +22,7 @@
     "url": "https://github.com/ionutkosteea/fittable.git"
   },
   "scripts": {
+    "reset": "rm -r coverage & rm -r dist && rm -r node_modules & rm package-lock.json & npm cache clean --force",
     "link": "npm link fittable-core",
     "clean": "rm -r ./dist && mkdir ./dist",
     "build": "tsc -p tsconfig.json",
@@ -36,7 +38,7 @@
     "@typescript-eslint/parser": "^5.57.0",
     "c8": "^7.13.0",
     "eslint": "^8.37.0",
-    "fittable-model": "^1.0.0",
+    "fittable-model": "^1.1.0",
     "jasmine": "^4.6.0",
     "rxjs": "^7.8.0",
     "source-map-support": "^0.5.21",
@@ -45,15 +47,16 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "fittable-core": "^1.0.0"
+    "fittable-core": "^1.1.0"
   },
   "files": [
     "dist",
     "src",
     "LICENSE",
     "README.md",
+    "CHANGELOG.md",
     "package.json",
     "tsconfig.json",
-    "fittable-component-diagram.jpg"
+    "architecture.jpg"
   ]
 }

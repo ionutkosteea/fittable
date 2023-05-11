@@ -1,7 +1,8 @@
 {
     "name": "fittable-core",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Fittable core",
+    "homepage": "https://fittable-499b2.web.app",
     "author": {
         "name": "Ionut Costea",
         "email": "ionut.kosteea@gmail.com"
@@ -31,6 +32,7 @@
         }
     },
     "scripts": {
+        "reset": "rm -r coverage & rm -r dist && rm -r node_modules & rm package-lock.json & npm cache clean --force",
         "clean": "rm -r ./dist && mkdir ./dist",
         "build": "tsc -p tsconfig.json",
         "watch": "tsc -p tsconfig.json --watch",
@@ -59,8 +61,9 @@
         "src",
         "LICENSE",
         "README.md",
+        "CHANGELOG.md",
         "package.json",
         "tsconfig.json",
-        "fittable-component-diagram.jpg"
+        "architecture.jpg"
     ]
 }
