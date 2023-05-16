@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "reset": "rm -r dist && rm -r node_modules & rm package-lock.json & npm cache clean --force",
+    "reset": "rm -r dist & rm -r node_modules & rm package-lock.json & npm cache clean --force",
     "link": "npm link fittable-core",
     "clean": "rm -r ./dist & rm -r -f ./.angular/cache",
     "build": "ng build fittable-angular && cp ./projects/fittable-angular/LICENSE ./dist/fittable-angular && cp ./projects/fittable-angular/README.md ./dist/fittable-angular && cp ./projects/fittable-angular/CHANGELOG.md ./dist/fittable-angular && cp ./projects/fittable-angular/architecture.jpg ./dist/fittable-angular  && cp -r ./projects/fittable-angular/src ./dist/fittable-angular",

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --watch",
-    "reset": "rm -r dist && rm -r node_modules & rm package-lock.json & npm cache clean --force",
+    "reset": "rm -r dist & rm -r node_modules & rm package-lock.json & npm cache clean --force",
     "link": "npm link fittable-core fittable-model fittable-model-operations fittable-view-model fittable-angular",
     "clean": "rm -r ./dist & rm -r -f ./.angular/cache",
     "build": "ng build  && cp ./LICENSE ./dist/ngx-fittable-docs",
