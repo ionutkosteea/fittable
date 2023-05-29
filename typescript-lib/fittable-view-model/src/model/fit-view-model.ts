@@ -46,7 +46,6 @@ import {
 
 import {
   FIT_CSS_COLOR_VARIABLES,
-  FIT_CSS_UNIT_VARIABLES,
   setCssVariable,
   setCssVariables,
 } from './common/css-variables.js';
@@ -197,12 +196,6 @@ export class FitViewModel implements ViewModel {
     } catch (error) {
       if (!(error instanceof MissingFactoryError)) console.error(error);
     }
-    if (toolbar) {
-      const defaultHeight: string = FIT_CSS_UNIT_VARIABLES['--toolbar-height'];
-      setCssVariable('--toolbar-height', defaultHeight);
-    } else {
-      setCssVariable('--toolbar-height', '0px');
-    }
     const config: ViewModelConfig = getViewModelConfig();
     setCssVariable('--font-size', config.fontSize + 'px');
     if (config.fontFamily) {
@@ -221,13 +214,6 @@ export class FitViewModel implements ViewModel {
       });
     } catch (error) {
       if (!(error instanceof MissingFactoryError)) console.error(error);
-    }
-    if (statusbar) {
-      const defaultHeight: string =
-        FIT_CSS_UNIT_VARIABLES['--statusbar-height'];
-      setCssVariable('--statusbar-height', defaultHeight);
-    } else {
-      setCssVariable('--statusbar-height', '0px');
     }
     return statusbar;
   }

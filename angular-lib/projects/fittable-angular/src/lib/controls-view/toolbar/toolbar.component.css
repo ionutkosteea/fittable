@@ -7,7 +7,7 @@
   align-items: center;
   border-bottom: 1px solid var(--toolbar-border-color);
   background-color: var(--toolbar-background-color);
-  height: var(--toolbar-height);
+  height: 36px;
 }
 
 .button {

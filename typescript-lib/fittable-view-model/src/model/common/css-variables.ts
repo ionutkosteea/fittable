@@ -65,17 +65,11 @@ export const FIT_CSS_COLOR_VARIABLES: FitCssColorVariables = {
   '--statusbar-border-color': '#b7b7b7',
 };
 
-export type FitCssUnitVariable =
-  | '--toolbar-height'
-  | '--statusbar-height'
-  | '--font-size'
-  | '--font-family';
+export type FitCssUnitVariable = '--font-size' | '--font-family';
 
 export type FitCssUnitVariables = { [name in FitCssUnitVariable]: string };
 
 export const FIT_CSS_UNIT_VARIABLES: FitCssUnitVariables = {
-  '--toolbar-height': '36px',
-  '--statusbar-height': '20px',
   '--font-size': '0px',
   '--font-family': '',
 };

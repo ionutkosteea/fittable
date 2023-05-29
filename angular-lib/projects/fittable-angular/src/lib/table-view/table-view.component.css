@@ -1,11 +1,14 @@
 .table-view {
   position: relative;
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
 .scroller {
   position: relative;
-  height: calc(100% - var(--statusbar-height) - var(--toolbar-height));
+  flex: 1;
+  height: 100%;
   overflow: scroll;
   margin: 0px;
   padding: 0px;
