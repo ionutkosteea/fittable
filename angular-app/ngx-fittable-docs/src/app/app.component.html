@@ -1,64 +1,78 @@
 <div class="main">
-  <div class="top">
+  <header class="top">
     <div class="logo">#Fittable</div>
-    <div class="top-right-bar">
+    <aside class="top-right-bar">
       <img class="top-button" src="../assets//icons//npmjs.svg" alt="npmjs" title="npmjs" (click)="onNpmJs()" />
       <img class="top-button" src="../assets//icons//github.svg" alt="GitHub" title="GitHub" (click)="onGitHub()" />
       <img class="top-button" src="../assets//icons//e-mail.svg" alt="Contact" title="mailto:ionut.kosteea@gmail.com"
         (click)="onContact()" />
-    </div>
-  </div>
-  <div class="navigation">
+    </aside>
+  </header>
+  <nav class="navigation">
     <navigation-tree [clickedLeaf$]="activeContent$"></navigation-tree>
-  </div>
-  <div #content class="content">
-    <introduction *ngIf="activeContent==='Introduction'"></introduction>
-    <playground *ngIf="activeContent==='Playground'"></playground>
-    <architecture *ngIf="activeContent==='Architecture'"></architecture>
-    <installation *ngIf="activeContent==='Installation'"></installation>
-    <row-height *ngIf="activeContent==='Row height'"></row-height>
-    <column-width *ngIf="activeContent==='Column width'"></column-width>
-    <cell-value *ngIf="activeContent==='Cell value'"></cell-value>
-    <cell-style *ngIf="activeContent==='Cell style'"></cell-style>
-    <cell-merge *ngIf="activeContent==='Cell merge'"></cell-merge>
-    <table-dto *ngIf="activeContent==='Table DTO'"></table-dto>
-    <custom-table *ngIf="activeContent==='Custom table'"></custom-table>
-    <update-style *ngIf="activeContent==='Update style'"></update-style>
-    <paint-format *ngIf="activeContent==='Paint format'"></paint-format>
-    <resize-rows *ngIf="activeContent==='Resize rows'"></resize-rows>
-    <insert-rows-above *ngIf="activeContent==='Insert rows above'"></insert-rows-above>
-    <insert-rows-below *ngIf="activeContent==='Insert rows below'"></insert-rows-below>
-    <remove-rows *ngIf="activeContent==='Remove rows'"></remove-rows>
-    <resize-columns *ngIf="activeContent==='Resize columns'"></resize-columns>
-    <insert-columns-left *ngIf="activeContent==='Insert columns left'"></insert-columns-left>
-    <insert-columns-right *ngIf="activeContent==='Insert columns right'"></insert-columns-right>
-    <remove-columns *ngIf="activeContent==='Remove columns'"></remove-columns>
-    <clear-cells *ngIf="activeContent==='Clear cells'"></clear-cells>
-    <cell-values *ngIf="activeContent==='Cell values'"></cell-values>
-    <remove-cells *ngIf="activeContent==='Remove cells'"></remove-cells>
-    <cut-paste-cells *ngIf="activeContent==='Cut / Paste cells'"></cut-paste-cells>
-    <copy-paste-cells *ngIf="activeContent==='Copy / Paste cells'"></copy-paste-cells>
-    <merge-cells *ngIf="activeContent==='Merge cells'"></merge-cells>
-    <unmerge-cells *ngIf="activeContent==='Unmerge cells'"></unmerge-cells>
-    <operation-dto *ngIf="activeContent==='Operation DTO'"></operation-dto>
-    <custom-operation *ngIf="activeContent==='Custom operation'"></custom-operation>
-    <table-interoperability *ngIf="activeContent==='Table interoperability'"></table-interoperability>
-    <row-header *ngIf="activeContent==='Row header'"></row-header>
-    <column-header *ngIf="activeContent==='Column header'"></column-header>
-    <row-heights *ngIf="activeContent==='Row heights'"></row-heights>
-    <column-widths *ngIf="activeContent==='Column widths'"></column-widths>
-    <column-filters *ngIf="activeContent==='Column filters (1/2)'"></column-filters>
-    <column-filter-executor *ngIf="activeContent==='Column filters (2/2)'"></column-filter-executor>
-    <table-scroller *ngIf="activeContent==='Table scroller'"></table-scroller>
-    <cell-selection *ngIf="activeContent==='Cell selection'"></cell-selection>
-    <cell-editor *ngIf="activeContent==='Cell editor'"></cell-editor>
-    <language-dictionary *ngIf="activeContent==='Language dictionary'"></language-dictionary>
-    <image-registry *ngIf="activeContent==='Image registry'"></image-registry>
-    <theme-switcher *ngIf="activeContent==='Theme switcher'"></theme-switcher>
-    <settings-bar *ngIf="activeContent==='Settings bar'"></settings-bar>
-    <toolbar *ngIf="activeContent==='Toolbar'"></toolbar>
-    <context-menu *ngIf="activeContent==='Context menu'"></context-menu>
-    <statusbar *ngIf="activeContent==='Statusbar'"></statusbar>
-    <custom-view-model *ngIf="activeContent==='Custom view model'"></custom-view-model>
-  </div>
+  </nav>
+  <main #content class="content">
+    <section *ngIf="activeContent==='Introduction'">
+      <introduction></introduction>
+    </section>
+    <section *ngIf="activeContent==='Playground'">
+      <playground></playground>
+    </section>
+    <section *ngIf="activeContent==='Architecture'">
+      <architecture></architecture>
+    </section>
+    <section *ngIf="activeContent==='Installation'">
+      <installation></installation>
+    </section>
+    <section *ngIf="activeContent==='Row height'"><row-height></row-height></section>
+    <section *ngIf="activeContent==='Column width'"><column-width></column-width></section>
+    <section *ngIf="activeContent==='Cell value'"><cell-value></cell-value></section>
+    <section *ngIf="activeContent==='Cell style'"><cell-style></cell-style></section>
+    <section *ngIf="activeContent==='Cell merge'"><cell-merge></cell-merge></section>
+    <section *ngIf="activeContent==='Table DTO'"><table-dto></table-dto></section>
+    <section *ngIf="activeContent==='Custom table'"><custom-table></custom-table></section>
+    <section *ngIf="activeContent==='Update style'"><update-style></update-style></section>
+    <section *ngIf="activeContent==='Paint format'"><paint-format></paint-format></section>
+    <section *ngIf="activeContent==='Resize rows'"><resize-rows></resize-rows></section>
+    <section *ngIf="activeContent==='Insert rows above'"><insert-rows-above></insert-rows-above></section>
+    <section *ngIf="activeContent==='Insert rows below'"><insert-rows-below></insert-rows-below></section>
+    <section *ngIf="activeContent==='Remove rows'"><remove-rows></remove-rows></section>
+    <section *ngIf="activeContent==='Resize columns'"><resize-columns></resize-columns></section>
+    <section *ngIf="activeContent==='Insert columns left'"><insert-columns-left></insert-columns-left></section>
+    <section *ngIf="activeContent==='Insert columns right'"><insert-columns-right></insert-columns-right></section>
+    <section *ngIf="activeContent==='Remove columns'"><remove-columns></remove-columns></section>
+    <section *ngIf="activeContent==='Clear cells'"><clear-cells></clear-cells></section>
+    <section *ngIf="activeContent==='Cell values'"><cell-values></cell-values></section>
+    <section *ngIf="activeContent==='Remove cells'"><remove-cells></remove-cells></section>
+    <section *ngIf="activeContent==='Cut / Paste cells'"><cut-paste-cells></cut-paste-cells></section>
+    <section *ngIf="activeContent==='Copy / Paste cells'"><copy-paste-cells></copy-paste-cells></section>
+    <section *ngIf="activeContent==='Merge cells'"><merge-cells></merge-cells></section>
+    <section *ngIf="activeContent==='Unmerge cells'"><unmerge-cells></unmerge-cells></section>
+    <section *ngIf="activeContent==='Operation DTO'"><operation-dto></operation-dto></section>
+    <section *ngIf="activeContent==='Custom operation'"><custom-operation></custom-operation></section>
+    <section *ngIf="activeContent==='Table interoperability'"><table-interoperability></table-interoperability>
+    </section>
+    <section *ngIf="activeContent==='Row header'"><row-header></row-header></section>
+    <section *ngIf="activeContent==='Column header'"><column-header></column-header></section>
+    <section *ngIf="activeContent==='Row heights'"><row-heights></row-heights></section>
+    <section *ngIf="activeContent==='Column widths'"><column-widths></column-widths></section>
+    <section *ngIf="activeContent==='Column filters (1/2)'"><column-filters></column-filters></section>
+    <section *ngIf="activeContent==='Column filters (2/2)'"><column-filter-executor></column-filter-executor>
+    </section>
+    <section *ngIf="activeContent==='Table scroller'"><table-scroller></table-scroller></section>
+    <section *ngIf="activeContent==='Cell selection'"><cell-selection></cell-selection></section>
+    <section *ngIf="activeContent==='Cell editor'"><cell-editor></cell-editor></section>
+    <section *ngIf="activeContent==='Language dictionary'"><language-dictionary></language-dictionary></section>
+    <section *ngIf="activeContent==='Image registry'"><image-registry></image-registry></section>
+    <section *ngIf="activeContent==='Theme switcher'"><theme-switcher></theme-switcher></section>
+    <section *ngIf="activeContent==='Settings bar'"><settings-bar></settings-bar></section>
+    <section *ngIf="activeContent==='Toolbar'">
+      <toolbar></toolbar>
+    </section>
+    <section *ngIf="activeContent==='Context menu'"><context-menu></context-menu></section>
+    <section *ngIf="activeContent==='Statusbar'">
+      <statusbar></statusbar>
+    </section>
+    <section *ngIf="activeContent==='Custom view model'"><custom-view-model></custom-view-model></section>
+  </main>
 </div>
