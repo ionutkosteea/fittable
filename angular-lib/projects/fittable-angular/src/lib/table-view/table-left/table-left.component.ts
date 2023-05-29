@@ -15,7 +15,7 @@ import { TableCommon } from '../common/table-common.model';
   styleUrls: ['../common/css/table-common.css', './table-left.component.css'],
 })
 export class TableLeftComponent extends TableCommon {
-  @Input() viewModel!: ViewModel;
+  @Input() override viewModel!: ViewModel;
   @Input() cellSelectionListener?: CellSelectionListener;
 
   public readonly getTableOffset = (): CssStyle =>

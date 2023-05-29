@@ -22,7 +22,7 @@ export class BorderPopUpButtonComponent
   implements OnInit
 {
   @Input() override model!: OptionsControl;
-  protected override windowListener!: WindowListener;
+  public override windowListener!: WindowListener;
 
   private isColorPickerVisible = false;
   private isBorderTypeVisible = false;

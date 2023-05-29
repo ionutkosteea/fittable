@@ -23,7 +23,7 @@ export class TableCenterComponent
   extends TableCommon
   implements OnInit, OnDestroy
 {
-  @Input() viewModel!: ViewModel;
+  @Input() override viewModel!: ViewModel;
   @Input() cellSelectionListener?: CellSelectionListener;
 
   public cellEditorListener?: CellEditorListener;

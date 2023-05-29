@@ -18,7 +18,7 @@ export class SettingsButtonComponent
 {
   @Input() override model!: OptionsControl;
 
-  protected override windowListener!: WindowListener;
+  public override windowListener!: WindowListener;
 
   public ngOnInit(): void {
     this.windowListener = createWindowListener(this.model.getWindow());

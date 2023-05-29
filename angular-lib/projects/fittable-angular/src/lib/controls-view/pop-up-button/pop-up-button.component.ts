@@ -19,7 +19,7 @@ import { createToggleStyle } from '../common/style-functions.model';
 export class PopUpButtonComponent extends OptionsComponent implements OnInit {
   @Input() override model!: OptionsControl;
 
-  protected override windowListener!: WindowListener;
+  public override windowListener!: WindowListener;
 
   public ngOnInit(): void {
     this.windowListener = createWindowListener(this.model.getWindow());

@@ -18,7 +18,7 @@ import { TableCommon } from '../common/table-common.model';
   ],
 })
 export class TableLeftTopCornerComponent extends TableCommon {
-  @Input() viewModel!: ViewModel;
+  @Input() override viewModel!: ViewModel;
   @Input() cellSelectionListener?: CellSelectionListener;
 
   public readonly getTableOffset = (): CssStyle =>

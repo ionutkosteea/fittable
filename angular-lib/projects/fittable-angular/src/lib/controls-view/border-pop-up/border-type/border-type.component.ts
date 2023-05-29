@@ -31,7 +31,7 @@ export class BorderTypeComponent
   @Input() override model!: OptionsControl;
   @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
 
-  protected override windowListener!: WindowListener;
+  public override windowListener!: WindowListener;
   private readonly subscriptions: Subscription[] = [];
 
   public ngAfterViewInit(): void {

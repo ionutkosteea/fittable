@@ -13,9 +13,9 @@ import { ControlType } from './control-type.model';
 import { createWindowStyle } from './style-functions.model';
 
 @Injectable({ providedIn: 'root' })
-export class OptionsComponent {
-  public model!: OptionsControl;
-  protected windowListener!: WindowListener;
+export abstract class OptionsComponent {
+  public abstract model: OptionsControl;
+  public abstract windowListener: WindowListener;
 
   public getWindowStyle(): CssStyle {
     return createWindowStyle(this.model.getWindow());

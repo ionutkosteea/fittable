@@ -36,8 +36,9 @@ export class ColorPickerComponent
   @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('colorPicker') colorPickerRef!: ElementRef;
 
+  public override windowListener!: WindowListener;
+
   public isColorPickerVisible = false;
-  protected override windowListener!: WindowListener;
   private numberDefaultOfColors = 0;
   private readonly subscriptions: Subscription[] = [];
 

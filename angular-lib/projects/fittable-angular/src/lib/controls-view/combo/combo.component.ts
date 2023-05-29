@@ -22,7 +22,7 @@ export class ComboComponent extends OptionsComponent implements OnInit {
   @Input() override model!: OptionsControl;
   @Input() isFontCombo = false;
 
-  protected override windowListener!: WindowListener;
+  public override windowListener!: WindowListener;
 
   public ngOnInit(): void {
     this.windowListener = createWindowListener(this.model.getWindow());
