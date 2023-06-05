@@ -7,7 +7,7 @@ import { registerViewModelConfig } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
-import { NgxFittableModule } from 'fittable-angular';
+import { FittableModule } from 'fittable-angular';
 
 import { AppComponent } from './app.component';
 
@@ -18,7 +18,7 @@ registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, NgxFittableModule],
+  imports: [BrowserModule, FittableModule],
   providers: [],
   bootstrap: [AppComponent],
 })

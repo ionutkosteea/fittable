@@ -22,7 +22,7 @@ import { Button, ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'table-scroller',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class TableScrollerComponent implements ConsoleTopic, OnInit {
   public readonly title: TopicTitle = 'Table scroller';

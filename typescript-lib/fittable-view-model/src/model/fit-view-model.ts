@@ -107,11 +107,13 @@ export class FitViewModel implements ViewModel {
 
   private createTableScroller(): ScrollContainer {
     const tableScroller: ScrollContainer = //
-      createScrollContainer(this.tableViewer)
-        .setHorizontalScrollbar(new HorizontalScrollbar(this.tableViewer))
+      createScrollContainer(this.tableViewer);
+    !this.config.disableVirtualRows &&
+      tableScroller //
         .setVerticalScrollbar(new VerticalScrollbar(this.tableViewer));
-    this.config.disableVirtualRows && tableScroller.setVerticalScrollbar();
-    this.config.disableVirtualCols && tableScroller.setHorizontalScrollbar();
+    !this.config.disableVirtualCols &&
+      tableScroller //
+        .setHorizontalScrollbar(new HorizontalScrollbar(this.tableViewer));
     return tableScroller;
   }
 
@@ -339,6 +341,7 @@ export class FitViewModel implements ViewModel {
     this.viewModelSubscriptions.destroy();
     this.operationSubscriptions?.destroy();
     this.mobileLayout.destroy();
+    this.statusbar?.destroy();
   }
 }
 

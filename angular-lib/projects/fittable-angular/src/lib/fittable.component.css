@@ -1,0 +1,11 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.table {
+  display: contents;
+  flex: 1;
+}

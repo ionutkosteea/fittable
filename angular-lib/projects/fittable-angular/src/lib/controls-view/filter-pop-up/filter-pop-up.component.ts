@@ -1,11 +1,9 @@
-import { Subscription } from 'rxjs';
 import {
   AfterViewInit,
   Component,
   ElementRef,
   HostListener,
   Input,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -73,15 +71,13 @@ type ControlId =
   templateUrl: './filter-pop-up-window.component.html',
   styleUrls: ['./filter-pop-up.component.css'],
 })
-export class FilterPopupWindowComponent implements AfterViewInit, OnDestroy {
+export class FilterPopupWindowComponent implements AfterViewInit {
   @Input() colFilters!: ColFilters;
   @ViewChild('filterWindow') filterWindowRef!: ElementRef;
   @ViewChild('searchInput') searchInputRef!: ElementRef;
   @ViewChild('scroller') scrollerRef!: ElementRef;
 
   private windowListener!: WindowListener;
-
-  private subscriptions: Subscription[] = [];
 
   public ngAfterViewInit(): void {
     const filterWindow: HTMLElement = this.filterWindowRef.nativeElement;
@@ -90,16 +86,6 @@ export class FilterPopupWindowComponent implements AfterViewInit, OnDestroy {
       .setWidth((): number => filterWindow.clientWidth);
     this.windowListener = //
       createWindowListener(this.getPopUpButton().getWindow());
-    this.subscriptions.push(this.initScrollContainer$());
-  }
-
-  private initScrollContainer$(): Subscription {
-    return this.getPopUpWindow()
-      .onAfterSetFocus$()
-      .subscribe((focus: boolean): void => {
-        if (!focus) return;
-        this.getScrollContainer().resizeViewportHeight();
-      });
   }
 
   public readonly getWindowStyle = (): CssStyle =>
@@ -185,9 +171,5 @@ export class FilterPopupWindowComponent implements AfterViewInit, OnDestroy {
 
   @HostListener('window:mousedown') onGlobalMouseDown(): void {
     this.windowListener.onGlobalMouseDown();
-  }
-
-  public ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
   }
 }

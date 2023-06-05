@@ -46,8 +46,10 @@ describe('Statusbar', (): void => {
       .setNumberOfRows(10)
       .setNumberOfCols(5);
     const tableViewer: TableViewer = createTableViewer(table);
-    const tableScroller: ScrollContainer = createScrollContainer(tableViewer);
-    tableScroller.init(new TstScrollElement());
+    const tableScroller: ScrollContainer = createScrollContainer(tableViewer)
+      .init(new TstScrollElement())
+      .resizeViewportWidth()
+      .resizeViewportHeight();
     const statusbar: Statusbar = createStatusbar({
       dictionary,
       tableViewer,

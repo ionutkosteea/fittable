@@ -9,7 +9,7 @@ import { ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'resize-rows',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class ResizeRowsComponent extends ConsoleTopic {
   public readonly title: TopicTitle = 'Resize rows';

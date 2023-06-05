@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import {
   Dictionary,
   LanguageDictionary,
@@ -14,6 +16,9 @@ export class TstLanguageDictionary implements LanguageDictionary {
     throw new Error('Method not implemented.');
   }
   setCurrentLanguage(code: string): this {
+    throw new Error('Method not implemented.');
+  }
+  onAfterSetCurrentLanguage$(): Observable<string> {
     throw new Error('Method not implemented.');
   }
   getCurrentLanguage(): string | undefined {

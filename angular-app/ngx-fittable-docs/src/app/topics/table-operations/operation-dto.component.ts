@@ -27,7 +27,7 @@ import { ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'operation-dto',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class OperationDtoComponent extends ConsoleTopic implements OnInit {
   public readonly title: TopicTitle = 'Operation DTO';

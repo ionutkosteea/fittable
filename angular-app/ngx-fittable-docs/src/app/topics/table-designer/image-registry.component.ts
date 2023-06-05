@@ -18,7 +18,7 @@ import { Button, ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'image-registry',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class ImageRegistryComponent implements ConsoleTopic, OnInit {
   public readonly title: TopicTitle = 'Image registry';

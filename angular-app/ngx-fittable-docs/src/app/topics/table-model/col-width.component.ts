@@ -18,7 +18,7 @@ import { SimpleTopic } from '../common/simple-topic.model';
 @Component({
   selector: 'column-width',
   templateUrl: '../common/simple-topic.html',
-  styleUrls: ['../common/simple-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class ColWidthtComponent implements SimpleTopic, OnInit {
   public readonly title: TopicTitle = 'Column width';

@@ -9,7 +9,7 @@ import { ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'cell-values',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class CellValuesComponent extends ConsoleTopic {
   public readonly title: TopicTitle = 'Cell values';

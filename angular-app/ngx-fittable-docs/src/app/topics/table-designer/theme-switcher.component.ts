@@ -29,7 +29,7 @@ type CustomThemeName = FitThemeName | 'Lemon';
 @Component({
   selector: 'theme-switcher',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class ThemeSwitcherComponent implements ConsoleTopic, OnInit {
   public readonly title: TopicTitle = 'Theme switcher';

@@ -1,0 +1,12 @@
+<div class="scroller" fitScrollContainer [scrollContainer]="getTableScroller()">
+  <div class="table-container" [ngStyle]="{'width.px':getTableWidth(),'height.px':getTableHeight()}">
+    <fit-table-center [viewModel]="viewModel" [cellSelectionListener]="cellSelectionListener">
+    </fit-table-center>
+    <fit-table-left *ngIf="showRowHeader()" [viewModel]="viewModel" [cellSelectionListener]="cellSelectionListener">
+    </fit-table-left>
+    <fit-table-top *ngIf="showColHeader()" [viewModel]="viewModel" [cellSelectionListener]="cellSelectionListener">
+    </fit-table-top>
+    <fit-table-left-top-corner *ngIf="showRowHeader()" [viewModel]="viewModel"
+      [cellSelectionListener]="cellSelectionListener"></fit-table-left-top-corner>
+  </div>
+</div>

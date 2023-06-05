@@ -14,7 +14,7 @@ import { ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'update-style',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class UpdateStyleComponent extends ConsoleTopic {
   public readonly title: TopicTitle = 'Update style';

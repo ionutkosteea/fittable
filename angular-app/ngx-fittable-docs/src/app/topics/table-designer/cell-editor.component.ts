@@ -25,7 +25,7 @@ import { Button, ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'cell-editor',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class CellEditorComponent implements ConsoleTopic, OnInit {
   public readonly title: TopicTitle = 'Cell editor';

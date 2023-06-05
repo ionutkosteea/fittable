@@ -22,7 +22,7 @@ import { Button, ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'column-filters',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class ColFiltersComponent implements ConsoleTopic, OnInit {
   public readonly title: TopicTitle = 'Column filters (1/2)';

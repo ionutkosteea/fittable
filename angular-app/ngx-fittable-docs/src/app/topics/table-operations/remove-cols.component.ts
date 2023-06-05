@@ -24,7 +24,7 @@ import { ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'remove-columns',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class RemoveColsComponent extends ConsoleTopic implements OnInit {
   public readonly title: TopicTitle = 'Remove columns';

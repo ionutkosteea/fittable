@@ -18,7 +18,7 @@ import { ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'table-dto',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class TableDtoComponent extends ConsoleTopic implements OnInit {
   @ViewChild('console') console!: ElementRef;

@@ -25,7 +25,7 @@ import { SimpleTopic } from '../common/simple-topic.model';
 @Component({
   selector: 'toolbar',
   templateUrl: '../common/simple-topic.html',
-  styleUrls: ['../common/simple-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class ToolbarComponent implements SimpleTopic, OnInit {
   public readonly title: TopicTitle = 'Toolbar';

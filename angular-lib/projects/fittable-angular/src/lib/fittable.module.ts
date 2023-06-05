@@ -5,7 +5,7 @@ import { TableLeftTopCornerComponent } from './table-view/table-left-top-corner/
 import { TableTopComponent } from './table-view/table-top/table-top.component';
 import { TableLeftComponent } from './table-view/table-left/table-left.component';
 import { TableCenterComponent } from './table-view/table-center/table-center.component';
-import { TableViewComponent } from './table-view/table-view.component';
+import { FittableComponent } from './fittable.component';
 import { ScrollContainerDirective } from './table-view/common/scroll-container.directive';
 import { CellSelectionDirective } from './table-view/common/cell-selection.directive';
 import { ToolbarComponent } from './controls-view/toolbar/toolbar.component';
@@ -27,6 +27,7 @@ import {
   FilterPopupButtonComponent,
   FilterPopupWindowComponent,
 } from './controls-view/filter-pop-up/filter-pop-up.component';
+import { TableComponent } from './table-view/table.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import {
     TableTopComponent,
     TableLeftComponent,
     TableCenterComponent,
-    TableViewComponent,
+    FittableComponent,
     ScrollContainerDirective,
     CellSelectionDirective,
     ToolbarComponent,
@@ -54,10 +55,18 @@ import {
     SettingsButtonComponent,
     FilterPopupButtonComponent,
     FilterPopupWindowComponent,
+    TableComponent,
   ],
   imports: [CommonModule],
   providers: [],
   bootstrap: [],
-  exports: [TableViewComponent],
+  exports: [
+    FittableComponent,
+    ToolbarComponent,
+    TableComponent,
+    StatusbarComponent,
+    SettingsBarComponent,
+    ContextMenuComponent,
+  ],
 })
-export class NgxFittableModule {}
+export class FittableModule {}

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { NgxFittableModule } from 'fittable-angular';
+import { FittableModule } from 'fittable-angular';
 
 import { AppComponent } from './app.component';
 import { NavigationTreeComponent } from './navigation-tree/navigation-tree.component';
@@ -109,7 +109,7 @@ describe('AppComponent', () => {
         CustomViewModelComponent,
         TableInteroperabilityComponent,
       ],
-      imports: [BrowserModule, NgxFittableModule],
+      imports: [BrowserModule, FittableModule],
     }).compileComponents();
   });
 

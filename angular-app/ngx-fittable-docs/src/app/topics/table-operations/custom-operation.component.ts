@@ -30,7 +30,7 @@ import { ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'custom-operation',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class CustomOperationComponent extends ConsoleTopic implements OnInit {
   public readonly title: TopicTitle = 'Custom operation';

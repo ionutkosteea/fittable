@@ -47,4 +47,5 @@ export type TopicTitle =
   | 'Toolbar'
   | 'Context menu'
   | 'Statusbar'
-  | 'Custom view model';
+  | 'Custom view model'
+  | 'Custom view';

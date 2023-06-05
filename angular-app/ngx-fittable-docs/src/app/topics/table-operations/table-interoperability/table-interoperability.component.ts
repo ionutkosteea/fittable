@@ -28,10 +28,7 @@ type OperationProperties = FitUIOperationProperties & {
 @Component({
   selector: 'table-interoperability',
   templateUrl: './table-interoperability.component.html',
-  styleUrls: [
-    './table-interoperability.component.css',
-    '../../common/common.css',
-  ],
+  styleUrls: ['../../common/common.css'],
 })
 export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   public readonly title: TopicTitle = 'Table interoperability';

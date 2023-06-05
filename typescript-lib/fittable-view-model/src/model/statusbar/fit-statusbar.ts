@@ -1,4 +1,4 @@
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 
 import {
   Statusbar,
@@ -9,21 +9,49 @@ import {
 import { FitTextKey } from '../language-dictionary/language-dictionary-keys.js';
 
 export class FitStatusbar implements Statusbar {
+  private text = '';
   private focus = false;
   private afterSetFocus$: Subject<boolean> = new Subject();
 
-  constructor(private readonly args: StatusbarArgs) {}
+  private readonly subscriptions: Subscription[] = [];
+
+  constructor(private readonly args: StatusbarArgs) {
+    this.init();
+  }
+
+  private init(): void {
+    this.refresh();
+    this.subscriptions.push(this.onAfterRenderScroller$());
+    this.subscriptions.push(this.onAfterSetCurrentLanguage$());
+  }
+
+  private onAfterRenderScroller$(): Subscription {
+    return this.args.tableScroller
+      .onAfterRenderModel$()
+      .subscribe((): void => this.refresh());
+  }
+
+  private onAfterSetCurrentLanguage$(): Subscription {
+    return this.args.dictionary
+      .onAfterSetCurrentLanguage$()
+      .subscribe((): void => this.refresh());
+  }
+
+  public refresh(): void {
+    this.text = this.createText();
+  }
+
+  private readonly createText = (): string =>
+    this.getTranslation('Rows') +
+    ': ' +
+    this.getRenderedRows() +
+    ' ' +
+    this.getTranslation('Columns') +
+    ': ' +
+    this.getRederedCols();
 
   public getText(): string {
-    return (
-      this.getTranslation('Rows') +
-      ': ' +
-      this.getRenderedRows() +
-      ' ' +
-      this.getTranslation('Columns') +
-      ': ' +
-      this.getRederedCols()
-    );
+    return this.text;
   }
 
   public getRenderedRows(): string {
@@ -81,11 +109,17 @@ export class FitStatusbar implements Statusbar {
     !ignoreTrigger && this.afterSetFocus$.next(focus);
     return this;
   }
+
   public hasFocus(): boolean {
     return this.focus;
   }
+
   public onAfterSetFocus$(): Observable<boolean> {
     return this.afterSetFocus$.asObservable();
+  }
+
+  public destroy(): void {
+    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
   }
 }
 

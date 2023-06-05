@@ -23,7 +23,7 @@ import {
   FitViewModelConfigDef,
   FIT_VIEW_MODEL_CONFIG,
 } from 'fittable-view-model';
-import { TableViewComponent } from 'fittable-angular';
+import { FittableComponent } from 'fittable-angular';
 
 import { TopicTitle } from '../../../common/topic-title.model';
 
@@ -80,7 +80,7 @@ const getFitTableDto = (): FitTableDto => ({
 export class PlaygroundComponent implements OnInit, AfterViewInit {
   @ViewChild('content', { read: ViewContainerRef })
   vcr!: ViewContainerRef;
-  ref!: ComponentRef<TableViewComponent>;
+  ref!: ComponentRef<FittableComponent>;
 
   public readonly title: TopicTitle = 'Playground';
   public readonly navigation: NavigationItem[] = this.createNavigation();
@@ -251,7 +251,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
       const index = this.vcr.indexOf(this.ref.hostView);
       if (index != -1) this.vcr.remove(index);
     }
-    this.ref = this.vcr.createComponent(TableViewComponent);
+    this.ref = this.vcr.createComponent(FittableComponent);
     this.ref.setInput('designer', this.fit);
   }
 }

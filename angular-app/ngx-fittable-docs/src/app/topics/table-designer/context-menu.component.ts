@@ -21,7 +21,7 @@ import { SimpleTopic } from '../common/simple-topic.model';
 @Component({
   selector: 'context-menu',
   templateUrl: '../common/simple-topic.html',
-  styleUrls: ['../common/simple-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class ContextMenuComponent implements SimpleTopic, OnInit {
   public readonly title: TopicTitle = 'Context menu';

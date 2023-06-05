@@ -27,7 +27,7 @@ type ButtonText = 'Copy cells B2, B3' | 'Paste over C2';
 @Component({
   selector: 'copy-paste-cells',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class CopyPasteCellsComponent extends ConsoleTopic implements OnInit {
   public readonly title: TopicTitle = 'Copy / Paste cells';

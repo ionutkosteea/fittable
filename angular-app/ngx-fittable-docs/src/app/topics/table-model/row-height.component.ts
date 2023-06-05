@@ -18,7 +18,7 @@ import { SimpleTopic } from '../common/simple-topic.model';
 @Component({
   selector: 'row-height',
   templateUrl: '../common/simple-topic.html',
-  styleUrls: ['../common/simple-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class RowHeightComponent implements SimpleTopic, OnInit {
   public readonly title: TopicTitle = 'Row height';

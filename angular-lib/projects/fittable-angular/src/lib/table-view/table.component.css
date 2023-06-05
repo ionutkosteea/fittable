@@ -1,13 +1,5 @@
-.table-view {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
 .scroller {
   position: relative;
-  flex: 1;
   height: 100%;
   overflow: scroll;
   margin: 0px;

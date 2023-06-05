@@ -23,7 +23,7 @@
   },
   "scripts": {
     "reset": "rm -r coverage & rm -r dist & rm -r node_modules & rm package-lock.json & npm cache clean --force",
-    "link": "npm link fittable-core",
+    "link": "npm link fittable-core fittable-model fittable-model-operations",
     "clean": "rm -r ./dist && mkdir ./dist",
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -p tsconfig.json --watch",

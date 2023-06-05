@@ -27,7 +27,7 @@ type ButtonText = 'Cut cells B2, B3' | 'Paste over C2';
 @Component({
   selector: 'cut-paste-cells',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class CutPasteCellsComponent extends ConsoleTopic implements OnInit {
   public readonly title: TopicTitle = 'Cut / Paste cells';

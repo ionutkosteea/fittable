@@ -24,7 +24,7 @@ import { ConsoleTopic } from './common/console-topic.model';
 @Component({
   selector: 'insert-rows-above',
   templateUrl: './common/console-topic.html',
-  styleUrls: ['./common/console-topic.css', '../common/common.css'],
+  styleUrls: ['../common/common.css'],
 })
 export class InsertRowsAboveComponent extends ConsoleTopic implements OnInit {
   public readonly title: TopicTitle = 'Insert rows above';

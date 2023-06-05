@@ -1,3 +1,5 @@
+import { Observable, Subject } from 'rxjs';
+
 import {
   LanguageDictionary,
   LanguageDictionaryFactory,
@@ -14,6 +16,7 @@ import { deDE } from './languages/de-DE.js';
 export class FitLanguageDictionary implements LanguageDictionary {
   private dictionaries: { [FitLanguageCode in string]?: FitDictionary } = {};
   private currentCode?: FitLanguageCode;
+  private afterSetCurrentLanguage$: Subject<string> = new Subject();
 
   public registerLanguage(
     code: FitLanguageCode,
@@ -34,7 +37,12 @@ export class FitLanguageDictionary implements LanguageDictionary {
 
   public setCurrentLanguage(code: FitLanguageCode): this {
     this.currentCode = code;
+    this.afterSetCurrentLanguage$.next(code);
     return this;
+  }
+
+  public onAfterSetCurrentLanguage$(): Observable<string> {
+    return this.afterSetCurrentLanguage$.asObservable();
   }
 
   public getCurrentLanguage(): FitLanguageCode | undefined {

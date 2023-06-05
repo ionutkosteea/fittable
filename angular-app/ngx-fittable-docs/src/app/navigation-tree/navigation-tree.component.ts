@@ -108,6 +108,7 @@ function createTree(): Composite[] {
         'Context menu',
         'Statusbar',
         'Custom view model',
+        'Custom view',
       ],
     },
   ];

@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import { getViewModelConfig } from '../view-model-config.js';
 
 export type Dictionary = { [key in string]?: string };
@@ -7,6 +9,7 @@ export interface LanguageDictionary {
   getRegisteredLanguages(): string[];
   unregisterLanguage(code: string): this;
   setCurrentLanguage(code: string): this;
+  onAfterSetCurrentLanguage$(): Observable<string>;
   getCurrentLanguage(): string | undefined;
   setText(key: string, value?: string): this;
   getText(key: string): string;

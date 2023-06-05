@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { NgxFittableModule } from 'fittable-angular';
+import { FittableModule } from 'fittable-angular';
 
 import { AppComponent } from './app.component';
 import { NavigationTreeComponent } from './navigation-tree/navigation-tree.component';
@@ -53,6 +53,10 @@ import { ColFiltersComponent } from './topics/table-designer/col-filters.compone
 import { ColFilterExecutorComponent } from './topics/table-designer/col-filter-executor.component';
 import { TableInteroperabilityComponent } from './topics/table-operations/table-interoperability/table-interoperability.component';
 import { InstallationComponent } from './topics/getting-started/installation/installation.component';
+import { CustomViewComponent } from './topics/table-designer/custom-view/custom-view.component';
+import { CustomContextMenuComponent } from './topics/table-designer/custom-view/custom-context-menu.component';
+import { CustomToolbarComponent } from './topics/table-designer/custom-view/custom-toolbar.component';
+import { CustomStatusbarComponent } from './topics/table-designer/custom-view/custom-statusbar.component';
 
 @NgModule({
   declarations: [
@@ -106,8 +110,12 @@ import { InstallationComponent } from './topics/getting-started/installation/ins
     StatusbarComponent,
     CustomViewModelComponent,
     TableInteroperabilityComponent,
+    CustomViewComponent,
+    CustomContextMenuComponent,
+    CustomToolbarComponent,
+    CustomStatusbarComponent,
   ],
-  imports: [BrowserModule, NgxFittableModule],
+  imports: [BrowserModule, FittableModule],
   providers: [],
   bootstrap: [AppComponent],
 })

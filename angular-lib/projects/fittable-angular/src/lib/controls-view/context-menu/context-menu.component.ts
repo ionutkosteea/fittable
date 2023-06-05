@@ -24,31 +24,31 @@ import { createWindowStyle } from '../common/style-functions.model';
   styleUrls: ['./context-menu.component.css'],
 })
 export class ContextMenuComponent implements AfterViewInit {
-  @Input() window!: Window;
+  @Input() model!: Window;
   @ViewChild('main') menuRef!: ElementRef;
 
   private windowListener!: WindowListener;
 
   public ngAfterViewInit(): void {
     const htmlMenu: HTMLElement = this.menuRef.nativeElement;
-    this.window
+    this.model
       .setWidth((): number => htmlMenu.clientWidth)
       .setHeight((): number => htmlMenu.clientHeight);
-    this.windowListener = createWindowListener(this.window);
+    this.windowListener = createWindowListener(this.model);
   }
 
-  public readonly getMenuStyle = (): CssStyle => createWindowStyle(this.window);
+  public readonly getMenuStyle = (): CssStyle => createWindowStyle(this.model);
 
-  public readonly getMenuItemIds = (): string[] => this.window.getControlIds();
+  public readonly getMenuItemIds = (): string[] => this.model.getControlIds();
 
   public readonly getMenuItem = (id: string): Control =>
-    this.window.getControl(id);
+    this.model.getControl(id);
 
   public readonly getMenuItemType = (id: string): ControlType =>
     this.getMenuItem(id).getType() as ControlType;
 
   public hideMenu = (): void => {
-    this.window.setVisible(false);
+    this.model.setVisible(false);
   };
 
   @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
