@@ -1,4 +1,4 @@
-import { FitOptionsControl } from '../common/controls/fit-options-control.js';
+import { FitPopupControl } from '../common/controls/fit-popup-control.js';
 import { VirtualScrollbar } from '../scroll-container/fit-scrollbar.js';
 import { FitColFiltersControlId } from './fit-col-filters.js';
 
@@ -6,15 +6,15 @@ const FIT_CHECK_BOX_HEIGHT = 20;
 
 export class ColValueScrollbar extends VirtualScrollbar {
   constructor(
-    private readonly popUpButton: FitOptionsControl<FitColFiltersControlId>
+    private readonly popupButton: FitPopupControl<FitColFiltersControlId>
   ) {
     super();
   }
 
   protected getNumberOfLines(): number {
-    const container: FitOptionsControl<string> = this.popUpButton
+    const container: FitPopupControl<string> = this.popupButton
       .getWindow()
-      .getControl('value-check-list') as FitOptionsControl<string>;
+      .getControl('value-check-list') as FitPopupControl<string>;
     return container.getWindow().getControlIds().length;
   }
 

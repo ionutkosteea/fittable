@@ -10,7 +10,7 @@ import {
   Window,
   ColFilters,
   Control,
-  asOptionsControl,
+  asPopupControl,
 } from 'fittable-core/view-model';
 
 import { ControlUpdater } from '../toolbar/controls/common/control-updater.js';
@@ -97,7 +97,7 @@ export class ViewModelSubscriptions {
     this.args.cellSelection?.pageHeader &&
       objects.push(this.args.cellSelection.pageHeader);
     this.args.colFilters &&
-      objects.push(this.args.colFilters.getPopUpButton(0).getWindow());
+      objects.push(this.args.colFilters.getPopupButton(0).getWindow());
     const settingsWindow: Window | undefined = this.getSettingsWindow();
     settingsWindow && objects.push(settingsWindow);
     return objects;
@@ -107,7 +107,7 @@ export class ViewModelSubscriptions {
     if (!this.args.settingsBar) return undefined;
     const id: FitSettingsBarControlId = 'settings-button';
     const control: Control = this.args.settingsBar.getControl(id);
-    return asOptionsControl(control)?.getWindow();
+    return asPopupControl(control)?.getWindow();
   }
 
   private ifObjectIsFocusedFocusOutOthers$(

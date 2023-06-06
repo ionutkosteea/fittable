@@ -1,11 +1,11 @@
-<div class="button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showOptionsWindow()">&nbsp;</div>
-<div class="menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+<div class="button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showPopupWindow()">&nbsp;</div>
+<div class="popup-window" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
   (window:mousedown)="onGlobalMouseDown()">
-  <ng-container *ngFor="let id of getOptionIds()">
-    <div *ngIf="getOptionType(id)==='label'" class="title">{{getOptionLabel(id)}}</div>
-    <div *ngIf="getOptionType(id)!=='label'" class="option" (click)="runOption(id)">
-      <div class="label">{{getOptionLabel(id)}}</div>
-      <div class="check" [ngStyle]="{backgroundImage:getOptionIcon(id)}">&nbsp;</div>
+  <ng-container *ngFor="let id of getPopupIds()">
+    <div *ngIf="getPopupType(id)==='label'" class="title">{{getPopupLabel(id)}}</div>
+    <div *ngIf="getPopupType(id)!=='label'" class="popup-child" (click)="runPopup(id)">
+      <div class="label">{{getPopupLabel(id)}}</div>
+      <div class="check" [ngStyle]="{backgroundImage:getPopupIcon(id)}">&nbsp;</div>
     </div>
   </ng-container>
 </div>

@@ -2,7 +2,7 @@ import { MissingFactoryError } from '../../common/factory-error.js';
 import { ColFilterExecutor } from '../../model/col-filter-executor.js';
 import { OperationExecutor } from '../../operations/operation-core.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { OptionsControl } from './controls.js';
+import { PopupControl } from './controls.js';
 import { ImageRegistry } from './image-registry.js';
 import { LanguageDictionary } from './language-dictionary.js';
 import { ScrollContainer } from './scroll-container.js';
@@ -15,7 +15,7 @@ export type ValueCondition = {
 export interface ColFilters {
   filterExecutor: ColFilterExecutor;
   loadCol(colId: number): this;
-  getPopUpButton(colId: number): OptionsControl;
+  getPopupButton(colId: number): PopupControl;
   getValueConditions(): { [colId: number]: ValueCondition };
   getValueScroller(): ScrollContainer;
   destroy(): void;

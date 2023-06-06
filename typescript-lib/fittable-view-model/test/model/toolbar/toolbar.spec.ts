@@ -20,14 +20,14 @@ import {
   unregisterOperationConfig,
 } from 'fittable-core/operations';
 import {
-  asOptionsControl,
+  asPopupControl,
   asValueControl,
   Container,
   Control,
   createImageRegistry,
   createLanguageDictionary,
   createToolbar,
-  OptionsControl,
+  PopupControl,
   registerViewModelConfig,
   unregisterViewModelConfig,
 } from 'fittable-core/view-model';
@@ -207,7 +207,7 @@ describe('Toolbar', (): void => {
     });
     const controlId: FitToolbarControlId = 'font-family';
     const control: Control = toolbar.getControl(controlId);
-    const fontCombo: OptionsControl | undefined = asOptionsControl(control);
+    const fontCombo: PopupControl | undefined = asPopupControl(control);
     fontCombo?.setSelectedControl('Fantasy').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
@@ -250,7 +250,7 @@ describe('Toolbar', (): void => {
     });
     const controlId: FitToolbarControlId = 'color';
     const control: Control = toolbar.getControl(controlId);
-    const fontCombo: OptionsControl | undefined = asOptionsControl(control);
+    const fontCombo: PopupControl | undefined = asPopupControl(control);
     fontCombo?.setSelectedControl('#d9d9d9').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
@@ -272,7 +272,7 @@ describe('Toolbar', (): void => {
     });
     const controlId: FitToolbarControlId = 'background-color';
     const control: Control = toolbar.getControl(controlId);
-    const fontCombo: OptionsControl | undefined = asOptionsControl(control);
+    const fontCombo: PopupControl | undefined = asPopupControl(control);
     fontCombo?.setSelectedControl('#d9d9d9').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
@@ -296,7 +296,7 @@ describe('Toolbar', (): void => {
     });
     const controlId: FitToolbarControlId = 'horizontal-align';
     const control: Control = toolbar.getControl(controlId);
-    const fontCombo: OptionsControl | undefined = asOptionsControl(control);
+    const fontCombo: PopupControl | undefined = asPopupControl(control);
     fontCombo?.setSelectedControl('align-center').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
@@ -318,7 +318,7 @@ describe('Toolbar', (): void => {
     });
     const controlId: FitToolbarControlId = 'vertical-align';
     const control: Control = toolbar.getControl(controlId);
-    const fontCombo: OptionsControl | undefined = asOptionsControl(control);
+    const fontCombo: PopupControl | undefined = asPopupControl(control);
     fontCombo?.setSelectedControl('align-middle').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
@@ -342,7 +342,7 @@ describe('Toolbar', (): void => {
     });
     const controlId: FitToolbarControlId = 'border';
     const control: Control = toolbar.getControl(controlId);
-    const fontCombo: OptionsControl | undefined = asOptionsControl(control);
+    const fontCombo: PopupControl | undefined = asPopupControl(control);
     fontCombo?.getWindow().getControl('Bottom').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);

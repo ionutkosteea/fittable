@@ -2,22 +2,25 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { CssStyle } from 'fittable-core/model';
 import {
-  OptionsControl,
+  PopupControl,
   WindowListener,
   createWindowListener,
   Control,
 } from 'fittable-core/view-model';
 
-import { OptionsComponent } from '../common/options-component.model';
+import { PopupControlComponent } from '../common/popup-control-component.model';
 import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
-  selector: 'fit-pop-up-button',
-  templateUrl: './pop-up-button.component.html',
-  styleUrls: ['./pop-up-button.component.css'],
+  selector: 'fit-popup-button',
+  templateUrl: './popup-button.component.html',
+  styleUrls: ['./popup-button.component.css'],
 })
-export class PopUpButtonComponent extends OptionsComponent implements OnInit {
-  @Input() override model!: OptionsControl;
+export class PopupButtonComponent
+  extends PopupControlComponent
+  implements OnInit
+{
+  @Input() override model!: PopupControl;
 
   public override windowListener!: WindowListener;
 

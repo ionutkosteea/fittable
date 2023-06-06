@@ -2,7 +2,7 @@ import { SettingsBarArgs, SettingsBarFactory } from 'fittable-core/view-model';
 
 import { FitContainer } from '../common/controls/fit-container.js';
 import { FitControl } from '../common/controls/fit-control.js';
-import { FitOptionsControl } from '../common/controls/fit-options-control.js';
+import { FitPopupControl } from '../common/controls/fit-popup-control.js';
 import { FitValueControl } from '../common/controls/fit-value-control.js';
 import { FitWindow } from '../common/controls/fit-window.js';
 import { FitImageId } from '../image-registry/fit-image-ids.js';
@@ -27,9 +27,9 @@ export class FitSettingsBarBuilder {
       .addControl('settings-button', this.createButton());
   }
 
-  private createButton(): FitOptionsControl<string> {
+  private createButton(): FitPopupControl<string> {
     const window: FitWindow<string> = this.createWindow();
-    const button: FitOptionsControl<string> = new FitOptionsControl(window) //
+    const button: FitPopupControl<string> = new FitPopupControl(window) //
       .setLabel((): string => this.getText('Settings'))
       .setIcon((): string | undefined => this.getImageUrl('settings'));
     return button;

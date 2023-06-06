@@ -1,18 +1,18 @@
 <div class="color-picker">
-  <div class="button" (click)="showOptionsWindow()" [ngStyle]="getButtonStyle()">&nbsp;</div>
-  <hr class="picked-color" (click)="showOptionsWindow()" [ngStyle]="{backgroundColor:getSelectedValue()}" />
-  <div class="options" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+  <div class="button" (click)="showPopupWindow()" [ngStyle]="getButtonStyle()">&nbsp;</div>
+  <hr class="picked-color" (click)="showPopupWindow()" [ngStyle]="{backgroundColor:getSelectedValue()}" />
+  <div class="popup-window" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">
-    <div class="color-none-panel" (click)="runOption(getColorNoneId())">
+    <div class="color-none-panel" (click)="runPopup(getColorNoneId())">
       <div class="color-none-icon" [ngStyle]="{ backgroundImage: getColorNoneIcon() }"></div>
       <div class="color-none-label">{{getColorNoneLabel()}}</div>
     </div>
     <div class="color-panel">
-      <div class="color" *ngFor="let id of getColorIds()" (click)="runOption(id)"
+      <div class="color" *ngFor="let id of getColorIds()" (click)="runPopup(id)"
         [ngStyle]="{ backgroundColor: getColorValue(id) }"></div>
     </div>
     <div class="custom-color-panel">
-      <div class="color" *ngFor="let id of getCustomColorIds()" (click)="runOption(id)"
+      <div class="color" *ngFor="let id of getCustomColorIds()" (click)="runPopup(id)"
         [ngStyle]="{ backgroundColor: getColorValue(id) }"></div>
     </div>
     <div class="add-color-panel">

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 import {
-  OptionsControl,
+  PopupControl,
   Control,
   ValueControl,
   asValueControl,
@@ -17,7 +17,7 @@ import {
   createWindowListener,
 } from 'fittable-core/view-model';
 
-import { OptionsComponent } from '../../common/options-component.model';
+import { PopupControlComponent } from '../../common/popup-control-component.model';
 
 @Component({
   selector: 'fit-border-type',
@@ -25,10 +25,10 @@ import { OptionsComponent } from '../../common/options-component.model';
   styleUrls: ['./border-type.component.css'],
 })
 export class BorderTypeComponent
-  extends OptionsComponent
+  extends PopupControlComponent
   implements AfterViewInit, OnDestroy
 {
-  @Input() override model!: OptionsControl;
+  @Input() override model!: PopupControl;
   @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
 
   public override windowListener!: WindowListener;

@@ -5,7 +5,7 @@
         <fit-button class="button" [model]="getControl(id)"></fit-button>
       </ng-container>
       <ng-container *ngSwitchCase="'combo'">
-        <fit-combo class="field" [model]="getOptionsControl(id)" [isFontCombo]="true">
+        <fit-combo class="field" [model]="getPopupControl(id)" [isFontCombo]="true">
         </fit-combo>
       </ng-container>
       <ng-container *ngSwitchCase="'input'">
@@ -13,16 +13,16 @@
         </fit-input>
       </ng-container>
       <ng-container *ngSwitchCase="'color-picker'">
-        <fit-color-picker class="button" [model]="getOptionsControl(id)">
+        <fit-color-picker class="button" [model]="getPopupControl(id)">
         </fit-color-picker>
       </ng-container>
-      <ng-container *ngSwitchCase="'pop-up-button'">
-        <fit-pop-up-button class="button" [model]="getOptionsControl(id)">
-        </fit-pop-up-button>
+      <ng-container *ngSwitchCase="'popup-button'">
+        <fit-popup-button class="button" [model]="getPopupControl(id)">
+        </fit-popup-button>
       </ng-container>
-      <ng-container *ngSwitchCase="'border-pop-up-button'">
-        <fit-border-pop-up class="button" [model]="getOptionsControl(id)">
-        </fit-border-pop-up>
+      <ng-container *ngSwitchCase="'border-popup-button'">
+        <fit-border-popup class="button" [model]="getPopupControl(id)">
+        </fit-border-popup>
       </ng-container>
       <ng-container *ngSwitchCase="'separator'">
         <div class="separator">&nbsp;</div>

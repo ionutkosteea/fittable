@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { Value, CssStyle } from 'fittable-core/model';
 import {
-  OptionsControl,
+  PopupControl,
   Control,
   ValueControl,
   asValueControl,
@@ -10,7 +10,7 @@ import {
   createWindowListener,
 } from 'fittable-core/view-model';
 
-import { OptionsComponent } from '../common/options-component.model';
+import { PopupControlComponent } from '../common/popup-control-component.model';
 import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
@@ -18,8 +18,8 @@ import { createToggleStyle } from '../common/style-functions.model';
   templateUrl: './combo.component.html',
   styleUrls: ['./combo.component.css'],
 })
-export class ComboComponent extends OptionsComponent implements OnInit {
-  @Input() override model!: OptionsControl;
+export class ComboComponent extends PopupControlComponent implements OnInit {
+  @Input() override model!: PopupControl;
   @Input() isFontCombo = false;
 
   public override windowListener!: WindowListener;
@@ -38,7 +38,7 @@ export class ComboComponent extends OptionsComponent implements OnInit {
     return style;
   }
 
-  public getOptionStyle(id: string): CssStyle | null {
+  public getPopupStyle(id: string): CssStyle | null {
     if (this.isFontCombo) {
       const control: Control = this.model.getWindow().getControl(id);
       const valueControl: ValueControl | undefined = asValueControl(control);

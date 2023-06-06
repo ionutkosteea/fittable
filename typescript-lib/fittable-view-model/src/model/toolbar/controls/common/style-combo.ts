@@ -7,14 +7,14 @@ import {
 
 import { FitUIOperationArgs } from '../../../operation-executor/operation-args.js';
 import { getFirstCellStyle } from '../../../common/style-functions.js';
-import { FitOptionsControl } from '../../../common/controls/fit-options-control.js';
+import { FitPopupControl } from '../../../common/controls/fit-popup-control.js';
 import { FitValueControl } from '../../../common/controls/fit-value-control.js';
 import { FitWindow } from '../../../common/controls/fit-window.js';
 import { FitControlArgs } from './fit-control-args.js';
 import { ControlUpdater } from './control-updater.js';
 
 export class StyleCombo
-  extends FitOptionsControl<string>
+  extends FitPopupControl<string>
   implements ControlUpdater
 {
   private styleAttName?: string;
@@ -29,9 +29,9 @@ export class StyleCombo
     const selectedCells: CellRange[] = this.args.getSelectedCells();
     const id: string | undefined = this.getSelectedControl();
     if (!id) throw new Error('Control ID is not defined!');
-    const selectedOption: ValueControl = this.getValueControl(id); //
+    const valueControl: ValueControl = this.getValueControl(id); //
     const style: Style = createStyle() //
-      .set(this.styleAttName, selectedOption.getValue());
+      .set(this.styleAttName, valueControl.getValue());
     const args: FitUIOperationArgs = {
       id: 'style-update',
       selectedCells,
@@ -53,16 +53,16 @@ export class StyleCombo
     const style: Style | undefined = getFirstCellStyle(table, selectedCells);
     const attValue: string | number | undefined = style?.get(this.styleAttName);
     if (attValue) {
-      let isSelectedOptionId = false;
+      let isSelectedControlId = false;
       for (const id of this.getWindow().getControlIds()) {
-        const option: ValueControl = this.getValueControl(id);
-        if (option.getValue() === attValue) {
+        const valueControl: ValueControl = this.getValueControl(id);
+        if (valueControl.getValue() === attValue) {
           this.setSelectedControl(id);
-          isSelectedOptionId = true;
+          isSelectedControlId = true;
           return;
         }
       }
-      if (!isSelectedOptionId) {
+      if (!isSelectedControlId) {
         const value: string = '' + attValue;
         const newControl: FitValueControl = new FitValueControl()
           .setLabel((): string => value)

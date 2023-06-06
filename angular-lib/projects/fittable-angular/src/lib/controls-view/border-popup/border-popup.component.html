@@ -1,0 +1,22 @@
+<div class="border-popup">
+  <div class="button" [ngStyle]="getButtonStyle()" (click)="showPopupWindow()">&nbsp;</div>
+  <div class="popup-window" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+    (window:mousedown)="onGlobalMouseDown()">
+    <div class="left-panel">
+      <ng-container *ngFor="let id of getLeftPanelIDs()">
+        <fit-border-type class="popup-child" *ngIf="getControlType(id)==='popup-button'" [model]="getPopupControl(id)"
+          (isVisibleEvent)="showBorderType($event)">
+        </fit-border-type>
+        <fit-color-picker class="popup-child" *ngIf="getControlType(id)==='color-picker'" [model]="getPopupControl(id)"
+          (isVisibleEvent)=" showColorPicker($event)">
+        </fit-color-picker>
+      </ng-container>
+    </div>
+    <div class="right-panel">
+      <div class="popup-child" *ngFor="let id of getRightPanelIDs()"
+        [ngStyle]="{backgroundImage:getPopupIcon(id),backgroundRepeat: 'no-repeat',backgroundPosition:'center'}"
+        (click)="runPopup(id)">&nbsp;
+      </div>
+    </div>
+  </div>
+</div>

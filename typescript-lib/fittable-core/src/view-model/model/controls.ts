@@ -93,16 +93,14 @@ export interface Window extends Container {
   setHeight(heightFn: () => number): this;
 }
 
-export interface OptionsControl extends Control {
+export interface PopupControl extends Control {
   getWindow(): Window;
   setSelectedControl(id: string): this;
   getSelectedControl(): string | undefined;
 }
 
-export function asOptionsControl(
-  control?: Control
-): OptionsControl | undefined {
-  return implementsTKeys<OptionsControl>(control, ['getSelectedControl'])
+export function asPopupControl(control?: Control): PopupControl | undefined {
+  return implementsTKeys<PopupControl>(control, ['getSelectedControl'])
     ? control
     : undefined;
 }

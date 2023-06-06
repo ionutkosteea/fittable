@@ -3,8 +3,8 @@ export type ControlType =
   | 'input'
   | 'separator'
   | 'combo'
-  | 'pop-up-button'
+  | 'popup-button'
   | 'color-picker'
-  | 'border-pop-up-button'
+  | 'border-popup-button'
   | 'menu-item'
   | 'label';

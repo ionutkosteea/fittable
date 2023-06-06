@@ -3,25 +3,25 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CssStyle } from 'fittable-core/model';
 import {
   Control,
-  OptionsControl,
+  PopupControl,
   WindowListener,
   createWindowListener,
 } from 'fittable-core/view-model';
 
-import { OptionsComponent } from '../common/options-component.model';
+import { PopupControlComponent } from '../common/popup-control-component.model';
 import { ControlType } from '../common/control-type.model';
 import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
-  selector: 'fit-border-pop-up',
-  templateUrl: './border-pop-up.component.html',
-  styleUrls: ['./border-pop-up.component.css'],
+  selector: 'fit-border-popup',
+  templateUrl: './border-popup.component.html',
+  styleUrls: ['./border-popup.component.css'],
 })
-export class BorderPopUpButtonComponent
-  extends OptionsComponent
+export class BorderPopupButtonComponent
+  extends PopupControlComponent
   implements OnInit
 {
-  @Input() override model!: OptionsControl;
+  @Input() override model!: PopupControl;
   public override windowListener!: WindowListener;
 
   private isColorPickerVisible = false;

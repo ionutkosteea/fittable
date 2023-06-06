@@ -1,4 +1,4 @@
-.border-pop-up-button {
+.border-popup {
   display: flex;
   position: relative;
   margin: 0px;
@@ -12,7 +12,7 @@
   height: 100%;
 }
 
-.options {
+.popup-window {
   -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
@@ -38,7 +38,7 @@
   width: 81%;
 }
 
-.option {
+.popup-child {
   -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
@@ -51,7 +51,7 @@
   cursor: pointer;
 }
 
-.option:active {
+.popup-child:active {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;

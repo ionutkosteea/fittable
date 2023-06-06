@@ -1,8 +1,0 @@
-<div class="border-type">
-  <div class="button" [ngStyle]="{backgroundImage:getIcon(),backgroundRepeat:'no-repeat',backgroundPosition:'center'}"
-    (click)="showOptionsWindow()">&nbsp;</div>
-  <div class="options" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
-    (window:mousedown)="onGlobalMouseDown()">
-    <hr class="option" *ngFor="let id of getOptionIds()" [ngStyle]="getBorderStyle(''+id)" (click)="runOption(id)" />
-  </div>
-</div>

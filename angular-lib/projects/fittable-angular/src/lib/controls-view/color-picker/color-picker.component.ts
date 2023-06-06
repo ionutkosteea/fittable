@@ -12,7 +12,7 @@ import {
 
 import { Value, CssStyle } from 'fittable-core/model';
 import {
-  OptionsControl,
+  PopupControl,
   Control,
   ValueControl,
   asValueControl,
@@ -20,7 +20,7 @@ import {
   createWindowListener,
 } from 'fittable-core/view-model';
 
-import { OptionsComponent } from '../common/options-component.model';
+import { PopupControlComponent } from '../common/popup-control-component.model';
 import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
@@ -29,10 +29,10 @@ import { createToggleStyle } from '../common/style-functions.model';
   styleUrls: ['./color-picker.component.css'],
 })
 export class ColorPickerComponent
-  extends OptionsComponent
+  extends PopupControlComponent
   implements AfterViewInit, OnDestroy
 {
-  @Input() override model!: OptionsControl;
+  @Input() override model!: PopupControl;
   @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('colorPicker') colorPickerRef!: ElementRef;
 
@@ -62,7 +62,7 @@ export class ColorPickerComponent
     return style;
   }
 
-  public readonly getColorNoneId = (): string => this.getOptionIds()[0];
+  public readonly getColorNoneId = (): string => this.getPopupIds()[0];
 
   public readonly getColorNoneIcon = (): string | undefined =>
     this.getControl(this.getColorNoneId()).getIcon();
@@ -72,12 +72,12 @@ export class ColorPickerComponent
 
   public readonly getColorIds = (): string[] =>
     this.model.getWindow().hasFocus()
-      ? this.getOptionIds().slice(1, this.numberDefaultOfColors)
+      ? this.getPopupIds().slice(1, this.numberDefaultOfColors)
       : [];
 
   public readonly getCustomColorIds = (): string[] =>
     this.model.getWindow().hasFocus()
-      ? this.getOptionIds().slice(this.numberDefaultOfColors)
+      ? this.getPopupIds().slice(this.numberDefaultOfColors)
       : [];
 
   public getColorValue(id: string): Value | undefined {

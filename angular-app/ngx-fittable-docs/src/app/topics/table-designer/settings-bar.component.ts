@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  asOptionsControl,
+  asPopupControl,
   Container,
   Control,
   ControlMap,
   createFittableDesigner,
   FittableDesigner,
-  OptionsControl,
+  PopupControl,
   registerViewModelConfig,
   Window,
 } from 'fittable-core/view-model';
@@ -55,7 +55,7 @@ export class SettingsBarComponent implements SimpleTopic, OnInit {
   }
 
   private insertNewLanguageControl(): void {
-    const window: Window = this.getSettingsButtonWindow();
+    const window: Window = this.getSettingsPopupWindow();
     const controlMap: ControlMap = {};
     const languageLabelId: FitSettingsBarControlId = 'language-label';
     for (const id of window.getControlIds()) {
@@ -70,13 +70,13 @@ export class SettingsBarComponent implements SimpleTopic, OnInit {
     window.setControls(controlMap);
   }
 
-  private getSettingsButtonWindow(): Window {
-    const settingsButtonId: FitSettingsBarControlId = 'settings-button';
+  private getSettingsPopupWindow(): Window {
     const settingsBar: Container | undefined = this.fit.viewModel.settingsBar;
     if (!settingsBar) throw new Error('Settings bar is not defined.');
+    const settingsButtonId: FitSettingsBarControlId = 'settings-button';
     const control: Control = settingsBar.getControl(settingsButtonId);
-    const options: OptionsControl | undefined = asOptionsControl(control);
-    if (!options) throw new Error('Settings button has no pop-up menu.');
-    return options.getWindow();
+    const popup: PopupControl | undefined = asPopupControl(control);
+    if (!popup) throw new Error('Settings button has no pop-up menu.');
+    return popup.getWindow();
   }
 }

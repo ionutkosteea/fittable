@@ -7,7 +7,7 @@ import {
   FitUIOperationArgs,
 } from '../../operation-executor/operation-args.js';
 import { FitControl } from '../../common/controls/fit-control.js';
-import { FitOptionsControl } from '../../common/controls/fit-options-control.js';
+import { FitPopupControl } from '../../common/controls/fit-popup-control.js';
 import { FitWindow } from '../../common/controls/fit-window.js';
 import { FitValueControl } from '../../common/controls/fit-value-control.js';
 import { FitImageId } from '../../image-registry/fit-image-ids.js';
@@ -17,17 +17,17 @@ import { FitControlArgs } from './common/fit-control-args.js';
 
 export function createBorderMenu(
   args: FitControlArgs
-): FitOptionsControl<string> {
+): FitPopupControl<string> {
   return new BorderMenuBuilder(args).build();
 }
 
 class BorderMenuBuilder {
-  private readonly borderButton: FitOptionsControl<string>;
+  private readonly borderButton: FitPopupControl<string>;
   private readonly borderStyle: BorderStyle;
 
   constructor(private readonly args: FitControlArgs) {
-    this.borderButton = new FitOptionsControl<string>(new FitWindow()) //
-      .setType('border-pop-up-button');
+    this.borderButton = new FitPopupControl<string>(new FitWindow()) //
+      .setType('border-popup-button');
     this.borderStyle = {
       location: 'around',
       type: 'solid',
@@ -36,7 +36,7 @@ class BorderMenuBuilder {
     };
   }
 
-  public build(): FitOptionsControl<string> {
+  public build(): FitPopupControl<string> {
     const window: Window = this.borderButton.getWindow();
     window.addControl('border-type', this.createTypeMenu());
     window.addControl('border-color', this.createColorPickerMenu());
@@ -48,7 +48,7 @@ class BorderMenuBuilder {
     return this.borderButton;
   }
 
-  private createTypeMenu(): FitOptionsControl<string> {
+  private createTypeMenu(): FitPopupControl<string> {
     const window: FitWindow<string> = new FitWindow()
       .addControl('solid-3', this.createTypeMenuItem('Solid 3px', 'solid 3'))
       .addControl('solid-2', this.createTypeMenuItem('Solid 2px', 'solid 2'))
@@ -58,8 +58,8 @@ class BorderMenuBuilder {
         'dotted-1',
         this.createTypeMenuItem('Dotted 1px', 'dotted 1')
       );
-    return new FitOptionsControl<string>(window)
-      .setType('pop-up-button')
+    return new FitPopupControl<string>(window)
+      .setType('popup-button')
       .setLabel(() => 'solid')
       .setIcon((): string | undefined => this.getImageUrl('borderType'));
   }
@@ -76,26 +76,24 @@ class BorderMenuBuilder {
       });
   }
 
-  private createColorPickerMenu(): FitOptionsControl<string> {
+  private createColorPickerMenu(): FitPopupControl<string> {
     const window: FitWindow<string> = new FitWindow();
     window.setControls(createColorControls(this.args));
-    const optionsControl: FitOptionsControl<string> =
-      new FitOptionsControl<string>(window)
-        .setType('color-picker')
-        .setLabel(() => 'Colors')
-        .setIcon((): string | undefined => this.getImageUrl('borderColor'));
-    optionsControl.setRun((): void => {
-      const id: string | number | undefined =
-        optionsControl.getSelectedControl();
+    const popup: FitPopupControl<string> = new FitPopupControl<string>(window)
+      .setType('color-picker')
+      .setLabel(() => 'Colors')
+      .setIcon((): string | undefined => this.getImageUrl('borderColor'));
+    popup.setRun((): void => {
+      const id: string | number | undefined = popup.getSelectedControl();
       if (!id) throw new Error('Invalid id ' + id);
-      const control: ValueControl = optionsControl
+      const control: ValueControl = popup
         .getWindow()
         .getControl(id) as ValueControl;
       this.borderStyle.color = control.getValue()
         ? (control.getValue() as string)
         : '#000000';
     });
-    return optionsControl;
+    return popup;
   }
 
   private createLocationButtons(): FitControl[] {

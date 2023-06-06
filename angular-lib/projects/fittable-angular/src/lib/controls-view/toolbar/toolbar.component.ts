@@ -5,8 +5,8 @@ import {
   Control,
   InputControl,
   asInputControl,
-  OptionsControl,
-  asOptionsControl,
+  PopupControl,
+  asPopupControl,
 } from 'fittable-core/view-model';
 
 import { ControlType } from '../common/control-type.model';
@@ -33,10 +33,10 @@ export class ToolbarComponent {
     else throw new Error('Invalid input control for id ' + id);
   }
 
-  public getOptionsControl(id: string): OptionsControl {
+  public getPopupControl(id: string): PopupControl {
     const control: Control = this.getControl(id);
-    const options: OptionsControl | undefined = asOptionsControl(control);
-    if (options) return options;
-    else throw new Error('Invalid options control for id ' + id);
+    const popup: PopupControl | undefined = asPopupControl(control);
+    if (popup) return popup;
+    else throw new Error('Invalid popup control for id ' + id);
   }
 }

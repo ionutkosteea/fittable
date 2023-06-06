@@ -3,9 +3,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   WindowListener,
   createWindowListener,
-  OptionsControl,
+  PopupControl,
 } from 'fittable-core/view-model';
-import { OptionsComponent } from '../../common/options-component.model';
+import { PopupControlComponent } from '../../common/popup-control-component.model';
 
 @Component({
   selector: 'fit-settings-button',
@@ -13,10 +13,10 @@ import { OptionsComponent } from '../../common/options-component.model';
   styleUrls: ['./settings-button.component.css'],
 })
 export class SettingsButtonComponent
-  extends OptionsComponent
+  extends PopupControlComponent
   implements OnInit
 {
-  @Input() override model!: OptionsControl;
+  @Input() override model!: PopupControl;
 
   public override windowListener!: WindowListener;
 

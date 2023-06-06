@@ -3,8 +3,8 @@ import { HostListener, Injectable } from '@angular/core';
 import { Value, CssStyle } from 'fittable-core/model';
 import {
   Control,
-  OptionsControl,
-  asOptionsControl,
+  PopupControl,
+  asPopupControl,
   asValueControl,
   WindowListener,
 } from 'fittable-core/view-model';
@@ -13,8 +13,8 @@ import { ControlType } from './control-type.model';
 import { createWindowStyle } from './style-functions.model';
 
 @Injectable({ providedIn: 'root' })
-export abstract class OptionsComponent {
-  public abstract model: OptionsControl;
+export abstract class PopupControlComponent {
+  public abstract model: PopupControl;
   public abstract windowListener: WindowListener;
 
   public getWindowStyle(): CssStyle {
@@ -25,18 +25,18 @@ export abstract class OptionsComponent {
     return this.model.getWindow().getControl(id);
   }
 
-  public getOptionsControl(id: string): OptionsControl {
+  public getPopupControl(id: string): PopupControl {
     const control: Control = this.getControl(id);
-    const options: OptionsControl | undefined = asOptionsControl(control);
-    if (options) return options;
-    else throw new Error('Invalid options control for id ' + id);
+    const popup: PopupControl | undefined = asPopupControl(control);
+    if (popup) return popup;
+    else throw new Error('Invalid popup control for id ' + id);
   }
 
-  public getOptionIds(): string[] {
+  public getPopupIds(): string[] {
     return this.model.getWindow().getControlIds();
   }
 
-  public showOptionsWindow(): void {
+  public showPopupWindow(): void {
     if (this.model.isDisabled()) return;
     this.windowListener.onShow();
   }
@@ -45,7 +45,7 @@ export abstract class OptionsComponent {
     return this.model.getLabel();
   }
 
-  public getOptionLabel(id: string): string {
+  public getPopupLabel(id: string): string {
     return this.getControl(id).getLabel();
   }
 
@@ -53,7 +53,7 @@ export abstract class OptionsComponent {
     return this.getSelectedControl()?.getLabel();
   }
 
-  public getOptionValue(id: string): Value | undefined {
+  public getPopupValue(id: string): Value | undefined {
     return asValueControl(this.getControl(id))?.getValue();
   }
 
@@ -65,11 +65,11 @@ export abstract class OptionsComponent {
     return this.model.getIcon();
   }
 
-  public getOptionIcon(id: string): string | undefined {
+  public getPopupIcon(id: string): string | undefined {
     return this.getControl(id).getIcon();
   }
 
-  public getOptionType(id: string): ControlType | undefined {
+  public getPopupType(id: string): ControlType | undefined {
     return this.getControl(id).getType() as ControlType;
   }
 
@@ -83,10 +83,10 @@ export abstract class OptionsComponent {
     return id ? this.getControl(id) : undefined;
   }
 
-  public runOption(id: string): void {
+  public runPopup(id: string): void {
     this.getControl(id).run();
     this.model.setSelectedControl(id).run();
-    this.hideOptionsWindow();
+    this.hidePopupWindow();
   }
 
   @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
@@ -94,10 +94,10 @@ export abstract class OptionsComponent {
   }
 
   @HostListener('window:mousedown') onGlobalMouseDown(): void {
-    this.hideOptionsWindow();
+    this.hidePopupWindow();
   }
 
-  private hideOptionsWindow(): void {
+  private hidePopupWindow(): void {
     this.windowListener.onGlobalMouseDown();
   }
 }

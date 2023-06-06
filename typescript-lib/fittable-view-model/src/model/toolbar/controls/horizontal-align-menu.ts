@@ -6,7 +6,7 @@ import { FitControlArgs } from './common/fit-control-args.js';
 
 export function createHorizontalAlignMenu(args: FitControlArgs): StyleCombo {
   const combo: StyleCombo = new StyleCombo(args)
-    .setType('pop-up-button')
+    .setType('popup-button')
     .setLabel((): string => args.dictionary.getText('Horizontal align'))
     .setIcon((): string | undefined =>
       args.imageRegistry.getImageUrl('alignLeft')

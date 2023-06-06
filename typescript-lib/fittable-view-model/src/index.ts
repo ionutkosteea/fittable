@@ -18,7 +18,7 @@ export * from './model/common/controls/fit-separator.js';
 export * from './model/common/controls/fit-container.js';
 export * from './model/common/controls/fit-control.js';
 export * from './model/common/controls/fit-input-control.js';
-export * from './model/common/controls/fit-options-control.js';
+export * from './model/common/controls/fit-popup-control.js';
 export * from './model/common/controls/fit-value-control.js';
 export * from './model/common/controls/fit-window.js';
 export { FitToolbarControlId } from './model/toolbar/fit-toolbar-factory.js';

@@ -16,14 +16,14 @@ import {
 } from 'fittable-core/operations';
 import {
   asCheckBoxControl,
-  asOptionsControl,
+  asPopupControl,
   CheckBoxControl,
   ColFilters,
   Control,
   createColFilters,
   createImageRegistry,
   createLanguageDictionary,
-  OptionsControl,
+  PopupControl,
   registerViewModelConfig,
   unregisterViewModelConfig,
   Window,
@@ -74,20 +74,20 @@ describe('Column filters', (): void => {
     });
 
     colFilters.loadCol(1);
-    const popUpButton: OptionsControl = colFilters.getPopUpButton(1);
-    const popUpWindow: Window = popUpButton.getWindow();
+    const popupButton: PopupControl = colFilters.getPopupButton(1);
+    const popupWindow: Window = popupButton.getWindow();
     const clearButtonId: FitColFiltersControlId = 'clear-button';
-    popUpWindow.getControl(clearButtonId).run();
+    popupWindow.getControl(clearButtonId).run();
     const valueCheckListId: FitColFiltersControlId = 'value-check-list';
-    const valueCheckList: OptionsControl | undefined = //
-      asOptionsControl(popUpWindow.getControl(valueCheckListId));
+    const valueCheckList: PopupControl | undefined = //
+      asPopupControl(popupWindow.getControl(valueCheckListId));
     if (!valueCheckList) throw Error('Invalid value check list');
     const checkBox: CheckBoxControl | undefined = //
       asCheckBoxControl(valueCheckList.getWindow().getControl('1'));
     if (!checkBox) throw Error('Invalid value check box');
     checkBox.setChecked(true);
     const okButtonId: FitColFiltersControlId = 'ok-button';
-    const okButton: Control = popUpWindow.getControl(okButtonId);
+    const okButton: Control = popupWindow.getControl(okButtonId);
     okButton.run();
     const getFilteredTable: () =>
       | (TableColFilter & TableBasics)

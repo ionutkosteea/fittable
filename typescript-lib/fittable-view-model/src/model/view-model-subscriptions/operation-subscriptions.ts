@@ -86,7 +86,7 @@ export class OperationSubscriptions {
     this.setObjectFocus(this.args.cellSelection?.pageHeader, 'PageHeader');
     this.setObjectFocus(this.args.cellEditor, 'CellEditor');
     this.setObjectFocus(
-      this.args.colFilters?.getPopUpButton(0).getWindow(),
+      this.args.colFilters?.getPopupButton(0).getWindow(),
       'ColFilter'
     );
   }

@@ -3,8 +3,8 @@ import { Component, Input } from '@angular/core';
 import {
   Container,
   Control,
-  OptionsControl,
-  asOptionsControl,
+  PopupControl,
+  asPopupControl,
 } from 'fittable-core/view-model';
 
 @Component({
@@ -20,10 +20,10 @@ export class SettingsBarComponent {
   public readonly getControl = (id: string): Control =>
     this.model.getControl(id);
 
-  public getOptionsControl(id: string): OptionsControl {
+  public getPopupControl(id: string): PopupControl {
     const control: Control = this.getControl(id);
-    const options: OptionsControl | undefined = asOptionsControl(control);
-    if (options) return options;
-    else throw new Error('Invalid options control for id ' + id);
+    const popup: PopupControl | undefined = asPopupControl(control);
+    if (popup) return popup;
+    else throw new Error('Invalid popup control for id ' + id);
   }
 }

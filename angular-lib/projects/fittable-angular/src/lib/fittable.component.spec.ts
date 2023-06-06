@@ -19,8 +19,8 @@ import { ScrollContainerDirective } from './table-view/common/scroll-container.d
 import { CellSelectionDirective } from './table-view/common/cell-selection.directive';
 import { ToolbarComponent } from './controls-view/toolbar/toolbar.component';
 import { ButtonComponent } from './controls-view/button/button.component';
-import { BorderPopUpButtonComponent } from './controls-view/border-pop-up/border-pop-up.component';
-import { BorderTypeComponent } from './controls-view/border-pop-up/border-type/border-type.component';
+import { BorderPopupButtonComponent } from './controls-view/border-popup/border-popup.component';
+import { BorderTypeComponent } from './controls-view/border-popup/border-type/border-type.component';
 import { CellEditorComponent } from './controls-view/cell-editor/cell-editor.component';
 import { CellEditorOpenDirective } from './controls-view/cell-editor/cell-editor.directive';
 import { ColorPickerComponent } from './controls-view/color-picker/color-picker.component';
@@ -30,9 +30,9 @@ import { MenuItemComponent } from './controls-view/context-menu/menu-item/menu-i
 import {
   FilterPopupButtonComponent,
   FilterPopupWindowComponent,
-} from './controls-view/filter-pop-up/filter-pop-up.component';
+} from './controls-view/filter-popup/filter-popup.component';
 import { InputComponent } from './controls-view/input/input.component';
-import { PopUpButtonComponent } from './controls-view/pop-up-button/pop-up-button.component';
+import { PopupButtonComponent } from './controls-view/popup-button/popup-button.component';
 import { SettingsBarComponent } from './controls-view/settings-bar/settings-bar.component';
 import { SettingsButtonComponent } from './controls-view/settings-bar/settings-button/settings-button.component';
 import { StatusbarComponent } from './controls-view/statusbar/statusbar.component';
@@ -62,11 +62,11 @@ describe('FittableComponent', () => {
         ButtonComponent,
         ComboComponent,
         InputComponent,
-        PopUpButtonComponent,
+        PopupButtonComponent,
         ColorPickerComponent,
         ContextMenuComponent,
         MenuItemComponent,
-        BorderPopUpButtonComponent,
+        BorderPopupButtonComponent,
         BorderTypeComponent,
         StatusbarComponent,
         CellEditorOpenDirective,

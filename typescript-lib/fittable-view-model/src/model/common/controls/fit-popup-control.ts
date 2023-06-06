@@ -1,13 +1,13 @@
-import { OptionsControl } from 'fittable-core/view-model';
+import { PopupControl } from 'fittable-core/view-model';
 
 import { FitControl } from './fit-control.js';
 import { FitWindow } from './fit-window.js';
 
-export class FitOptionsControl<Id extends string>
+export class FitPopupControl<Id extends string>
   extends FitControl
-  implements OptionsControl
+  implements PopupControl
 {
-  private selectedOptionId?: Id;
+  private selectedControlId?: Id;
 
   constructor(private window: FitWindow<Id>) {
     super();
@@ -18,11 +18,11 @@ export class FitOptionsControl<Id extends string>
   }
 
   public setSelectedControl(id: Id): this {
-    this.selectedOptionId = id;
+    this.selectedControlId = id;
     return this;
   }
 
   public getSelectedControl(): Id | undefined {
-    return this.selectedOptionId;
+    return this.selectedControlId;
   }
 }
