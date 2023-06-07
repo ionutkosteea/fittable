@@ -40,6 +40,7 @@ import {
 import {
   FitToolbarControlId,
   FIT_VIEW_MODEL_CONFIG,
+  FitTextKey,
 } from '../../../dist/index.js';
 
 import { ControlUpdater } from '../../../dist/model/toolbar/controls/common/control-updater.js';
@@ -340,10 +341,11 @@ describe('Toolbar', (): void => {
         createCellRange(createCellCoord(0, 0)),
       ],
     });
-    const controlId: FitToolbarControlId = 'border';
-    const control: Control = toolbar.getControl(controlId);
-    const fontCombo: PopupControl | undefined = asPopupControl(control);
-    fontCombo?.getWindow().getControl('Bottom').run();
+    const borderControlId: FitToolbarControlId = 'border';
+    const control: Control = toolbar.getControl(borderControlId);
+    const popup: PopupControl | undefined = asPopupControl(control);
+    const borderButtomControlId: FitTextKey = 'Bottom borders';
+    popup?.getWindow().getControl(borderButtomControlId).run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
     expect(tbl?.getCellStyleName(0, 0) === 's0').toBeTruthy();

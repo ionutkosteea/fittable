@@ -31,7 +31,7 @@ import { createWindowStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-filter-popup-button',
   template:
-    '<div class="pop-up-button" [ngStyle]="{backgroundImage: getPopupButton().getIcon()}">&nbsp;</div>',
+    '<div class="pop-up-button" [ngStyle]="{backgroundImage: getPopupButton().getIcon()}" [title]="getLabel()">&nbsp;</div>',
   styleUrls: ['./filter-popup.component.css'],
 })
 export class FilterPopupButtonComponent implements OnInit {
@@ -53,6 +53,8 @@ export class FilterPopupButtonComponent implements OnInit {
       this.colFilters.getValueScroller().scrollTo(0, 0);
     });
   }
+
+  public readonly getLabel = (): string => this.getPopupButton().getLabel();
 
   public readonly getPopupButton = (): PopupControl =>
     this.colFilters.getPopupButton(this.colId);

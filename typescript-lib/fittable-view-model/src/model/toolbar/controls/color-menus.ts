@@ -21,7 +21,7 @@ export function createColorMenu(args: FitControlArgs): StyleCombo {
 export function createBackgroundColorMenu(args: FitControlArgs): StyleCombo {
   const combo: StyleCombo = new StyleCombo(args)
     .setType('color-picker')
-    .setLabel((): string => args.dictionary.getText('Backgroundcolor'))
+    .setLabel((): string => args.dictionary.getText('Background color'))
     .setIcon((): string | undefined =>
       args.imageRegistry.getImageUrl('backgroundColor')
     )

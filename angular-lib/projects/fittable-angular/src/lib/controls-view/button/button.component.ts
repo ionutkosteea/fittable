@@ -7,7 +7,8 @@ import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
   selector: 'fit-button',
-  template: '<div [ngStyle]="getStyle()" (click)="onClick()">&nbsp;</div>',
+  template:
+    '<div [ngStyle]="getStyle()" (click)="onClick()" [title]="getLabel()">&nbsp;</div>',
 })
 export class ButtonComponent {
   @Input() model!: Control;
@@ -21,5 +22,9 @@ export class ButtonComponent {
 
   public onClick(): void {
     !this.model.isDisabled() && this.model.run();
+  }
+
+  public getLabel(): string {
+    return this.model.getLabel();
   }
 }

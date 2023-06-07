@@ -1,6 +1,6 @@
 <div class="combo">
   <input class="input" [ngStyle]="getComboStyle()" [value]="getSelectedLabel()" (click)="showPopupWindow()" readonly
-    type="text" />
+    type="text" [title]="getLabel()" />
   <div class="arrow" (click)="showPopupWindow()" [ngStyle]="getComboArrowStyle()">&nbsp;</div>
   <div class="popup-window" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">

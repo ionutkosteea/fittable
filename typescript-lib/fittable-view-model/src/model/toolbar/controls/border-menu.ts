@@ -6,6 +6,7 @@ import {
   BorderType,
   FitUIOperationArgs,
 } from '../../operation-executor/operation-args.js';
+import { FitTextKey } from '../../language-dictionary/language-dictionary-keys.js';
 import { FitControl } from '../../common/controls/fit-control.js';
 import { FitPopupControl } from '../../common/controls/fit-popup-control.js';
 import { FitWindow } from '../../common/controls/fit-window.js';
@@ -27,6 +28,7 @@ class BorderMenuBuilder {
 
   constructor(private readonly args: FitControlArgs) {
     this.borderButton = new FitPopupControl<string>(new FitWindow()) //
+      .setLabel((): string => this.args.dictionary.getText('Borders'))
       .setType('border-popup-button');
     this.borderStyle = {
       location: 'around',
@@ -60,7 +62,7 @@ class BorderMenuBuilder {
       );
     return new FitPopupControl<string>(window)
       .setType('popup-button')
-      .setLabel(() => 'solid')
+      .setLabel((): string => this.args.dictionary.getText('Border type'))
       .setIcon((): string | undefined => this.getImageUrl('borderType'));
   }
 
@@ -81,7 +83,7 @@ class BorderMenuBuilder {
     window.setControls(createColorControls(this.args));
     const popup: FitPopupControl<string> = new FitPopupControl<string>(window)
       .setType('color-picker')
-      .setLabel(() => 'Colors')
+      .setLabel((): string => this.args.dictionary.getText('Border color'))
       .setIcon((): string | undefined => this.getImageUrl('borderColor'));
     popup.setRun((): void => {
       const id: string | number | undefined = popup.getSelectedControl();
@@ -98,27 +100,27 @@ class BorderMenuBuilder {
 
   private createLocationButtons(): FitControl[] {
     return [
-      this.createLocationButton('None', 'none', 'borderNone'),
-      this.createLocationButton('Left', 'left', 'borderLeft'),
-      this.createLocationButton('Center', 'center', 'borderCenter'),
-      this.createLocationButton('Right', 'right', 'borderRight'),
-      this.createLocationButton('Top', 'top', 'borderTop'),
-      this.createLocationButton('Middle', 'middle', 'borderMiddle'),
-      this.createLocationButton('Bottom', 'bottom', 'borderBottom'),
-      this.createLocationButton('Cross', 'cross', 'borderCross'),
-      this.createLocationButton('Around', 'around', 'borderAround'),
-      this.createLocationButton('All', 'all', 'borderAll'),
+      this.createLocationButton('Clear borders', 'none', 'borderNone'),
+      this.createLocationButton('Left borders', 'left', 'borderLeft'),
+      this.createLocationButton('Horizontal borders', 'center', 'borderCenter'),
+      this.createLocationButton('Right borders', 'right', 'borderRight'),
+      this.createLocationButton('Top borders', 'top', 'borderTop'),
+      this.createLocationButton('Vertical borders', 'middle', 'borderMiddle'),
+      this.createLocationButton('Bottom borders', 'bottom', 'borderBottom'),
+      this.createLocationButton('Inner borders', 'cross', 'borderCross'),
+      this.createLocationButton('Outer borders', 'around', 'borderAround'),
+      this.createLocationButton('All borders', 'all', 'borderAll'),
     ];
   }
 
   private createLocationButton(
-    label: string,
+    label: FitTextKey,
     value: BorderLocation,
     icon: FitImageId
   ): FitControl {
     return new FitValueControl()
       .setType('push-button')
-      .setLabel((): string => label)
+      .setLabel((): string => this.args.dictionary.getText(label))
       .setIcon((): string | undefined => this.getImageUrl(icon))
       .setValue(value)
       .setRun((): void => {

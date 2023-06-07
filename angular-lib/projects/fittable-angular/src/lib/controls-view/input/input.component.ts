@@ -21,7 +21,7 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-input',
   template:
-    '<input #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="model.getValue()" [disabled]="getDisabled()" />',
+    '<input #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="model.getValue()" [disabled]="getDisabled()" [title]="getLabel()" />',
   styles: [
     `
       input {
@@ -74,6 +74,8 @@ export class InputComponent implements OnInit, OnDestroy {
 
   public readonly getDisabled = (): string | null =>
     this.model.isDisabled() ? 'disabled' : null;
+
+  public readonly getLabel = (): string | undefined => this.model.getLabel();
 
   @HostListener('input', ['$event']) onInput(event: KeyboardEvent): void {
     this.inputControlListener.onInput(event);

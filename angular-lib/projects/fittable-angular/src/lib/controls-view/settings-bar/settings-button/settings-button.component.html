@@ -1,4 +1,5 @@
-<div class="button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showPopupWindow()">&nbsp;</div>
+<div class="button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showPopupWindow()" [title]="getLabel()">&nbsp;
+</div>
 <div class="popup-window" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
   (window:mousedown)="onGlobalMouseDown()">
   <ng-container *ngFor="let id of getPopupIds()">

@@ -1,5 +1,5 @@
 <div class="color-picker">
-  <div class="button" (click)="showPopupWindow()" [ngStyle]="getButtonStyle()">&nbsp;</div>
+  <div class="button" (click)="showPopupWindow()" [ngStyle]="getButtonStyle()" [title]="getLabel()">&nbsp;</div>
   <hr class="picked-color" (click)="showPopupWindow()" [ngStyle]="{backgroundColor:getSelectedValue()}" />
   <div class="popup-window" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">

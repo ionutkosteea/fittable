@@ -1,5 +1,5 @@
 <div class="border-popup">
-  <div class="button" [ngStyle]="getButtonStyle()" (click)="showPopupWindow()">&nbsp;</div>
+  <div class="button" [ngStyle]="getButtonStyle()" (click)="showPopupWindow()" [title]="getLabel()">&nbsp;</div>
   <div class="popup-window" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">
     <div class="left-panel">
@@ -15,7 +15,7 @@
     <div class="right-panel">
       <div class="popup-child" *ngFor="let id of getRightPanelIDs()"
         [ngStyle]="{backgroundImage:getPopupIcon(id),backgroundRepeat: 'no-repeat',backgroundPosition:'center'}"
-        (click)="runPopup(id)">&nbsp;
+        (click)="runPopup(id)" [title]="getPopupLabel(id)">&nbsp;
       </div>
     </div>
   </div>

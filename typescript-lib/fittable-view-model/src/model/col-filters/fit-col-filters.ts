@@ -86,7 +86,7 @@ export class FitColFilters implements ColFilters {
       .addControl('ok-button', this.createOkButton())
       .addControl('cancel-button', this.createCancelButton());
     return new FitPopupControl<FitColFiltersControlId>(window) //
-      .setLabel((): string => 'Filter');
+      .setLabel((): string => this.args.dictionary.getText('Filter'));
   }
 
   private createSearchInput(): FitInputControl {

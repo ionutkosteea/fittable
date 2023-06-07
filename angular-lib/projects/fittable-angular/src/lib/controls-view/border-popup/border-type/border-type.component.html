@@ -1,6 +1,6 @@
 <div class="border-type">
   <div class="button" [ngStyle]="{backgroundImage:getIcon(),backgroundRepeat:'no-repeat',backgroundPosition:'center'}"
-    (click)="showPopupWindow()">&nbsp;</div>
+    (click)="showPopupWindow()" [title]="getLabel()">&nbsp;</div>
   <div class="popup-window" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">
     <hr class="popup-child" *ngFor="let id of getPopupIds()" [ngStyle]="getBorderStyle(''+id)" (click)="runPopup(id)" />

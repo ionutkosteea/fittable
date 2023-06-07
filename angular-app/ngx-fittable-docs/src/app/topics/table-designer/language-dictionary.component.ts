@@ -145,7 +145,7 @@ const frFr: CustomDictionary = {
   'Font size': 'Taille de police',
   'Font family': 'Famille de polices',
   'Text color': 'Couleur du texte',
-  Backgroundcolor: "Couleur de l'arrière plan",
+  'Background color': "Couleur de l'arrière plan",
   'Vertical align': 'Alignement vertical',
   'Horizontal align': 'Alignement horizontal',
   'en-US': 'Anglais',
