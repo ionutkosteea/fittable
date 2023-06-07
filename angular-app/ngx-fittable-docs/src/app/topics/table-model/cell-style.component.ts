@@ -51,7 +51,7 @@ export class CellStyleComponent implements SimpleTopic, OnInit {
             .set('font-style', 'italic')
             .set('text-decoration', 'underline')
             .set('font-family', 'sans-serif')
-            .set('font-size.px', 16)
+            .set('font-size.px', 14)
             .set('color', 'red')
             .set('background-color', 'lightyellow')
             .set('place-items', 'center normal')

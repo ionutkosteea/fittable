@@ -39,13 +39,12 @@
   right: 0px;
   bottom: 0px;
   margin: 0px;
-  padding: 0px;
+  padding: 2px;
   display: grid;
   place-items: inherit;
   text-decoration: inherit;
   box-sizing: border-box;
   white-space: break-spaces;
-  word-break: break-all;
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: none;
