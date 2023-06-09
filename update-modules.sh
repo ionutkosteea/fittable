@@ -2,29 +2,21 @@
 
 rm ./typescript-lib/fittable-core/LICENSE
 cp LICENSE ./typescript-lib/fittable-core
-rm ./typescript-lib/fittable-core/README.md
-cp README.md ./typescript-lib/fittable-core
 rm ./typescript-lib/fittable-core/architecture.jpg
 cp architecture.jpg ./typescript-lib/fittable-core
 
 rm ./typescript-lib/fittable-model/LICENSE
 cp LICENSE ./typescript-lib/fittable-model
-rm ./typescript-lib/fittable-model/README.md
-cp README.md ./typescript-lib/fittable-model
 rm ./typescript-lib/fittable-model/architecture.jpg
 cp architecture.jpg ./typescript-lib/fittable-model
 
 rm ./typescript-lib/fittable-model-operations/LICENSE
 cp LICENSE ./typescript-lib/fittable-model-operations
-rm ./typescript-lib/fittable-model-operations/README.md
-cp README.md ./typescript-lib/fittable-model-operations
 rm ./typescript-lib/fittable-model-operations/architecture.jpg
 cp architecture.jpg ./typescript-lib/fittable-model-operations
 
 rm ./typescript-lib/fittable-view-model/LICENSE
 cp LICENSE ./typescript-lib/fittable-view-model
-rm ./typescript-lib/fittable-view-model/README.md
-cp README.md ./typescript-lib/fittable-view-model
 rm ./typescript-lib/fittable-view-model/architecture.jpg
 cp architecture.jpg ./typescript-lib/fittable-view-model
 

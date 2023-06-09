@@ -2,15 +2,18 @@
 
 ## Introduction
 
-<p>
-  Fittable is a flexible and easy-to-use software component optimized for handling large table structures with spreadsheet-like capabilities. Built using Angular and TypeScript, it offers a dynamic table model, a robust operation execution mechanism, and an adjustable user interface that can be easily customized to meet your specific needs.
-</p>
-<p>
-  The main module of Fittable is developed in Angular, which presents a responsive and interactive view for the application. The view model and other essential modules are written in TypeScript without any dependency on a GUI framework, making it possible to use the component on the server-side as well.
-</p>
-<p>
-  Fittable's modules are highly adaptable, with a range of configurable options that allow you to customize each functionality to match your application's requirements.
-</p>
+  <p>
+    Fittable is a flexible and easy-to-use software component optimized for handling large table structures with spreadsheet-like capabilities. Built using Angular and TypeScript, it offers a customizable table model, an interoperable operation execution mechanism and a dynamic user interface adaptable to model structure and changes.
+  </p>
+  <p>
+    The main module of Fittable is developed in Angular, which presents an interactive view for the application. The view model and other essential modules are written in TypeScript, without any dependency on a GUI framework, providing server-side compatibility as well.
+  </p>
+  <p>
+    Fittable's modules are highly adjustable, with a range of configurable options, allowing the customization of each functionality.
+  </p>
+  <p>
+    Currently, the following features are available in Fittable:
+  </p>
 
 ## Preview
 
@@ -30,7 +33,7 @@ npm install fittable-angular
 
 ## Angular component example
 
-### tsconfig.json (for non-ECMAScript module dependants)
+### tsconfig.json
 
 ```json
 "compilerOptions": {
@@ -66,7 +69,7 @@ import { registerViewModelConfig } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
-import { NgxFittableModule } from 'fittable-angular';
+import { FittableModule } from 'fittable-angular';
 
 import { AppComponent } from './app.component';
 
@@ -77,7 +80,7 @@ registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, NgxFittableModule],
+  imports: [BrowserModule, FittableModule],
   providers: [],
   bootstrap: [AppComponent],
 })
