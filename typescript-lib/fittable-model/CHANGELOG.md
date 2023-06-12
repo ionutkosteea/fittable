@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.1.1] - 2023-06-12
+
+### Changed
+
+- Enhance the comprehensibility of the user documentation.
+
 ## [v1.1.0] - 2023-05-11
 
 ### Changed

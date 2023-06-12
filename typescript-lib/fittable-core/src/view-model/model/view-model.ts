@@ -15,8 +15,8 @@ import { Statusbar } from './statusbar.js';
 import { MobileLayout } from './mobile-layout.js';
 
 export interface ViewModel {
-  table: Table;
-  operationExecutor?: OperationExecutor;
+  readonly table: Table;
+  readonly operationExecutor?: OperationExecutor;
   dictionary: LanguageDictionary;
   imageRegistry: ImageRegistry;
   tableViewer: TableViewer;

@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.0.0] - 2023-06-12
+
+### Added
+
+- Incorporate view customization capabilities.
+- Add toolbar controls tooltips.
+- Add padding to table cells.
+
+### Changed
+
+- Improve code readability:
+
+  - rename NgxFittableModule to FittableModule;
+  - rename TableViewComponent to FittableComponent
+
+- Enhance the comprehensibility of the user documentation.
+
 ## [v2.0.0] - 2023-05-25
 
 ### Changed
