@@ -6,6 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { TreeNode } from 'primeng/api';
 
 import { TopicTitle } from './common/topic-title.model';
 
@@ -15,19 +16,25 @@ import { TopicTitle } from './common/topic-title.model';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  public readonly activeContent$: Subject<TopicTitle> = new Subject();
-  public activeContent: TopicTitle = 'Introduction';
+  public readonly activeTopic$: Subject<TreeNode<TopicTitle>> = new Subject();
+  public activeTopic: TopicTitle = 'Introduction';
+  public showSidebar = false;
   private subscription?: Subscription;
 
-  @ViewChild('content') htmlContent!: ElementRef;
+  @ViewChild('topic') htmlTopic!: ElementRef;
 
   public ngOnInit(): void {
-    this.subscription = this.activeContent$.subscribe(
-      (content: TopicTitle): void => {
-        this.activeContent = content;
-        this.htmlContent.nativeElement.scrollTop = 0;
+    this.subscription = this.activeTopic$.subscribe(
+      (title: TreeNode<TopicTitle>): void => {
+        this.activeTopic = title.label as TopicTitle;
+        this.htmlTopic.nativeElement.scrollTop = 0;
+        if (this.showSidebar) this.showSidebar = false;
       }
     );
+  }
+
+  public onHamburgerClick(): void {
+    this.showSidebar = !this.showSidebar;
   }
 
   public onNpmJs(): void {

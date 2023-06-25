@@ -1,17 +1,15 @@
 <div class="topic">
   <h1 class="title">{{title}}</h1>
-  <p class="description">
-    The key functionalities of Fittable can be approached below.
-  </p>
   <div class="preview">
-    <div class="left-navigation">
-      <div *ngFor="let item of navigation" class="control"
-        [ngStyle]="{backgroundImage:item.isChecked()?'url(../../../assets/icons/outline-check-circle.svg)':undefined}"
-        (click)="item.run()">
-        {{item.label}}
-      </div>
+    <div class="toolbar">
+      <span class="p-buttonset">
+        <p-button *ngFor="let item of navigation" [label]="item.label"
+          [icon]="item.isChecked() ? 'pi pi-check':'pi pi-times'"
+          [styleClass]="item.isChecked()?'p-button-sm':'p-button-sm p-button-secondary'"
+          (onClick)="item.run()"></p-button>
+      </span>
     </div>
-    <div class="fittable">
+    <div class="fittable" style="height: 470px;">
       <ng-template #content></ng-template>
     </div>
   </div>

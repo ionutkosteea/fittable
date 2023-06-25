@@ -26,7 +26,10 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-color-picker',
   templateUrl: './color-picker.component.html',
-  styleUrls: ['./color-picker.component.css'],
+  styleUrls: [
+    '../common/css/controls-common.css',
+    './color-picker.component.css',
+  ],
 })
 export class ColorPickerComponent
   extends PopupControlComponent

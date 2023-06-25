@@ -15,7 +15,10 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-border-popup',
   templateUrl: './border-popup.component.html',
-  styleUrls: ['./border-popup.component.css'],
+  styleUrls: [
+    '../common/css/controls-common.css',
+    './border-popup.component.css',
+  ],
 })
 export class BorderPopupButtonComponent
   extends PopupControlComponent
@@ -34,7 +37,6 @@ export class BorderPopupButtonComponent
   public getButtonStyle(): CssStyle {
     const style: CssStyle = createToggleStyle(this.model);
     style['background-image'] = this.getButtonIcon();
-    style['background-repeat'] = 'no-repeat';
     return style;
   }
 

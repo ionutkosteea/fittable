@@ -22,7 +22,10 @@
 
 .cell-selection {
   position: absolute;
-  border: 2px solid var(--cell-selection-border-color);
   background-color: var(--cell-selection-background-color);
   pointer-events: none;
+  box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -webkit-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -moz-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  border: none;
 }

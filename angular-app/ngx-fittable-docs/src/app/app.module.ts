@@ -1,5 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToolbarModule } from 'primeng/toolbar';
+import { ButtonModule } from 'primeng/button';
+import { TreeModule } from 'primeng/tree';
+import { SidebarModule } from 'primeng/sidebar';
 
 import { FittableModule } from 'fittable-angular';
 
@@ -115,7 +121,15 @@ import { CustomStatusbarComponent } from './topics/table-designer/custom-view/cu
     CustomToolbarComponent,
     CustomStatusbarComponent,
   ],
-  imports: [BrowserModule, FittableModule],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    ToolbarModule,
+    ButtonModule,
+    TreeModule,
+    SidebarModule,
+    FittableModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

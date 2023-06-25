@@ -10,7 +10,10 @@ import { PopupControlComponent } from '../../common/popup-control-component.mode
 @Component({
   selector: 'fit-settings-button',
   templateUrl: './settings-button.component.html',
-  styleUrls: ['./settings-button.component.css'],
+  styleUrls: [
+    '../../common/css/controls-common.css',
+    './settings-button.component.css',
+  ],
 })
 export class SettingsButtonComponent
   extends PopupControlComponent

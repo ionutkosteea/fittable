@@ -14,7 +14,10 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-popup-button',
   templateUrl: './popup-button.component.html',
-  styleUrls: ['./popup-button.component.css'],
+  styleUrls: [
+    '../common/css/controls-common.css',
+    './popup-button.component.css',
+  ],
 })
 export class PopupButtonComponent
   extends PopupControlComponent
@@ -33,7 +36,6 @@ export class PopupButtonComponent
     const control: Control | undefined = this.getSelectedControl();
     if (control) {
       style['background-image'] = control.getIcon();
-      style['background-repeat'] = 'no-repeat';
     }
     return style;
   }

@@ -19,8 +19,8 @@
   color: var(--context-menu-color);
   position: fixed;
   left: 0px;
-  top: 21px;
-  padding: 10px;
+  top: 20px;
+  padding: 12px;
   text-align: left;
   display: none;
   z-index: 15;
@@ -36,7 +36,7 @@
   border: 1px solid var(--context-menu-border-color);
   margin: 0px;
   padding: 2px;
-  width: calc(100% - 2px - 4px);
+  width: 100%;
   border-radius: 4px;
   font-size: 14px;
   background-position: bottom 4px right 4px;

@@ -1,32 +1,21 @@
-.button {
+.settings-button {
   position: relative;
   width: 16px;
   height: 16px;
   background-repeat: 'no-repeat';
+  background-position: center;
   cursor: pointer;
 }
 
-.popup-window {
+.settings-menu {
   position: absolute;
   top: 24px;
   right: 2px;
-  background-color: var(--context-menu-background-color);
-  border-left: 1px solid var(--context-menu-border-color);
-  border-top: 1px solid var(--context-menu-border-color);
-  border-radius: 4px;
-  -webkit-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
-  -moz-box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
-  box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-size: 14px;
-  max-height: 80vh;
-  overflow: auto;
-
+  left: auto;
 }
 
 .title {
-  padding-left: 10px;
+  padding-left: 12px;
   color: var(--highlight-color);
   line-height: 30px;
 }
@@ -36,9 +25,8 @@
   display: grid;
   grid-template-columns: 100px 16px;
   place-items: center normal;
-  padding-left: 10px;
-  padding-right: 10px;
-  height: 30px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 .popup-child:hover {
@@ -48,5 +36,5 @@
 
 .check {
   background-position: center;
-  background-repeat: 'no-repeat';
+  background-repeat: no-repeat;
 }

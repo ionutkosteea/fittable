@@ -21,7 +21,7 @@ import { createWindowStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-context-menu',
   templateUrl: './context-menu.component.html',
-  styleUrls: ['./context-menu.component.css'],
+  styleUrls: ['../common/css/controls-common.css'],
 })
 export class ContextMenuComponent implements AfterViewInit {
   @Input() model!: Window;

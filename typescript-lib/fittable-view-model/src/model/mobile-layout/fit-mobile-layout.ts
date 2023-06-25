@@ -91,10 +91,10 @@ export class FitMobileLayout implements MobileLayout {
           .getRectangles()
           .forEach((rect: Rectangle) => {
             this.bodySelectionRectangles.push({
-              'left.px': rect.left - 2,
-              'top.px': rect.top - 2,
-              'width.px': rect.width,
-              'height.px': rect.height,
+              left: rect.left + 'px',
+              top: rect.top + 'px',
+              width: rect.width + 'px',
+              height: rect.height + 'px',
             });
           });
       });
@@ -112,8 +112,8 @@ export class FitMobileLayout implements MobileLayout {
             const top: number = rect.top + this.args.tableScroller.getTop();
             this.pageHeaderSelectionRectangles.push({
               transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
-              'width.px': rect.width,
-              'height.px': rect.height,
+              width: rect.width + 'px',
+              height: rect.height + 'px',
             });
           });
       });
@@ -130,8 +130,8 @@ export class FitMobileLayout implements MobileLayout {
             const top: number = rect.top + this.args.tableScroller.getTop();
             this.colHeaderSelectionRectangles.push({
               transform: 'translate3d(' + rect.left + 'px,' + top + 'px,0px)',
-              'width.px': rect.width,
-              'height.px': rect.height,
+              width: rect.width + 'px',
+              height: rect.height + 'px',
             });
           });
       });
@@ -148,8 +148,8 @@ export class FitMobileLayout implements MobileLayout {
             const left: number = rect.left + this.args.tableScroller.getLeft();
             this.rowHeaderSelectionRectangles.push({
               transform: 'translate3d(' + left + 'px,' + rect.top + 'px,0px)',
-              'width.px': rect.width,
-              'height.px': rect.height,
+              width: rect.width + 'px',
+              height: rect.height + 'px',
             });
           });
       });

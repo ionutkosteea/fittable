@@ -1,72 +1,50 @@
-.main {
-  position: relative;
-  height: 100%;
-  max-width: 1680px;
+.content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 8px;
+  height: 100vh;
 }
 
-.top {
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 50px;
-  background-color: white;
-  z-index: 5;
-  border-bottom: 2px solid rgba(96, 96, 96, 0.1);
-  box-sizing: border-box;
+.header {
+  grid-column: 1 / span 2;
+}
+
+.hamburger {
+  margin-right: 8px;
+  display: none;
 }
 
 .logo {
-  position: absolute;
-  left: 4px;
-  top: 10px;
-  width: fit-content;
-  color: #606060;
-  display: inline-table;
-  vertical-align: middle;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: bolder;
   font-style: italic;
-  padding-left: 6px;
-}
-
-.top-right-bar {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  height: 20px;
-}
-
-.top-button {
-  width: 20px;
-  height: 20px;
-  margin-left: 6px;
-  cursor: pointer;
-}
-
-.contact:hover {
-  background-color: rgba(96, 96, 96, 0.1);
 }
 
 .navigation {
-  position: fixed;
-  left: 0px;
-  top: 50px;
-  width: 240px;
-  height: calc(100% - 50px);
-  overflow: auto;
-  scroll-behavior: smooth;
-  border-right: 2px solid rgba(96, 96, 96, 0.1);
-  padding-top: 10px;
-  padding-left: 4px;
-  padding-right: 4px;
-  box-sizing: border-box;
+  display: block;
+  width: 300px;
 }
 
-.content {
-  margin-top: 50px;
-  margin-left: 240px;
-  height: calc(100% - 50px);
+.navigation-tree {
   overflow: auto;
+  scroll-behavior: smooth;
+}
+
+
+.topic {
+  overflow: auto;
+  max-width: 1080px;
   box-sizing: border-box;
+  padding: 8px;
+}
+
+@media screen and (max-width: 1080px) {
+  .hamburger {
+    display: block;
+  }
+
+  .navigation {
+    width: 0;
+  }
 }

@@ -1,12 +1,9 @@
-<div class="navigation-tree">
-  <ng-container *ngFor="let composite of tree">
-    <div class="composite"
-      [ngStyle]="{backgroundImage:composite.isExpended?'url(../../assets/icons/tree-expanded.svg)':'url(../../assets/icons/tree-collapsed.svg)'}"
-      (click)="onCompositeClick(composite)">{{composite.label}}
-    </div>
-    <ng-container *ngIf="composite.isExpended">
-      <div *ngFor="let leaf of composite.leafs" [class]="leaf===clickedLeaf?'leaf selected-leaf':'leaf'"
-        (click)="onLeafClick(leaf)">{{leaf}}</div>
-    </ng-container>
-  </ng-container>
+<div class="flex-wrap justify-content-center gap-5">
+  <p-tree [value]="tree" class="w-full md:w-30rem" [filter]="true" filterPlaceholder="Search" selectionMode="single"
+    [(selection)]="treeSelection" (onNodeSelect)="onNodeSelect($event)">
+    <ng-template let-node pTemplate="default">
+      <strong *ngIf="node.children" style="font-size: 16px;">{{ node.label }}</strong>
+      <span *ngIf="!node.children" style="font-size: 14px;">{{ node.label }}</span>
+    </ng-template>
+  </p-tree>
 </div>

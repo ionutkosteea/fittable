@@ -5,37 +5,14 @@
   cursor: auto;
 }
 
-.button {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  background-repeat: "no-repeat";
-}
-
 .picked-color {
   position: absolute;
-  top: 5px;
-  left: 0px;
+  top: 13px;
+  left: 6px;
   width: 16px;
   height: 4px;
   border: none;
   cursor: pointer;
-}
-
-.popup-window {
-  -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
-  -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
-  box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
-  position: absolute;
-  top: 26px;
-  left: -6px;
-  background-color: var(--toolbar-background-color);
-  border-left: 1px solid var(--toolbar-border-color);
-  z-index: 15;
-  padding: 5px;
-  width: 132px;
-  overflow: auto;
-  max-height: 80vh;
 }
 
 .color-none-panel {

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.1.0] - 2023-06-25
+
+### Changed
+
+- Add responsive design capabilities.
+
 ## [v3.0.0] - 2023-06-12
 
 ### Added

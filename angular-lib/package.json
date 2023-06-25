@@ -47,6 +47,6 @@
   "peerDependencies": {
     "fittable-model": "^1.1.1",
     "fittable-model-operations": "^1.1.1",
-    "fittable-view-model": "^1.1.1"
+    "fittable-view-model": "^1.1.2"
   }
 }

@@ -8,7 +8,8 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-button',
   template:
-    '<div [ngStyle]="getStyle()" (click)="onClick()" [title]="getLabel()">&nbsp;</div>',
+    '<div class="button" [ngStyle]="getStyle()" (click)="onClick()" [title]="getLabel()">&nbsp;</div>',
+  styleUrls: ['../common/css/controls-common.css'],
 })
 export class ButtonComponent {
   @Input() model!: Control;
