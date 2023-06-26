@@ -88,9 +88,10 @@
     <section *ngIf="activeTopic==='Custom view model'"><custom-view-model></custom-view-model></section>
     <section *ngIf="activeTopic==='Custom view'"><custom-view></custom-view></section>
   </main>
-  <p-sidebar [(visible)]="showSidebar" [style]="{width:'300px'}">
-    <div class="navigation-tree">
-      <navigation-tree [treeSelection$]="activeTopic$"></navigation-tree>
-    </div>
-  </p-sidebar>
+  <footer class="footer">&nbsp;</footer>
 </div>
+<p-sidebar [(visible)]="showSidebar" [style]="{width:'300px'}">
+  <div class="navigation-tree">
+    <navigation-tree [treeSelection$]="activeTopic$"></navigation-tree>
+  </div>
+</p-sidebar>

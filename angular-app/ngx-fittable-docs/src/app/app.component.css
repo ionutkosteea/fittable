@@ -10,6 +10,13 @@
   grid-column: 1 / span 2;
 }
 
+.footer {
+  grid-column: 1 / span 2;
+  background: var(--surface-card);
+  height: 40px;
+  border-top: 2px solid var(--surface-border);
+}
+
 .hamburger {
   margin-right: 8px;
   display: none;
