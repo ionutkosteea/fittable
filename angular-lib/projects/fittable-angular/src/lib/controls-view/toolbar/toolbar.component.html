@@ -1,5 +1,4 @@
 <div class="toolbar">
-  <div class="toolbar-separator">&nbsp;</div>
   <ng-container *ngFor="let id of getControlIDs()">
     <ng-container [ngSwitch]="getControlType(id)">
       <ng-container *ngSwitchCase="'push-button'">

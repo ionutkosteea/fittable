@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.0] - ?
+
+### Changed
+
+- Improve code readability according to fittable-core/view-model
+
+- Add responsive design capabilities:
+  - toolbar height should increase relative to child controls.
+
 ## [v3.1.0] - 2023-06-25
 
 ### Changed
