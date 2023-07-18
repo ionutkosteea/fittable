@@ -37,8 +37,8 @@ export class CustomViewComponent {
   }
 
   public readonly getViewModel = (): ViewModel => this.fit.viewModel;
-  public readonly getTableScroller = (): ScrollContainer =>
-    this.fit.viewModel.tableScroller;
+  public readonly getTableScrollContainer = (): ScrollContainer =>
+    this.fit.viewModel.tableScrollContainer;
   public readonly hasToolbar = (): boolean =>
     this.fit.viewModel.toolbar !== undefined;
   public readonly getToolbar = (): Container =>

@@ -17,7 +17,7 @@ export interface ColFilters {
   loadCol(colId: number): this;
   getPopupButton(colId: number): PopupControl;
   getValueConditions(): { [colId: number]: ValueCondition };
-  getValueScroller(): ScrollContainer;
+  getValueScrollContainer(): ScrollContainer;
   destroy(): void;
 }
 

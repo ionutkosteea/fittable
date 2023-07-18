@@ -39,7 +39,7 @@ export type TopicTitle =
   | 'Column filters (2/2)'
   | 'Language dictionary'
   | 'Image registry'
-  | 'Table scroller'
+  | 'Table scroll container'
   | 'Cell selection'
   | 'Cell editor'
   | 'Theme switcher'

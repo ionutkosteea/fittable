@@ -31,9 +31,11 @@ export class ContextMenuComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     const htmlMenu: HTMLElement = this.menuRef.nativeElement;
-    this.model
-      .setWidth((): number => htmlMenu.clientWidth)
-      .setHeight((): number => htmlMenu.clientHeight);
+    this.model //
+      .setSize({
+        getWidth: (): number => htmlMenu.clientWidth,
+        getHeight: (): number => htmlMenu.clientHeight,
+      });
     this.windowListener = createWindowListener(this.model);
   }
 

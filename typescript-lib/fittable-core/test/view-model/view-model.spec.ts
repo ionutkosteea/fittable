@@ -64,7 +64,7 @@ describe('view-model', () => {
     const throwsError: boolean = throwsMethodNotImplemented(() =>
       createMobileLayout({
         tableViewer: new TstTableViewer(),
-        tableScroller: new TstScrollContainer(),
+        tableScrollContainer: new TstScrollContainer(),
       })
     );
     expect(throwsError).toBeTrue();
@@ -112,7 +112,7 @@ describe('view-model', () => {
     const throwsError: boolean = throwsMissingFactory(() =>
       createCellSelectionPainter({
         tableViewer: new TstTableViewer(),
-        tableScroller: new TstScrollContainer(),
+        tableScrollContainer: new TstScrollContainer(),
         cellSelection: new TstCellSelection(),
       })
     );
@@ -157,7 +157,7 @@ describe('view-model', () => {
       createStatusbar({
         dictionary: new TstLanguageDictionary(),
         tableViewer: new TstTableViewer(),
-        tableScroller: new TstScrollContainer(),
+        tableScrollContainer: new TstScrollContainer(),
       })
     );
     expect(throwsError).toBeTrue();

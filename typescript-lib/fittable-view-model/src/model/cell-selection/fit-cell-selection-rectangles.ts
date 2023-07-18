@@ -15,7 +15,7 @@ abstract class FitCellSelectionRectangles implements CellSelectionRectangles {
 
   constructor(
     protected readonly tableViewer: TableViewer,
-    protected readonly tableScroller: ScrollContainer
+    protected readonly tableScrollContainer: ScrollContainer
   ) {}
 
   protected abstract calcLeft(cellRange: CellRange): number;

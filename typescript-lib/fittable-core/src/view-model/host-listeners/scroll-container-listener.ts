@@ -1,6 +1,6 @@
-import { ScrollContainer, ScrollElement } from '../model/scroll-container.js';
+import { ScrollContainer } from '../model/scroll-container.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { FitEvent } from './html-mockups.js';
+import { FitEvent, FitHtmlDivElement } from './html-mockups.js';
 
 export interface ScrollContainerListener {
   onScroll(event?: FitEvent): void;
@@ -8,16 +8,16 @@ export interface ScrollContainerListener {
 
 export interface ScrollContainerListenerFactory {
   createScrollContainerListener(
-    div: ScrollElement,
-    scroller: ScrollContainer
+    div: FitHtmlDivElement,
+    scrollContainer: ScrollContainer
   ): ScrollContainerListener;
 }
 
 export function createScrollContainerListener(
-  div: ScrollElement,
-  scroller: ScrollContainer
+  div: FitHtmlDivElement,
+  scrollContainer: ScrollContainer
 ): ScrollContainerListener {
   return getViewModelConfig()
     .scrollContainerListenerFactory //
-    .createScrollContainerListener(div, scroller);
+    .createScrollContainerListener(div, scrollContainer);
 }

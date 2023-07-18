@@ -20,7 +20,7 @@ export interface ViewModel {
   dictionary: LanguageDictionary;
   imageRegistry: ImageRegistry;
   tableViewer: TableViewer;
-  tableScroller: ScrollContainer;
+  tableScrollContainer: ScrollContainer;
   mobileLayout: MobileLayout;
   cellSelection?: CellSelection;
   cellSelectionPainter?: CellSelectionPainter;

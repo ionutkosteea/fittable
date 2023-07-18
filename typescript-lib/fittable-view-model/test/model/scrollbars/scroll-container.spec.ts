@@ -12,13 +12,16 @@ import {
   createScrollContainer,
   registerViewModelConfig,
   ScrollContainer,
-  ScrollElement,
   unregisterViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 
 import { FIT_VIEW_MODEL_CONFIG } from '../../../dist/index.js';
+
+import { TstGrid } from '../common/tst-grid.js';
+import { TstSize } from '../common/tst-size.js';
+import { TstScroller } from '../common/tst-scroller.js';
 
 describe('Scroll container', (): void => {
   beforeAll((): void => {
@@ -33,11 +36,11 @@ describe('Scroll container', (): void => {
   });
 
   it('traverse row indexes', (): void => {
-    const scrollContainer: ScrollContainer = createScrollContainer({
-      getNumberOfRows: () => 10,
-      getNumberOfCols: () => 5,
-    });
-    scrollContainer.init(new TstScrollElement());
+    const scrollContainer: ScrollContainer = //
+      createScrollContainer(new TstGrid(10, 5))
+        .setSize(new TstSize(100, 200))
+        .setScroller(new TstScroller(0, 0));
+
     let firstRow: number | undefined = 0;
     let lastRow = 0;
     for (const i of scrollContainer.getRenderableRows()) {
@@ -49,11 +52,11 @@ describe('Scroll container', (): void => {
   });
 
   it('traverse column indexes', (): void => {
-    const scrollContainer: ScrollContainer = createScrollContainer({
-      getNumberOfRows: () => 10,
-      getNumberOfCols: () => 5,
-    });
-    scrollContainer.init(new TstScrollElement());
+    const scrollContainer: ScrollContainer = //
+      createScrollContainer(new TstGrid(10, 5))
+        .setSize(new TstSize(100, 200))
+        .setScroller(new TstScroller(0, 0));
+
     let firstCol: number | undefined = 0;
     let lastCol = 0;
     for (const i of scrollContainer.getRenderableCols()) {
@@ -64,14 +67,3 @@ describe('Scroll container', (): void => {
     expect(lastCol === 4).toBeTruthy();
   });
 });
-
-class TstScrollElement implements ScrollElement {
-  clientHeight = 200;
-  clientWidth = 100;
-  scrollLeft = 0;
-  scrollTop = 0;
-  scrollTo(left: number, top: number): void {
-    this.scrollLeft = left;
-    this.scrollTop = top;
-  }
-}

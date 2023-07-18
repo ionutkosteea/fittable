@@ -11,15 +11,15 @@ import {
 import { FitWindow, FIT_VIEW_MODEL_CONFIG } from '../../dist/index.js';
 
 import { TstMouseEvent } from './tst-html-mockups.js';
+import { TstSize } from '../model/common/tst-size.js';
 
 describe('fit-window-listener.ts', () => {
   beforeAll(() => registerViewModelConfig(FIT_VIEW_MODEL_CONFIG));
   afterAll(() => unregisterViewModelConfig());
 
   it('onShow()', () => {
-    const window: Window = new FitWindow()
-      .setWidth(() => 100)
-      .setHeight(() => 200);
+    const window: Window = new FitWindow() //
+      .setSize(new TstSize(100, 200));
     const windowListener: WindowListener = createWindowListener(window);
     const mouseEvent: TstMouseEvent = new TstMouseEvent();
     mouseEvent.x = 10;
@@ -34,9 +34,8 @@ describe('fit-window-listener.ts', () => {
   it('onMouseDown()', () => {
     const window: Window = new FitWindow()
       .setVisible(true)
-      .setPosition({ x: 10, y: 20 })
-      .setWidth(() => 100)
-      .setHeight(() => 200);
+      .setSize(new TstSize(100, 200))
+      .setPosition({ x: 10, y: 20 });
     const windowListener: WindowListener = createWindowListener(window);
     const mouseEvent: TstMouseEvent = new TstMouseEvent();
     mouseEvent.x = 20;
@@ -49,9 +48,8 @@ describe('fit-window-listener.ts', () => {
   it('onGlobalMouseDown()', () => {
     const window: Window = new FitWindow()
       .setVisible(true)
-      .setPosition({ x: 10, y: 20 })
-      .setWidth(() => 100)
-      .setHeight(() => 200);
+      .setSize(new TstSize(100, 200))
+      .setPosition({ x: 10, y: 20 });
     const windowListener: WindowListener = createWindowListener(window);
     const mouseEvent: TstMouseEvent = new TstMouseEvent();
     mouseEvent.x = 200;

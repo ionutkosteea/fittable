@@ -64,7 +64,7 @@ export interface CellSelectionPainter {
 
 export type CellSelectionPainterArgs = {
   tableViewer: TableViewer;
-  tableScroller: ScrollContainer;
+  tableScrollContainer: ScrollContainer;
   cellSelection: CellSelection;
 };
 

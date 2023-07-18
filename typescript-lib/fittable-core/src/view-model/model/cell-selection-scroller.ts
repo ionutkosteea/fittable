@@ -15,17 +15,20 @@ export interface CellSelectionScroller {
 export interface CellSelectionScrollerFactory {
   createCellSelectionScroller(
     tableViewer: TableViewer,
-    tableScroller: ScrollContainer
+    tableScrollContainer: ScrollContainer
   ): CellSelectionScroller;
 }
 
 export function createCellSelectionScroller(
   tableViewer: TableViewer,
-  tableScroller: ScrollContainer
+  tableScrollContainer: ScrollContainer
 ): CellSelectionScroller {
   const factory: CellSelectionScrollerFactory | undefined =
     getViewModelConfig().cellSelectionScrollerFactory;
   if (factory)
-    return factory.createCellSelectionScroller(tableViewer, tableScroller);
+    return factory.createCellSelectionScroller(
+      tableViewer,
+      tableScrollContainer
+    );
   else throw new MissingFactoryError();
 }

@@ -20,26 +20,26 @@ import { CodeSnippet } from '../common/code-snippet.model';
 import { Button, ConsoleTopic } from './common/console-topic.model';
 
 @Component({
-  selector: 'table-scroller',
+  selector: 'table-scroll-container',
   templateUrl: './common/console-topic.html',
   styleUrls: ['../common/common.css'],
 })
-export class TableScrollerComponent implements ConsoleTopic, OnInit {
-  public readonly title: TopicTitle = 'Table scroller';
+export class TableScrollContainerComponent implements ConsoleTopic, OnInit {
+  public readonly title: TopicTitle = 'Table scroll container';
   public readonly htmlCode: CodeSnippet[] = [
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'table-scroller-ts-01.jpg' },
-    { image: 'table-scroller-ts-02.jpg' },
-    { image: 'table-scroller-ts-03.jpg' },
-    { image: 'table-scroller-ts-04.jpg' },
-    { image: 'table-scroller-ts-05.jpg' },
-    { image: 'table-scroller-ts-06.jpg' },
-    { image: 'table-scroller-ts-07.jpg' },
-    { image: 'table-scroller-ts-08.jpg' },
-    { image: 'table-scroller-ts-09.jpg' },
-    { image: 'table-scroller-ts-10.jpg' },
+    { image: 'table-scroll-container-ts-01.jpg' },
+    { image: 'table-scroll-container-ts-02.jpg' },
+    { image: 'table-scroll-container-ts-03.jpg' },
+    { image: 'table-scroll-container-ts-04.jpg' },
+    { image: 'table-scroll-container-ts-05.jpg' },
+    { image: 'table-scroll-container-ts-06.jpg' },
+    { image: 'table-scroll-container-ts-07.jpg' },
+    { image: 'table-scroll-container-ts-08.jpg' },
+    { image: 'table-scroll-container-ts-09.jpg' },
+    { image: 'table-scroll-container-ts-10.jpg' },
   ];
   public readonly buttons: Button[] = [];
   public fit!: FittableDesigner;
@@ -69,9 +69,10 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
     });
     this.fit = createFittableDesigner(table);
 
-    const tableScroller: ScrollContainer = this.fit.viewModel.tableScroller;
-    this.verticalScrollbar = tableScroller.getVerticalScrollbar();
-    this.horizontalScrollbar = tableScroller.getHorizontalScrollbar();
+    const tableScrollContainer: ScrollContainer =
+      this.fit.viewModel.tableScrollContainer;
+    this.verticalScrollbar = tableScrollContainer.getVerticalScrollbar();
+    this.horizontalScrollbar = tableScrollContainer.getHorizontalScrollbar();
     this.createButtons();
   }
 
@@ -94,12 +95,13 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
         if (!this.virtualColsButton) throw new Error('Button is not defined.');
         const config: ViewModelConfig = getViewModelConfig();
         config.disableVirtualRows = !config.disableVirtualRows;
-        const tableScroller: ScrollContainer = this.fit.viewModel.tableScroller;
+        const tableScrollContainer: ScrollContainer =
+          this.fit.viewModel.tableScrollContainer;
         if (config.disableVirtualRows) {
-          tableScroller.setVerticalScrollbar();
+          tableScrollContainer.setVerticalScrollbar();
           this.virtualColsButton.disabled = 'disabled';
         } else {
-          tableScroller.setVerticalScrollbar(this.verticalScrollbar);
+          tableScrollContainer.setVerticalScrollbar(this.verticalScrollbar);
           this.virtualColsButton.disabled = undefined;
         }
       },
@@ -117,12 +119,13 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
         if (!this.virtualRowsButton) throw new Error('Button is not defined.');
         const config: ViewModelConfig = getViewModelConfig();
         config.disableVirtualCols = !config.disableVirtualCols;
-        const tableScroller: ScrollContainer = this.fit.viewModel.tableScroller;
+        const tableScrollContainer: ScrollContainer =
+          this.fit.viewModel.tableScrollContainer;
         if (config.disableVirtualCols) {
-          tableScroller.setHorizontalScrollbar();
+          tableScrollContainer.setHorizontalScrollbar();
           this.virtualRowsButton.disabled = 'disabled';
         } else {
-          tableScroller.setHorizontalScrollbar(this.horizontalScrollbar);
+          tableScrollContainer.setHorizontalScrollbar(this.horizontalScrollbar);
           this.virtualRowsButton.disabled = undefined;
         }
       },
@@ -132,7 +135,8 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
   private createScrollToTopButton = (): Button => {
     return {
       getLabel: (): string => 'Scroll to top',
-      run: (): void => this.fit.viewModel.tableScroller.scrollTo(0, 0),
+      run: (): void =>
+        this.fit.viewModel.tableScrollContainer.getScroller().scroll(0, 0),
     };
   };
 
@@ -149,15 +153,19 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
     const lastCol: number = this.getLastRenderableCol();
     consoleText += 'Rendered columns: [' + firstCol + ',' + lastCol + ']\n';
     consoleText +=
-      'Scroll left: ' + this.fit.viewModel.tableScroller.getLeft() + '\n';
+      'Scroll left: ' +
+      this.fit.viewModel.tableScrollContainer.getScroller().getLeft() +
+      '\n';
     consoleText +=
-      'Scroll top: ' + this.fit.viewModel.tableScroller.getTop() + '\n';
+      'Scroll top: ' +
+      this.fit.viewModel.tableScrollContainer.getScroller().getTop() +
+      '\n';
     return consoleText;
   }
 
   private getFirstRenderableCol(): number {
     return (
-      this.fit.viewModel.tableScroller
+      this.fit.viewModel.tableScrollContainer
         .getHorizontalScrollbar()
         ?.getFirstRenderableLine() ?? 0
     );
@@ -165,7 +173,7 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
 
   private getLastRenderableCol(): number {
     const colId: number =
-      this.fit.viewModel.tableScroller
+      this.fit.viewModel.tableScrollContainer
         .getHorizontalScrollbar()
         ?.getLastRenderableLine() ?? 0;
     const numberOfCols: number = this.fit.table.getNumberOfCols();
@@ -174,7 +182,7 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
 
   private getFirstRenderableRow(): number {
     return (
-      this.fit.viewModel.tableScroller
+      this.fit.viewModel.tableScrollContainer
         .getVerticalScrollbar()
         ?.getFirstRenderableLine() ?? 0
     );
@@ -182,7 +190,7 @@ export class TableScrollerComponent implements ConsoleTopic, OnInit {
 
   private getLastRenderableRow(): number {
     const rowId: number =
-      this.fit.viewModel.tableScroller
+      this.fit.viewModel.tableScrollContainer
         .getVerticalScrollbar()
         ?.getLastRenderableLine() ?? 0;
     const numberOfRows: number = this.fit.table.getNumberOfRows();

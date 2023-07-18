@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 
 import { RangeIterator } from '../../common/range-iterator.js';
 import { getViewModelConfig } from '../view-model-config.js';
+import { Size } from './controls.js';
 
 export interface Scrollbar {
   setViewport(viewport: number): this;
@@ -12,29 +13,23 @@ export interface Scrollbar {
   getLastRenderableLine(): number;
 }
 
-export interface ScrollElement {
-  clientHeight: number;
-  clientWidth: number;
-  scrollLeft: number;
-  scrollTop: number;
-  scrollTo(left: number, top: number): void;
+export interface Scroller {
+  getLeft: () => number;
+  getTop: () => number;
+  scroll: (left: number, top: number) => void;
 }
 
 export interface ScrollContainer {
-  init(element: ScrollElement): this;
-  getHeight(): number;
-  getWidth(): number;
-  scrollTo(left: number, top: number): void;
-  getLeft(): number;
-  getTop(): number;
+  getSize(): Size;
+  setSize(size: Size): this;
+  getScroller(): Scroller;
+  setScroller(scroller: Scroller): this;
   setVerticalScrollbar(scrollbar?: Scrollbar): this;
   getVerticalScrollbar(): Scrollbar | undefined;
   setHorizontalScrollbar(scrollbar?: Scrollbar): this;
   getHorizontalScrollbar(): Scrollbar | undefined;
-  resizeViewportWidth(): this;
-  resizeViewportHeight(): this;
-  getOffsetX(): number;
-  getOffsetY(): number;
+  getInnerOffsetX(): number;
+  getInnerOffsetY(): number;
   getRenderableRows(): RangeIterator;
   getRenderableCols(): RangeIterator;
   renderModel(): this;

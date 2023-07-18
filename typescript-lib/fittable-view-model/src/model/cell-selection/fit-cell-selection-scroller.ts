@@ -2,6 +2,7 @@ import {
   CellSelectionScroller,
   CellSelectionScrollerFactory,
   ScrollContainer,
+  Scroller,
   TableViewer,
 } from 'fittable-core/view-model';
 
@@ -14,7 +15,7 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
 
   constructor(
     private tableViewer: TableViewer,
-    private tableScroller: ScrollContainer
+    private tableScrollContainer: ScrollContainer
   ) {}
 
   public setRowId(rowId: number): this {
@@ -33,29 +34,30 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
   }
 
   public scroll(): this {
+    const scroller: Scroller = this.tableScrollContainer.getScroller();
     if (this.scrollDirection === 'Down') {
-      const scrollLeft: number = this.tableScroller.getLeft();
+      const scrollLeft: number = scroller.getLeft();
       const scrollTop: number = this.scrollDown();
-      if (scrollTop > -1) this.tableScroller.scrollTo(scrollLeft, scrollTop);
+      if (scrollTop > -1) scroller.scroll(scrollLeft, scrollTop);
     } else if (this.scrollDirection === 'Right') {
       const scrollLeft: number = this.scrollRight();
-      const scrollTop: number = this.tableScroller.getTop();
-      if (scrollLeft > -1) this.tableScroller.scrollTo(scrollLeft, scrollTop);
+      const scrollTop: number = scroller.getTop();
+      if (scrollLeft > -1) scroller.scroll(scrollLeft, scrollTop);
     } else if (this.scrollDirection === 'Up') {
-      const scrollLeft: number = this.tableScroller.getLeft();
+      const scrollLeft: number = scroller.getLeft();
       const scrollTop: number = this.scrollUp();
-      if (scrollTop > -1) this.tableScroller.scrollTo(scrollLeft, scrollTop);
+      if (scrollTop > -1) scroller.scroll(scrollLeft, scrollTop);
     } else if (this.scrollDirection === 'Left') {
       const scrollLeft: number = this.scrollLeft();
-      const scrollTop: number = this.tableScroller.getTop();
-      if (scrollLeft > -1) this.tableScroller.scrollTo(scrollLeft, scrollTop);
+      const scrollTop: number = scroller.getTop();
+      if (scrollLeft > -1) scroller.scroll(scrollLeft, scrollTop);
     }
     return this;
   }
 
   private scrollUp(): number {
     if (this.rowId === 0) return this.tableViewer.getRowPosition(0);
-    const scrollTop: number = this.tableScroller.getTop();
+    const scrollTop: number = this.tableScrollContainer.getScroller().getTop();
     const rowPosition: number = this.tableViewer.getRowPosition(this.rowId);
     const rowHeight: number = this.getRowHeight(this.rowId);
     if (scrollTop >= rowPosition && scrollTop < rowPosition + rowHeight) {
@@ -68,8 +70,9 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
   private scrollDown(): number {
     const numberOfRows: number = this.tableViewer.getNumberOfRows();
     if (this.rowId === numberOfRows - 1) return -1;
-    const scrollTop: number = this.tableScroller.getTop();
-    const clientHeight: number = this.tableScroller.getHeight();
+    const scrollTop: number = this.tableScrollContainer.getScroller().getTop();
+    const clientHeight: number = //
+      this.tableScrollContainer.getSize().getHeight();
     const colHeaderHeight: number = this.tableViewer.getColHeaderHeight();
     const viewport: number = scrollTop + clientHeight - colHeaderHeight;
     const rowPosition: number = this.tableViewer.getRowPosition(this.rowId);
@@ -93,7 +96,8 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
 
   private scrollLeft(): number {
     if (this.colId === 0) return this.tableViewer.getColPosition(0);
-    const scrollLeft: number = this.tableScroller.getLeft();
+    const scrollLeft: number = //
+      this.tableScrollContainer.getScroller().getLeft();
     const colPosition: number = this.tableViewer.getColPosition(this.colId);
     const colWidth: number = this.getColWidth(this.colId);
     if (scrollLeft >= colPosition && scrollLeft < colPosition + colWidth) {
@@ -106,8 +110,10 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
   private scrollRight(): number {
     const numberOfCols: number = this.tableViewer.getNumberOfCols();
     if (this.colId === numberOfCols - 1) return -1;
-    const scrollLeft: number = this.tableScroller.getLeft();
-    const clientWidth: number = this.tableScroller.getWidth();
+    const scrollLeft: number = //
+      this.tableScrollContainer.getScroller().getLeft();
+    const clientWidth: number = //
+      this.tableScrollContainer.getSize().getWidth();
     const rowHeaderWidth: number = this.tableViewer.getRowHeaderWidth();
     const viewport: number = scrollLeft + clientWidth - rowHeaderWidth;
     const colPosition: number = this.tableViewer.getColPosition(this.colId);
@@ -135,8 +141,8 @@ export class FitCellSelectionScrollerFactory
 {
   public createCellSelectionScroller(
     viewer: TableViewer,
-    scroller: ScrollContainer
+    scrollContainer: ScrollContainer
   ): CellSelectionScroller {
-    return new FitCellSelectionScroller(viewer, scroller);
+    return new FitCellSelectionScroller(viewer, scrollContainer);
   }
 }

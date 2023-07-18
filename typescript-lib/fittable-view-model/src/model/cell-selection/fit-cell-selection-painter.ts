@@ -29,13 +29,13 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
     this.rowHeader = this.createRowHeaderPainterRanges();
     this.colHeader = this.createColHeaderPainterRanges();
     this.subscribeToCellSelection();
-    this.subscribeToTableScroller();
+    this.subscribeToTableScrollContainer();
   }
 
   private createBodyPainterRanges(): CellSelectionRectangles {
     return new BodySelectionRectangles(
       this.args.tableViewer,
-      this.args.tableScroller
+      this.args.tableScrollContainer
     );
   }
 
@@ -44,7 +44,7 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
       this.args.cellSelection.pageHeader &&
       new PageHeaderCellSelectionRectangles(
         this.args.tableViewer,
-        this.args.tableScroller
+        this.args.tableScrollContainer
       )
     );
   }
@@ -54,7 +54,7 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
       this.args.cellSelection.rowHeader &&
       new RowHeaderSelectionRectangles(
         this.args.tableViewer,
-        this.args.tableScroller
+        this.args.tableScrollContainer
       )
     );
   }
@@ -64,7 +64,7 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
       this.args.cellSelection.colHeader &&
       new ColHeaderSelectionRectangles(
         this.args.tableViewer,
-        this.args.tableScroller
+        this.args.tableScrollContainer
       )
     );
   }
@@ -166,11 +166,11 @@ export class FitCellSelectionPainter implements CellSelectionPainter {
     return this;
   }
 
-  private subscribeToTableScroller(): void {
+  private subscribeToTableScrollContainer(): void {
     this.subscriptions.add(
-      this.args.tableScroller.onAfterRenderModel$().subscribe((): void => {
-        this.paintHeaders();
-      })
+      this.args.tableScrollContainer
+        .onAfterRenderModel$()
+        .subscribe((): void => this.paintHeaders())
     );
   }
 

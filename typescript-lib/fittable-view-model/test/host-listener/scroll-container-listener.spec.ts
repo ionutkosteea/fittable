@@ -15,8 +15,8 @@ import {
   registerViewModelConfig,
   ScrollContainer,
   ScrollContainerListener,
-  ScrollElement,
   unregisterViewModelConfig,
+  FitHtmlDivElement,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
@@ -46,7 +46,7 @@ describe('fit-scroll-container-listener.ts', (): void => {
         scroll = true;
       })
     );
-    const scrollElement: ScrollElement = new (class implements ScrollElement {
+    const div: FitHtmlDivElement = new (class implements FitHtmlDivElement {
       clientHeight = 100;
       clientWidth = 50;
       scrollLeft = 0;
@@ -55,9 +55,14 @@ describe('fit-scroll-container-listener.ts', (): void => {
         this.scrollLeft = left;
         this.scrollTop = top;
       }
+      parentElement = null;
+      tagName = 'div';
+      getAttribute(name: string): string | null {
+        throw new Error('Method not implemented.');
+      }
     })();
     const scrollContainerListener: ScrollContainerListener =
-      createScrollContainerListener(scrollElement, scrollContainer);
+      createScrollContainerListener(div, scrollContainer);
     scrollContainerListener.onScroll();
 
     expect(scroll).toBeTrue();

@@ -7,14 +7,13 @@ import { TableViewer } from './table-viewer.js';
 
 export interface Statusbar extends FocusableObject {
   getText(): string;
-  refresh(): void;
   destroy(): void;
 }
 
 export type StatusbarArgs = {
   dictionary: LanguageDictionary;
   tableViewer: TableViewer;
-  tableScroller: ScrollContainer;
+  tableScrollContainer: ScrollContainer;
 };
 
 export interface StatusbarFactory {

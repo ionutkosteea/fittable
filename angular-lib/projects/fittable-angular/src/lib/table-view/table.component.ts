@@ -22,6 +22,7 @@ export class TableComponent implements OnInit {
   public ngOnInit(): void {
     this.cellSelectionListener = this.createCellSelectionListener();
   }
+
   private createCellSelectionListener(): CellSelectionListener | undefined {
     const wm: ViewModel = this.viewModel;
     return (
@@ -30,8 +31,8 @@ export class TableComponent implements OnInit {
     );
   }
 
-  public readonly getTableScroller = (): ScrollContainer =>
-    this.viewModel.tableScroller;
+  public readonly getTableScrollContainer = (): ScrollContainer =>
+    this.viewModel.tableScrollContainer;
 
   public getTableWidth(): number {
     const tableViewer: TableViewer = this.viewModel.tableViewer;

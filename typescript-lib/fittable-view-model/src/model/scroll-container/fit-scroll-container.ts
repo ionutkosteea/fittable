@@ -4,52 +4,37 @@ import { RangeIterator } from 'fittable-core/common';
 import {
   Scrollbar,
   ScrollContainer,
-  ScrollElement,
   ScrollContainerFactory,
   TableViewer,
   ScrollContainerArgs,
+  Size,
+  Scroller,
 } from 'fittable-core/view-model';
 
 export class FitScrollContainer implements ScrollContainer {
-  private scrollElement?: ScrollElement;
+  private scroller: Scroller = new FitScroller(0, 0);
+  private size: Size = new FitSize(0, 0);
   private verticalScrollbar?: Scrollbar;
   private horizontalScrollbar?: Scrollbar;
   private readonly afterRenderModel$: Subject<void> = new Subject();
 
   constructor(private readonly args?: ScrollContainerArgs) {}
 
-  public init(element: ScrollElement): this {
-    this.scrollElement = element;
+  public getScroller(): Scroller {
+    return this.scroller;
+  }
+
+  public setScroller(scroller: Scroller): this {
+    this.scroller = scroller;
     return this;
   }
 
-  public getHeight(): number {
-    return this.scrollElement?.clientHeight ?? 0;
+  public getSize(): Size {
+    return this.size;
   }
 
-  public getWidth(): number {
-    return this.scrollElement?.clientWidth ?? 0;
-  }
-
-  public scrollTo(left: number, top: number): void {
-    this.scrollElement?.scrollTo(left, top);
-  }
-
-  public getLeft(): number {
-    return this.scrollElement?.scrollLeft ?? 0;
-  }
-
-  public getTop(): number {
-    return this.scrollElement?.scrollTop ?? 0;
-  }
-
-  public resizeViewportHeight(): this {
-    this.verticalScrollbar?.setViewport(this.getHeight());
-    return this;
-  }
-
-  public resizeViewportWidth(): this {
-    this.horizontalScrollbar?.setViewport(this.getWidth());
+  public setSize(size: Size): this {
+    this.size = size;
     return this;
   }
 
@@ -71,11 +56,11 @@ export class FitScrollContainer implements ScrollContainer {
     return this.horizontalScrollbar;
   }
 
-  public getOffsetX(): number {
+  public getInnerOffsetX(): number {
     return this.horizontalScrollbar?.getOffset() ?? 0;
   }
 
-  public getOffsetY(): number {
+  public getInnerOffsetY(): number {
     return this.verticalScrollbar?.getOffset() ?? 0;
   }
 
@@ -113,8 +98,12 @@ export class FitScrollContainer implements ScrollContainer {
   }
 
   public renderModel(): this {
-    this.verticalScrollbar?.renderModel(this.getTop());
-    this.horizontalScrollbar?.renderModel(this.getLeft());
+    this.verticalScrollbar
+      ?.setViewport(this.size.getHeight())
+      .renderModel(this.scroller.getTop());
+    this.horizontalScrollbar
+      ?.setViewport(this.size.getWidth())
+      .renderModel(this.scroller.getLeft());
     this.afterRenderModel$.next();
     return this;
   }
@@ -124,8 +113,12 @@ export class FitScrollContainer implements ScrollContainer {
   }
 
   public renderMergedRegions(): this {
-    this.verticalScrollbar?.renderMergedLines();
-    this.horizontalScrollbar?.renderMergedLines();
+    this.verticalScrollbar
+      ?.setViewport(this.size.getHeight())
+      .renderMergedLines();
+    this.horizontalScrollbar
+      ?.setViewport(this.size.getWidth())
+      .renderMergedLines();
     return this;
   }
 }
@@ -134,4 +127,22 @@ export class FitScrollContainerFactory implements ScrollContainerFactory {
   public createScrollContainer(tableViewer: TableViewer): FitScrollContainer {
     return new FitScrollContainer(tableViewer);
   }
+}
+
+class FitScroller implements Scroller {
+  constructor(private left: number, private top: number) {}
+
+  public readonly getLeft = (): number => this.left;
+  public readonly getTop = (): number => this.top;
+  public readonly scroll = (left: number, top: number): void => {
+    this.left = left;
+    this.top = top;
+  };
+}
+
+class FitSize implements Size {
+  constructor(private width: number, private height: number) {}
+
+  public readonly getWidth = (): number => this.width;
+  public readonly getHeight = (): number => this.height;
 }

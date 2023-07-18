@@ -109,7 +109,7 @@ export class NavigationTreeComponent implements OnInit, OnDestroy {
           { label: 'Column filters (2/2)' },
           { label: 'Cell selection' },
           { label: 'Cell editor' },
-          { label: 'Table scroller' },
+          { label: 'Table scroll container' },
           { label: 'Language dictionary' },
           { label: 'Image registry' },
           { label: 'Theme switcher' },

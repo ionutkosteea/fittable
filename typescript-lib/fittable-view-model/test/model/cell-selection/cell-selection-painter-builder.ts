@@ -25,7 +25,7 @@ export class CellSelectionPainterBuilder {
   private numberOfCols = 0;
   private table!: Table;
   private tableViewer!: TableViewer;
-  private tableScroller!: ScrollContainer;
+  private tableScrollContainer!: ScrollContainer;
   private cellSelection!: CellSelection;
   private cellSelectionPainter!: CellSelectionPainter;
   private bodyCellSelectionRanges: CellRange[] = [];
@@ -67,10 +67,10 @@ export class CellSelectionPainterBuilder {
     this.table = this.createTable();
     this.tableViewer = createTableViewer(this.table);
     this.cellSelection = createCellSelection(this.tableViewer);
-    this.tableScroller = createScrollContainer();
+    this.tableScrollContainer = createScrollContainer();
     this.cellSelectionPainter = createCellSelectionPainter({
       tableViewer: this.tableViewer,
-      tableScroller: this.tableScroller,
+      tableScrollContainer: this.tableScrollContainer,
       cellSelection: this.cellSelection,
     });
     this.buildCellSelections();

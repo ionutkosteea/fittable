@@ -18,7 +18,6 @@ import {
   MobileLayout,
   MobileLayoutArgs,
   ScrollContainerListener,
-  ScrollElement,
   CellEditorListenerFactory,
   CellEditor,
   CellEditorListener,
@@ -26,6 +25,7 @@ import {
   CellSelection,
   CellSelectionListener,
   CellSelectionScroller,
+  FitHtmlDivElement,
 } from '../../../dist/view-model/index.js';
 
 export class TstViewModelConfig implements ViewModelConfig {
@@ -88,8 +88,8 @@ class TstScrollContainerListenerFactory
   implements ScrollContainerListenerFactory
 {
   createScrollContainerListener(
-    div: ScrollElement,
-    scroller: ScrollContainer
+    div: FitHtmlDivElement,
+    scrollContainer: ScrollContainer
   ): ScrollContainerListener {
     throw new Error('Method not implemented.');
   }

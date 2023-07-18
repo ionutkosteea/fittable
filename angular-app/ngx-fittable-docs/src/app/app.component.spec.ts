@@ -37,7 +37,7 @@ import { RowHeaderComponent } from './topics/table-designer/row-header.component
 import { ColHeaderComponent } from './topics/table-designer/col-header.component';
 import { RowHeightsComponent } from './topics/table-designer/row-heights.component';
 import { ColWidthtsComponent } from './topics/table-designer/col-widths.component';
-import { TableScrollerComponent } from './topics/table-designer/table-scroller.component';
+import { TableScrollContainerComponent } from './topics/table-designer/table-scroll-container.component';
 import { CellSelectionComponent } from './topics/table-designer/cell-selection.component';
 import { CellEditorComponent } from './topics/table-designer/cell-editor.component';
 import { LanguageDictionaryComponent } from './topics/table-designer/language-dictionary.component';
@@ -96,7 +96,7 @@ describe('AppComponent', () => {
         ColWidthtsComponent,
         ColFiltersComponent,
         ColFilterExecutorComponent,
-        TableScrollerComponent,
+        TableScrollContainerComponent,
         CellSelectionComponent,
         CellEditorComponent,
         LanguageDictionaryComponent,

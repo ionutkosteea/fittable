@@ -4,6 +4,14 @@ export interface FitHtmlElement {
   getAttribute(name: string): string | null;
 }
 
+export interface FitHtmlDivElement extends FitHtmlElement {
+  clientHeight: number;
+  clientWidth: number;
+  scrollLeft: number;
+  scrollTop: number;
+  scrollTo(left: number, top: number): void;
+}
+
 export interface FitHtmlInputElement extends FitHtmlElement {
   value: string | null;
 }

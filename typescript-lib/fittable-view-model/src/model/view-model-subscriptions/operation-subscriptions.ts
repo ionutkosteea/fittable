@@ -31,6 +31,7 @@ import {
   FitUIOperationProperties,
   FitUIOperationScroll,
 } from '../operation-executor/operation-properties.js';
+import { Scroller } from 'fittable-core/view-model';
 
 type LastLines = {
   lastRow: number;
@@ -40,7 +41,7 @@ type LastLines = {
 };
 export type OperationSubscriptionArgs = {
   operationExecutor: OperationExecutor;
-  tableScroller: ScrollContainer;
+  tableScrollContainer: ScrollContainer;
   tableViewer: TableViewer;
   cellEditor?: CellEditor;
   cellSelection?: CellSelection;
@@ -178,8 +179,9 @@ export class OperationSubscriptions {
     if (properties.scroll) {
       this.setScrollPosition(operationDto);
     } else {
-      const top: number = this.args.tableScroller.getTop();
-      const left: number = this.args.tableScroller.getLeft();
+      const scroller: Scroller = this.args.tableScrollContainer.getScroller();
+      const top: number = scroller.getTop();
+      const left: number = scroller.getLeft();
       if (properties) properties.scroll = { left, top };
     }
   }
@@ -252,7 +254,9 @@ export class OperationSubscriptions {
     if (!properties) return;
     const scroll: FitUIOperationScroll | undefined = properties.scroll;
     if (!scroll) return;
-    this.args.tableScroller.scrollTo(scroll.left, scroll.top);
+    this.args.tableScrollContainer
+      .getScroller()
+      .scroll(scroll.left, scroll.top);
   }
 
   private createRefreshSubscriptions(): void {
@@ -369,19 +373,19 @@ export class OperationSubscriptions {
 
   private refreshRows(): void {
     this.args.tableViewer.resetRowProperties();
-    this.args.tableScroller.resizeViewportHeight().renderModel();
+    this.args.tableScrollContainer.renderModel();
     this.args.cellSelectionPainter?.paint();
   }
 
   private refreshCols(): void {
     this.args.tableViewer.resetColProperties();
-    this.args.tableScroller.resizeViewportWidth().renderModel();
+    this.args.tableScrollContainer.renderModel();
     this.args.cellSelectionPainter?.paint();
   }
 
   private refreshMergedRegions(): void {
     this.args.tableViewer.resetMergedRegions();
-    this.args.tableScroller.renderMergedRegions();
+    this.args.tableScrollContainer.renderMergedRegions();
     this.args.cellEditor?.setCell(this.args.cellEditor?.getCell());
   }
 

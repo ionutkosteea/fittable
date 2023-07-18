@@ -17,7 +17,7 @@ import { ControlUpdater } from '../toolbar/controls/common/control-updater.js';
 import { FitSettingsBarControlId } from '../settings-bar/fit-settings-bar-factory.js';
 
 export type ViewModelSubscriptionsArgs = {
-  tableScroller: ScrollContainer;
+  tableScrollContainer: ScrollContainer;
   cellEditor?: CellEditor;
   cellSelection?: CellSelection;
   settingsBar?: Container;
@@ -43,10 +43,7 @@ export class ViewModelSubscriptions {
   }
 
   private onWindowResize = (): void => {
-    this.args.tableScroller
-      .resizeViewportHeight()
-      .resizeViewportWidth()
-      .renderModel();
+    this.args.tableScrollContainer.renderModel();
   };
 
   private onWindowKeyDown = (event: KeyboardEvent): void => {

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.0] - ?
+
+### Changed
+
+- Improve code readability according to fittable-core/view-model
+
 ## [v1.1.2] - 2023-06-25
 
 ### Fixed

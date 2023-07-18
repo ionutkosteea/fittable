@@ -17,7 +17,6 @@ import {
   createTableViewer,
   registerViewModelConfig,
   ScrollContainer,
-  ScrollElement,
   TableViewer,
   unregisterViewModelConfig,
 } from 'fittable-core/view-model';
@@ -25,6 +24,9 @@ import { FIT_MODEL_CONFIG } from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 
 import { FIT_VIEW_MODEL_CONFIG } from '../../../dist/index.js';
+
+import { TstSize } from '../common/tst-size.js';
+import { TstScroller } from '../common/tst-scroller.js';
 
 describe('Cell selection scroller', (): void => {
   beforeAll((): void => {
@@ -43,17 +45,19 @@ describe('Cell selection scroller', (): void => {
       .setNumberOfRows(50)
       .setNumberOfCols(10);
     const tableViewer: TableViewer = createTableViewer(table);
-    const tableScroller: ScrollContainer = createScrollContainer(tableViewer);
-    tableScroller.init(new TstScrollElement());
+    const tableScrollContainer: ScrollContainer = //
+      createScrollContainer(tableViewer)
+        .setSize(new TstSize(1000, 210))
+        .setScroller(new TstScroller(0, 0));
     const cellSelectionScroller: CellSelectionScroller =
-      createCellSelectionScroller(tableViewer, tableScroller);
+      createCellSelectionScroller(tableViewer, tableScrollContainer);
     cellSelectionScroller
       .setRowId(9)
       .setColId(0)
       .setScrollDirection('Down')
       .scroll();
 
-    expect(tableScroller.getTop() === 42).toBeTruthy(); // incl. col header
+    expect(tableScrollContainer.getScroller().getTop() === 42).toBeTruthy(); // incl. col header
   });
 
   it('scroll up', (): void => {
@@ -61,19 +65,19 @@ describe('Cell selection scroller', (): void => {
       .setNumberOfRows(50)
       .setNumberOfCols(10);
     const tableViewer: TableViewer = createTableViewer(table);
-    const tableScroller: ScrollContainer = createScrollContainer(tableViewer);
-    const scrollElement: TstScrollElement = new TstScrollElement();
-    scrollElement.scrollTop = 21;
-    tableScroller.init(scrollElement);
+    const tableScrollContainer: ScrollContainer = //
+      createScrollContainer(tableViewer)
+        .setSize(new TstSize(1000, 210))
+        .setScroller(new TstScroller(0, 21));
     const cellSelectionScroller: CellSelectionScroller =
-      createCellSelectionScroller(tableViewer, tableScroller);
+      createCellSelectionScroller(tableViewer, tableScrollContainer);
     cellSelectionScroller
       .setRowId(1)
       .setColId(0)
       .setScrollDirection('Up')
       .scroll();
 
-    expect(tableScroller.getTop() === 0).toBeTruthy(); // incl. col header
+    expect(tableScrollContainer.getScroller().getTop() === 0).toBeTruthy(); // incl. col header
   });
 
   it('scroll right', (): void => {
@@ -81,17 +85,19 @@ describe('Cell selection scroller', (): void => {
       .setNumberOfRows(50)
       .setNumberOfCols(20);
     const tableViewer: TableViewer = createTableViewer(table);
-    const tableScroller: ScrollContainer = createScrollContainer(tableViewer);
-    tableScroller.init(new TstScrollElement());
+    const tableScrollContainer: ScrollContainer = //
+      createScrollContainer(tableViewer)
+        .setSize(new TstSize(1000, 210))
+        .setScroller(new TstScroller(0, 0));
     const cellSelectionScroller: CellSelectionScroller =
-      createCellSelectionScroller(tableViewer, tableScroller);
+      createCellSelectionScroller(tableViewer, tableScrollContainer);
     cellSelectionScroller
       .setRowId(0)
       .setColId(9)
       .setScrollDirection('Right')
       .scroll();
 
-    expect(tableScroller.getLeft() === 140).toBeTruthy(); // incl. row header
+    expect(tableScrollContainer.getScroller().getLeft() === 140).toBeTruthy(); // incl. row header
   });
 
   it('scroll left', (): void => {
@@ -99,29 +105,18 @@ describe('Cell selection scroller', (): void => {
       .setNumberOfRows(50)
       .setNumberOfCols(20);
     const tableViewer: TableViewer = createTableViewer(table);
-    const tableScroller: ScrollContainer = createScrollContainer(tableViewer);
-    const scrollElement: TstScrollElement = new TstScrollElement();
-    scrollElement.scrollLeft = 140;
-    tableScroller.init(scrollElement);
+    const tableScrollContainer: ScrollContainer = //
+      createScrollContainer(tableViewer)
+        .setSize(new TstSize(1000, 210))
+        .setScroller(new TstScroller(140, 0));
     const cellSelectionScroller: CellSelectionScroller =
-      createCellSelectionScroller(tableViewer, tableScroller);
+      createCellSelectionScroller(tableViewer, tableScrollContainer);
     cellSelectionScroller
       .setRowId(0)
       .setColId(1)
       .setScrollDirection('Left')
       .scroll();
 
-    expect(tableScroller.getLeft() === 0).toBeTruthy(); // incl. row header
+    expect(tableScrollContainer.getScroller().getLeft() === 0).toBeTruthy(); // incl. row header
   });
 });
-
-class TstScrollElement implements ScrollElement {
-  clientHeight = 210;
-  clientWidth = 1000;
-  scrollLeft = 0;
-  scrollTop = 0;
-  scrollTo(left: number, top: number): void {
-    this.scrollLeft = left;
-    this.scrollTop = top;
-  }
-}

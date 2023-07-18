@@ -20,8 +20,8 @@ export class FittableComponent implements OnDestroy {
 
   public readonly getViewModel = (): ViewModel => this.designer.viewModel;
 
-  public readonly getTableScroller = (): ScrollContainer =>
-    this.designer.viewModel.tableScroller;
+  public readonly getTableScrollContainer = (): ScrollContainer =>
+    this.designer.viewModel.tableScrollContainer;
 
   public readonly hasToolbar = (): boolean =>
     this.designer.viewModel.toolbar !== undefined;

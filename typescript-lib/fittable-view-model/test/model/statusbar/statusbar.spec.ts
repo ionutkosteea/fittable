@@ -18,7 +18,6 @@ import {
   LanguageDictionary,
   registerViewModelConfig,
   ScrollContainer,
-  ScrollElement,
   Statusbar,
   TableViewer,
   unregisterViewModelConfig,
@@ -27,6 +26,9 @@ import { FIT_MODEL_CONFIG } from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 
 import { FIT_VIEW_MODEL_CONFIG } from '../../../dist/index.js';
+
+import { TstSize } from '../common/tst-size.js';
+import { TstScroller } from '../common/tst-scroller.js';
 
 describe('Statusbar', (): void => {
   beforeAll((): void => {
@@ -46,27 +48,19 @@ describe('Statusbar', (): void => {
       .setNumberOfRows(10)
       .setNumberOfCols(5);
     const tableViewer: TableViewer = createTableViewer(table);
-    const tableScroller: ScrollContainer = createScrollContainer(tableViewer)
-      .init(new TstScrollElement())
-      .resizeViewportWidth()
-      .resizeViewportHeight();
+    const tableScrollContainer: ScrollContainer =
+      createScrollContainer(tableViewer);
     const statusbar: Statusbar = createStatusbar({
       dictionary,
       tableViewer,
-      tableScroller,
+      tableScrollContainer,
     });
+    tableScrollContainer
+      .setSize(new TstSize(100, 200))
+      .setScroller(new TstScroller(0, 0))
+      .renderModel();
     const text: string = 'Rows: 10 [0,9] Columns: 5 [0,4]';
     expect(text === statusbar.getText()).toBeTruthy();
+    statusbar.destroy();
   });
 });
-
-class TstScrollElement implements ScrollElement {
-  clientHeight = 200;
-  clientWidth = 100;
-  scrollLeft = 0;
-  scrollTop = 0;
-  scrollTo(left: number, top: number): void {
-    this.scrollLeft = left;
-    this.scrollTop = top;
-  }
-}

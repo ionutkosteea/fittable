@@ -1,20 +1,33 @@
 import {
+  FitHtmlDivElement,
   ScrollContainer,
-  ScrollElement,
   ScrollContainerListener,
   ScrollContainerListenerFactory,
 } from 'fittable-core/view-model';
 
 export class FitScrollContainerListener implements ScrollContainerListener {
   constructor(
-    readonly div: ScrollElement,
-    private readonly scroller: ScrollContainer
+    readonly div: FitHtmlDivElement,
+    private readonly scrollContainer: ScrollContainer
   ) {
-    scroller.init(div).resizeViewportHeight().resizeViewportWidth();
+    scrollContainer //
+      .setSize({
+        getWidth: (): number => div.clientWidth,
+        getHeight: (): number => div.clientHeight,
+      })
+      .setScroller({
+        getLeft: (): number => div.scrollLeft,
+        getTop: (): number => div.scrollTop,
+        scroll: (left: number, top: number): void => div.scrollTo(left, top),
+      });
+
+    setTimeout((): void => {
+      scrollContainer.renderModel();
+    });
   }
 
   public onScroll(): void {
-    this.scroller.renderModel();
+    this.scrollContainer.renderModel();
   }
 }
 
@@ -22,9 +35,9 @@ export class FitScrollContainerListenerFactory
   implements ScrollContainerListenerFactory
 {
   public createScrollContainerListener(
-    div: ScrollElement,
-    scroller: ScrollContainer
+    div: FitHtmlDivElement,
+    scrollContainer: ScrollContainer
   ): FitScrollContainerListener {
-    return new FitScrollContainerListener(div, scroller);
+    return new FitScrollContainerListener(div, scrollContainer);
   }
 }

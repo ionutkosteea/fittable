@@ -57,7 +57,7 @@ export class FitColFilters implements ColFilters {
   private colId!: number;
   private popupButton!: FitPopupControl<FitColFiltersControlId>;
   private valueConditions!: ColValueConditions;
-  private valueScroller!: ScrollContainer;
+  private valueScrollContainer!: ScrollContainer;
   private isSearchMode = false;
 
   private readonly subscriptions: Subscription[] = [];
@@ -70,9 +70,8 @@ export class FitColFilters implements ColFilters {
     this.filterExecutor = createColFilterExecutor(table);
     this.valueConditions = new ColValueConditions();
     this.popupButton = this.createPopupButton();
-    this.valueScroller = createScrollContainer() //
+    this.valueScrollContainer = createScrollContainer() //
       .setVerticalScrollbar(new ColValueScrollbar(this.popupButton));
-    this.subscriptions.push(this.resizeScroller$());
     this.subscriptions.push(this.clearValueCheckListControls$());
   }
 
@@ -121,7 +120,7 @@ export class FitColFilters implements ColFilters {
           this.isSearchMode = false;
           this.getPopupWindow().addControl('value-check-list', origList);
         }
-        this.valueScroller.resizeViewportHeight().renderModel();
+        this.valueScrollContainer.renderModel();
       }, 100);
     });
     return input;
@@ -206,8 +205,8 @@ export class FitColFilters implements ColFilters {
     );
   }
 
-  public getValueScroller(): ScrollContainer {
-    return this.valueScroller;
+  public getValueScrollContainer(): ScrollContainer {
+    return this.valueScrollContainer;
   }
 
   public getValueConditions(): { [colId: number]: ValueCondition } {
@@ -279,15 +278,6 @@ export class FitColFilters implements ColFilters {
         else condition.values.has(value) && condition.values.delete(value);
       }
     });
-  }
-
-  private resizeScroller$(): Subscription {
-    return this.getPopupWindow()
-      .onAfterSetFocus$()
-      .subscribe((focus: boolean): void => {
-        if (!focus) return;
-        this.valueScroller.resizeViewportHeight();
-      });
   }
 
   private clearValueCheckListControls$(): Subscription {

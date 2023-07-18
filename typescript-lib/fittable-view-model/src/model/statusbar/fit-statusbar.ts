@@ -20,26 +20,25 @@ export class FitStatusbar implements Statusbar {
   }
 
   private init(): void {
-    this.refresh();
     this.subscriptions.push(this.onAfterRenderScroller$());
     this.subscriptions.push(this.onAfterSetCurrentLanguage$());
   }
 
   private onAfterRenderScroller$(): Subscription {
-    return this.args.tableScroller
+    return this.args.tableScrollContainer
       .onAfterRenderModel$()
-      .subscribe((): void => this.refresh());
+      .subscribe((): void => this.updateText());
   }
 
   private onAfterSetCurrentLanguage$(): Subscription {
     return this.args.dictionary
       .onAfterSetCurrentLanguage$()
-      .subscribe((): void => this.refresh());
+      .subscribe((): void => this.updateText());
   }
 
-  public refresh(): void {
+  private readonly updateText = (): void => {
     this.text = this.createText();
-  }
+  };
 
   private readonly createText = (): string =>
     this.getTranslation('Rows') +
@@ -70,7 +69,7 @@ export class FitStatusbar implements Statusbar {
 
   private getFirstRenderableCol(): number {
     return (
-      this.args.tableScroller
+      this.args.tableScrollContainer
         .getHorizontalScrollbar()
         ?.getFirstRenderableLine() ?? 0
     );
@@ -78,7 +77,7 @@ export class FitStatusbar implements Statusbar {
 
   private getLastRenderableCol(): number {
     const colId: number =
-      this.args.tableScroller
+      this.args.tableScrollContainer
         .getHorizontalScrollbar()
         ?.getLastRenderableLine() ?? 0;
     const numberOfCols: number = this.args.tableViewer.getNumberOfCols();
@@ -87,7 +86,7 @@ export class FitStatusbar implements Statusbar {
 
   private getFirstRenderableRow(): number {
     return (
-      this.args.tableScroller
+      this.args.tableScrollContainer
         .getVerticalScrollbar()
         ?.getFirstRenderableLine() ?? 0
     );
@@ -95,8 +94,9 @@ export class FitStatusbar implements Statusbar {
 
   private getLastRenderableRow(): number {
     const rowId: number =
-      this.args.tableScroller.getVerticalScrollbar()?.getLastRenderableLine() ??
-      0;
+      this.args.tableScrollContainer
+        .getVerticalScrollbar()
+        ?.getLastRenderableLine() ?? 0;
     const numberOfRows: number = this.args.tableViewer.getNumberOfRows();
     return rowId > 0 ? rowId : numberOfRows > 0 ? numberOfRows - 1 : 0;
   }

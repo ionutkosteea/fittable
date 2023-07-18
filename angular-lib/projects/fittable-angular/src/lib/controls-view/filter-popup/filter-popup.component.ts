@@ -1,11 +1,9 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   HostListener,
   Input,
   OnInit,
-  ViewChild,
 } from '@angular/core';
 
 import { RangeIterator } from 'fittable-core/common';
@@ -50,7 +48,7 @@ export class FilterPopupButtonComponent implements OnInit {
     this.windowListener.onShow(event);
     setTimeout((): void => {
       this.getPopupButton().getWindow().setFocus(true);
-      this.colFilters.getValueScroller().scrollTo(0, 0);
+      this.colFilters.getValueScrollContainer().renderModel();
     });
   }
 
@@ -75,17 +73,10 @@ type ControlId =
 })
 export class FilterPopupWindowComponent implements AfterViewInit {
   @Input() colFilters!: ColFilters;
-  @ViewChild('filterWindow') filterWindowRef!: ElementRef;
-  @ViewChild('searchInput') searchInputRef!: ElementRef;
-  @ViewChild('scroller') scrollerRef!: ElementRef;
 
   private windowListener!: WindowListener;
 
   public ngAfterViewInit(): void {
-    const filterWindow: HTMLElement = this.filterWindowRef.nativeElement;
-    this.getPopupWindow()
-      .setHeight((): number => filterWindow.clientHeight)
-      .setWidth((): number => filterWindow.clientWidth);
     this.windowListener = //
       createWindowListener(this.getPopupButton().getWindow());
   }
@@ -107,9 +98,9 @@ export class FilterPopupWindowComponent implements AfterViewInit {
   }
 
   public getScrollContainer = (): ScrollContainer =>
-    this.colFilters.getValueScroller();
+    this.colFilters.getValueScrollContainer();
 
-  public getOffsetY = (): number => this.getScrollContainer().getOffsetY();
+  public getOffsetY = (): number => this.getScrollContainer().getInnerOffsetY();
 
   public getCheckListHeight = (): number =>
     this.getCheckBoxContainer().getControlIds().length * 20;

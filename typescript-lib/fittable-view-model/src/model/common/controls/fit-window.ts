@@ -1,4 +1,4 @@
-import { Window, Coord } from 'fittable-core/view-model';
+import { Window, Coord, Size } from 'fittable-core/view-model';
 
 import { FitContainer } from './fit-container.js';
 
@@ -8,8 +8,7 @@ export class FitWindow<Id extends string>
 {
   private visible = false;
   private position: Coord = { x: 0, y: 0 };
-  private widthFn?: () => number;
-  private heightFn?: () => number;
+  private size?: Size;
 
   public isVisible(): boolean {
     return this.visible;
@@ -30,21 +29,12 @@ export class FitWindow<Id extends string>
     return this;
   }
 
-  public getWidth(): number {
-    return this.widthFn ? this.widthFn() : 0;
+  public getSize(): Size | undefined {
+    return this.size;
   }
 
-  public setWidth(widthFn: () => number): this {
-    this.widthFn = widthFn;
-    return this;
-  }
-
-  public getHeight(): number {
-    return this.heightFn ? this.heightFn() : 0;
-  }
-
-  public setHeight(heightFn: () => number): this {
-    this.heightFn = heightFn;
+  public setSize(size?: Size | undefined): this {
+    this.size = size;
     return this;
   }
 }

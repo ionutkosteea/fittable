@@ -6,7 +6,7 @@ import { TableTopComponent } from './table-view/table-top/table-top.component';
 import { TableLeftComponent } from './table-view/table-left/table-left.component';
 import { TableCenterComponent } from './table-view/table-center/table-center.component';
 import { FittableComponent } from './fittable.component';
-import { ScrollContainerDirective } from './table-view/common/scroll-container.directive';
+import { ScrollContainerDirective } from './controls-view/common/scroll-container.directive';
 import { CellSelectionDirective } from './table-view/common/cell-selection.directive';
 import { ToolbarComponent } from './controls-view/toolbar/toolbar.component';
 import { ButtonComponent } from './controls-view/button/button.component';

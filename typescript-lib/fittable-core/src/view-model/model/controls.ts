@@ -82,15 +82,18 @@ export interface Coord {
   y: number;
 }
 
+export interface Size {
+  getWidth: () => number;
+  getHeight: () => number;
+}
+
 export interface Window extends Container {
-  setVisible(visible: boolean): this;
   isVisible(): boolean;
-  setPosition(coord: Coord): this;
+  setVisible(visible: boolean): this;
   getPosition(): Coord;
-  getWidth(): number;
-  setWidth(widthFn: () => number): this;
-  getHeight(): number;
-  setHeight(heightFn: () => number): this;
+  setPosition(coord: Coord): this;
+  getSize(): Size | undefined;
+  setSize(size?: Size): this;
 }
 
 export interface PopupControl extends Control {

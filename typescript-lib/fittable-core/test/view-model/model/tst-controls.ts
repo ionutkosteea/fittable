@@ -6,6 +6,7 @@ import {
   ControlMap,
   Coord,
   InputControl,
+  Size,
   Window,
 } from '../../../dist/view-model/index.js';
 
@@ -22,16 +23,10 @@ export class TstWindow implements Window {
   getPosition(): Coord {
     throw new Error('Method not implemented.');
   }
-  getWidth(): number {
+  setSize(size?: Size | undefined): this {
     throw new Error('Method not implemented.');
   }
-  setWidth(widthFn: () => number): this {
-    throw new Error('Method not implemented.');
-  }
-  getHeight(): number {
-    throw new Error('Method not implemented.');
-  }
-  setHeight(heightFn: () => number): this {
+  getSize(): Size | undefined {
     throw new Error('Method not implemented.');
   }
   setControls(controls: ControlMap): this {

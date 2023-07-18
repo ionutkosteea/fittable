@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.0.0] - ?
+
+### Changed
+
+- Improve code readability:
+
+  - rename ViewModel.tableScroller to ViewModel.tableScrollContainer;
+  - replace Window methods getWidth, setWidth, getHeight, setHeight with getSize, setSize;
+  - rename ScrollContainer methods getOffsetX, getOffsetY to getInnerOffsetX, getInnerOffsetY;
+  - replace ScrollContainer methods getHeight, getWidth with getSize, setSize;
+  - replace ScrollContainer methods getLeft, getTop, scrollTo with getScroller, setScroller;
+  - remove ScrollContainer methods: init, resizeViewportWidth, resizeViewportHeight.
+
 ## [v2.0.0] - 2023-06-12
 
 ### Added

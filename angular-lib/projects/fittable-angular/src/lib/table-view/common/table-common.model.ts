@@ -52,10 +52,10 @@ export abstract class TableCommon {
     this.viewModel.tableViewer.getColSpan(rowId, colId);
 
   public readonly getRowIds = (): RangeIterator =>
-    this.viewModel.tableScroller.getRenderableRows();
+    this.viewModel.tableScrollContainer.getRenderableRows();
 
   public readonly getColIds = (): RangeIterator =>
-    this.viewModel.tableScroller.getRenderableCols();
+    this.viewModel.tableScrollContainer.getRenderableCols();
 
   public readonly getColWidth = (colId: number): number =>
     this.viewModel.tableViewer.getColWidth(colId);
@@ -68,16 +68,16 @@ export abstract class TableCommon {
     createWindowListener(this.viewModel.contextMenu).onShow(event);
 
   protected readonly getScrollLeft = (): number =>
-    this.viewModel.tableScroller.getLeft();
+    this.viewModel.tableScrollContainer.getScroller().getLeft();
 
   protected readonly getScrollTop = (): number =>
-    this.viewModel.tableScroller.getTop();
+    this.viewModel.tableScrollContainer.getScroller().getTop();
 
   protected readonly getOffsetX = (): number =>
-    this.viewModel.tableScroller.getOffsetX();
+    this.viewModel.tableScrollContainer.getInnerOffsetX();
 
   protected readonly getOffsetY = (): number =>
-    this.viewModel.tableScroller.getOffsetY();
+    this.viewModel.tableScrollContainer.getInnerOffsetY();
 
   protected readonly getRowHeaderWidth = (): number =>
     this.viewModel.tableViewer.getRowHeaderWidth();

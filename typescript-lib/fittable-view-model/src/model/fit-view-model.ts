@@ -60,7 +60,7 @@ export class FitViewModel implements ViewModel {
   public readonly dictionary: LanguageDictionary;
   public readonly imageRegistry: ImageRegistry;
   public readonly tableViewer: TableViewer;
-  public readonly tableScroller: ScrollContainer;
+  public readonly tableScrollContainer: ScrollContainer;
   public readonly mobileLayout: MobileLayout;
   public readonly cellSelection?: CellSelection;
   public readonly cellSelectionPainter?: CellSelectionPainter;
@@ -85,7 +85,7 @@ export class FitViewModel implements ViewModel {
     this.dictionary = createLanguageDictionary();
     this.imageRegistry = createImageRegistry();
     this.tableViewer = this.createTableViewer();
-    this.tableScroller = this.createTableScroller();
+    this.tableScrollContainer = this.createTableScrollContainer();
     this.cellSelection = this.createCellSelection();
     this.cellSelectionScroller = this.createCellSelectionScroller();
     this.cellSelectionPainter = this.createCellSelectionPainter();
@@ -105,21 +105,24 @@ export class FitViewModel implements ViewModel {
     return createTableViewer(this.table);
   }
 
-  private createTableScroller(): ScrollContainer {
-    const tableScroller: ScrollContainer = //
+  private createTableScrollContainer(): ScrollContainer {
+    const tableScrollContainer: ScrollContainer = //
       createScrollContainer(this.tableViewer);
     !this.config.disableVirtualRows &&
-      tableScroller //
+      tableScrollContainer //
         .setVerticalScrollbar(new VerticalScrollbar(this.tableViewer));
     !this.config.disableVirtualCols &&
-      tableScroller //
+      tableScrollContainer //
         .setHorizontalScrollbar(new HorizontalScrollbar(this.tableViewer));
-    return tableScroller;
+    return tableScrollContainer;
   }
 
   private createCellSelectionScroller(): CellSelectionScroller | undefined {
     try {
-      return createCellSelectionScroller(this.tableViewer, this.tableScroller);
+      return createCellSelectionScroller(
+        this.tableViewer,
+        this.tableScrollContainer
+      );
     } catch (error) {
       if (error instanceof MissingFactoryError) return undefined;
       else console.error(error);
@@ -153,7 +156,7 @@ export class FitViewModel implements ViewModel {
         this.cellSelection &&
         createCellSelectionPainter({
           tableViewer: this.tableViewer,
-          tableScroller: this.tableScroller,
+          tableScrollContainer: this.tableScrollContainer,
           cellSelection: this.cellSelection,
         })
       );
@@ -212,7 +215,7 @@ export class FitViewModel implements ViewModel {
       statusbar = createStatusbar({
         dictionary: this.dictionary,
         tableViewer: this.tableViewer,
-        tableScroller: this.tableScroller,
+        tableScrollContainer: this.tableScrollContainer,
       });
     } catch (error) {
       if (!(error instanceof MissingFactoryError)) console.error(error);
@@ -265,14 +268,14 @@ export class FitViewModel implements ViewModel {
   private createMobileLayout(): MobileLayout {
     return createMobileLayout({
       tableViewer: this.tableViewer,
-      tableScroller: this.tableScroller,
+      tableScrollContainer: this.tableScrollContainer,
       cellSelectionPainter: this.cellSelectionPainter,
     });
   }
 
   private addSubscriptions(): void {
     this.viewModelSubscriptions = new ViewModelSubscriptions({
-      tableScroller: this.tableScroller,
+      tableScrollContainer: this.tableScrollContainer,
       cellEditor: this.cellEditor,
       cellSelection: this.cellSelection,
       toolbar: this.toolbar,
@@ -285,7 +288,7 @@ export class FitViewModel implements ViewModel {
       this.operationSubscriptions = new OperationSubscriptions({
         operationExecutor: this.operationExecutor,
         tableViewer: this.tableViewer,
-        tableScroller: this.tableScroller,
+        tableScrollContainer: this.tableScrollContainer,
         cellEditor: this.cellEditor,
         cellSelection: this.cellSelection,
         cellSelectionPainter: this.cellSelectionPainter,
@@ -312,11 +315,8 @@ export class FitViewModel implements ViewModel {
     this.table = table;
     this.operationExecutor?.setTable(table);
     this.tableViewer.loadTable(table);
-    this.tableScroller.scrollTo(0, 0);
-    this.tableScroller
-      .resizeViewportWidth()
-      .resizeViewportHeight()
-      .renderModel();
+    this.tableScrollContainer.getScroller().scroll(0, 0);
+    this.tableScrollContainer.renderModel();
     this.selectFirstCell();
   };
 

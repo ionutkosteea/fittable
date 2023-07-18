@@ -67,7 +67,7 @@ describe('fittable-view-model.ts', (): void => {
     expect(viewModel.settingsBar).toBeDefined();
     expect(viewModel.statusbar).toBeDefined();
     expect(viewModel.table).toBeDefined();
-    expect(viewModel.tableScroller).toBeDefined();
+    expect(viewModel.tableScrollContainer).toBeDefined();
     expect(viewModel.tableViewer).toBeDefined();
     expect(viewModel.themeSwitcher).toBeDefined();
     expect(viewModel.toolbar).toBeDefined();
@@ -92,7 +92,7 @@ describe('fittable-view-model.ts', (): void => {
     expect(viewModel.settingsBar).toBeUndefined();
     expect(viewModel.statusbar).toBeUndefined();
     expect(viewModel.table).toBeDefined();
-    expect(viewModel.tableScroller).toBeDefined();
+    expect(viewModel.tableScrollContainer).toBeDefined();
     expect(viewModel.tableViewer).toBeDefined();
     expect(viewModel.themeSwitcher).toBeUndefined();
     expect(viewModel.toolbar).toBeUndefined();

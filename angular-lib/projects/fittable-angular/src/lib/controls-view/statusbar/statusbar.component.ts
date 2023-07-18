@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 
 import { Statusbar } from 'fittable-core/view-model';
 
@@ -21,11 +21,10 @@ import { Statusbar } from 'fittable-core/view-model';
     `,
   ],
 })
-export class StatusbarComponent implements OnInit {
+export class StatusbarComponent implements OnDestroy {
   @Input() model!: Statusbar;
 
-  public ngOnInit(): void {
-    // Refresh statusbar after table scroller is initialized.
-    setTimeout((): void => this.model.refresh(), 100);
+  public ngOnDestroy(): void {
+    this.model.destroy();
   }
 }

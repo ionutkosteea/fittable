@@ -18,7 +18,7 @@ export interface MobileLayout {
 
 export type MobileLayoutArgs = {
   tableViewer: TableViewer;
-  tableScroller: ScrollContainer;
+  tableScrollContainer: ScrollContainer;
   cellSelectionPainter?: CellSelectionPainter;
 };
 

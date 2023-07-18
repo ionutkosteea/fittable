@@ -6,6 +6,7 @@ import {
   MobileLayoutArgs,
   MobileLayoutFactory,
   Rectangle,
+  Scroller,
 } from 'fittable-core/view-model';
 
 export class FitMobileLayout implements MobileLayout {
@@ -37,7 +38,7 @@ export class FitMobileLayout implements MobileLayout {
   }
 
   private onScroll$(): Subscription {
-    return this.args.tableScroller
+    return this.args.tableScrollContainer
       .onAfterRenderModel$()
       .subscribe((): void => this.calcOffsets());
   }
@@ -45,18 +46,18 @@ export class FitMobileLayout implements MobileLayout {
   private calcBodyOffset(): void {
     const left: number =
       this.args.tableViewer.getRowHeaderWidth() +
-      this.args.tableScroller.getOffsetX();
+      this.args.tableScrollContainer.getInnerOffsetX();
     const top: number =
       this.args.tableViewer.getColHeaderHeight() +
-      this.args.tableScroller.getOffsetY();
+      this.args.tableScrollContainer.getInnerOffsetY();
     this.bodyOffset = {
       transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
     };
   }
 
   private calcPageHeaderOffset(): void {
-    const left: number = this.args.tableScroller.getLeft();
-    const top: number = this.args.tableScroller.getTop();
+    const left: number = this.args.tableScrollContainer.getScroller().getLeft();
+    const top: number = this.args.tableScrollContainer.getScroller().getTop();
     this.pageHeaderOffset = {
       transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
     };
@@ -65,18 +66,18 @@ export class FitMobileLayout implements MobileLayout {
   private calcColHeaderOffset(): void {
     const left: number =
       this.args.tableViewer.getRowHeaderWidth() +
-      this.args.tableScroller.getOffsetX();
-    const top: number = this.args.tableScroller.getTop();
+      this.args.tableScrollContainer.getInnerOffsetX();
+    const top: number = this.args.tableScrollContainer.getScroller().getTop();
     this.colHeaderOffset = {
       transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
     };
   }
 
   private calcRowHeaderOffset(): void {
-    const left: number = this.args.tableScroller.getLeft();
+    const left: number = this.args.tableScrollContainer.getScroller().getLeft();
     const top: number =
       this.args.tableViewer.getColHeaderHeight() +
-      this.args.tableScroller.getOffsetY();
+      this.args.tableScrollContainer.getInnerOffsetY();
     this.rowHeaderOffset = {
       transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
     };
@@ -108,8 +109,10 @@ export class FitMobileLayout implements MobileLayout {
         this.args.cellSelectionPainter?.pageHeader
           ?.getRectangles()
           .forEach((rect: Rectangle) => {
-            const left: number = rect.left + this.args.tableScroller.getLeft();
-            const top: number = rect.top + this.args.tableScroller.getTop();
+            const scroller: Scroller =
+              this.args.tableScrollContainer.getScroller();
+            const left: number = rect.left + scroller.getLeft();
+            const top: number = rect.top + scroller.getTop();
             this.pageHeaderSelectionRectangles.push({
               transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
               width: rect.width + 'px',
@@ -127,7 +130,9 @@ export class FitMobileLayout implements MobileLayout {
         this.args.cellSelectionPainter?.colHeader
           ?.getRectangles()
           .forEach((rect: Rectangle) => {
-            const top: number = rect.top + this.args.tableScroller.getTop();
+            const scroller: Scroller =
+              this.args.tableScrollContainer.getScroller();
+            const top: number = rect.top + scroller.getTop();
             this.colHeaderSelectionRectangles.push({
               transform: 'translate3d(' + rect.left + 'px,' + top + 'px,0px)',
               width: rect.width + 'px',
@@ -145,7 +150,9 @@ export class FitMobileLayout implements MobileLayout {
         this.args.cellSelectionPainter?.rowHeader
           ?.getRectangles()
           .forEach((rect: Rectangle) => {
-            const left: number = rect.left + this.args.tableScroller.getLeft();
+            const scroller: Scroller =
+              this.args.tableScrollContainer.getScroller();
+            const left: number = rect.left + scroller.getLeft();
             this.rowHeaderSelectionRectangles.push({
               transform: 'translate3d(' + left + 'px,' + rect.top + 'px,0px)',
               width: rect.width + 'px',

@@ -2,12 +2,15 @@ import { Observable } from 'rxjs';
 
 import { RangeIterator } from '../../../dist/common/range-iterator.js';
 import {
-  ScrollElement,
+  FitHtmlDivElement,
+  FitHtmlElement,
   ScrollContainer,
   Scrollbar,
+  Scroller,
+  Size,
 } from '../../../dist/view-model/index.js';
 
-export class TstScrollElement implements ScrollElement {
+export class TstScrollElement implements FitHtmlDivElement {
   clientHeight = 0;
   clientWidth = 0;
   scrollLeft = 0;
@@ -15,25 +18,24 @@ export class TstScrollElement implements ScrollElement {
   scrollTo(left: number, top: number): void {
     throw new Error('Method not implemented.');
   }
+  parentElement: FitHtmlElement | null = null;
+  tagName = 'div';
+  getAttribute(name: string): string | null {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export class TstScrollContainer implements ScrollContainer {
-  init(element: ScrollElement): this {
+  getSize(): Size {
     throw new Error('Method not implemented.');
   }
-  getHeight(): number {
+  setSize(size: Size): this {
     throw new Error('Method not implemented.');
   }
-  getWidth(): number {
+  getScroller(): Scroller {
     throw new Error('Method not implemented.');
   }
-  scrollTo(left: number, top: number): void {
-    throw new Error('Method not implemented.');
-  }
-  getLeft(): number {
-    throw new Error('Method not implemented.');
-  }
-  getTop(): number {
+  setScroller(scroller: Scroller): this {
     throw new Error('Method not implemented.');
   }
   setVerticalScrollbar(scrollbar?: Scrollbar | undefined): this {
@@ -48,16 +50,10 @@ export class TstScrollContainer implements ScrollContainer {
   getHorizontalScrollbar(): Scrollbar | undefined {
     throw new Error('Method not implemented.');
   }
-  resizeViewportWidth(): this {
+  getInnerOffsetX(): number {
     throw new Error('Method not implemented.');
   }
-  resizeViewportHeight(): this {
-    throw new Error('Method not implemented.');
-  }
-  getOffsetX(): number {
-    throw new Error('Method not implemented.');
-  }
-  getOffsetY(): number {
+  getInnerOffsetY(): number {
     throw new Error('Method not implemented.');
   }
   getRenderableRows(): RangeIterator {
