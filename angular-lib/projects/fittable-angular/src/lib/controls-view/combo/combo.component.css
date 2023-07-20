@@ -4,32 +4,22 @@
 }
 
 .input {
-  padding-right: 10px;
-  width: 100px;
+  width: 6.25rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   box-sizing: border-box;
-}
-
-.arrow {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 10px;
-  height: 10px;
-  cursor: pointer;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: right center;
+  background-origin: content-box;
+  padding-right: 10px;
 }
 
-.popup-child {
+.menu-item {
   cursor: pointer;
-  margin: 0px;
-  padding: 6px;
-  text-align: left;
-  font-size: 14px;
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
 }
 
-.popup-child:hover {
+.menu-item:hover {
   background-color: var(--toolbar-background-hover-color);
 }

@@ -1,9 +1,9 @@
-<div class="flex-wrap justify-content-center gap-5">
-  <p-tree [value]="tree" class="w-full md:w-30rem" [filter]="true" filterPlaceholder="Search" selectionMode="single"
-    [(selection)]="treeSelection" (onNodeSelect)="onNodeSelect($event)">
+<div class="navigation-tree">
+  <p-tree [value]="tree" [filter]="true" filterPlaceholder="Search" selectionMode="single" [(selection)]="treeSelection"
+    (onNodeSelect)="onNodeSelect($event)">
     <ng-template let-node pTemplate="default">
-      <strong *ngIf="node.children" style="font-size: 16px;">{{ node.label }}</strong>
-      <span *ngIf="!node.children" style="font-size: 14px;">{{ node.label }}</span>
+      <strong *ngIf="node.children" class="category">{{ node.label }}</strong>
+      <span *ngIf="!node.children" class="link">{{ node.label }}</span>
     </ng-template>
   </p-tree>
 </div>

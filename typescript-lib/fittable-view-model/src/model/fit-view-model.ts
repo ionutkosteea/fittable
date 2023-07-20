@@ -201,11 +201,6 @@ export class FitViewModel implements ViewModel {
     } catch (error) {
       if (!(error instanceof MissingFactoryError)) console.error(error);
     }
-    const config: ViewModelConfig = getViewModelConfig();
-    setCssVariable('--font-size', config.fontSize + 'px');
-    if (config.fontFamily) {
-      setCssVariable('--font-family', config.fontFamily[0]?.value ?? '');
-    }
     return toolbar;
   }
 

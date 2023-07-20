@@ -11,13 +11,13 @@
   <h2 class="subtitle">HTML code</h2>
   <ng-container *ngFor="let codeSnippet of htmlCode">
     <div class="code-snippet">
-      <img [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
+      <img class="figure" [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
     </div>
   </ng-container>
   <h2 class="subtitle">TypeScript code</h2>
   <ng-container *ngFor="let codeSnippet of typescriptCode">
     <div class="code-snippet">
-      <img [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
+      <img class="figure" [src]="'../../../assets//code-snippets/'+codeSnippet.image" />
     </div>
   </ng-container>
 </div>

@@ -10,6 +10,8 @@ import {
   FitMouseEvent,
   createWindowListener,
   CellSelectionListener,
+  getViewModelConfig,
+  Option,
 } from 'fittable-core/view-model';
 
 import { TableCommon } from '../common/table-common.model';
@@ -68,6 +70,14 @@ export class TableCenterComponent
 
   public readonly getCellSelectionRectangles = (): CssStyle[] =>
     this.viewModel.mobileLayout.bodySelectionRectangles;
+
+  public readonly getTableFontSize = (): number =>
+    getViewModelConfig().fontSize;
+
+  public readonly getTableFontFamily = (): string | undefined => {
+    const fonts: Option[] | undefined = getViewModelConfig().fontFamily;
+    return fonts ? fonts[0].value : undefined;
+  };
 
   public ngOnDestroy(): void {
     this.subscriptions.forEach((s: Subscription | undefined): void =>

@@ -14,7 +14,7 @@ export interface Composite {
 @Component({
   selector: 'navigation-tree',
   templateUrl: './navigation-tree.component.html',
-  styleUrls: [],
+  styleUrls: ['./navigation-tree.component.css'],
 })
 export class NavigationTreeComponent implements OnInit, OnDestroy {
   @Input() treeSelection$: Subject<TreeNode<TopicTitle>> = new Subject();

@@ -20,27 +20,31 @@
 .field {
   margin: 0;
   padding: 0;
-  vertical-align: bottom;
+  vertical-align: middle;
   text-align: center;
   border: none;
   border-radius: 2px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   color: var(--toolbar-color);
   background-color: var(--toolbar-background-color);
-  font-size: 14px;
+  font-size: 0.875rem;
   height: 28px;
   cursor: pointer;
   box-sizing: border-box;
 }
 
 .toolbar-separator {
-  margin: 0px;
-  padding: 0px;
   width: 4px;
-  height: 4px;
+  height: 8px;
+  margin: 0;
+  padding: 0;
   font-size: 0;
+  line-height: 0;
 }
 
 .toolbar-menu {
@@ -56,6 +60,8 @@
   max-height: 300px;
   box-sizing: border-box;
   white-space: nowrap;
+  font-size: 0.875rem;
+  line-height: 1.75rem;
 }
 
 .context-menu {
@@ -71,17 +77,18 @@
   box-shadow: 1px 1px 2px 0px var(--context-menu-box-shadow-color);
   max-height: 90vh;
   overflow: auto;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
   z-index: 15;
-  font-size: 14px;
-  line-height: 28px;
+  font-size: 0.875rem;
+  line-height: 1.75rem;
 }
 
 .context-menu-separator {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  border-top: 1px solid var(--context-menu-border-color);
-  border-bottom: none;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+  height: 1px;
+  background-color: var(--context-menu-border-color);
   position: relative;
+  opacity: 0.5;
 }

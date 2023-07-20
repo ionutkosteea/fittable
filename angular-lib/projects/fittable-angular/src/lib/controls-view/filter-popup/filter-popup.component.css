@@ -20,14 +20,14 @@
   position: fixed;
   left: 0px;
   top: 20px;
-  padding: 12px;
+  padding: 0.875rem;
   text-align: left;
   display: none;
   z-index: 15;
 }
 
 .label {
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .search-input {
@@ -38,15 +38,16 @@
   padding: 2px;
   width: 100%;
   border-radius: 4px;
-  font-size: 14px;
-  background-position: bottom 4px right 4px;
+  font-size: 0.75rem;
+  line-height: 0.875rem;
+  background-position: bottom 0.15rem right 0.15rem;
   background-repeat: no-repeat;
   background-size: 12px;
 }
 
 .value-button-bar {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   text-align: right;
 }
 
@@ -54,10 +55,10 @@
   background-color: var(--context-menu-background-color);
   border: 1px solid var(--context-menu-border-color);
   color: var(--context-menu-color);
-  margin-left: 4px;
+  margin-left: 0.25rem;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .value-button:active {
@@ -66,37 +67,36 @@
 
 .scroller {
   position: relative;
-  height: 100px;
+  height: 6.25rem;
   overflow: auto;
-  margin: 0px;
-  padding: 0px;
   scroll-behavior: smooth;
   background-color: var(--scrollbar-background-color);
 }
 
 .check-list-container {
   position: relative;
-  margin: 0px;
-  padding: 0px;
   background-color: var(--context-menu-background-color);
+  font-size: 0.75rem;
 }
 
 .check-list {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100%;
+  min-width: 100%;
 }
 
 .check-item {
+  display: flex;
+  place-items: center;
   position: relative;
-  font-size: 12px;
   height: 20px;
   cursor: pointer;
 }
 
 .check-item label {
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .check-item:hover {
@@ -104,7 +104,7 @@
 }
 
 .button-bar {
-  margin-top: 20px;
+  margin-top: 1.75rem;
   text-align: center;
 }
 
@@ -115,8 +115,8 @@
   background-color: var(--highlight-color);
   color: white;
   border: none;
-  margin-left: 2px;
-  margin-right: 2px;
-  padding: 4px;
+  margin-left: 0.125rem;
+  margin-right: 0.125rem;
+  padding: 0.25rem;
   cursor: pointer;
 }

@@ -7,7 +7,7 @@
 
 .picked-color {
   position: absolute;
-  top: 13px;
+  top: 11px;
   left: 6px;
   width: 16px;
   height: 4px;
@@ -37,9 +37,9 @@
 }
 
 .color-none-label {
-  font-size: 12px;
-  line-height: 18px;
-  padding-left: 10px;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding-left: 4px;
   color: var(--toolbar-color);
 }
 
@@ -70,25 +70,29 @@
 }
 
 .add-color-panel {
+  display: flex;
+  place-items: center;
   cursor: pointer;
   margin-top: 12px;
   margin-bottom: 2px;
   padding-top: 2px;
   width: 100%;
-  float: left;
   position: relative;
+  font-size: 10px;
+  line-height: 10px;
 }
 
 .add-color-combo {
-  float: left;
+  display: flex;
+  flex: 1;
+  place-items: center;
   border: 1px solid var(--toolbar-border-color);
   border-radius: 2px;
   margin-right: 2px;
 }
 
 .add-color-picker {
-  float: left;
-  width: 104px;
+  flex: 1;
   height: 14px;
   border: none;
   margin: 0px;
@@ -98,11 +102,6 @@
 }
 
 .arrow-down {
-  float: left;
-  margin-top: 3px;
-  font-size: 8px;
-  vertical-align: middle;
-  text-align: center;
   color: var(--toolbar-color);
 }
 
@@ -111,7 +110,6 @@
   -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   border: none;
-  float: left;
   width: 16px;
   height: 16px;
   text-align: center;

@@ -15,21 +15,22 @@
 }
 
 .title {
-  padding-left: 12px;
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
   color: var(--highlight-color);
-  line-height: 30px;
+  line-height: 1.75rem;
 }
 
-.popup-child {
+.menu-item {
   color: var(--context-menu-color);
   display: grid;
-  grid-template-columns: 100px 16px;
+  grid-template-columns: 6.25rem 16px;
   place-items: center normal;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
 }
 
-.popup-child:hover {
+.menu-item:hover {
   background-color: var(--context-menu-background-hover-color);
   cursor: pointer;
 }

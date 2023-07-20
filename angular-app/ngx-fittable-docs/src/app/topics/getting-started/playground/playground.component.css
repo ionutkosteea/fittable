@@ -2,5 +2,29 @@
   background-color: var(--text-color-secondary);
   border: 2px solid var(--text-color-secondary);
   border-radius: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 0.4rem;
+}
+
+:host ::ng-deep .p-button {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding: 0.25rem;
+}
+
+.fittable-height {
+  height: 470px;
+}
+
+@media (max-height: 430px) {
+
+  .title,
+  .toolbar {
+    display: none;
+  }
+
+  .fittable-height {
+    height: 68vh;
+    margin: 0;
+    padding: 0;
+  }
 }

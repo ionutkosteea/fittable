@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
 - Improve code readability according to fittable-core/view-model
 
 - Add responsive design capabilities:
-  - toolbar height should increase relative to child controls.
+  - toolbar height should increase relative to child controls;
+  - enable font size scaling.
 
 ## [v3.1.0] - 2023-06-25
 

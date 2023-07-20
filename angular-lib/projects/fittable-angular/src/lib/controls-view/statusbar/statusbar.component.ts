@@ -9,14 +9,14 @@ import { Statusbar } from 'fittable-core/view-model';
     `
       .statusbar {
         position: relative;
-        padding-right: 6px;
+        padding-right: 0.875rem;
         border-top: 1px solid var(--statusbar-border-color);
         background-color: var(--statusbar-background-color);
         color: var(--statusbar-color);
         width: auto;
         text-align: right;
-        font-size: 10px;
-        height: 20px;
+        font-size: 0.625rem;
+        line-height: 1.2rem;
       }
     `,
   ],

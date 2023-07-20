@@ -1,5 +1,5 @@
 <div class="table-center" [ngStyle]="getTableOffset()">
-  <table class="table">
+  <table class="table" [ngStyle]="{'font-size.px':getTableFontSize(),'font-family':getTableFontFamily()}">
     <colgroup>
       <col *ngFor="let colId of getColIds()" [ngStyle]="{'width.px':getColWidth(colId)}" />
     </colgroup>

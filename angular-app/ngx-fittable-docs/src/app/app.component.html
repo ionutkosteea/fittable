@@ -23,7 +23,7 @@
   <nav class="navigation-tree navigation">
     <navigation-tree [treeSelection$]="activeTopic$"></navigation-tree>
   </nav>
-  <main #topic class="topic">
+  <main #main class="main">
     <section *ngIf="activeTopic==='Introduction'">
       <introduction></introduction>
     </section>
@@ -88,9 +88,8 @@
     <section *ngIf="activeTopic==='Custom view model'"><custom-view-model></custom-view-model></section>
     <section *ngIf="activeTopic==='Custom view'"><custom-view></custom-view></section>
   </main>
-  <footer class="footer">&nbsp;</footer>
 </div>
-<p-sidebar [(visible)]="showSidebar" [style]="{width:'300px'}">
+<p-sidebar [(visible)]="showSidebar">
   <div class="navigation-tree">
     <navigation-tree [treeSelection$]="activeTopic$"></navigation-tree>
   </div>

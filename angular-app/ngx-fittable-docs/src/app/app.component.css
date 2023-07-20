@@ -2,23 +2,25 @@
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
-  gap: 8px;
+  gap: 0.5rem;
   height: 100vh;
+  margin: 0;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .header {
   grid-column: 1 / span 2;
 }
 
-.footer {
-  grid-column: 1 / span 2;
-  background: var(--surface-card);
-  height: 40px;
-  border-top: 2px solid var(--surface-border);
+:host ::ng-deep .p-toolbar {
+  margin: 0;
+  padding: 0.5rem;
 }
 
 .hamburger {
-  margin-right: 8px;
+  margin-right: 0.5rem;
   display: none;
 }
 
@@ -30,7 +32,6 @@
 
 .navigation {
   display: block;
-  width: 300px;
 }
 
 .navigation-tree {
@@ -39,14 +40,12 @@
 }
 
 
-.topic {
+.main {
   overflow: auto;
-  max-width: 1080px;
-  box-sizing: border-box;
-  padding: 8px;
+  max-width: 100ch;
 }
 
-@media screen and (max-width: 1080px) {
+@media (max-width: 100ch) {
   .hamburger {
     display: block;
   }

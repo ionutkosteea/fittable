@@ -1,0 +1,12 @@
+:host ::ng-deep .p-tree .p-tree-container .p-treenode .p-treenode-content {
+  margin: 0;
+  padding: 0;
+}
+
+.category {
+  font-size: 1rem;
+}
+
+.link {
+  font-size: 0.875rem;
+}

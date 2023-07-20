@@ -29,10 +29,6 @@ export class ComboComponent extends PopupControlComponent implements OnInit {
   }
 
   public getComboStyle(): CssStyle {
-    return createToggleStyle(this.model);
-  }
-
-  public getComboArrowStyle(): CssStyle {
     const style: CssStyle = createToggleStyle(this.model);
     style['background-image'] = this.getIcon();
     return style;

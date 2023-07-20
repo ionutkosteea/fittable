@@ -65,17 +65,8 @@ export const FIT_CSS_COLOR_VARIABLES: FitCssColorVariables = {
   '--statusbar-border-color': '#b7b7b7',
 };
 
-export type FitCssUnitVariable = '--font-size' | '--font-family';
-
-export type FitCssUnitVariables = { [name in FitCssUnitVariable]: string };
-
-export const FIT_CSS_UNIT_VARIABLES: FitCssUnitVariables = {
-  '--font-size': '0px',
-  '--font-family': '',
-};
-
 export function setCssVariable(
-  name: keyof FitCssColorVariables | keyof FitCssUnitVariables,
+  name: keyof FitCssColorVariables,
   value: string
 ): void {
   if (typeof document === 'undefined') return;

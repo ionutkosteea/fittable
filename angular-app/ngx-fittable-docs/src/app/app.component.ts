@@ -21,13 +21,13 @@ export class AppComponent implements OnInit, OnDestroy {
   public showSidebar = false;
   private subscription?: Subscription;
 
-  @ViewChild('topic') htmlTopic!: ElementRef;
+  @ViewChild('main') topicRef!: ElementRef;
 
   public ngOnInit(): void {
     this.subscription = this.activeTopic$.subscribe(
       (title: TreeNode<TopicTitle>): void => {
         this.activeTopic = title.label as TopicTitle;
-        this.htmlTopic.nativeElement.scrollTop = 0;
+        this.topicRef.nativeElement.scrollTop = 0;
         if (this.showSidebar) this.showSidebar = false;
       }
     );

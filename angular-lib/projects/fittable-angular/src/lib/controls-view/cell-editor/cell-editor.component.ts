@@ -15,6 +15,8 @@ import {
   CellEditorListener,
   InputControl,
   Rectangle,
+  getViewModelConfig,
+  Option,
 } from 'fittable-core/view-model';
 
 @Component({
@@ -144,6 +146,21 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
         this.textAreaStyle[name] = cellStyle[name];
       }
     }
+    if (!this.textAreaStyle['font-size.px']) {
+      this.textAreaStyle['font-size.px'] = this.getTextAreaFontSize();
+    }
+    if (!this.textAreaStyle['font-family']) {
+      this.textAreaStyle['font-family'] = this.getTextAreaFontFamily();
+    }
+  }
+
+  private getTextAreaFontSize(): number {
+    return getViewModelConfig().fontSize;
+  }
+
+  private getTextAreaFontFamily(): string | undefined {
+    const fonts: Option[] | undefined = getViewModelConfig().fontFamily;
+    return fonts ? fonts[0].value : undefined;
   }
 
   private updateTextAreaDimensions(): void {

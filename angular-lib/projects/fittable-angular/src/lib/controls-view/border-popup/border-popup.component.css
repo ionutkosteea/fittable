@@ -10,15 +10,11 @@
   padding: 4px;
 }
 
-.top-panel {
-  display: grid;
-  position: relative;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 2px;
-}
-
+.top-panel,
 .bottom-panel {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 2px;
+  margin: 0;
+  padding: 0;
 }

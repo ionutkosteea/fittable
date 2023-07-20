@@ -1,9 +1,9 @@
 .menu-item {
   display: grid;
-  grid-template-columns: 18px auto 40px;
+  grid-template-columns: 18px auto 2.5rem;
   place-items: center normal;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
 }
 
 .menu-item:hover {
@@ -16,18 +16,18 @@
 }
 
 .label {
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
   color: var(--toolbar-color);
   cursor: inherit;
 }
 
 .input {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   border: 1px solid var(--context-menu-border-color);
   background-color: var(--context-menu-background-color);
   color: var(--context-menu-color);
-  font-size: 12px;
-  height: 16px;
+  font-size: 0.75rem;
+  line-height: 0.875rem;
 }
