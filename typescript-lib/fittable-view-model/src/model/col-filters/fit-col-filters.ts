@@ -72,6 +72,7 @@ export class FitColFilters implements ColFilters {
     this.popupButton = this.createPopupButton();
     this.valueScrollContainer = createScrollContainer() //
       .setVerticalScrollbar(new ColValueScrollbar(this.popupButton));
+    this.subscriptions.push(this.initValueScrollContainer$());
     this.subscriptions.push(this.clearValueCheckListControls$());
   }
 
@@ -278,6 +279,15 @@ export class FitColFilters implements ColFilters {
         else condition.values.has(value) && condition.values.delete(value);
       }
     });
+  }
+
+  private initValueScrollContainer$(): Subscription {
+    return this.getPopupWindow()
+      .onAfterSetFocus$()
+      .subscribe((focus: boolean): void => {
+        if (!focus) return;
+        this.valueScrollContainer.renderModel();
+      });
   }
 
   private clearValueCheckListControls$(): Subscription {
