@@ -29,8 +29,8 @@ import { createWindowStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-filter-popup-button',
   template:
-    '<div class="pop-up-button" [ngStyle]="{backgroundImage: getPopupButton().getIcon()}" [title]="getLabel()">&nbsp;</div>',
-  styleUrls: ['./filter-popup.component.css'],
+    '<div class="fit-col-filters-button" [ngStyle]="{backgroundImage: getPopupButton().getIcon()}" [title]="getLabel()">&nbsp;</div>',
+  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class FilterPopupButtonComponent implements OnInit {
   @Input() colFilters!: ColFilters;
@@ -69,7 +69,7 @@ type ControlId =
 @Component({
   selector: 'fit-filter-popup-window',
   templateUrl: './filter-popup-window.component.html',
-  styleUrls: ['./filter-popup.component.css'],
+  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class FilterPopupWindowComponent implements AfterViewInit {
   @Input() colFilters!: ColFilters;
@@ -100,7 +100,8 @@ export class FilterPopupWindowComponent implements AfterViewInit {
   public getScrollContainer = (): ScrollContainer =>
     this.colFilters.getValueScrollContainer();
 
-  public getOffsetY = (): number => this.getScrollContainer().getInnerOffsetY();
+  public getScrollOffsetY = (): number =>
+    this.getScrollContainer().getInnerOffsetY();
 
   public getCheckListHeight = (): number =>
     this.getCheckBoxContainer().getControlIds().length * 20;

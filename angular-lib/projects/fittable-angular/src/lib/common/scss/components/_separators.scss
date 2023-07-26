@@ -1,0 +1,21 @@
+@import "../common/common";
+
+.fit-bar-separator {
+  width: 0.25rem;
+  height: 0.5rem;
+  font-size: 0;
+}
+
+.fit-container-separator {
+  margin: 0;
+  padding: 0;
+  height: 1px;
+  background-color: var(--context-menu-border-color);
+  opacity: 0.5;
+}
+
+.fit-menu-separator {
+  @extend .fit-container-separator;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+}

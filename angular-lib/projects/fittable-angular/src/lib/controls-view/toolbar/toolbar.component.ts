@@ -14,7 +14,7 @@ import { ControlType } from '../common/control-type.model';
 @Component({
   selector: 'fit-toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['../common/css/controls-common.css', './toolbar.component.css'],
+  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class ToolbarComponent {
   @Input() model!: Container;

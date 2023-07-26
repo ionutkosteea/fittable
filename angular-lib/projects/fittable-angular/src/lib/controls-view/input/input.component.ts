@@ -21,8 +21,8 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-input',
   template:
-    '<input class="field" style="width: 2.5rem;" #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="model.getValue()" [disabled]="getDisabled()" [title]="getLabel()" />',
-  styleUrls: ['../common/css/controls-common.css'],
+    '<input class="fit-toolbar-input" #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="model.getValue()" [disabled]="getDisabled()" [title]="getLabel()" />',
+  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class InputComponent implements OnInit, OnDestroy {
   @Input() model!: InputControl;

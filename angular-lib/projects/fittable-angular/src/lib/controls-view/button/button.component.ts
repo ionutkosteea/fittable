@@ -8,8 +8,8 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-button',
   template:
-    '<div class="button" [ngStyle]="getStyle()" (click)="onClick()" [title]="getLabel()">&nbsp;</div>',
-  styleUrls: ['../common/css/controls-common.css'],
+    '<div class="fit-toolbar-button" [ngStyle]="getStyle()" (click)="onClick()" [title]="getLabel()">&nbsp;</div>',
+  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class ButtonComponent {
   @Input() model!: Control;
@@ -17,7 +17,6 @@ export class ButtonComponent {
   public getStyle(): CssStyle {
     const style: CssStyle = createToggleStyle(this.model);
     style['background-image'] = this.model.getIcon();
-    style['background-repeat'] = 'no-repeat';
     return style;
   }
 

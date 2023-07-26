@@ -1,0 +1,64 @@
+@import "../common/common";
+
+@mixin bar($h-align) {
+  display: flex;
+  gap: fit-map-get($gap-map, small);
+  justify-content: $h-align;
+}
+
+.fit-left-aligned-bar {
+  @include bar(flex-start);
+  padding-top: fit-map-get($padding-map, medium);
+  padding-bottom: fit-map-get($padding-map, medium);
+}
+
+.fit-right-aligned-bar {
+  @include bar(flex-end);
+  padding-top: fit-map-get($padding-map, medium);
+  padding-bottom: fit-map-get($padding-map, medium);
+}
+
+.fit-center-aligned-bar {
+  @include bar(center);
+  padding-top: fit-map-get($padding-map, medium);
+  padding-bottom: fit-map-get($padding-map, medium);
+}
+
+.fit-settingsbar {
+  @include bar(flex-start);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: fit-map-get($padding-map, small);
+  border-left: 1px dotted var(--highlight-color);
+  border-bottom: 1px dotted var(--highlight-color);
+  border-bottom-left-radius: 6px;
+  background-color: var(--toolbar-background-color);
+}
+
+.fit-toolbar {
+  @include bar(flex-start);
+  flex-wrap: wrap;
+  padding-left: fit-map-get($padding-map, small);
+  padding-top: fit-map-get($padding-map, small);
+  padding-right: (fit-map-get($size-map, large) + fit-map-get($padding-map, small));
+  padding-bottom: fit-map-get($padding-map, small);
+  border-bottom: 1px solid var(--toolbar-border-color);
+  color: var(--toolbar-color);
+  background-color: var(--toolbar-background-color);
+}
+
+.fit-toolbar-button-bar {
+  @include bar(center);
+  padding: fit-map-get($padding-map, small);
+}
+
+.fit-statusbar {
+  padding: fit-map-get($padding-map, small);
+  border-top: 1px solid var(--statusbar-border-color);
+  background-color: var(--statusbar-background-color);
+  color: var(--statusbar-color);
+  width: auto;
+  text-align: right;
+  font-size: fit-map-get($font-size-map, small);
+}

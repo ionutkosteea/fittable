@@ -1,0 +1,19 @@
+@import "../common/common";
+
+.fit-left-icon-label {
+  @include icon(left center);
+  padding-left: fit-map-get($size-map, large);
+}
+
+.fit-right-icon-label {
+  @include icon(right center);
+  padding-right: fit-map-get($size-map, large);
+}
+
+.fit-menu-label {
+  color: var(--highlight-color);
+  font-size: fit-map-get($font-size-map, large);
+  line-height: fit-map-get($line-height-map, large);
+  padding-left: fit-map-get($size-map, medium);
+  padding-right: fit-map-get($size-map, medium);
+}

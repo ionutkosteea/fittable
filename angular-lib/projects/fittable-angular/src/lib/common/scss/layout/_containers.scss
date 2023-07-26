@@ -1,0 +1,153 @@
+@import "../common/common";
+
+@mixin window {
+  @include border;
+  top: 0;
+  left: 0;
+  border-left: 1px solid var(--context-menu-border-color);
+  color: var(--context-menu-color);
+  background-color: var(--context-menu-background-color);
+  overflow: auto;
+  z-index: 10;
+  font-size: fit-map-get($font-size-map, base);
+  line-height: fit-map-get($line-height-map, base);
+  box-sizing: border-box;
+}
+
+@mixin scroll-container($width, $height) {
+  width: $width;
+  height: $height;
+  overflow: auto;
+  scroll-behavior: smooth;
+  background-color: var(--scrollbar-background-color);
+
+  .fit-full-size-container {
+    position: relative;
+    width: 0px; // to be set in HTML
+    height: 0px; // to be set in HTML
+
+    .fit-mobile-grid {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      min-width: 100%;
+      transform: translate3d(0px, 0px, 0px); // to be set in HTML
+    }
+  }
+}
+
+@mixin col-container($number-of-cols) {
+  display: grid;
+  grid-template-columns: repeat($number-of-cols, 1fr);
+  gap: fit-map-get($gap-map, small);
+  place-items: center;
+}
+
+.fit-relative-container {
+  position: relative;
+}
+
+.fit-padding-container {
+  padding: fit-map-get($padding-map, small);
+}
+
+.fit-2col-container {
+  @include col-container(2);
+}
+
+.fit-6col-container {
+  @include col-container(6);
+}
+
+.fit-window {
+  @include window;
+  position: fixed;
+  padding: fit-map-get($padding-map, large);
+  border-top: 1px solid var(--context-menu-border-color);
+}
+
+.fit-context-menu {
+  @include window;
+  position: fixed;
+  padding-top: fit-map-get($padding-map, large);
+  padding-bottom: fit-map-get($padding-map, large);
+  border-top: 1px solid var(--context-menu-border-color);
+  max-height: 90vh;
+  white-space: nowrap;
+}
+
+.fit-settingsbar-menu {
+  @extend .fit-context-menu;
+  position: absolute;
+  top: (fit-map-get($size-map, medium) + 0.125rem);
+  right: 0;
+  left: auto;
+}
+
+.fit-combo-menu {
+  @include window;
+  position: absolute;
+  top: (fit-map-get($size-map, large) + 0.125rem);
+  max-height: 18.75rem;
+  white-space: nowrap;
+}
+
+.fit-button-menu {
+  @include window;
+  position: absolute;
+  top: (fit-map-get($size-map, large) + 0.125rem);
+  overflow: unset;
+}
+
+.fit-menu-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: fit-map-get($gap-map, large);
+  place-items: center normal;
+  padding-left: fit-map-get($padding-map, large);
+  padding-right: fit-map-get($padding-map, large);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--context-menu-background-hover-color);
+  }
+}
+
+.fit-border-type-menu {
+  hr {
+    padding-top: 16px;
+    border-top-color: var(--toolbar-color);
+    border-left: none;
+    border-top: none;
+    border-right: none;
+    width: 100px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--toolbar-background-hover-color);
+    }
+  }
+}
+
+.fit-col-filters-scroll-container {
+  @include scroll-container(100%, 6.25rem);
+  font-size: fit-map-get($font-size-map, medium);
+}
+
+.fit-col-filters-check-item {
+  display: flex;
+  place-items: center;
+  white-space: nowrap;
+  cursor: pointer;
+  height: 20px;
+
+  &:hover {
+    background-color: var(--context-menu-background-hover-color);
+  }
+  input {
+    cursor: inherit;
+  }
+  label {
+    cursor: inherit;
+  }
+}

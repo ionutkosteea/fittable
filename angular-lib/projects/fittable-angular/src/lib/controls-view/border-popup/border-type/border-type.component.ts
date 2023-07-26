@@ -22,10 +22,7 @@ import { PopupControlComponent } from '../../common/popup-control-component.mode
 @Component({
   selector: 'fit-border-type',
   templateUrl: './border-type.component.html',
-  styleUrls: [
-    '../../common/css/controls-common.css',
-    './border-type.component.css',
-  ],
+  styleUrls: ['../../../common/css/fittable-main.css'],
 })
 export class BorderTypeComponent
   extends PopupControlComponent

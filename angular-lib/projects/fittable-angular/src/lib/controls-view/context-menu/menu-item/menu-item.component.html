@@ -1,7 +1,6 @@
-<div class="menu-item" [ngStyle]="getToggleStyle()" (mousedown)="onMouseDown()">
-  <div class="icon" [ngStyle]="{backgroundImage:getIcon()}">&nbsp;</div>
-  <div class="label" [ngStyle]="getIsValidStyle()">{{getLabel()}}</div>
-  <input *ngIf="hasValue()" #input class="input" [value]="getValue()" [disabled]="isDisabled() ? 'disabled' : null"
-    (mousedown)="onInputMouseDown()" (keydown)="onInputKeyDown($event)" (input)="onInputChange($event)"
-    (focusout)="onInputFocusOut()" type="number" min="1" />
+<div class="fit-menu-item" [ngStyle]="getMenuItemStyle()" (mousedown)="onMouseDown()">
+  <div class="fit-left-icon-label" [ngStyle]="getLabelStyle()">{{getLabel()}}</div>
+  <input class="fit-menu-input" *ngIf="hasValue()" #input [ngStyle]="getTextFieldStyle()" [value]="getValue()"
+    [disabled]="isDisabled() ? 'disabled' : null" (mousedown)="onInputMouseDown()" (keydown)="onInputKeyDown($event)"
+    (input)="onInputChange($event)" (focusout)="onInputFocusOut()" type="number" min="1" />
 </div>

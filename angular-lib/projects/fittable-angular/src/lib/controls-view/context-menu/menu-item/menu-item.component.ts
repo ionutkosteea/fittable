@@ -22,7 +22,7 @@ import { createToggleStyle } from '../../common/style-functions.model';
 @Component({
   selector: 'fit-menu-item',
   templateUrl: './menu-item.component.html',
-  styleUrls: ['./menu-item.component.css'],
+  styleUrls: ['../../../common/css/fittable-main.css'],
 })
 export class MenuItemComponent implements OnInit, OnDestroy {
   @Input() model!: Control;
@@ -52,15 +52,22 @@ export class MenuItemComponent implements OnInit, OnDestroy {
       });
   }
 
-  public readonly getToggleStyle = (): CssStyle =>
+  public readonly getMenuItemStyle = (): CssStyle =>
     createToggleStyle(this.model);
 
-  public readonly getIsValidStyle = (): CssStyle | null =>
-    this.model.isValid() ? null : { opacity: 0.4, cursor: 'default' };
+  public readonly getLabelStyle = (): CssStyle => {
+    const style: CssStyle = { backgroundImage: this.model.getIcon() };
+    if (!this.model.isValid()) {
+      style['opacity'] = 0.4;
+      style['cursor'] = 'default';
+    }
+    return style;
+  };
+
+  public readonly getTextFieldStyle = (): CssStyle | null =>
+    this.model.isValid() ? null : { cursor: 'default' };
 
   public readonly isDisabled = (): boolean => this.model.isDisabled();
-
-  public readonly getIcon = (): string | undefined => this.model.getIcon();
 
   public readonly getLabel = (): string | undefined => this.model.getLabel();
 

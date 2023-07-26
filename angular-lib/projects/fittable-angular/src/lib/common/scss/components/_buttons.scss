@@ -1,0 +1,89 @@
+@import "../common/common";
+
+@mixin button($size) {
+  width: $size;
+  height: $size;
+  cursor: pointer;
+}
+
+.fit-left-icon-button {
+  @include icon(left center);
+  padding-left: fit-map-get($size-map, large);
+  cursor: pointer;
+  font-size: fit-map-get($font-size-map, medium);
+  line-height: fit-map-get($line-height-map, medium);
+
+  &:hover {
+    background-color: var(--context-menu-background-hover-color);
+  }
+}
+
+.fit-toolbar-button {
+  @include border;
+  @include icon(center);
+  @include button(fit-map-get($size-map, large));
+
+  &:active {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+.fit-color-picker-button {
+  @extend .fit-toolbar-button;
+  // picked color
+  hr {
+    position: absolute;
+    top: 0.6875rem;
+    left: 0.375rem;
+    width: 1rem;
+    height: 0.25rem;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.fit-color-picker-color-button {
+  @include button(18px);
+  border: 1px solid var(--toolbar-border-color);
+  border-radius: 2px;
+}
+
+.fit-settingsbar-button {
+  @include icon(center);
+  @include button(fit-map-get($size-map, medium));
+}
+
+.fit-col-filters-button {
+  @include icon(center);
+  position: absolute;
+  top: 5px;
+  right: 2px;
+  width: 12px;
+  height: 8px;
+  cursor: pointer;
+}
+
+.fit-col-filters-select-button {
+  font-size: fit-map-get($font-size-map, medium);
+  padding: fit-map-get($padding-map, small);
+  border-radius: 0.25rem;
+  background-color: var(--context-menu-background-color);
+  border: 1px solid var(--context-menu-border-color);
+  color: var(--context-menu-color);
+  cursor: pointer;
+
+  &:active {
+    border-color: var(--context-menu-background-color);
+  }
+}
+
+.fit-col-filters-action-button {
+  @include border;
+  padding: fit-map-get($padding-map, small);
+  color: var(--context-menu-background-color);
+  background-color: var(--highlight-color);
+  border: none;
+  cursor: pointer;
+}

@@ -1,0 +1,159 @@
+@import "../common/common";
+
+@mixin field {
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  border: none;
+  color: inherit;
+  background-color: inherit;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.fit-col-filters-search-input {
+  font-size: fit-map-get($font-size-map, medium);
+  line-height: fit-map-get($line-height-map, medium);
+
+  input {
+    color: var(--context-menu-color);
+    background-color: var(--context-menu-background-color);
+    border: 1px solid var(--context-menu-border-color);
+    margin: 0;
+    padding: fit-map-get($padding-map, small);
+    width: 100%;
+    border-radius: 4px;
+    font-size: inherit;
+    height: 1.25rem;
+    background-position: bottom 0.15rem right 0.15rem;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+  }
+}
+
+.fit-toolbar-input {
+  @include field;
+  @include border;
+  width: 2.5rem;
+  text-align: center;
+  font-size: fit-map-get($font-size-map, base);
+  height: fit-map-get($size-map, large);
+}
+
+.fit-menu-input {
+  @include field;
+  border: 1px solid var(--context-menu-border-color);
+  width: 2.5rem;
+  font-size: fit-map-get($font-size-map, medium);
+  height: fit-map-get($size-map, medium);
+}
+
+.fit-toolbar-combo {
+  @include field;
+  @include border;
+  width: 6.25rem;
+  text-align: center;
+  padding-right: 0.625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-origin: content-box;
+  font-size: fit-map-get($font-size-map, base);
+  height: fit-map-get($size-map, large);
+}
+
+.fit-color-picker-combo {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: fit-map-get($gap-map, small);
+  font-size: fit-map-get($font-size-map, small);
+  color: var(--toolbar-color);
+
+  .fit-combo {
+    border: 1px solid var(--toolbar-border-color);
+    display: flex;
+    flex: 1;
+    input {
+      flex: 1;
+      margin: 0;
+      padding: 0;
+      border: none;
+      height: 14px;
+      cursor: pointer;
+      background-color: var(--toolbar-background-color);
+    }
+    // combo arrow
+    span {
+      margin: 0;
+      padding: 0;
+      height: 14px;
+      line-height: 14px;
+    }
+  }
+  // add new color
+  button {
+    @include border;
+    border: none;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+  }
+}
+
+.fit-table-cell-editor {
+  position: absolute;
+  margin: 0px;
+  padding: 0px;
+  left: 0px;
+  top: 0px;
+  width: 0px;
+  height: 0px;
+  box-sizing: border-box;
+
+  textarea {
+    position: absolute;
+    margin: 0px;
+    padding: 2px;
+    color: var(--cell-editor-color);
+    background-color: var(--cell-editor-background-color);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+    -webkit-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+    -moz-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+    border: none;
+    box-sizing: border-box;
+    resize: both;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -webkit-scrollbar-width: none;
+
+    &:focus {
+      outline: none;
+    }
+    &::-webkit-scrollbar {
+      background-color: var(--cell-editor-background-color);
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--cell-editor-background-color);
+    }
+    &::-webkit-scrollbar-track {
+      background-color: var(--cell-editor-background-color);
+    }
+    &::-webkit-scrollbar-corner {
+      background-color: var(--cell-editor-background-color);
+    }
+    &::-webkit-resizer {
+      border: none;
+    }
+  }
+}

@@ -6,7 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Improve code readability according to fittable-core/view-model
+- Improve CSS development.
+
+- Improve code readability:
+
+  - according to fittable-core/view-model;
+  - rename <fit-settings-bar> component to <fit-settingsbar>.
 
 - Add responsive design capabilities:
   - toolbar height should increase relative to child controls;

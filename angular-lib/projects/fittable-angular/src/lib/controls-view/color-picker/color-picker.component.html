@@ -1,29 +1,39 @@
-<div class="color-picker">
-  <div class="button" (click)="showPopupWindow()" [ngStyle]="getButtonStyle()" [title]="getLabel()">&nbsp;</div>
-  <hr class="picked-color" (click)="showPopupWindow()" [ngStyle]="{backgroundColor:getSelectedValue()}" />
-  <div class="toolbar-menu" style="padding: 4px;" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+<div class="fit-relative-container">
+  <div class="fit-color-picker-button" (click)="showPopupWindow()" [ngStyle]="getButtonStyle()" [title]="getLabel()">
+    <hr (click)="showPopupWindow()" [ngStyle]="{backgroundColor:getSelectedValue()}" />
+  </div>
+  <div class="fit-button-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">
-    <div class="color-none-panel" (click)="runPopup(getColorNoneId())">
-      <div class="color-none-icon" [ngStyle]="{ backgroundImage: getColorNoneIcon() }"></div>
-      <div class="color-none-label">{{getColorNoneLabel()}}</div>
-    </div>
-    <div class="color-panel">
-      <div class="color" *ngFor="let id of getColorIds()" (click)="runPopup(id)"
-        [ngStyle]="{ backgroundColor: getColorValue(id) }"></div>
-    </div>
-    <div class="custom-color-panel">
-      <div class="color" *ngFor="let id of getCustomColorIds()" (click)="runPopup(id)"
-        [ngStyle]="{ backgroundColor: getColorValue(id) }"></div>
-    </div>
-    <div class="add-color-panel">
-      <div class="add-color-combo">
-        <input class="add-color-picker" #colorPicker [value]="getSelectedValue()" type="color"
-          (input)="onSelectCustomColor()" />
-        <div class='arrow-down'>▼</div>
+    <div class="fit-padding-container">
+      <div class="fit-left-icon-button" [ngStyle]="{ backgroundImage: getColorNoneIcon() }"
+        (click)="runPopup(getColorNoneId())">
+        {{getColorNoneLabel()}}
       </div>
-      <button class="add-btn"
-        [ngStyle]="{backgroundColor: isColorPickerVisible?'var(--highlight-color)':'var(--context-menu-color)'}"
-        (click)="addCustomColor()">+</button>
+    </div>
+    <div class="fit-padding-container">
+      <div class="fit-6col-container">
+        <div class="fit-color-picker-color-button" *ngFor="let id of getColorIds()" (click)="runPopup(id)"
+          [ngStyle]="{ backgroundColor: getColorValue(id) }"></div>
+      </div>
+    </div>
+    <div class="fit-padding-container">
+      <hr class="fit-container-separator" />
+    </div>
+    <div class="fit-padding-container">
+      <div class="fit-6col-container">
+        <div class="fit-color-picker-color-button" *ngFor="let id of getCustomColorIds()" (click)="runPopup(id)"
+          [ngStyle]="{ backgroundColor: getColorValue(id) }"></div>
+      </div>
+    </div>
+    <div class="fit-padding-container">
+      <div class="fit-color-picker-combo">
+        <div class="fit-combo">
+          <input #colorPicker [value]="getSelectedValue()" type="color" (input)="onSelectCustomColor()" />
+          <span>▼</span>
+        </div>
+        <button [ngStyle]="{backgroundColor: isColorPickerVisible?'var(--highlight-color)':'var(--context-menu-color)'}"
+          (click)="addCustomColor()">+</button>
+      </div>
     </div>
   </div>
 </div>

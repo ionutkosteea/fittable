@@ -15,10 +15,7 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-border-popup',
   templateUrl: './border-popup.component.html',
-  styleUrls: [
-    '../common/css/controls-common.css',
-    './border-popup.component.css',
-  ],
+  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class BorderPopupButtonComponent
   extends PopupControlComponent

@@ -42,7 +42,13 @@
 
 .main {
   overflow: auto;
-  max-width: 100ch;
+  max-width: 1366px;
+}
+
+.footer {
+  grid-column: 1 / span 2;
+  border-top: 1px solid var(--surface-border);
+  height: 1rem;
 }
 
 @media (max-width: 100ch) {

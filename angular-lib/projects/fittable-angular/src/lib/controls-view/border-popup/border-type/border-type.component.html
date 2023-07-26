@@ -1,8 +1,13 @@
-<div class="border-type">
-  <div class="button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showPopupWindow()" [title]="getLabel()">&nbsp;
+<div class="fit-relative-container">
+  <div class="fit-toolbar-button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showPopupWindow()"
+    [title]="getLabel()">&nbsp;
   </div>
-  <div class="toolbar-menu" style="padding: 4px;" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+  <div class="fit-button-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">
-    <hr class="popup-child" *ngFor="let id of getPopupIds()" [ngStyle]="getBorderStyle(''+id)" (click)="runPopup(id)" />
+    <div class="fit-padding-container">
+      <div class="fit-border-type-menu">
+        <hr *ngFor="let id of getPopupIds()" [ngStyle]="getBorderStyle(''+id)" (click)="runPopup(id)" />
+      </div>
+    </div>
   </div>
 </div>

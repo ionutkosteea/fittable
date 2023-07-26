@@ -1,13 +1,18 @@
-<div class="settings-button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showPopupWindow()" [title]="getLabel()">
-  &nbsp;
-</div>
-<div class="context-menu settings-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
-  (window:mousedown)="onGlobalMouseDown()">
-  <ng-container *ngFor="let id of getPopupIds()">
-    <div *ngIf="getPopupType(id)==='label'" class="title">{{getPopupLabel(id)}}</div>
-    <div *ngIf="getPopupType(id)!=='label'" class="menu-item" (click)="runPopup(id)">
-      <div class="label">{{getPopupLabel(id)}}</div>
-      <div class="check" [ngStyle]="{backgroundImage:getPopupIcon(id)}">&nbsp;</div>
-    </div>
-  </ng-container>
+<div class="fit-relative-container">
+  <div class="fit-settingsbar-button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showPopupWindow()"
+    [title]="getLabel()">
+    &nbsp;
+  </div>
+  <div class="fit-settingsbar-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+    (window:mousedown)="onGlobalMouseDown()">
+    <ng-container *ngFor="let id of getPopupIds()">
+      <div *ngIf="getPopupType(id)==='label'" class="fit-menu-label">{{getPopupLabel(id)}}</div>
+      <div class="fit-menu-item">
+        <div *ngIf="getPopupType(id)!=='label'" class="fit-right-icon-label"
+          [ngStyle]="{backgroundImage:getPopupIcon(id)}" (click)="runPopup(id)">
+          {{getPopupLabel(id)}}
+        </div>
+      </div>
+    </ng-container>
+  </div>
 </div>

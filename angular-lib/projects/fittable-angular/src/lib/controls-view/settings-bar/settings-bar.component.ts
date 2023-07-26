@@ -8,9 +8,9 @@ import {
 } from 'fittable-core/view-model';
 
 @Component({
-  selector: 'fit-settings-bar',
+  selector: 'fit-settingsbar',
   templateUrl: './settings-bar.component.html',
-  styleUrls: ['./settings-bar.component.css'],
+  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class SettingsBarComponent {
   @Input() model!: Container;

@@ -1,9 +1,11 @@
-<div class="pop-up-button">
-  <div class="button" (click)="showPopupWindow()" [ngStyle]="getButtonStyle()" [title]="getLabel()">&nbsp;</div>
-  <div class="toolbar-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
+<div class="fit-relative-container">
+  <div class="fit-toolbar-button" (click)="showPopupWindow()" [ngStyle]="getButtonStyle()" [title]="getLabel()">
+    &nbsp;
+  </div>
+  <div class="fit-button-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">
-    <div class="panel">
-      <div class="button" *ngFor="let id of getPopupIds()" [ngStyle]="{backgroundImage:getPopupIcon(id)}"
+    <div class="fit-toolbar-button-bar">
+      <div class="fit-toolbar-button" *ngFor="let id of getPopupIds()" [ngStyle]="{backgroundImage:getPopupIcon(id)}"
         (click)="runPopup(id)" [title]="getPopupLabel(id)">
         &nbsp;
       </div>

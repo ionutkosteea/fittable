@@ -10,7 +10,8 @@
     "build": "ng build fittable-angular && cp ./projects/fittable-angular/LICENSE ./dist/fittable-angular && cp ./projects/fittable-angular/README.md ./dist/fittable-angular && cp ./projects/fittable-angular/CHANGELOG.md ./dist/fittable-angular && cp ./projects/fittable-angular/architecture.jpg ./dist/fittable-angular  && cp -r ./projects/fittable-angular/src ./dist/fittable-angular",
     "watch": "ng build fittable-angular --watch --configuration development",
     "test": "ng test",
-    "lint": "npx eslint ./projects/**/src"
+    "lint": "npx eslint ./projects/**/src",
+    "scss": "node-sass --watch ./projects/fittable-angular/src/lib/common/scss -o ./projects/fittable-angular/src/lib/common/css"
   },
   "private": true,
   "dependencies": {
@@ -31,7 +32,6 @@
     "@angular-devkit/build-angular": "^16.0.2",
     "@angular/cli": "~16.0.2",
     "@angular/compiler-cli": "^16.0.3",
-    "ng-packagr": "^16.0.1",
     "@types/jasmine": "~4.3.0",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
@@ -42,6 +42,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "ng-packagr": "^16.0.1",
+    "node-sass": "^8.0.0",
     "typescript": "~5.0.2"
   },
   "peerDependencies": {
