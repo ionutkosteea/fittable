@@ -10,8 +10,6 @@ export function createWindowStyle(window: Window): CssStyle {
   return { display, transform };
 }
 
-export function createToggleStyle(control: Control): CssStyle {
-  return control.isDisabled()
-    ? { opacity: 0.4, cursor: 'default' }
-    : { cursor: 'pointer' };
+export function createToggleStyle(control: Control): CssStyle | null {
+  return control.isDisabled() ? { opacity: 0.4, cursor: 'default' } : null;
 }

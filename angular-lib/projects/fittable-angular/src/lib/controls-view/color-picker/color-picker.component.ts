@@ -56,9 +56,8 @@ export class ColorPickerComponent
   }
 
   public getButtonStyle(): CssStyle {
-    const style: CssStyle = createToggleStyle(this.model);
+    const style: CssStyle = createToggleStyle(this.model) ?? {};
     style['background-image'] = this.getIcon();
-    style['background-repeat'] = 'no-repeat';
     return style;
   }
 

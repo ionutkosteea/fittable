@@ -15,7 +15,7 @@ export class ButtonComponent {
   @Input() model!: Control;
 
   public getStyle(): CssStyle {
-    const style: CssStyle = createToggleStyle(this.model);
+    const style: CssStyle = createToggleStyle(this.model) ?? {};
     style['background-image'] = this.model.getIcon();
     return style;
   }

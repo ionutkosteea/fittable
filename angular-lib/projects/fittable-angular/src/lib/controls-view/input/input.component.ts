@@ -56,7 +56,8 @@ export class InputComponent implements OnInit, OnDestroy {
   private readonly getHtmlInput = (): HTMLInputElement =>
     this.inputFieldRef.nativeElement;
 
-  public readonly getStyle = (): CssStyle => createToggleStyle(this.model);
+  public readonly getStyle = (): CssStyle | null =>
+    createToggleStyle(this.model);
 
   public readonly getDisabled = (): string | null =>
     this.model.isDisabled() ? 'disabled' : null;

@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Text cursor shall be displayed when mouse over input fields.
+
 - Improve CSS development.
 
 - Improve code readability:

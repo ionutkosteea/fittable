@@ -29,9 +29,10 @@ export class PopupButtonComponent
   }
 
   public getButtonStyle(): CssStyle | null {
-    const style: CssStyle = createToggleStyle(this.model);
+    let style: CssStyle | null = createToggleStyle(this.model);
     const control: Control | undefined = this.getSelectedControl();
     if (control) {
+      if (!style) style = {};
       style['background-image'] = control.getIcon();
     }
     return style;

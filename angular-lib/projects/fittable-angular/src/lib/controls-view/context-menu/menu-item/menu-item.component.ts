@@ -52,7 +52,7 @@ export class MenuItemComponent implements OnInit, OnDestroy {
       });
   }
 
-  public readonly getMenuItemStyle = (): CssStyle =>
+  public readonly getMenuItemStyle = (): CssStyle | null =>
     createToggleStyle(this.model);
 
   public readonly getLabelStyle = (): CssStyle => {

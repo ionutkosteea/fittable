@@ -29,7 +29,7 @@ export class ComboComponent extends PopupControlComponent implements OnInit {
   }
 
   public getComboStyle(): CssStyle {
-    const style: CssStyle = createToggleStyle(this.model);
+    const style: CssStyle = createToggleStyle(this.model) ?? {};
     style['background-image'] = this.getIcon();
     return style;
   }

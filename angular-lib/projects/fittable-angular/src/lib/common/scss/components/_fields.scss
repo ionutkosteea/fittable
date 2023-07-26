@@ -7,7 +7,6 @@
   border: none;
   color: inherit;
   background-color: inherit;
-  cursor: pointer;
   box-sizing: border-box;
 }
 
@@ -51,6 +50,7 @@
 .fit-toolbar-combo {
   @include field;
   @include border;
+  cursor: pointer;
   width: 6.25rem;
   text-align: center;
   padding-right: 0.625rem;
