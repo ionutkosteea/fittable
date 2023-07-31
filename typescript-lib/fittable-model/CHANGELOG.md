@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.1.2] - 2023-07-31
+
+### Changed
+
+- Update dependency to fittable-core.
+
 ## [v1.1.1] - 2023-06-12
 
 ### Changed

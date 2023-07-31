@@ -22,7 +22,7 @@
     "@angular/platform-browser": "^16.0.3",
     "@angular/platform-browser-dynamic": "^16.0.3",
     "@angular/router": "^16.0.3",
-    "fittable-angular": "^3.1.0",
+    "fittable-angular": "^4.0.0",
     "npm": "^9.6.6",
     "primeicons": "^6.0.1",
     "primeng": "^16.0.2",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.0.2",
-    "@angular/cli": "~16.0.2",
+    "@angular/cli": "^16.1.6",
     "@angular/compiler-cli": "^16.0.3",
     "@types/jasmine": "~4.3.0",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
