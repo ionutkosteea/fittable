@@ -45,6 +45,7 @@ export class ColFiltersComponent implements ConsoleTopic, OnInit {
       createFitViewModelConfig({
         rowHeader: true,
         colHeader: true,
+        cellSelection: true,
         colFilters: true,
         toolbar: true,
         cellEditor: true,
