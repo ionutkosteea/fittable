@@ -159,7 +159,8 @@
   place-items: center;
   white-space: nowrap;
   cursor: pointer;
-  height: 20px; }
+  height: 20px;
+  background-color: var(--context-menu-background-color); }
   .fit-col-filters-check-item:hover {
     background-color: var(--context-menu-background-hover-color); }
   .fit-col-filters-check-item input {
@@ -378,6 +379,7 @@
   background-color: inherit;
   box-sizing: border-box;
   border: 1px solid var(--context-menu-border-color);
+  background-color: var(--context-menu-background-color);
   width: 2.5rem;
   font-size: 0.75rem;
   height: 1rem; }
@@ -507,3 +509,153 @@
 .fit-menu-separator {
   margin-top: 0.4rem;
   margin-bottom: 0.4rem; }
+
+.fit-component {
+  display: contents; }
+
+.fit-table-main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative; }
+
+.fit-table-container {
+  flex: 1;
+  overflow: hidden; }
+
+.fit-table-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "pageHeader colHeader" "rowHeader body";
+  height: 100%; }
+
+.fit-table-page-header {
+  background-color: var(--table-header-background-color);
+  position: relative;
+  box-sizing: border-box;
+  grid-area: pageHeader; }
+
+.fit-table-col-header {
+  background-color: var(--table-header-background-color);
+  position: relative;
+  box-sizing: border-box;
+  grid-area: colHeader;
+  overflow-x: hidden;
+  overflow-y: scroll; }
+  .fit-table-col-header::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: var(--table-header-background-hover-color); }
+
+.fit-table-row-header {
+  background-color: var(--table-header-background-color);
+  position: relative;
+  box-sizing: border-box;
+  grid-area: rowHeader;
+  overflow-x: scroll;
+  overflow-y: hidden; }
+  .fit-table-row-header::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: var(--table-header-background-hover-color); }
+
+.fit-table-body {
+  background-color: var(--table-body-background-color);
+  position: relative;
+  box-sizing: border-box;
+  grid-area: body;
+  overflow: scroll; }
+  .fit-table-body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: var(--table-header-background-hover-color); }
+  .fit-table-body::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-color); }
+  .fit-table-body::-webkit-scrollbar-corner {
+    background-color: var(--scrollbar-color); }
+
+.fit-full-size-container {
+  position: relative;
+  box-sizing: border-box;
+  width: 0;
+  height: 0; }
+
+.fit-offset-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate3d(0px, 0px, 0px); }
+
+.fit-table {
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+  cursor: default;
+  border-collapse: collapse;
+  box-sizing: border-box; }
+
+.fit-table-header-row {
+  position: relative; }
+
+.fit-table-header-cell {
+  position: relative;
+  background-clip: padding-box;
+  position: relative;
+  color: var(--table-header-color);
+  font-size: 0.625rem;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--table-header-border-color);
+  box-sizing: border-box; }
+
+.fit-table-header-cell-selection {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: var(--table-header-background-hover-color);
+  pointer-events: none; }
+
+.fit-table-cell {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  border-left: 1px dotted var(--table-body-border-color);
+  border-top: 1px dotted var(--table-body-border-color);
+  border-right: 1px dotted var(--table-body-border-color);
+  border-bottom: 1px dotted var(--table-body-border-color);
+  background-clip: padding-box;
+  font-size: var(--font-size);
+  font-family: var(--font-family);
+  color: var(--table-body-color);
+  box-sizing: border-box; }
+
+.fit-table-cell-selection {
+  position: absolute;
+  background-color: var(--cell-selection-background-color);
+  pointer-events: none;
+  box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -webkit-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -moz-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  border: none; }
+
+.fit-table-cell-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 2px;
+  display: grid;
+  place-items: inherit;
+  text-decoration: inherit;
+  box-sizing: border-box;
+  white-space: break-spaces;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-scrollbar-width: none; }
+  .fit-table-cell-text::-webkit-scrollbar {
+    display: none; }

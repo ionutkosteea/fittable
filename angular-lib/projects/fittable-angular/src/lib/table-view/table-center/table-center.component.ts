@@ -1,5 +1,12 @@
 import { Subscription } from 'rxjs';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 
 import { CssStyle, CellRange } from 'fittable-core/model';
 import {
@@ -12,6 +19,7 @@ import {
   CellSelectionListener,
   getViewModelConfig,
   Option,
+  ScrollContainer,
 } from 'fittable-core/view-model';
 
 import { TableCommon } from '../common/table-common.model';
@@ -19,7 +27,6 @@ import { TableCommon } from '../common/table-common.model';
 @Component({
   selector: 'fit-table-center',
   templateUrl: './table-center.component.html',
-  styleUrls: ['../common/css/table-common.css', './table-center.component.css'],
 })
 export class TableCenterComponent
   extends TableCommon
@@ -27,6 +34,8 @@ export class TableCenterComponent
 {
   @Input() override viewModel!: ViewModel;
   @Input() cellSelectionListener?: CellSelectionListener;
+  @Output() onScroll$: EventEmitter<{ scrollLeft: number; scrollTop: number }> =
+    new EventEmitter();
 
   public cellEditorListener?: CellEditorListener;
   private readonly subscriptions: Set<Subscription | undefined> = new Set();
@@ -58,8 +67,16 @@ export class TableCenterComponent
     );
   }
 
-  public readonly getTableOffset = (): CssStyle =>
-    this.viewModel.mobileLayout.bodyOffset;
+  public onScroll(event: Event): void {
+    const scrollContainer: HTMLElement = event.target as HTMLElement;
+    this.onScroll$.emit({
+      scrollLeft: scrollContainer.scrollLeft,
+      scrollTop: scrollContainer.scrollTop,
+    });
+  }
+
+  public readonly getScrollContainer = (): ScrollContainer =>
+    this.viewModel.tableScrollContainer;
 
   public readonly getCellSelectionRanges = ():
     | CellSelectionRanges

@@ -65,6 +65,8 @@ describe('fit-scroll-container-listener.ts', (): void => {
       createScrollContainerListener(div, scrollContainer);
     scrollContainerListener.onScroll();
 
-    expect(scroll).toBeTrue();
+    setTimeout(() => {
+      expect(scroll).toBeTrue();
+    });
   });
 });

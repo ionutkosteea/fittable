@@ -1,15 +1,19 @@
-<div class="table-left-top" *ngIf="hasRowHeader() && hasColHeader()" [ngStyle]="getTableOffset()">
-  <table class="table">
-    <colgroup>
-      <col [ngStyle]="{'width.px':getRowHeaderWidth()}" />
-    </colgroup>
-    <thead fitCellSelection [cellSelectionListener]="cellSelectionListener"
-      [cellSelectionRanges]="getCellSelectionRanges()">
-      <tr class="header-row" [ngStyle]="{'height.px':getColHeaderHeight()}">
-        <th class="header-cell" [attr.rowId]="0" [attr.colId]="0">
-          &nbsp;</th>
-      </tr>
-    </thead>
-  </table>
+<div class="fit-table-page-header" *ngIf="hasRowHeader() && hasColHeader()">
+  <div class="fit-full-size-container" [ngStyle]="{'width.px':getRowHeaderWidth(),'height.px':getColHeaderHeight()+1}">
+    <div class="fit-offset-container">
+      <table class="fit-table">
+        <colgroup>
+          <col [ngStyle]="{'width.px':getRowHeaderWidth()}" />
+        </colgroup>
+        <thead fitCellSelection [cellSelectionListener]="cellSelectionListener"
+          [cellSelectionRanges]="getCellSelectionRanges()">
+          <tr class="fit-table-header-row" [ngStyle]="{'height.px':getColHeaderHeight()}">
+            <th class="fit-table-header-cell" [attr.rowId]="0" [attr.colId]="0">
+              &nbsp;</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <div class="fit-table-header-cell-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>
 </div>
-<div class="header-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>

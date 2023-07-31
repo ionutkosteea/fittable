@@ -108,8 +108,8 @@ describe('Test CellSelectionPainter', (): void => {
         .selectBodyRange(createCellCoord(0, 0), createCellCoord(1, 1));
     const painter: CellSelectionPainter = builder.build();
     const bodyRange: Rectangle = painter.body.getRectangles()[0];
-    expect(bodyRange.top === config!.rowHeights).toBeTruthy();
-    expect(bodyRange.left === config!.rowHeaderWidth).toBeTruthy();
+    expect(bodyRange.top === 0).toBeTruthy();
+    expect(bodyRange.left === 0).toBeTruthy();
     expect(bodyRange.width === 2 * config!.colWidths).toBeTruthy();
     expect(bodyRange.height === 2 * config!.rowHeights).toBeTruthy();
     builder.destroy();

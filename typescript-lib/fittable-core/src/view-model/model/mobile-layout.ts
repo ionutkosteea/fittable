@@ -6,7 +6,6 @@ import { TableViewer } from './table-viewer.js';
 
 export interface MobileLayout {
   bodyOffset: CssStyle;
-  pageHeaderOffset: CssStyle;
   rowHeaderOffset: CssStyle;
   colHeaderOffset: CssStyle;
   bodySelectionRectangles: CssStyle[];

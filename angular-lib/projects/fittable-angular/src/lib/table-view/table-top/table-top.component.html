@@ -1,19 +1,23 @@
-<div class="table-top" *ngIf="hasColHeader()" [ngStyle]="getTableOffset()">
-  <table class="table">
-    <colgroup>
-      <col *ngFor="let colId of getColIds()" [ngStyle]="{'width.px':getColWidth(colId)}" />
-    </colgroup>
-    <thead (contextmenu)="showContextMenu($event)" fitCellSelection [cellSelectionListener]="cellSelectionListener"
-      [cellSelectionRanges]="getCellSelectionRanges()">
-      <tr class="header-row" [ngStyle]="{'height.px':getColHeaderHeight()}">
-        <th class="header-cell" *ngFor="let colId of getColIds()" [attr.rowId]="0" [attr.colId]="colId">
-          {{getColLabel(colId)}}
-          <fit-filter-popup-button *ngIf="hasColFilters()" [colFilters]="getColFilters()"
-            [colId]="colId"></fit-filter-popup-button>
-        </th>
-      </tr>
-    </thead>
-  </table>
+<div class="fit-table-col-header" #scroller *ngIf="hasColHeader()">
+  <div class="fit-full-size-container" [ngStyle]="{'width.px':getBodyWidth(),'height.px':getColHeaderHeight()+1}">
+    <div class="fit-offset-container" [ngStyle]="getColHeaderOffset()">
+      <table class="fit-table">
+        <colgroup>
+          <col *ngFor="let colId of getColIds()" [ngStyle]="{'width.px':getColWidth(colId)}" />
+        </colgroup>
+        <thead (contextmenu)="showContextMenu($event)" fitCellSelection [cellSelectionListener]="cellSelectionListener"
+          [cellSelectionRanges]="getCellSelectionRanges()">
+          <tr class="fit-table-header-row" [ngStyle]="{'height.px':getColHeaderHeight()}">
+            <th class="fit-table-header-cell" *ngFor="let colId of getColIds()" [attr.rowId]="0" [attr.colId]="colId">
+              {{getColLabel(colId)}}
+              <fit-filter-popup-button *ngIf="hasColFilters()" [colFilters]="getColFilters()"
+                [colId]="colId"></fit-filter-popup-button>
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <div class="fit-table-header-cell-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>
+  <fit-filter-popup-window *ngIf="hasColFilters()" [colFilters]="getColFilters()"></fit-filter-popup-window>
 </div>
-<div class="header-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>
-<fit-filter-popup-window *ngIf="hasColFilters()" [colFilters]="getColFilters()"></fit-filter-popup-window>

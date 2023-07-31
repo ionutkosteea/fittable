@@ -57,7 +57,7 @@ describe('Cell selection scroller', (): void => {
       .setScrollDirection('Down')
       .scroll();
 
-    expect(tableScrollContainer.getScroller().getTop() === 42).toBeTruthy(); // incl. col header
+    expect(tableScrollContainer.getScroller().getTop() === 21).toBeTruthy();
   });
 
   it('scroll up', (): void => {
@@ -77,7 +77,7 @@ describe('Cell selection scroller', (): void => {
       .setScrollDirection('Up')
       .scroll();
 
-    expect(tableScrollContainer.getScroller().getTop() === 0).toBeTruthy(); // incl. col header
+    expect(tableScrollContainer.getScroller().getTop() === 0).toBeTruthy();
   });
 
   it('scroll right', (): void => {
@@ -97,7 +97,7 @@ describe('Cell selection scroller', (): void => {
       .setScrollDirection('Right')
       .scroll();
 
-    expect(tableScrollContainer.getScroller().getLeft() === 140).toBeTruthy(); // incl. row header
+    expect(tableScrollContainer.getScroller().getLeft() === 100).toBeTruthy();
   });
 
   it('scroll left', (): void => {
@@ -117,6 +117,6 @@ describe('Cell selection scroller', (): void => {
       .setScrollDirection('Left')
       .scroll();
 
-    expect(tableScrollContainer.getScroller().getLeft() === 0).toBeTruthy(); // incl. row header
+    expect(tableScrollContainer.getScroller().getLeft() === 0).toBeTruthy();
   });
 });

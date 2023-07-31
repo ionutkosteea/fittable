@@ -30,7 +30,6 @@ import { createWindowStyle } from '../common/style-functions.model';
   selector: 'fit-filter-popup-button',
   template:
     '<div class="fit-col-filters-button" [ngStyle]="{backgroundImage: getPopupButton().getIcon()}" [title]="getLabel()">&nbsp;</div>',
-  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class FilterPopupButtonComponent implements OnInit {
   @Input() colFilters!: ColFilters;
@@ -69,7 +68,6 @@ type ControlId =
 @Component({
   selector: 'fit-filter-popup-window',
   templateUrl: './filter-popup-window.component.html',
-  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class FilterPopupWindowComponent implements AfterViewInit {
   @Input() colFilters!: ColFilters;

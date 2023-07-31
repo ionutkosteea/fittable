@@ -22,7 +22,6 @@ import {
 @Component({
   selector: 'fit-cell-editor',
   templateUrl: './cell-editor.component.html',
-  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() cellEditorListener!: CellEditorListener;

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, ViewEncapsulation } from '@angular/core';
 
 import {
   Container,
@@ -13,7 +13,8 @@ import {
 @Component({
   selector: 'fittable',
   templateUrl: './fittable.component.html',
-  styleUrls: ['./fittable.component.css'],
+  styleUrls: ['./common/css/fittable-main.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class FittableComponent implements OnDestroy {
   @Input() designer!: FittableDesigner;

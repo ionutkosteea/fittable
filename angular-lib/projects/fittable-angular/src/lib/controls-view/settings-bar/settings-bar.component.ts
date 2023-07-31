@@ -10,7 +10,6 @@ import {
 @Component({
   selector: 'fit-settingsbar',
   templateUrl: './settings-bar.component.html',
-  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class SettingsBarComponent {
   @Input() model!: Container;

@@ -67,21 +67,36 @@ export abstract class TableCommon {
     this.viewModel.contextMenu &&
     createWindowListener(this.viewModel.contextMenu).onShow(event);
 
-  protected readonly getScrollLeft = (): number =>
+  public readonly getScrollLeft = (): number =>
     this.viewModel.tableScrollContainer.getScroller().getLeft();
 
-  protected readonly getScrollTop = (): number =>
+  public readonly getScrollTop = (): number =>
     this.viewModel.tableScrollContainer.getScroller().getTop();
 
-  protected readonly getOffsetX = (): number =>
+  public readonly getOffsetX = (): number =>
     this.viewModel.tableScrollContainer.getInnerOffsetX();
 
-  protected readonly getOffsetY = (): number =>
+  public readonly getOffsetY = (): number =>
     this.viewModel.tableScrollContainer.getInnerOffsetY();
 
-  protected readonly getRowHeaderWidth = (): number =>
+  public readonly getRowHeaderWidth = (): number =>
     this.viewModel.tableViewer.getRowHeaderWidth();
 
-  protected readonly getColHeaderHeight = (): number =>
+  public readonly getColHeaderHeight = (): number =>
     this.viewModel.tableViewer.getColHeaderHeight();
+
+  public readonly getBodyHeight = (): number =>
+    this.viewModel.tableViewer.getBodyHeight();
+
+  public readonly getBodyWidth = (): number =>
+    this.viewModel.tableViewer.getBodyWidth();
+
+  public readonly getBodyOffset = (): CssStyle =>
+    this.viewModel.mobileLayout.bodyOffset;
+
+  public readonly getRowHeaderOffset = (): CssStyle =>
+    this.viewModel.mobileLayout.rowHeaderOffset;
+
+  public readonly getColHeaderOffset = (): CssStyle =>
+    this.viewModel.mobileLayout.colHeaderOffset;
 }

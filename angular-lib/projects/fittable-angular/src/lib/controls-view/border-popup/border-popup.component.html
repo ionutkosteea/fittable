@@ -14,7 +14,7 @@
           </fit-color-picker>
         </ng-container>
       </div>
-      <div class="toolbar-separator">&nbsp;</div>
+      <hr class="fit-menu-separator" />
       <div class="fit-2col-container">
         <div class="fit-toolbar-button" *ngFor="let id of getRightPanelIDs()"
           [ngStyle]="{backgroundImage:getPopupIcon(id)}" (click)="runPopup(id)" [title]="getPopupLabel(id)">&nbsp;

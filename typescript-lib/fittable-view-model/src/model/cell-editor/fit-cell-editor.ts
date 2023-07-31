@@ -110,12 +110,8 @@ export class FitCellEditor implements CellEditor {
   private createCellRectangle(cellCoord: CellCoord): Rectangle {
     const rowId: number = cellCoord.getRowId();
     const colId: number = cellCoord.getColId();
-    const left: number =
-      this.tableViewer.getRowHeaderWidth() +
-      this.tableViewer.getColPosition(colId);
-    const top: number =
-      this.tableViewer.getColHeaderHeight() +
-      this.tableViewer.getRowPosition(rowId);
+    const left: number = this.tableViewer.getColPosition(colId);
+    const top: number = this.tableViewer.getRowPosition(rowId);
     let width: number = this.tableViewer.getColWidth(colId);
     const colSpan: number = this.tableViewer.getColSpan(rowId, colId);
     if (colSpan > 1) {

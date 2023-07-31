@@ -21,13 +21,17 @@ export class FitScrollContainerListener implements ScrollContainerListener {
         scroll: (left: number, top: number): void => div.scrollTo(left, top),
       });
 
-    setTimeout((): void => {
-      scrollContainer.renderModel();
-    });
+    this.renderModel();
   }
 
   public onScroll(): void {
-    this.scrollContainer.renderModel();
+    this.renderModel();
+  }
+
+  private renderModel(): void {
+    setTimeout((): void => {
+      this.scrollContainer.renderModel();
+    });
   }
 }
 

@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Eliminate table row - and column header flickering while scrolling:
+
+  - remove method MobileLayout.pageHeaderOffset
+
 - Improve code readability:
 
   - rename ViewModel.tableScroller to ViewModel.tableScrollContainer;

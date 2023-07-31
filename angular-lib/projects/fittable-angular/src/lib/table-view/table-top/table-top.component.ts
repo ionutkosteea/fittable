@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 import { CssStyle, getModelConfig } from 'fittable-core/model';
 import {
@@ -13,14 +13,11 @@ import { TableCommon } from '../common/table-common.model';
 @Component({
   selector: 'fit-table-top',
   templateUrl: './table-top.component.html',
-  styleUrls: ['../common/css/table-common.css', './table-top.component.css'],
 })
 export class TableTopComponent extends TableCommon {
   @Input() override viewModel!: ViewModel;
   @Input() cellSelectionListener?: CellSelectionListener;
-
-  public readonly getTableOffset = (): CssStyle =>
-    this.viewModel.mobileLayout.colHeaderOffset;
+  @ViewChild('scroller') scrollerRef?: ElementRef;
 
   public readonly getCellSelectionRanges = ():
     | CellSelectionRanges

@@ -6,12 +6,10 @@ import {
   MobileLayoutArgs,
   MobileLayoutFactory,
   Rectangle,
-  Scroller,
 } from 'fittable-core/view-model';
 
 export class FitMobileLayout implements MobileLayout {
   public bodyOffset!: CssStyle;
-  public pageHeaderOffset!: CssStyle;
   public rowHeaderOffset!: CssStyle;
   public colHeaderOffset!: CssStyle;
   public bodySelectionRectangles: CssStyle[] = [];
@@ -32,7 +30,6 @@ export class FitMobileLayout implements MobileLayout {
 
   private calcOffsets(): void {
     this.calcBodyOffset();
-    this.calcPageHeaderOffset();
     this.calcColHeaderOffset();
     this.calcRowHeaderOffset();
   }
@@ -44,42 +41,24 @@ export class FitMobileLayout implements MobileLayout {
   }
 
   private calcBodyOffset(): void {
-    const left: number =
-      this.args.tableViewer.getRowHeaderWidth() +
-      this.args.tableScrollContainer.getInnerOffsetX();
-    const top: number =
-      this.args.tableViewer.getColHeaderHeight() +
-      this.args.tableScrollContainer.getInnerOffsetY();
+    const left: number = this.args.tableScrollContainer.getInnerOffsetX();
+    const top: number = this.args.tableScrollContainer.getInnerOffsetY();
     this.bodyOffset = {
       transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
     };
   }
 
-  private calcPageHeaderOffset(): void {
-    const left: number = this.args.tableScrollContainer.getScroller().getLeft();
-    const top: number = this.args.tableScrollContainer.getScroller().getTop();
-    this.pageHeaderOffset = {
-      transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
-    };
-  }
-
   private calcColHeaderOffset(): void {
-    const left: number =
-      this.args.tableViewer.getRowHeaderWidth() +
-      this.args.tableScrollContainer.getInnerOffsetX();
-    const top: number = this.args.tableScrollContainer.getScroller().getTop();
+    const left: number = this.args.tableScrollContainer.getInnerOffsetX();
     this.colHeaderOffset = {
-      transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
+      transform: 'translate3d(' + left + 'px,' + '0px,0px)',
     };
   }
 
   private calcRowHeaderOffset(): void {
-    const left: number = this.args.tableScrollContainer.getScroller().getLeft();
-    const top: number =
-      this.args.tableViewer.getColHeaderHeight() +
-      this.args.tableScrollContainer.getInnerOffsetY();
+    const top: number = this.args.tableScrollContainer.getInnerOffsetY();
     this.rowHeaderOffset = {
-      transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
+      transform: 'translate3d(' + '0px,' + top + 'px,0px)',
     };
   }
 
@@ -109,12 +88,9 @@ export class FitMobileLayout implements MobileLayout {
         this.args.cellSelectionPainter?.pageHeader
           ?.getRectangles()
           .forEach((rect: Rectangle) => {
-            const scroller: Scroller =
-              this.args.tableScrollContainer.getScroller();
-            const left: number = rect.left + scroller.getLeft();
-            const top: number = rect.top + scroller.getTop();
             this.pageHeaderSelectionRectangles.push({
-              transform: 'translate3d(' + left + 'px,' + top + 'px,0px)',
+              left: 0,
+              top: 0,
               width: rect.width + 'px',
               height: rect.height + 'px',
             });
@@ -130,11 +106,9 @@ export class FitMobileLayout implements MobileLayout {
         this.args.cellSelectionPainter?.colHeader
           ?.getRectangles()
           .forEach((rect: Rectangle) => {
-            const scroller: Scroller =
-              this.args.tableScrollContainer.getScroller();
-            const top: number = rect.top + scroller.getTop();
             this.colHeaderSelectionRectangles.push({
-              transform: 'translate3d(' + rect.left + 'px,' + top + 'px,0px)',
+              left: rect.left + 'px',
+              top: 0,
               width: rect.width + 'px',
               height: rect.height + 'px',
             });
@@ -150,11 +124,9 @@ export class FitMobileLayout implements MobileLayout {
         this.args.cellSelectionPainter?.rowHeader
           ?.getRectangles()
           .forEach((rect: Rectangle) => {
-            const scroller: Scroller =
-              this.args.tableScrollContainer.getScroller();
-            const left: number = rect.left + scroller.getLeft();
             this.rowHeaderSelectionRectangles.push({
-              transform: 'translate3d(' + left + 'px,' + rect.top + 'px,0px)',
+              left: 0,
+              top: rect.top + 'px',
               width: rect.width + 'px',
               height: rect.height + 'px',
             });

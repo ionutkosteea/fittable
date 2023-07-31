@@ -1,22 +1,27 @@
-<div class="table-center" [ngStyle]="getTableOffset()">
-  <table class="table" [ngStyle]="{'font-size.px':getTableFontSize(),'font-family':getTableFontFamily()}">
-    <colgroup>
-      <col *ngFor="let colId of getColIds()" [ngStyle]="{'width.px':getColWidth(colId)}" />
-    </colgroup>
-    <tbody (contextmenu)="showContextMenu($event)" fitCellEditorOpen [cellEditorListener]="cellEditorListener"
-      fitCellSelection [cellSelectionListener]="cellSelectionListener" [cellSelectionRanges]="getCellSelectionRanges()">
-      <tr *ngFor="let rowId of getRowIds()" [ngStyle]="{'height.px':getRowHeight(rowId)}">
-        <ng-container *ngFor="let colId of getColIds()">
-          <td class="cell" *ngIf="!isHiddenCell(rowId,colId)" [ngStyle]="getCellStyle(rowId,colId)"
-            [rowSpan]="getRowSpan(rowId,colId)" [colSpan]="getColSpan(rowId,colId)" [attr.rowId]="rowId"
-            [attr.colId]="colId">
-            <p class="cell-text">{{getCellValue(rowId, colId)}}</p>
-          </td>
-        </ng-container>
-      </tr>
-    </tbody>
-  </table>
+<div class="fit-table-body" (scroll)="onScroll($event)" fitScrollContainer [scrollContainer]="getScrollContainer()">
+  <div class="fit-full-size-container" [ngStyle]="{'width.px':getBodyWidth(),'height.px':getBodyHeight()}">
+    <div class="fit-offset-container" [ngStyle]="getBodyOffset()">
+      <table class="fit-table" [ngStyle]="{'font-size.px':getTableFontSize(),'font-family':getTableFontFamily()}">
+        <colgroup>
+          <col *ngFor="let colId of getColIds()" [ngStyle]="{'width.px':getColWidth(colId)}" />
+        </colgroup>
+        <tbody (contextmenu)="showContextMenu($event)" fitCellEditorOpen [cellEditorListener]="cellEditorListener"
+          fitCellSelection [cellSelectionListener]="cellSelectionListener"
+          [cellSelectionRanges]="getCellSelectionRanges()">
+          <tr *ngFor="let rowId of getRowIds()" [ngStyle]="{'height.px':getRowHeight(rowId)}">
+            <ng-container *ngFor="let colId of getColIds()">
+              <td class="fit-table-cell" *ngIf="!isHiddenCell(rowId,colId)" [ngStyle]="getCellStyle(rowId,colId)"
+                [rowSpan]="getRowSpan(rowId,colId)" [colSpan]="getColSpan(rowId,colId)" [attr.rowId]="rowId"
+                [attr.colId]="colId">
+                <p class="fit-table-cell-text">{{getCellValue(rowId, colId)}}</p>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="fit-table-cell-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>
+  <fit-cell-editor *ngIf="cellEditorListener !== undefined" [cellEditorListener]="cellEditorListener"
+    [getCellStyle]="getCellStyle"></fit-cell-editor>
 </div>
-<div class="cell-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>
-<fit-cell-editor *ngIf="cellEditorListener !== undefined" [cellEditorListener]="cellEditorListener"
-  [getCellStyle]="getCellStyle"></fit-cell-editor>

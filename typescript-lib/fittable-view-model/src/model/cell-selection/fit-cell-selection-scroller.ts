@@ -73,8 +73,7 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
     const scrollTop: number = this.tableScrollContainer.getScroller().getTop();
     const clientHeight: number = //
       this.tableScrollContainer.getSize().getHeight();
-    const colHeaderHeight: number = this.tableViewer.getColHeaderHeight();
-    const viewport: number = scrollTop + clientHeight - colHeaderHeight;
+    const viewport: number = scrollTop + clientHeight;
     const rowPosition: number = this.tableViewer.getRowPosition(this.rowId);
     const rowHeight: number = this.getRowHeight(this.rowId);
     if (viewport >= rowPosition && viewport <= rowPosition + rowHeight) {
@@ -114,8 +113,7 @@ export class FitCellSelectionScroller implements CellSelectionScroller {
       this.tableScrollContainer.getScroller().getLeft();
     const clientWidth: number = //
       this.tableScrollContainer.getSize().getWidth();
-    const rowHeaderWidth: number = this.tableViewer.getRowHeaderWidth();
-    const viewport: number = scrollLeft + clientWidth - rowHeaderWidth;
+    const viewport: number = scrollLeft + clientWidth;
     const colPosition: number = this.tableViewer.getColPosition(this.colId);
     const colWidth: number = this.getColWidth(this.colId);
     if (viewport >= colPosition && viewport <= colPosition + colWidth) {

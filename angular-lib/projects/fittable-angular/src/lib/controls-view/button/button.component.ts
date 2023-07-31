@@ -9,7 +9,6 @@ import { createToggleStyle } from '../common/style-functions.model';
   selector: 'fit-button',
   template:
     '<div class="fit-toolbar-button" [ngStyle]="getStyle()" (click)="onClick()" [title]="getLabel()">&nbsp;</div>',
-  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class ButtonComponent {
   @Input() model!: Control;

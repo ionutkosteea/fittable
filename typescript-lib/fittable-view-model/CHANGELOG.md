@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Improve code readability according to fittable-core/view-model
+- Eliminate table row - and column header flickering while scrolling.
+- Improve code readability according to fittable-core/view-model.
 
 ## [v1.1.2] - 2023-06-25
 

@@ -46,7 +46,6 @@ import {
 
 import {
   FIT_CSS_COLOR_VARIABLES,
-  setCssVariable,
   setCssVariables,
 } from './common/css-variables.js';
 import {

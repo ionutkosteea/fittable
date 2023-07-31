@@ -5,7 +5,6 @@ import { Statusbar } from 'fittable-core/view-model';
 @Component({
   selector: 'fit-statusbar',
   template: '<div class="fit-statusbar">{{model.getText()}}</div>',
-  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class StatusbarComponent implements OnDestroy {
   @Input() model!: Statusbar;

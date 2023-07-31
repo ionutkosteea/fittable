@@ -140,6 +140,7 @@
   white-space: nowrap;
   cursor: pointer;
   height: 20px;
+  background-color: var(--context-menu-background-color);
 
   &:hover {
     background-color: var(--context-menu-background-hover-color);

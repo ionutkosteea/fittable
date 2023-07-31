@@ -9,6 +9,7 @@
   font-size: 0.75rem;
   line-height: 1rem;
   padding: 0.25rem;
+  border-radius: 0;
 }
 
 .fittable-height {

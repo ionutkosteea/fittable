@@ -1,7 +1,9 @@
-<div class="container">
-  <fit-toolbar *ngIf="hasToolbar()" [model]="getToolbar()"></fit-toolbar>
-  <fit-table class="table" [viewModel]="getViewModel()"></fit-table>
-  <fit-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()"></fit-statusbar>
-  <fit-settingsbar *ngIf="hasSettingsBar()" [model]="getSettingsBar()"></fit-settingsbar>
-  <fit-context-menu *ngIf="hasContextMenu()" [model]="getContextMenu()"></fit-context-menu>
+<div class="fit-table-main-container">
+  <fit-toolbar class="fit-component" *ngIf="hasToolbar()" [model]="getToolbar()"></fit-toolbar>
+  <div class="fit-table-container">
+    <fit-table class="fit-component" [viewModel]="getViewModel()"></fit-table>
+  </div>
+  <fit-statusbar class="fit-component" *ngIf="hasStatusbar()" [model]="getStatusbar()"></fit-statusbar>
+  <fit-settingsbar class="fit-component" *ngIf="hasSettingsBar()" [model]="getSettingsBar()"></fit-settingsbar>
+  <fit-context-menu class="fit-component" *ngIf="hasContextMenu()" [model]="getContextMenu()"></fit-context-menu>
 </div>

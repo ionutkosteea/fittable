@@ -10,9 +10,7 @@ export class VerticalScrollbar extends VirtualScrollbar {
     return this.tableViewer.getNumberOfRows();
   }
   protected getDimension(): number {
-    const headerHeight: number = this.tableViewer.getColHeaderHeight();
-    const bodyHeight: number = this.tableViewer.getBodyHeight();
-    return headerHeight + bodyHeight;
+    return this.tableViewer.getBodyHeight();
   }
   protected getLinePosition(rowId: number): number {
     return this.tableViewer.getRowPosition(rowId);
@@ -33,9 +31,7 @@ export class HorizontalScrollbar extends VirtualScrollbar {
     return this.tableViewer.getNumberOfCols();
   }
   protected getDimension(): number {
-    const headerWidth: number = this.tableViewer.getRowHeaderWidth();
-    const bodyWidth: number = this.tableViewer.getBodyWidth();
-    return headerWidth + bodyWidth;
+    return this.tableViewer.getBodyWidth();
   }
   protected getLinePosition(colId: number): number {
     return this.tableViewer.getColPosition(colId);

@@ -14,7 +14,6 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-popup-button',
   templateUrl: './popup-button.component.html',
-  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class PopupButtonComponent
   extends PopupControlComponent

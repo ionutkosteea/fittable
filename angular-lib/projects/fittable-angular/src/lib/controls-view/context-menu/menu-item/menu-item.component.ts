@@ -22,7 +22,6 @@ import { createToggleStyle } from '../../common/style-functions.model';
 @Component({
   selector: 'fit-menu-item',
   templateUrl: './menu-item.component.html',
-  styleUrls: ['../../../common/css/fittable-main.css'],
 })
 export class MenuItemComponent implements OnInit, OnDestroy {
   @Input() model!: Control;

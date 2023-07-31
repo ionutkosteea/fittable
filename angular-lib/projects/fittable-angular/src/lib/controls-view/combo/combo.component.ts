@@ -16,7 +16,6 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-combo',
   templateUrl: './combo.component.html',
-  styleUrls: ['../../common/css/fittable-main.css'],
 })
 export class ComboComponent extends PopupControlComponent implements OnInit {
   @Input() override model!: PopupControl;
