@@ -143,7 +143,10 @@ function updateCellSelectionConfig(
   cfg.cellSelectionPainterFactory = srcCfg?.cellSelectionPainterFactory;
   cfg.cellSelectionScrollerFactory = srcCfg?.cellSelectionScrollerFactory;
   cfg.cellSelectionListenerFactory = srcCfg?.cellSelectionListenerFactory;
-  if (!cfg.cellSelectionFactory) delete cfg.contextMenuFactory;
+  if (!cfg.cellSelectionFactory) {
+    delete cfg.contextMenuFactory;
+    delete cfg.colFiltersFactory;
+  }
 }
 
 function updateContextMenuConfig(
@@ -252,9 +255,10 @@ function updateColFiltersConfig(
 ): void {
   if (cfg.colHeaderHeight) {
     if (def.colFilters !== undefined) {
-      cfg.colFiltersFactory = def.colFilters
-        ? FIT_VIEW_MODEL_CONFIG.colFiltersFactory
-        : undefined;
+      cfg.colFiltersFactory =
+        def.colFilters && cfg.cellSelectionFactory
+          ? FIT_VIEW_MODEL_CONFIG.colFiltersFactory
+          : undefined;
     }
   } else {
     delete cfg.colFiltersFactory;
