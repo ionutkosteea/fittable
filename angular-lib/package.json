@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.0.2",
-    "@angular/cli": "~16.0.2",
+    "@angular/cli": "^16.2.0",
     "@angular/compiler-cli": "^16.0.3",
     "@types/jasmine": "~4.3.0",
     "@typescript-eslint/eslint-plugin": "^5.57.0",

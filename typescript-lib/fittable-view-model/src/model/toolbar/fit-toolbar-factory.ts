@@ -78,7 +78,7 @@ export class FitToolbarFactory implements ToolbarFactory {
       .addControl('separator5', new FitSeparator())
       .addControl('vertical-align', createVerticalAlignMenu(args))
       .addControl('horizontal-align', createHorizontalAlignMenu(args))
-      .addControl('separator5', new FitSeparator())
+      .addControl('separator6', new FitSeparator())
       .addControl('border', createBorderMenu(args));
   }
 }
