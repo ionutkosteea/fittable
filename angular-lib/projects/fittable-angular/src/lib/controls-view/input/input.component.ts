@@ -21,12 +21,13 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-input',
   template:
-    '<input class="fit-toolbar-input" #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="model.getValue()" [disabled]="getDisabled()" [title]="getLabel()" />',
+    '<input class="fit-toolbar-input" #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="inputValue" [disabled]="getDisabled()" [title]="getLabel()" />',
 })
 export class InputComponent implements OnInit, OnDestroy {
   @Input() model!: InputControl;
   @ViewChild('inputField') inputFieldRef!: ElementRef;
 
+  public inputValue?: Value;
   private inputControlListener!: InputControlListener;
   private readonly subscriptions: Subscription[] = [];
 
@@ -34,6 +35,7 @@ export class InputComponent implements OnInit, OnDestroy {
     this.inputControlListener = createInputControlListener(this.model);
     this.subscriptions.push(this.onFocus$());
     this.subscriptions.push(this.onForceValue$());
+    this.inputValue = this.model.getValue();
   }
 
   private onFocus$(): Subscription {

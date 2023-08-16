@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.1] - ?
+
+### Fixed
+
+- Pasted styled cell does not remove target cell's style.
+- When writing title case text on cell, while using shift key, the first letter dissapers.
+- Toolbar font size input field cannot decrease value after set to 14.
+
 ## [v4.0.0] - 2023-07-31
 
 ### Changed
