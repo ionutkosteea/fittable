@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.1] - ?
+
+### Fixed
+
+- When writing title case text on cell, while using shift key, the first letter dissapers.
+
 ## [v2.0.0] - 2023-07-31
 
 ### Changed

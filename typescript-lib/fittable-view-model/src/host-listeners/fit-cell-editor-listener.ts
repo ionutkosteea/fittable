@@ -102,7 +102,6 @@ export class FitCellEditorListener implements CellEditorListener {
   }
 
   public onKeyDown(event: FitKeyboardEvent): void {
-    if (event.shiftKey && !this.enableControlKeys) return;
     const key: ActionKey = event.key as ActionKey;
     const origin: NeighborCells = this.cellEditor.getNeighborCells();
     if (key === 'Enter') this.enterDown(event);
@@ -118,6 +117,7 @@ export class FitCellEditorListener implements CellEditorListener {
 
   private enterDown(event: FitKeyboardEvent): void {
     event.preventDefault();
+    if (event.shiftKey) return;
     if (this.enableControlEdit) {
       if (event.ctrlKey) {
         this.cellEditor.getCellControl().ctrlEnter();
