@@ -24,6 +24,7 @@ export interface Style {
 export interface StyleFactory {
   createStyle(): Style;
   createStyle4Dto?(dto: unknown): Style;
+  createStyleWithUndefinedProperties?(): Style;
 }
 
 export function createStyle<T extends Style>(): T {
@@ -34,6 +35,15 @@ export function createStyle4Dto<T extends Style>(dto: unknown): T {
   const factory: StyleFactory = getFactory();
   if (factory.createStyle4Dto) return factory.createStyle4Dto(dto) as T;
   else throw new MissingFactoryMethodError();
+}
+
+export function createStyleWithUndefinedProperties<T extends Style>(): T {
+  const factory: StyleFactory = getFactory();
+  if (factory.createStyleWithUndefinedProperties) {
+    return factory.createStyleWithUndefinedProperties() as T;
+  } else {
+    throw new MissingFactoryMethodError();
+  }
 }
 
 function getFactory(): StyleFactory {

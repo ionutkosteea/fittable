@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.0.1] - ?
+
+### Fixed
+
+- Pasted styled cell does not remove target cell's style.
+
 ## [v3.0.0] - 2023-07-31
 
 ### Changed

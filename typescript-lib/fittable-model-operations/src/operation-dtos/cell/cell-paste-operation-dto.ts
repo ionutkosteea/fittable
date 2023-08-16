@@ -6,6 +6,7 @@ import {
   TableStyles,
   CellCoord,
   asTableStyles,
+  createStyleWithUndefinedProperties,
 } from 'fittable-core/model';
 import {
   OperationDto,
@@ -324,14 +325,12 @@ export class CellPasteOperationDtoBuilder {
   ): StyleUpdateOperationDtoBuilder {
     if (!this.styledTable) throw new Error('Table styles are not defined!');
     const style: Style | undefined = styleByCss(cssStyle);
+    const undefinedProperties: Style = createStyleWithUndefinedProperties();
+    const styleSnippet: Style = undefinedProperties.append(style);
     const builder: StyleUpdateOperationDtoBuilder =
       new StyleUpdateOperationDtoBuilder(
         this.styledTable,
-        {
-          id: 'style-update',
-          selectedCells,
-          styleSnippet: style,
-        },
+        { id: 'style-update', selectedCells, styleSnippet },
         this.maxStyleNameUid
       );
     builder.build();

@@ -1,6 +1,6 @@
 import { Style, StyleFactory, CssStyle } from 'fittable-core/model';
 
-import { FitStyleDto } from './dto/fit-table-dto.js';
+import { FitStyleDto, FIT_STYLE_DTO } from './dto/fit-table-dto.js';
 
 export class FitStyle implements Style {
   private readonly dto: FitStyleDto = {};
@@ -141,5 +141,13 @@ export class FitStyleFactory implements StyleFactory {
       }
     }
     return new FitStyle(dto);
+  }
+
+  public createStyleWithUndefinedProperties(): FitStyle {
+    const style: FitStyle = new FitStyle();
+    for (const key of Object.keys(FIT_STYLE_DTO)) {
+      style.set(key as keyof FitStyleDto, undefined);
+    }
+    return style;
   }
 }

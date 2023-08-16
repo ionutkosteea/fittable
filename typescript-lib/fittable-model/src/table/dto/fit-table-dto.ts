@@ -12,21 +12,23 @@ export type FitMergedCellDto = { rowSpan?: number; colSpan?: number };
 
 export type FitMatrixDto<Cell> = { [rowId: string]: FitMapDto<Cell> };
 
-export type FitStyleDto = {
-  'font-weight'?: string;
-  'font-style'?: string;
-  'text-decoration'?: string;
-  'font-family'?: string;
-  'font-size.px'?: number;
-  color?: string;
-  'background-color'?: string;
-  'text-align'?: string;
-  'place-items'?: string;
-  'border-left'?: string;
-  'border-right'?: string;
-  'border-top'?: string;
-  'border-bottom'?: string;
+export const FIT_STYLE_DTO = {
+  'font-weight': '',
+  'font-style': '',
+  'text-decoration': '',
+  'font-family': '',
+  'font-size.px': 0,
+  color: '',
+  'background-color': '',
+  'text-align': '',
+  'place-items': '',
+  'border-left': '',
+  'border-right': '',
+  'border-top': '',
+  'border-bottom': '',
 };
+
+export type FitStyleDto = Partial<typeof FIT_STYLE_DTO>;
 
 export type FitTableDto = {
   numberOfRows: number;
