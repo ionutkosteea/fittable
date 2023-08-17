@@ -24,7 +24,6 @@ export class FitInputControlListener implements InputControlListener {
   }
 
   public onFocusOut(): void {
-    this.inputControl.setValue();
     this.inputControl.setFocus(false);
   }
 }

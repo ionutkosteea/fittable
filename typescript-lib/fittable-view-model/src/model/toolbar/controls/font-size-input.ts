@@ -63,7 +63,7 @@ class FontSizeInput extends FitInputControl implements ControlUpdater {
   };
 
   public override getValue(): number {
-    return this.size ?? this.getStyleFontSize();
+    return this.size ?? this.config.fontSize;
   }
 
   public override setValue(size?: number): this {

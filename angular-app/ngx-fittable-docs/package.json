@@ -22,7 +22,7 @@
     "@angular/platform-browser": "^16.0.3",
     "@angular/platform-browser-dynamic": "^16.0.3",
     "@angular/router": "^16.0.3",
-    "fittable-angular": "^4.0.0",
+    "fittable-angular": "^4.0.1",
     "npm": "^9.6.6",
     "primeicons": "^6.0.1",
     "primeng": "^16.0.2",

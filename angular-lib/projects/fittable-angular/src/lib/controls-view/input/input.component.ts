@@ -9,7 +9,7 @@ import {
   OnInit,
 } from '@angular/core';
 
-import { Value, CssStyle } from 'fittable-core/model';
+import { CssStyle } from 'fittable-core/model';
 import {
   InputControl,
   InputControlListener,
@@ -21,21 +21,18 @@ import { createToggleStyle } from '../common/style-functions.model';
 @Component({
   selector: 'fit-input',
   template:
-    '<input class="fit-toolbar-input" #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="inputValue" [disabled]="getDisabled()" [title]="getLabel()" />',
+    '<input class="fit-toolbar-input" #inputField type="number" min="1" [ngStyle]="getStyle()" [value]="this.model.getValue()" [disabled]="getDisabled()" [title]="getLabel()" />',
 })
 export class InputComponent implements OnInit, OnDestroy {
   @Input() model!: InputControl;
   @ViewChild('inputField') inputFieldRef!: ElementRef;
 
-  public inputValue?: Value;
   private inputControlListener!: InputControlListener;
   private readonly subscriptions: Subscription[] = [];
 
   public ngOnInit(): void {
     this.inputControlListener = createInputControlListener(this.model);
     this.subscriptions.push(this.onFocus$());
-    this.subscriptions.push(this.onForceValue$());
-    this.inputValue = this.model.getValue();
   }
 
   private onFocus$(): Subscription {
@@ -43,14 +40,6 @@ export class InputComponent implements OnInit, OnDestroy {
       const htmlInput: HTMLElement = this.getHtmlInput();
       if (focus) htmlInput.focus();
       else htmlInput.blur();
-    });
-  }
-
-  private onForceValue$(): Subscription {
-    return this.model.onSetValue$().subscribe((value?: Value): void => {
-      this.getHtmlInput().value = value
-        ? '' + value
-        : '' + this.model.getValue();
     });
   }
 
