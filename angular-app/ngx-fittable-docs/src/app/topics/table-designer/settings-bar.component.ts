@@ -62,6 +62,7 @@ export class SettingsBarComponent implements SimpleTopic, OnInit {
       if (id === languageLabelId) {
         const control = new FitControl()
           // Usually labels should be accessed via the language dictionary.
+          .setType('menu-item')
           .setLabel((): string => 'French')
           .setRun((): void => alert('No function added!'));
         controlMap.set('fr-FR', control);

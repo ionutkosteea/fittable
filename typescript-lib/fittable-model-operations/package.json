@@ -38,13 +38,13 @@
     "@typescript-eslint/parser": "^5.57.0",
     "c8": "^7.13.0",
     "eslint": "^8.37.0",
-    "fittable-model": "^1.1.3",
+    "fittable-model": "^2.0.0",
     "jasmine": "^4.6.0",
     "rxjs": "^7.8.0",
     "source-map-support": "^0.5.21",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.2"
+    "typescript": "~5.1.3"
   },
   "dependencies": {
     "fittable-core": "^4.0.0"
