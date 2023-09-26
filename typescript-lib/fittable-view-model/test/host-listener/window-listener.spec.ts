@@ -27,8 +27,8 @@ describe('fit-window-listener.ts', () => {
     windowListener.onShow(mouseEvent);
 
     expect(window.isVisible()).toBeTruthy();
-    expect(window.getPosition().x === 10).toBeTruthy();
-    expect(window.getPosition().y === 20).toBeTruthy();
+    expect(window.getPosition()?.x === 10).toBeTruthy();
+    expect(window.getPosition()?.y === 20).toBeTruthy();
   });
 
   it('onMouseDown()', () => {

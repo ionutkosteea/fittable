@@ -1,13 +1,17 @@
 import { CellRange, Style, createStyle, Table } from 'fittable-core/model';
-import { ViewModelConfig, getViewModelConfig } from 'fittable-core/view-model';
+import {
+  ControlArgs,
+  ViewModelConfig,
+  getViewModelConfig,
+} from 'fittable-core/view-model';
 
 import { FitInputControl } from '../../common/controls/fit-input-control.js';
 import { FitUIOperationArgs } from '../../operation-executor/operation-args.js';
 import { getFirstCellStyle } from '../../common/style-functions.js';
-import { FitControlArgs } from './common/fit-control-args.js';
+import { getLanguageDictionary } from '../../language/language-def.js';
 import { ControlUpdater } from './common/control-updater.js';
 
-export function createFontSizeInput(args: FitControlArgs): FitInputControl {
+export function createFontSizeInput(args: ControlArgs): FitInputControl {
   return new FontSizeInput(args);
 }
 
@@ -15,10 +19,10 @@ class FontSizeInput extends FitInputControl implements ControlUpdater {
   private config: ViewModelConfig = getViewModelConfig();
   private size?: number;
 
-  constructor(private readonly args: FitControlArgs) {
+  constructor(private readonly args: ControlArgs) {
     super();
     this.setType('input');
-    this.setLabel((): string => args.dictionary.getText('Font size'));
+    this.setLabel((): string => getLanguageDictionary().getText('Font size'));
     this.setRun(this.createRunFn);
     this.setValid((): boolean => {
       const value: number | undefined = this.getValue();

@@ -33,6 +33,7 @@ describe('Test FitTable', () => {
 
   it('Create table via dto.', () => {
     const dto: FitTableDto = {
+      locale: 'en-US',
       numberOfRows: 10,
       numberOfCols: 5,
       styles: { s0: { color: 'blue' } },

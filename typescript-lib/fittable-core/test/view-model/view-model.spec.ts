@@ -7,8 +7,6 @@ import {
   createCellSelectionScroller,
   createColFilters,
   createContextMenu,
-  createImageRegistry,
-  createLanguageDictionary,
   createMobileLayout,
   createScrollContainer,
   createSettingsBar,
@@ -17,6 +15,7 @@ import {
   createThemeSwitcher,
   createToolbar,
   createViewModel,
+  getImageRegistry,
   registerViewModelConfig,
   unregisterViewModelConfig,
 } from '../../dist/view-model/index.js';
@@ -31,8 +30,6 @@ import {
 } from './model/tst-functions.js';
 import { TstViewModelConfig } from './model/tst-view-model-config.js';
 import { TstScrollContainer } from './model/tst-scroll-container.js';
-import { TstLanguageDictionary } from './model/tst-language-dictionary.js';
-import { TstImageRegistry } from './model/tst-image-registry.js';
 import { TstCellSelection } from './model/tst-cell-selection.js';
 
 describe('view-model', () => {
@@ -48,14 +45,7 @@ describe('view-model', () => {
 
   it('image registry factory', () => {
     const throwsError: boolean = throwsMethodNotImplemented(() =>
-      createImageRegistry()
-    );
-    expect(throwsError).toBeTrue();
-  });
-
-  it('language dictionary factory', () => {
-    const throwsError: boolean = throwsMethodNotImplemented(() =>
-      createLanguageDictionary()
+      getImageRegistry()
     );
     expect(throwsError).toBeTrue();
   });
@@ -121,11 +111,7 @@ describe('view-model', () => {
 
   it('col filters factory', () => {
     const throwsError: boolean = throwsMissingFactory(() =>
-      createColFilters({
-        operationExecutor: new TstOperationExecutor(),
-        dictionary: new TstLanguageDictionary(),
-        imageRegistry: new TstImageRegistry(),
-      })
+      createColFilters(new TstOperationExecutor())
     );
     expect(throwsError).toBeTrue();
   });
@@ -134,8 +120,6 @@ describe('view-model', () => {
     const throwsError: boolean = throwsMissingFactory(() =>
       createContextMenu({
         operationExecutor: new TstOperationExecutor(),
-        dictionary: new TstLanguageDictionary(),
-        imageRegistry: new TstImageRegistry(),
         getSelectedCells: () => [],
       })
     );
@@ -144,28 +128,21 @@ describe('view-model', () => {
 
   it('settings bar factory', () => {
     const throwsError: boolean = throwsMissingFactory(() =>
-      createSettingsBar({
-        dictionary: new TstLanguageDictionary(),
-        imageRegistry: new TstImageRegistry(),
-      })
+      createSettingsBar(undefined, (): void => {})
     );
     expect(throwsError).toBeTrue();
   });
 
   it('statusbar factory', () => {
     const throwsError: boolean = throwsMissingFactory(() =>
-      createStatusbar({
-        dictionary: new TstLanguageDictionary(),
-        tableViewer: new TstTableViewer(),
-        tableScrollContainer: new TstScrollContainer(),
-      })
+      createStatusbar(new TstTableViewer(), new TstScrollContainer())
     );
     expect(throwsError).toBeTrue();
   });
 
   it('theme switcher factory', () => {
     const throwsError: boolean = throwsMissingFactory(() =>
-      createThemeSwitcher(new TstImageRegistry())
+      createThemeSwitcher()
     );
     expect(throwsError).toBeTrue();
   });
@@ -174,8 +151,6 @@ describe('view-model', () => {
     const throwsError: boolean = throwsMissingFactory(() =>
       createToolbar({
         operationExecutor: new TstOperationExecutor(),
-        dictionary: new TstLanguageDictionary(),
-        imageRegistry: new TstImageRegistry(),
         getSelectedCells: () => [],
       })
     );

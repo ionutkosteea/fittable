@@ -26,7 +26,8 @@ export class CellValuesComponent extends ConsoleTopic {
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(1, 2)),
       ],
-      value: 'operation text',
+      value: '2023-12-31 07:30',
+      dataType: { name: 'date-time', format: 'yyyy-MM-dd' },
     };
     this.fit.operationExecutor?.run(args);
   }

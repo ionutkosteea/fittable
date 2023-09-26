@@ -1,10 +1,13 @@
 import { MissingFactoryError } from 'fittable-core/common';
 import {
+  asTableCellDataType,
   asTableColFilter,
   CellRange,
   createCellCoord,
+  LanguageDictionary,
   Table,
   TableBasics,
+  TableCellDataType,
   TableColFilter,
 } from 'fittable-core/model';
 import { OperationExecutor } from 'fittable-core/operations';
@@ -23,10 +26,6 @@ import {
   createCellSelectionPainter,
   ScrollContainer,
   createScrollContainer,
-  createImageRegistry,
-  createLanguageDictionary,
-  ImageRegistry,
-  LanguageDictionary,
   CellSelectionScroller,
   createCellSelectionScroller,
   TableViewer,
@@ -54,10 +53,11 @@ import {
 } from './scroll-container/table-scrollbars.js';
 import { OperationSubscriptions } from './view-model-subscriptions/operation-subscriptions.js';
 import { ViewModelSubscriptions } from './view-model-subscriptions/view-model-subscriptions.js';
+import { getLanguageDictionary } from './language/language-def.js';
+import { enUS } from './language/en-US.js';
+import { deDE } from './language/de-DE.js';
 
 export class FitViewModel implements ViewModel {
-  public readonly dictionary: LanguageDictionary;
-  public readonly imageRegistry: ImageRegistry;
   public readonly tableViewer: TableViewer;
   public readonly tableScrollContainer: ScrollContainer;
   public readonly mobileLayout: MobileLayout;
@@ -80,9 +80,8 @@ export class FitViewModel implements ViewModel {
     public table: Table,
     public readonly operationExecutor?: OperationExecutor
   ) {
+    this.initLocals();
     operationExecutor?.setTable(table);
-    this.dictionary = createLanguageDictionary();
-    this.imageRegistry = createImageRegistry();
     this.tableViewer = this.createTableViewer();
     this.tableScrollContainer = this.createTableScrollContainer();
     this.cellSelection = this.createCellSelection();
@@ -172,8 +171,6 @@ export class FitViewModel implements ViewModel {
         this.cellSelection &&
         createContextMenu({
           operationExecutor: this.operationExecutor,
-          dictionary: this.dictionary,
-          imageRegistry: this.imageRegistry,
           getSelectedCells: this.getSelectedCells,
         })
       );
@@ -193,8 +190,6 @@ export class FitViewModel implements ViewModel {
         this.operationExecutor &&
         createToolbar({
           operationExecutor: this.operationExecutor,
-          dictionary: this.dictionary,
-          imageRegistry: this.imageRegistry,
           getSelectedCells: this.getSelectedCells,
         });
     } catch (error) {
@@ -206,11 +201,7 @@ export class FitViewModel implements ViewModel {
   private createStatusbar(): Statusbar | undefined {
     let statusbar: Statusbar | undefined;
     try {
-      statusbar = createStatusbar({
-        dictionary: this.dictionary,
-        tableViewer: this.tableViewer,
-        tableScrollContainer: this.tableScrollContainer,
-      });
+      statusbar = createStatusbar(this.tableViewer, this.tableScrollContainer);
     } catch (error) {
       if (!(error instanceof MissingFactoryError)) console.error(error);
     }
@@ -219,7 +210,7 @@ export class FitViewModel implements ViewModel {
 
   private createThemeSwitcher(): ThemeSwitcher | undefined {
     try {
-      return createThemeSwitcher(this.imageRegistry);
+      return createThemeSwitcher();
     } catch (error) {
       setCssVariables(FIT_CSS_COLOR_VARIABLES);
       if (error instanceof MissingFactoryError) return undefined;
@@ -229,10 +220,12 @@ export class FitViewModel implements ViewModel {
 
   private createSettingsBar(): Container | undefined {
     try {
-      return createSettingsBar({
-        dictionary: this.dictionary,
-        imageRegistry: this.imageRegistry,
-        themeSwitcher: this.themeSwitcher,
+      return createSettingsBar(this.themeSwitcher, (locale: string): void => {
+        const dataTypeTable: TableCellDataType | undefined =
+          asTableCellDataType(this.table);
+        if (!dataTypeTable) return;
+        dataTypeTable.setLocale(locale);
+        this.loadTable(this.table);
       });
     } catch (error) {
       if (error instanceof MissingFactoryError) return undefined;
@@ -247,11 +240,7 @@ export class FitViewModel implements ViewModel {
       return (
         filterTable &&
         this.operationExecutor &&
-        createColFilters({
-          dictionary: this.dictionary,
-          imageRegistry: this.imageRegistry,
-          operationExecutor: this.operationExecutor,
-        })
+        createColFilters(this.operationExecutor)
       );
     } catch (error) {
       if (error instanceof MissingFactoryError) return undefined;
@@ -307,12 +296,21 @@ export class FitViewModel implements ViewModel {
 
   private readonly loadTableWithoutFilters = (table: Table): void => {
     this.table = table;
+    this.initLocals();
     this.operationExecutor?.setTable(table);
     this.tableViewer.loadTable(table);
     this.tableScrollContainer.getScroller().scroll(0, 0);
     this.tableScrollContainer.renderModel();
     this.selectFirstCell();
   };
+
+  private initLocals(): void {
+    const dictionary: LanguageDictionary<string, string> =
+      getLanguageDictionary().register('en-US', enUS).register('de-DE', deDE);
+    const dataTypeTable: TableCellDataType | undefined = //
+      asTableCellDataType(this.table);
+    if (dataTypeTable) dictionary.setLocale(dataTypeTable.getLocale());
+  }
 
   private selectFirstCell(): void {
     if (this.table.getNumberOfRows() && this.table.getNumberOfCols()) {

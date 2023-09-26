@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs';
-import { Value } from '../../../dist/model/table.js';
 
+import { Value } from '../../../dist/model/index.js';
 import {
   Control,
-  ControlMap,
   Coord,
   InputControl,
   Size,
@@ -29,7 +28,7 @@ export class TstWindow implements Window {
   getSize(): Size | undefined {
     throw new Error('Method not implemented.');
   }
-  setControls(controls: ControlMap): this {
+  setControls(controls: Map<string, Control>): this {
     throw new Error('Method not implemented.');
   }
   addControl(id: string, control: Control): this {

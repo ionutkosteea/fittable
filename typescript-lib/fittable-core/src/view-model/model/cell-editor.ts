@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 
 import { MissingFactoryError } from '../../common/factory-error.js';
-import { CellCoord } from '../../model/cell-coord.js';
+import { CellCoord } from '../../model/table/cell-coord.js';
 import { OperationExecutor } from '../../operations/operation-core.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { NeighborCells } from './common/neighbor-cells.js';

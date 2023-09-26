@@ -26,7 +26,6 @@ import { CellEditorOpenDirective } from './controls-view/cell-editor/cell-editor
 import { ColorPickerComponent } from './controls-view/color-picker/color-picker.component';
 import { ComboComponent } from './controls-view/combo/combo.component';
 import { ContextMenuComponent } from './controls-view/context-menu/context-menu.component';
-import { MenuItemComponent } from './controls-view/context-menu/menu-item/menu-item.component';
 import {
   FilterPopupButtonComponent,
   FilterPopupWindowComponent,
@@ -37,6 +36,7 @@ import { SettingsBarComponent } from './controls-view/settings-bar/settings-bar.
 import { SettingsButtonComponent } from './controls-view/settings-bar/settings-button/settings-button.component';
 import { StatusbarComponent } from './controls-view/statusbar/statusbar.component';
 import { TableComponent } from './table-view/table.component';
+import { ContextMenuButtonComponent } from './controls-view/context-menu/context-menu-button.component';
 
 describe('FittableComponent', () => {
   let component: FittableComponent;
@@ -64,8 +64,8 @@ describe('FittableComponent', () => {
         InputComponent,
         PopupButtonComponent,
         ColorPickerComponent,
+        ContextMenuButtonComponent,
         ContextMenuComponent,
-        MenuItemComponent,
         BorderPopupButtonComponent,
         BorderTypeComponent,
         StatusbarComponent,

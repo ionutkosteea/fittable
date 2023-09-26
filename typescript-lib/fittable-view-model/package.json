@@ -1,6 +1,6 @@
 {
   "name": "fittable-view-model",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Fittable view model",
   "homepage": "https://fittable-499b2.web.app",
   "type": "module",
@@ -47,7 +47,7 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "fittable-core": "^3.0.1",
+    "fittable-core": "^4.0.0",
     "rxjs": "^7.8.0"
   },
   "files": [

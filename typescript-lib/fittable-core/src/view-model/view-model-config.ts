@@ -1,5 +1,4 @@
-import { LanguageDictionaryFactory } from './model/language-dictionary.js';
-import { ImageRegistryFactory } from './model/image-registry.js';
+import { ImageRegistry, ImageRegistryFactory } from './model/image-registry.js';
 import { CellEditorFactory } from './model/cell-editor.js';
 import {
   CellSelectionFactory,
@@ -37,7 +36,6 @@ export interface ViewModelConfig {
   disableVirtualRows?: boolean;
   disableVirtualCols?: boolean;
   viewModelFactory: ViewModelFactory;
-  languageDictionaryFactory: LanguageDictionaryFactory;
   imageRegistryFactory: ImageRegistryFactory;
   scrollContainerFactory: ScrollContainerFactory;
   tableViewerFactory: TableViewerFactory;
@@ -60,13 +58,16 @@ export interface ViewModelConfig {
 }
 
 let fitViewModelConfig: ViewModelConfig | undefined;
+let imageRegistry: ImageRegistry<string> | undefined;
 
 export function registerViewModelConfig(config: ViewModelConfig): void {
   fitViewModelConfig = { ...config };
+  imageRegistry = undefined;
 }
 
 export function unregisterViewModelConfig(): void {
   fitViewModelConfig = undefined;
+  imageRegistry = undefined;
 }
 
 export function getViewModelConfig(): ViewModelConfig {
@@ -77,4 +78,12 @@ export function getViewModelConfig(): ViewModelConfig {
       'The view model configuration has to be registered via the registerViewModelConfig function!'
     );
   }
+}
+
+export function getImageRegistry<Id extends string>(): ImageRegistry<Id> {
+  if (!imageRegistry) {
+    imageRegistry =
+      getViewModelConfig().imageRegistryFactory.createImageRegistry();
+  }
+  return imageRegistry as ImageRegistry<Id>;
 }

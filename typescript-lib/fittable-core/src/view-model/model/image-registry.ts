@@ -1,20 +1,14 @@
-import { getViewModelConfig } from '../view-model-config.js';
+export type Images<Id extends string> = { [id in Id]?: string };
 
-export type Images = { [id: string]: string };
-
-export interface ImageRegistry {
-  setImages(images: Images): this;
-  setImage(imgId: string, imgUrl: string): this;
-  removeImage(imgId: string): this;
-  removeAllImages(): this;
-  getImageIds(): string[];
-  getImageUrl(imgId: string): string | undefined;
+export interface ImageRegistry<Id extends string> {
+  setAll(images: Images<Id>): this;
+  set(id: Id, url: string): this;
+  remove(id: Id): this;
+  removeAll(): this;
+  getIds(): Id[];
+  getUrl(id: Id): string | undefined;
 }
 
 export interface ImageRegistryFactory {
-  createImageRegistry(): ImageRegistry;
-}
-
-export function createImageRegistry(): ImageRegistry {
-  return getViewModelConfig().imageRegistryFactory.createImageRegistry();
+  createImageRegistry(): ImageRegistry<string>;
 }

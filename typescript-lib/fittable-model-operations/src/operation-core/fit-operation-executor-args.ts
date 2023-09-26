@@ -32,13 +32,15 @@ import {
   ColRemoveOperationDtoArgs,
 } from '../operation-dtos/line/line-remove-operation-dto.js';
 import { StyleBorderOperationDtoArgs } from '../operation-dtos/style/style-border-operation-dto.js';
-import { StyleNameOperationDtoArgs } from '../operation-dtos/style/style-name-operation-dto.js';
+import { PaintFormatOperationDtoArgs } from '../operation-dtos/style/paint-format-operation-dto.js';
 import { StyleRemoveOperationDtoArgs } from '../operation-dtos/style/style-remove-operation-dto.js';
 import { StyleUpdateOperationDtoArgs } from '../operation-dtos/style/style-update-operation-dto.js';
 import { CellCutOperationDtoArgs } from '../operation-dtos/cell/cell-cut-operation-dto.js';
 import { MergedRegionsOperationStepDto } from '../operation-steps/merged-regions/merged-regions-operation-step.js';
 import { CellMergeOperationDtoArgs } from '../operation-dtos/merged-regions/cell-merge-operation-dto.js';
 import { CellUnmergeOperationDtoArgs } from '../operation-dtos/merged-regions/cell-unmerge-operation-dto.js';
+import { CellDataTypeOperationDtoArgs } from '../operation-dtos/cell/cell-data-type-operation-dto.js';
+import { CellDataTypeOperationStepDto } from '../operation-steps/cell/cell-data-type-operation-step.js';
 
 export type FitOperationArgs =
   | CellCutOperationDtoArgs
@@ -46,6 +48,7 @@ export type FitOperationArgs =
   | CellPasteOperationDtoArgs
   | CellRemoveOperationDtoArgs
   | CellValueOperationDtoArgs
+  | CellDataTypeOperationDtoArgs
   | CellMergeOperationDtoArgs
   | CellUnmergeOperationDtoArgs
   | RowHeightOperationDtoArgs
@@ -55,7 +58,7 @@ export type FitOperationArgs =
   | RowRemoveOperationDtoArgs
   | ColRemoveOperationDtoArgs
   | StyleBorderOperationDtoArgs
-  | StyleNameOperationDtoArgs
+  | PaintFormatOperationDtoArgs
   | StyleRemoveOperationDtoArgs
   | StyleUpdateOperationDtoArgs;
 
@@ -65,6 +68,7 @@ export type FitOperationDtoId =
   | CellPasteOperationDtoArgs['id']
   | CellRemoveOperationDtoArgs['id']
   | CellValueOperationDtoArgs['id']
+  | CellDataTypeOperationDtoArgs['id']
   | CellMergeOperationDtoArgs['id']
   | CellUnmergeOperationDtoArgs['id']
   | RowHeightOperationDtoArgs['id']
@@ -74,7 +78,7 @@ export type FitOperationDtoId =
   | RowRemoveOperationDtoArgs['id']
   | ColRemoveOperationDtoArgs['id']
   | StyleBorderOperationDtoArgs['id']
-  | StyleNameOperationDtoArgs['id']
+  | PaintFormatOperationDtoArgs['id']
   | StyleRemoveOperationDtoArgs['id']
   | StyleUpdateOperationDtoArgs['id'];
 
@@ -82,6 +86,7 @@ export type FitOperationStepId =
   | CellCopyOperationStepDto['id']
   | CellRemoveOperationStepDto['id']
   | CellValueOperationStepDto['id']
+  | CellDataTypeOperationStepDto['id']
   | RowHeightOperationStepDto['id']
   | ColWidthOperationStepDto['id']
   | RowInsertOperationStepDto['id']

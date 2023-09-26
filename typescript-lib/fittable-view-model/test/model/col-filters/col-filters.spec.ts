@@ -21,8 +21,6 @@ import {
   ColFilters,
   Control,
   createColFilters,
-  createImageRegistry,
-  createLanguageDictionary,
   PopupControl,
   registerViewModelConfig,
   unregisterViewModelConfig,
@@ -62,11 +60,7 @@ describe('Column filters', (): void => {
       .setCellValue(2, 1, 250);
     const operationExecutor: OperationExecutor = createOperationExecutor();
     operationExecutor.setTable(table);
-    colFilters = createColFilters({
-      operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
-    });
+    colFilters = createColFilters(operationExecutor);
     operationSubscriptions = new ColFilterOperationSubscriptions({
       operationExecutor,
       colFilters,

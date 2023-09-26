@@ -2,33 +2,42 @@ import {
   asTableRows,
   CellRange,
   createLineRange,
+  getLanguageDictionary,
   LineRange,
   LineRangeList,
   Table,
   Value,
 } from 'fittable-core/model';
-import { ViewModelConfig, getViewModelConfig } from 'fittable-core/view-model';
+import {
+  ControlArgs,
+  ViewModelConfig,
+  getViewModelConfig,
+} from 'fittable-core/view-model';
 
 import { FitControl } from '../../common/controls/fit-control.js';
 import { FitInputControl } from '../../common/controls/fit-input-control.js';
 import { FitUIOperationArgs } from '../../operation-executor/operation-args.js';
-import { FitControlArgs } from '../../toolbar/controls/common/fit-control-args.js';
+import { getImageRegistry } from '../../image-registry/fit-image-registry.js';
 
-export function createRowResizeMenuItem(args: FitControlArgs): FitInputControl {
-  return new RowResizeMenuItem(args);
+export function createRowResizeMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitInputControl {
+  return new RowResizeMenuItem(hideWindowFn, args);
 }
 
 class RowResizeMenuItem extends FitInputControl {
   private readonly config: ViewModelConfig = getViewModelConfig();
   private height?: number;
 
-  constructor(private readonly args: FitControlArgs) {
+  constructor(
+    private readonly hideWindowFn: () => void,
+    private readonly args: ControlArgs
+  ) {
     super();
     this.setType('menu-item');
-    this.setLabel((): string => args.dictionary.getText('Resize rows'));
-    this.setIcon((): string | undefined =>
-      args.imageRegistry.getImageUrl('height')
-    );
+    this.setLabel((): string => getLanguageDictionary().getText('Resize rows'));
+    this.setIcon((): string | undefined => getImageRegistry().getUrl('height'));
     this.setValid((): boolean =>
       this.height === undefined
         ? true
@@ -41,6 +50,7 @@ class RowResizeMenuItem extends FitInputControl {
     if (this.isValid()) {
       this.args.operationExecutor.run(this.getArgs());
       this.height = undefined;
+      this.hideWindowFn();
     } else {
       const oldValue: number | undefined = this.height;
       this.height = undefined;
@@ -76,14 +86,15 @@ class RowResizeMenuItem extends FitInputControl {
 }
 
 export function createRowInsertAboveMenuItem(
-  args: FitControlArgs
+  hideWindowFn: () => void,
+  args: ControlArgs
 ): FitInputControl {
   const control: FitInputControl = new FitInputControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Insert rows above'))
-    .setIcon((): string | undefined =>
-      args.imageRegistry.getImageUrl('insertAbove')
+    .setLabel((): string =>
+      getLanguageDictionary().getText('Insert rows above')
     )
+    .setIcon((): string | undefined => getImageRegistry().getUrl('insertAbove'))
     .setValueFn(() => 1);
   control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
@@ -95,6 +106,7 @@ export function createRowInsertAboveMenuItem(
       };
       args.operationExecutor.run(operationArgs);
       control.setValue(1);
+      hideWindowFn();
     } else {
       const oldValue: Value | undefined = control.getValue();
       control.setValue(1);
@@ -105,14 +117,15 @@ export function createRowInsertAboveMenuItem(
 }
 
 export function createRowInsertBelowMenuItem(
-  args: FitControlArgs
+  hideWindowFn: () => void,
+  args: ControlArgs
 ): FitInputControl {
   const control: FitInputControl = new FitInputControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Insert rows below'))
-    .setIcon((): string | undefined =>
-      args.imageRegistry.getImageUrl('insertBelow')
+    .setLabel((): string =>
+      getLanguageDictionary().getText('Insert rows below')
     )
+    .setIcon((): string | undefined => getImageRegistry().getUrl('insertBelow'))
     .setValueFn(() => 1);
   control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
@@ -125,6 +138,7 @@ export function createRowInsertBelowMenuItem(
       };
       args.operationExecutor.run(operationArgs);
       control.setValue(1);
+      hideWindowFn();
     } else {
       const oldValue: Value | undefined = control.getValue();
       control.setValue(1);
@@ -134,17 +148,21 @@ export function createRowInsertBelowMenuItem(
   return control;
 }
 
-export function createRowRemoveMenuItem(args: FitControlArgs): FitControl {
+export function createRowRemoveMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Remove rows'))
-    .setIcon((): string | undefined => args.imageRegistry.getImageUrl('remove'))
+    .setLabel((): string => getLanguageDictionary().getText('Remove rows'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('remove'))
     .setRun((): void => {
       const operationArgs: FitUIOperationArgs = {
         id: 'row-remove',
         selectedLines: getSelectedRows(args.getSelectedCells()),
       };
       args.operationExecutor.run(operationArgs);
+      hideWindowFn();
     });
 }
 

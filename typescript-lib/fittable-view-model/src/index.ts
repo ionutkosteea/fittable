@@ -1,8 +1,12 @@
+export {
+  FitLocale,
+  FitTextKey,
+  FitDictionary,
+} from './model/language/language-def.js';
+export * from './model/language/de-DE.js';
+export * from './model/language/en-US.js';
 export * from './model/image-registry/fit-image-ids.js';
 export * from './model/image-registry/fit-images.js';
-export * from './model/language-dictionary/language-dictionary-keys.js';
-export * from './model/language-dictionary/languages/de-DE.js';
-export * from './model/language-dictionary/languages/en-US.js';
 export {
   FitCssColorVariable,
   FitCssColorVariables,

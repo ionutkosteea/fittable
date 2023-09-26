@@ -1,4 +1,4 @@
-import { Table } from '../model/table.js';
+import { Table } from '../model/table/table.js';
 import {
   OperationExecutor,
   createOperationExecutor,

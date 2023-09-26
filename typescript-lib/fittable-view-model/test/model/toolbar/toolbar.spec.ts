@@ -24,8 +24,6 @@ import {
   asValueControl,
   Container,
   Control,
-  createImageRegistry,
-  createLanguageDictionary,
   createToolbar,
   PopupControl,
   registerViewModelConfig,
@@ -63,8 +61,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -95,8 +91,6 @@ describe('Toolbar', (): void => {
     let selectedCells: CellRange[] = [createCellRange(createCellCoord(0, 0))];
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => selectedCells,
     });
     const controlId: FitToolbarControlId = 'paint-format';
@@ -116,8 +110,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -136,8 +128,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -156,8 +146,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -178,8 +166,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -194,14 +180,12 @@ describe('Toolbar', (): void => {
     ).toBeTruthy();
   });
 
-  it('fomt family', (): void => {
+  it('font family', (): void => {
     const table: Table = createTable();
     const operationExecutor: OperationExecutor = createOperationExecutor();
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -209,7 +193,7 @@ describe('Toolbar', (): void => {
     const controlId: FitToolbarControlId = 'font-family';
     const control: Control = toolbar.getControl(controlId);
     const fontCombo: PopupControl | undefined = asPopupControl(control);
-    fontCombo?.setSelectedControl('Fantasy').run();
+    fontCombo?.getWindow().getControl('Fantasy').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
     expect(tbl?.getCellStyleName(0, 0) === 's0').toBeTruthy();
@@ -222,8 +206,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -243,8 +225,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -252,7 +232,7 @@ describe('Toolbar', (): void => {
     const controlId: FitToolbarControlId = 'color';
     const control: Control = toolbar.getControl(controlId);
     const fontCombo: PopupControl | undefined = asPopupControl(control);
-    fontCombo?.setSelectedControl('#d9d9d9').run();
+    fontCombo?.getWindow().getControl('#d9d9d9').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
     expect(tbl?.getCellStyleName(0, 0) === 's0').toBeTruthy();
@@ -265,8 +245,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -274,7 +252,7 @@ describe('Toolbar', (): void => {
     const controlId: FitToolbarControlId = 'background-color';
     const control: Control = toolbar.getControl(controlId);
     const fontCombo: PopupControl | undefined = asPopupControl(control);
-    fontCombo?.setSelectedControl('#d9d9d9').run();
+    fontCombo?.getWindow().getControl('#d9d9d9').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
     expect(tbl?.getCellStyleName(0, 0) === 's0').toBeTruthy();
@@ -289,8 +267,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -298,7 +274,7 @@ describe('Toolbar', (): void => {
     const controlId: FitToolbarControlId = 'horizontal-align';
     const control: Control = toolbar.getControl(controlId);
     const fontCombo: PopupControl | undefined = asPopupControl(control);
-    fontCombo?.setSelectedControl('align-center').run();
+    fontCombo?.getWindow().getControl('align-center').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
     expect(tbl?.getCellStyleName(0, 0) === 's0').toBeTruthy();
@@ -311,8 +287,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -320,7 +294,7 @@ describe('Toolbar', (): void => {
     const controlId: FitToolbarControlId = 'vertical-align';
     const control: Control = toolbar.getControl(controlId);
     const fontCombo: PopupControl | undefined = asPopupControl(control);
-    fontCombo?.setSelectedControl('align-middle').run();
+    fontCombo?.getWindow().getControl('align-middle').run();
 
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table);
     expect(tbl?.getCellStyleName(0, 0) === 's0').toBeTruthy();
@@ -335,8 +309,6 @@ describe('Toolbar', (): void => {
     operationExecutor.setTable(table);
     const toolbar: Container = createToolbar({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],

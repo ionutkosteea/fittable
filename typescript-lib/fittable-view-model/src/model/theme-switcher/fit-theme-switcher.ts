@@ -1,11 +1,11 @@
 import {
-  ImageRegistry,
   Theme,
   ThemeSwitcher,
   ThemeSwitcherFactory,
 } from 'fittable-core/view-model';
 
 import { setCssVariables } from '../common/css-variables.js';
+import { getImageRegistry } from '../image-registry/fit-image-registry.js';
 import { lightTheme } from './light-theme/theme.js';
 import { darkTheme } from './dark-theme/theme.js';
 
@@ -14,8 +14,6 @@ export type FitThemeName = 'Light mode' | 'Dark mode';
 export class FitThemeSwitcher implements ThemeSwitcher {
   private currentThemeName?: FitThemeName;
   private readonly themes: { [name in FitThemeName]?: Theme } = {};
-
-  constructor(private readonly imageRegistry: ImageRegistry) {}
 
   public registerTheme(name: FitThemeName, theme: Theme): this {
     this.themes[name] = theme;
@@ -33,7 +31,7 @@ export class FitThemeSwitcher implements ThemeSwitcher {
   public switch(name: FitThemeName): this {
     const theme: Theme | undefined = this.themes[name];
     if (!theme) throw new Error('Invalid theme name ' + name);
-    this.imageRegistry.setImages(theme.images);
+    getImageRegistry().setAll(theme.images);
     setCssVariables(theme.cssVariables);
     this.currentThemeName = name;
     return this;
@@ -45,8 +43,8 @@ export class FitThemeSwitcher implements ThemeSwitcher {
 }
 
 export class FitThemeSwitcherFactory implements ThemeSwitcherFactory {
-  public createThemeSwitcher(imageRegistry: ImageRegistry): FitThemeSwitcher {
-    return new FitThemeSwitcher(imageRegistry)
+  public createThemeSwitcher(): FitThemeSwitcher {
+    return new FitThemeSwitcher()
       .registerTheme('Light mode', lightTheme)
       .registerTheme('Dark mode', darkTheme)
       .switch('Light mode');

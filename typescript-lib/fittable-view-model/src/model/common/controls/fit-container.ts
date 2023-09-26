@@ -1,43 +1,43 @@
 import { Subject, Observable } from 'rxjs';
 
-import { Container, Control, ControlMap } from 'fittable-core/view-model';
+import { Container, Control } from 'fittable-core/view-model';
 
 export class FitContainer<Id extends string> implements Container {
-  private controls: ControlMap = {};
+  private controls: Map<Id, Control> = new Map();
   private focus = false;
   private afterSetFocus$: Subject<boolean> = new Subject();
 
-  public setControls(controls: ControlMap): this {
+  public setControls(controls: Map<Id, Control>): this {
     this.controls = controls;
     return this;
   }
 
   public addControl(id: Id, control: Control): this {
-    this.controls[id] = control;
+    this.controls.set(id, control);
     return this;
   }
 
   public getControlIds(): Id[] {
-    return Object.keys(this.controls) as Id[];
+    return [...this.controls.keys()];
   }
 
   public getControl(id: Id): Control {
-    const control: Control | undefined = this.controls[id];
+    const control: Control | undefined = this.controls.get(id);
     if (control) return control;
-    else throw new Error('Missing control for id: ' + id);
+    else throw new Error(`Missing control for id '${id}'`);
   }
 
   public getControls(): Control[] {
-    return Object.values(this.controls);
+    return [...this.controls.values()];
   }
 
   public removeControl(id: Id): this {
-    Reflect.deleteProperty(this.controls, id);
+    this.controls.delete(id);
     return this;
   }
 
   public clearControls(): this {
-    this.controls = {};
+    this.controls.clear();
     return this;
   }
 

@@ -1,4 +1,10 @@
-import { CellRange, Value, LineRange, Style } from 'fittable-core/model';
+import {
+  CellRange,
+  Value,
+  LineRange,
+  Style,
+  DataType,
+} from 'fittable-core/model';
 import { OperationId } from 'fittable-core/operations';
 
 import { ColFilterOperationArgs } from '../col-filters/col-filter-operation.js';
@@ -36,6 +42,12 @@ type ColRemoveArgs = OperationId<'column-remove'> & {
 type CellValueArgs = OperationId<'cell-value'> & {
   selectedCells: CellRange[];
   value?: Value;
+  dataType?: DataType;
+};
+
+type CellDataTypeArgs = OperationId<'cell-data-type'> & {
+  selectedCells: CellRange[];
+  dataType?: DataType;
 };
 
 type CellRemoveArgs = OperationId<'cell-remove'> & {
@@ -62,9 +74,10 @@ type CellUnmergeArgs = OperationId<'cell-unmerge'> & {
   selectedCells: CellRange[];
 };
 
-type StyleNameArgs = OperationId<'style-name'> & {
+type PaintFormatArgs = OperationId<'paint-format'> & {
   selectedCells: CellRange[];
   styleName?: string;
+  dataType?: DataType;
 };
 
 type StyleUpdateArgs = OperationId<'style-update'> & {
@@ -106,15 +119,16 @@ export type FitUIOperationArgs =
   | ColInsertArgs
   | ColRemoveArgs
   | CellValueArgs
+  | CellDataTypeArgs
   | CellRemoveArgs
   | CellCutArgs
   | CellCopyArgs
   | CellPasteArgs
   | CellMergeArgs
   | CellUnmergeArgs
-  | StyleNameArgs
+  | PaintFormatArgs
   | StyleUpdateArgs
   | StyleBorderArgs
   | ColFilterOperationArgs;
 
-export type FitUIOperationId = FitUIOperationArgs['id'] | 'style-name-copy';
+export type FitUIOperationId = FitUIOperationArgs['id'] | 'paint-format-copy';

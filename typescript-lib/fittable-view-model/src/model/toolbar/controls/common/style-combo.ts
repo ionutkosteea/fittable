@@ -1,63 +1,56 @@
-import { CellRange, createStyle, Style, Table } from 'fittable-core/model';
 import {
+  CellRange,
+  CssValue,
+  Style,
+  Table,
+  createStyle,
+} from 'fittable-core/model';
+import {
+  asSelectorWindow,
   asValueControl,
   Control,
+  ControlArgs,
+  SelectorWindow,
   ValueControl,
 } from 'fittable-core/view-model';
 
+import { FitSelectorWindow } from '../../../common/controls/fit-selector-window.js';
 import { FitUIOperationArgs } from '../../../operation-executor/operation-args.js';
 import { getFirstCellStyle } from '../../../common/style-functions.js';
 import { FitPopupControl } from '../../../common/controls/fit-popup-control.js';
 import { FitValueControl } from '../../../common/controls/fit-value-control.js';
-import { FitWindow } from '../../../common/controls/fit-window.js';
-import { FitControlArgs } from './fit-control-args.js';
 import { ControlUpdater } from './control-updater.js';
 
 export class StyleCombo
   extends FitPopupControl<string>
   implements ControlUpdater
 {
-  private styleAttName?: string;
-
-  constructor(private readonly args: FitControlArgs) {
-    super(new FitWindow());
-    this.setRun(this.createRunFn);
+  constructor(
+    private readonly styleAttName: string,
+    private readonly args: ControlArgs
+  ) {
+    super(new StyleComboWindow(styleAttName, args));
   }
 
-  private readonly createRunFn = (): void => {
-    if (!this.styleAttName) throw new Error('Style attribute is not defined!');
-    const selectedCells: CellRange[] = this.args.getSelectedCells();
-    const id: string | undefined = this.getSelectedControl();
-    if (!id) throw new Error('Control ID is not defined!');
-    const valueControl: ValueControl = this.getValueControl(id); //
-    const style: Style = createStyle() //
-      .set(this.styleAttName, valueControl.getValue());
-    const args: FitUIOperationArgs = {
-      id: 'style-update',
-      selectedCells,
-      styleSnippet: style,
-    };
-    this.args.operationExecutor.run(args);
-  };
-
-  public setStyleAttName(name: string): this {
-    this.styleAttName = name;
-    return this;
+  public override getWindow(): StyleComboWindow {
+    return super.getWindow() as StyleComboWindow;
   }
 
   public updateByCellSelection(): void {
-    if (!this.styleAttName) throw new Error('Style attribute is not defined!');
     const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
     const selectedCells: CellRange[] = this.args.getSelectedCells();
     const style: Style | undefined = getFirstCellStyle(table, selectedCells);
     const attValue: string | number | undefined = style?.get(this.styleAttName);
+    const selectorWindow: SelectorWindow | undefined = //
+      asSelectorWindow(this.getWindow());
+    if (!selectorWindow) throw new Error('Invalid selector window!');
     if (attValue) {
       let isSelectedControlId = false;
       for (const id of this.getWindow().getControlIds()) {
         const valueControl: ValueControl = this.getValueControl(id);
         if (valueControl.getValue() === attValue) {
-          this.setSelectedControl(id);
+          selectorWindow.setControlId(id);
           isSelectedControlId = true;
           return;
         }
@@ -67,18 +60,50 @@ export class StyleCombo
         const newControl: FitValueControl = new FitValueControl()
           .setLabel((): string => value)
           .setValue(value);
-        this.getWindow().addControl(value, newControl);
-        this.setSelectedControl(value);
+        selectorWindow.addControl(value, newControl).setControlId(value);
       }
     } else {
-      this.setSelectedControl('');
+      selectorWindow.setControlId(selectorWindow.getControlIds()[0]);
     }
   }
 
-  private readonly getValueControl = (id: string): ValueControl => {
+  public readonly getValueControl = (id: string): ValueControl => {
     const control: Control = this.getWindow().getControl(id);
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (valueControl) return valueControl;
     else throw new Error('Invalid value control for id ' + id);
   };
+}
+
+class StyleComboWindow extends FitSelectorWindow<string> {
+  constructor(
+    private readonly styleAttName: string,
+    private readonly args: ControlArgs
+  ) {
+    super();
+  }
+
+  public override addControl(id: string, control: Control): this {
+    super.addControl(id, control);
+    this.createRunFn(id, control);
+    return this;
+  }
+
+  private createRunFn(id: string, control: Control): void {
+    const valueControl: ValueControl | undefined = asValueControl(control);
+    if (!valueControl) throw new Error(`Invalid value control for id '$id'`);
+    valueControl.run = (): void => {
+      const selectedCells: CellRange[] = this.args.getSelectedCells();
+      const style: Style = createStyle() //
+        .set(this.styleAttName, valueControl.getValue() as CssValue);
+      const operationArgs: FitUIOperationArgs = {
+        id: 'style-update',
+        selectedCells,
+        styleSnippet: style,
+      };
+      this.args.operationExecutor.run(operationArgs);
+      this.setControlId(id);
+      this.setVisible(false);
+    };
+  }
 }

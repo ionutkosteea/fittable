@@ -19,8 +19,6 @@ import {
   asValueControl,
   Control,
   createContextMenu,
-  createImageRegistry,
-  createLanguageDictionary,
   registerViewModelConfig,
   unregisterViewModelConfig,
   Window,
@@ -51,8 +49,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(1, 0), createCellCoord(2, 0)),
       ],
@@ -74,8 +70,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -96,8 +90,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -118,8 +110,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0), createCellCoord(1, 0)),
       ],
@@ -137,8 +127,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 1), createCellCoord(0, 2)),
       ],
@@ -160,8 +148,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -182,8 +168,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -204,8 +188,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0), createCellCoord(0, 1)),
       ],
@@ -226,8 +208,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -249,8 +229,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0)),
       ],
@@ -268,8 +246,6 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0), createCellCoord(1, 2)),
       ],
@@ -289,15 +265,12 @@ describe('Context menu', (): void => {
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
-      dictionary: createLanguageDictionary(),
-      imageRegistry: createImageRegistry(),
       getSelectedCells: (): CellRange[] => [
         createCellRange(createCellCoord(0, 0), createCellCoord(1, 2)),
       ],
     });
     const controlId: FitContextMenuControlId = 'unmerge';
     contextMenu.getControl(controlId).run();
-
     expect(table.getRowSpan(0, 0)).toBeUndefined();
     expect(table.getColSpan(0, 0)).toBeUndefined();
   });

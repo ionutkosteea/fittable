@@ -1,18 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 
-import { createTable, registerModelConfig } from 'fittable-core/model';
+import {
+  createTable,
+  getLanguageDictionary,
+  registerModelConfig,
+} from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
-import { FIT_MODEL_CONFIG } from 'fittable-model';
+import {
+  FIT_MODEL_CONFIG,
+  FitLocale,
+  FitTextKey as FitModelTextKey,
+  FitTable,
+} from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 import {
+  FitTextKey as FitViewModelTextKey,
   createFitViewModelConfig,
-  FitLanguageCode,
-  FitTextKey,
 } from 'fittable-view-model';
 
 import { TopicTitle } from '../../common/topic-title.model';
@@ -34,10 +42,10 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
     { image: 'language-dictionary-ts-02.jpg' },
     { image: 'language-dictionary-ts-03.jpg' },
     { image: 'language-dictionary-ts-04.jpg' },
-    { image: 'language-dictionary-ts-05.jpg' },
   ];
   public readonly buttons: Button[] = [];
   public fit!: FittableDesigner;
+  private table?: FitTable;
 
   public ngOnInit(): void {
     // The register functions should be called, in most cases, from the Angular main module.
@@ -52,17 +60,18 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
       })
     );
 
-    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
+    const locale: CustomLocale = 'fr-FR';
+    getLanguageDictionary().register(locale, frFr);
 
-    this.setFrenchAsCurrentLanguage();
+    this.table = createTable<FitTable>()
+      .setLocale(locale)
+      .setCellValue(1, 1, 1000.123)
+      .setCellDataType(1, 1, { name: 'number', format: '# #,00' })
+      .setCellValue(1, 2, true)
+      .setCellValue(1, 3, false);
+    this.fit = createFittableDesigner(this.table);
+
     this.createButtons();
-  }
-
-  private setFrenchAsCurrentLanguage(): void {
-    const french: CustomLanguageCode = 'fr-FR';
-    this.fit.viewModel.dictionary
-      .registerLanguage(french, frFr)
-      .setCurrentLanguage(french);
   }
 
   private createButtons(): void {
@@ -75,8 +84,8 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
     return {
       getLabel: (): string => 'English',
       run: (): void => {
-        const lang: CustomLanguageCode = 'en-US';
-        this.fit.viewModel.dictionary.setCurrentLanguage(lang);
+        const locale: CustomLocale = 'en-US';
+        this.table?.setLocale(locale);
       },
     };
   }
@@ -85,8 +94,8 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
     return {
       getLabel: (): string => 'German',
       run: (): void => {
-        const lang: CustomLanguageCode = 'de-DE';
-        this.fit.viewModel.dictionary.setCurrentLanguage(lang);
+        const locale: CustomLocale = 'de-DE';
+        this.table?.setLocale(locale);
       },
     };
   }
@@ -95,24 +104,26 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
     return {
       getLabel: (): string => 'French',
       run: (): void => {
-        const lang: CustomLanguageCode = 'fr-FR';
-        this.fit.viewModel.dictionary.setCurrentLanguage(lang);
+        const locale: CustomLocale = 'fr-FR';
+        this.table?.setLocale(locale);
       },
     };
   }
 
   public getConsoleText(): string {
-    return (
-      'Current language: ' + this.fit.viewModel.dictionary.getCurrentLanguage()
-    );
+    return 'Current locale: ' + getLanguageDictionary().getLocale();
   }
 }
 
-type CustomLanguageCode = FitLanguageCode | 'fr-FR';
-type CustomTextKey = FitTextKey | 'fr-FR';
+type CustomLocale = FitLocale | 'fr-FR';
+type CustomTextKey = FitModelTextKey | FitViewModelTextKey | 'fr-FR';
 type CustomDictionary = { [key in CustomTextKey]?: string };
 
 const frFr: CustomDictionary = {
+  thousandSeparator: ' ',
+  decimalPoint: ',',
+  TRUE: 'VRAI',
+  FALSE: 'FAUX',
   'Clear cells': 'Effacer les cellules',
   'Remove cells': 'Supprimer des cellules',
   'Cut cells': 'Cellules coupées',

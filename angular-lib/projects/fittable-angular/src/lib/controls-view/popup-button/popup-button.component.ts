@@ -1,39 +1,43 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { CssStyle } from 'fittable-core/model';
-import {
-  PopupControl,
-  WindowListener,
-  createWindowListener,
-  Control,
-} from 'fittable-core/view-model';
+import { PopupControl, Window } from 'fittable-core/view-model';
 
-import { PopupControlComponent } from '../common/popup-control-component.model';
-import { createToggleStyle } from '../common/style-functions.model';
+import { WindowComponent } from '../common/window-component.model';
 
 @Component({
   selector: 'fit-popup-button',
-  templateUrl: './popup-button.component.html',
+  template: `
+    <div class="fit-relative-container">
+      <fit-button [model]="popupControl"></fit-button>
+      <div
+        class="fit-button-menu"
+        [ngStyle]="getWindowStyle()"
+        (mousedown)="onMouseDown($event)"
+        (window:mousedown)="onGlobalMouseDown()"
+      >
+        <div class="fit-toolbar-button-bar">
+          <div
+            class="fit-toolbar-button"
+            *ngFor="let id of getControlIds()"
+            [ngStyle]="{ backgroundImage: getControlIcon(id) }"
+            (click)="runControl(id)"
+            [title]="getControlLabel(id)"
+          >
+            &nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
 })
-export class PopupButtonComponent
-  extends PopupControlComponent
-  implements OnInit
-{
-  @Input() override model!: PopupControl;
+export class PopupButtonComponent extends WindowComponent implements OnInit {
+  @Input('model') popupControl!: PopupControl;
 
-  public override windowListener!: WindowListener;
-
-  public ngOnInit(): void {
-    this.windowListener = createWindowListener(this.model.getWindow());
+  public override getWindow(): Window {
+    return this.popupControl.getWindow();
   }
 
-  public getButtonStyle(): CssStyle | null {
-    let style: CssStyle | null = createToggleStyle(this.model);
-    const control: Control | undefined = this.getSelectedControl();
-    if (control) {
-      if (!style) style = {};
-      style['background-image'] = control.getIcon();
-    }
-    return style;
+  public ngOnInit(): void {
+    this.init();
   }
 }

@@ -1,3 +1,4 @@
+import { MissingFactoryError, TwoDimensionalMap } from 'fittable-core/common';
 import {
   createStyle4Dto,
   Style,
@@ -10,6 +11,13 @@ import {
   Value,
   ColConditionFn,
   TableColFilter,
+  TableCellDataType,
+  createCellNumberFormatter,
+  createCellDateFormatter,
+  DataType,
+  createCellBooleanFormatter,
+  getLanguageDictionary,
+  LanguageDictionary,
 } from 'fittable-core/model';
 
 import {
@@ -29,10 +37,17 @@ export class FitTable
     TableCols,
     TableStyles,
     TableMergedRegions,
-    TableColFilter
+    TableColFilter,
+    TableCellDataType
 {
+  private formatedCellValues: TwoDimensionalMap<string> =
+    new TwoDimensionalMap();
+
   constructor(
-    private readonly dto: FitTableDto = { numberOfRows: 5, numberOfCols: 5 }
+    private readonly dto: FitTableDto = {
+      numberOfRows: 5,
+      numberOfCols: 5,
+    }
   ) {}
 
   public getDto(): FitTableDto {
@@ -69,19 +84,22 @@ export class FitTable
       delete this.getCells()[rowId][colId]['value'];
       !this.hasCell(rowId, colId) && delete this.getCells()[rowId][colId];
     }
+    this.formatedCellValues.deleteValue(rowId, colId);
     return this;
   }
 
   public hasCell(rowId: number, colId: number): boolean {
     return (
       this.getCellValue(rowId, colId) !== undefined ||
-      this.getCellStyleName(rowId, colId) !== undefined
+      this.getCellStyleName(rowId, colId) !== undefined ||
+      this.getCellDataType(rowId, colId) !== undefined
     );
   }
 
   public removeCell(rowId: number, colId: number): this {
     if (this.dto.cells && this.dto.cells[rowId]) {
       delete this.dto.cells[rowId][colId];
+      this.formatedCellValues.deleteValue(rowId, colId);
     }
     return this;
   }
@@ -95,7 +113,10 @@ export class FitTable
   }
 
   public removeRowCells(rowId: number): this {
-    this.dto.cells && delete this.dto.cells[rowId];
+    if (this.dto.cells) {
+      delete this.dto.cells[rowId];
+      this.formatedCellValues.deleteRow(rowId);
+    }
     return this;
   }
 
@@ -104,6 +125,7 @@ export class FitTable
       const row: FitMapDto<FitCellDto> = { ...this.dto.cells[rowId] };
       delete this.dto.cells[rowId];
       this.dto.cells[rowId + move] = row;
+      this.formatedCellValues.deleteRow(rowId);
     }
     return this;
   }
@@ -114,6 +136,7 @@ export class FitTable
         delete this.dto.cells[rowId][colId];
       }
     }
+    this.formatedCellValues.deleteCol(colId);
     return this;
   }
 
@@ -127,6 +150,7 @@ export class FitTable
           row[colId + move] = cell;
         }
       }
+      this.formatedCellValues.deleteCol(colId);
     }
     return this;
   }
@@ -332,6 +356,142 @@ export class FitTable
     );
   }
 
+  public filterByCol(colId: number, conditionFn: ColConditionFn): FitTable {
+    let numberOfRows = 0;
+    const filterDto: FitTableDto = {
+      locale: this.dto.locale,
+      numberOfRows: numberOfRows,
+      numberOfCols: this.dto.numberOfCols,
+      styles: this.dto.styles,
+      cols: this.dto.cols,
+    };
+    filterDto.cells = {};
+    filterDto.rows = {};
+    for (let rowId = 0; rowId < this.getNumberOfRows(); rowId++) {
+      const value: Value | undefined = this.getCellValue(rowId, colId);
+      if (!conditionFn(rowId, colId, value)) continue;
+      if (this.getCells()[rowId]) {
+        filterDto.cells[numberOfRows] = this.getCells()[rowId];
+      }
+      if (this.dto.rows && this.dto.rows[rowId]) {
+        filterDto.rows[numberOfRows] = this.dto.rows[rowId];
+      }
+      numberOfRows++;
+    }
+    filterDto.numberOfRows = numberOfRows;
+    this.formatedCellValues.clearAll();
+    return new FitTable(filterDto);
+  }
+
+  public getLocale(): string {
+    return this.dto.locale ?? 'en-US';
+  }
+
+  public setLocale(locale: string): this {
+    if (locale !== this.dto.locale) {
+      const dictionary: LanguageDictionary<string, string> = //
+        getLanguageDictionary().setLocale(locale);
+      const prevDictionary: LanguageDictionary<string, string> = //
+        dictionary.clone().setLocale(this.getLocale());
+      this.adaptNumberFormatsToNewLocale(dictionary, prevDictionary);
+      this.dto.locale = locale;
+    }
+    return this;
+  }
+
+  private adaptNumberFormatsToNewLocale(
+    dictionary: LanguageDictionary<string, string>,
+    prevDictionary: LanguageDictionary<string, string>
+  ): void {
+    this.forEachCell((rowId: number, colId: number): void => {
+      const dataType: DataType | undefined = this.getCellDataType(rowId, colId);
+      if (!dataType || dataType.name !== 'number' || !dataType.format) return;
+      const [part1, part2] = dataType.format //
+        .split(prevDictionary.getText('thousandSeparator'));
+      if (part2) {
+        dataType.format =
+          part1 +
+          dictionary.getText('thousandSeparator') +
+          part2.replace(
+            prevDictionary.getText('decimalPoint'),
+            dictionary.getText('decimalPoint')
+          );
+      } else {
+        dataType.format = part1.replace(
+          prevDictionary.getText('decimalPoint'),
+          dictionary.getText('decimalPoint')
+        );
+      }
+    });
+    this.formatedCellValues.clearAll();
+  }
+
+  public getCellDataType(rowId: number, colId: number): DataType | undefined {
+    return this.getCellDto(rowId, colId)?.dataType;
+  }
+
+  public setCellDataType(
+    rowId: number,
+    colId: number,
+    dataType?: DataType
+  ): this {
+    if (dataType) {
+      this.createMatrixCell('cells', rowId, colId);
+      this.getCells()[rowId][colId]['dataType'] = dataType;
+    } else if (this.hasMatrixCell('cells', rowId, colId)) {
+      delete this.getCells()[rowId][colId]['dataType'];
+      !this.hasCell(rowId, colId) && delete this.getCells()[rowId][colId];
+    }
+    this.formatedCellValues.deleteValue(rowId, colId);
+    return this;
+  }
+
+  public getFormatedCellValue(
+    rowId: number,
+    colId: number
+  ): string | undefined {
+    if (this.formatedCellValues.hasValue(rowId, colId)) {
+      return this.formatedCellValues.getValue(rowId, colId);
+    } else {
+      const formatedValue: string | undefined = //
+        this.calcFormatedCellValue(rowId, colId);
+      if (formatedValue !== undefined) {
+        this.formatedCellValues.setValue(rowId, colId, formatedValue);
+      }
+      return formatedValue;
+    }
+  }
+
+  private calcFormatedCellValue(
+    rowId: number,
+    colId: number
+  ): string | undefined {
+    const value: Value | undefined = this.getCellValue(rowId, colId);
+    if (value === undefined) return undefined;
+    try {
+      const cellType: DataType['name'] = this.getCellType(rowId, colId);
+      const dataType: DataType | undefined = this.getCellDataType(rowId, colId);
+      if (cellType === 'number') {
+        return createCellNumberFormatter().formatValue(value, dataType?.format);
+      } else if (cellType === 'date-time') {
+        return createCellDateFormatter().formatValue(value, dataType?.format);
+      } else if (cellType === 'boolean') {
+        return createCellBooleanFormatter().formatValue(value);
+      }
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      return '#InvalidFormat';
+    }
+    return undefined;
+  }
+
+  public getCellType(rowId: number, colId: number): DataType['name'] {
+    return (
+      this.getCellDataType(rowId, colId)?.name ??
+      ((typeof this.getCellValue(rowId, colId) ?? 'string') as DataType['name'])
+    );
+  }
+
   private getMergedCellDto(
     rowId: number,
     colId: number
@@ -341,6 +501,16 @@ export class FitTable
       this.getMergedCells()[rowId] &&
       this.getMergedCells()[rowId][colId]
     );
+  }
+
+  private getCells(): FitMatrixDto<FitCellDto> {
+    if (this.dto.cells) return this.dto.cells;
+    else throw new Error('Cells are not defined!');
+  }
+
+  private getMergedCells(): FitMatrixDto<FitMergedCellDto> {
+    if (this.dto.mergedCells) return this.dto.mergedCells;
+    else throw new Error('Merged cells are not defined!');
   }
 
   private createMatrixCell(
@@ -365,41 +535,6 @@ export class FitTable
     if (!cells) return false;
     const rows: FitMapDto<object> | undefined = cells[rowId];
     return rows && rows[colId] ? true : false;
-  }
-
-  public filterByCol(colId: number, conditionFn: ColConditionFn): FitTable {
-    let numberOfRows = 0;
-    const filterDto: FitTableDto = {
-      numberOfRows: numberOfRows,
-      numberOfCols: this.dto.numberOfCols,
-      styles: this.dto.styles,
-      cols: this.dto.cols,
-    };
-    filterDto.cells = {};
-    filterDto.rows = {};
-    for (let rowId = 0; rowId < this.getNumberOfRows(); rowId++) {
-      const value: Value | undefined = this.getCellValue(rowId, colId);
-      if (!conditionFn(rowId, colId, value)) continue;
-      if (this.getCells()[rowId]) {
-        filterDto.cells[numberOfRows] = this.getCells()[rowId];
-      }
-      if (this.dto.rows && this.dto.rows[rowId]) {
-        filterDto.rows[numberOfRows] = this.dto.rows[rowId];
-      }
-      numberOfRows++;
-    }
-    filterDto.numberOfRows = numberOfRows;
-    return new FitTable(filterDto);
-  }
-
-  private getCells(): FitMatrixDto<FitCellDto> {
-    if (this.dto.cells) return this.dto.cells;
-    else throw new Error('Cells are not defined!');
-  }
-
-  private getMergedCells(): FitMatrixDto<FitMergedCellDto> {
-    if (this.dto.mergedCells) return this.dto.mergedCells;
-    else throw new Error('Merged cells are not defined!');
   }
 }
 

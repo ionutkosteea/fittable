@@ -1,11 +1,9 @@
 import { Observable } from 'rxjs';
 
 import { implementsTKeys } from '../../common/core-functions.js';
-import { Value } from '../../model/table.js';
-import { CellRange } from '../../model/cell-range.js';
+import { Value } from '../../model/table/table.js';
+import { CellRange } from '../../model/table/cell-range.js';
 import { OperationExecutor } from '../../operations/operation-core.js';
-import { LanguageDictionary } from './language-dictionary.js';
-import { ImageRegistry } from './image-registry.js';
 
 export interface Control {
   getLabel(): string;
@@ -65,10 +63,9 @@ export interface FocusableObject {
   setFocus(focus: boolean, ignoreTrigger?: boolean): this;
   onAfterSetFocus$(): Observable<boolean>;
 }
-export type ControlMap = { [id: string]: Control };
 
 export interface Container extends FocusableObject {
-  setControls(controls: ControlMap): this;
+  setControls(controls: Map<string, Control>): this;
   addControl(id: string, control: Control): this;
   getControlIds(): string[];
   getControl(id: string): Control;
@@ -90,27 +87,34 @@ export interface Size {
 export interface Window extends Container {
   isVisible(): boolean;
   setVisible(visible: boolean): this;
-  getPosition(): Coord;
+  getPosition(): Coord | undefined;
   setPosition(coord: Coord): this;
   getSize(): Size | undefined;
   setSize(size?: Size): this;
 }
 
+export interface SelectorWindow extends Window {
+  setControlId(id?: string): this;
+  getControlId(): string | undefined;
+}
+
+export function asSelectorWindow(window?: Window): SelectorWindow | undefined {
+  return implementsTKeys<SelectorWindow>(window, ['getControlId'])
+    ? window
+    : undefined;
+}
+
 export interface PopupControl extends Control {
   getWindow(): Window;
-  setSelectedControl(id: string): this;
-  getSelectedControl(): string | undefined;
 }
 
 export function asPopupControl(control?: Control): PopupControl | undefined {
-  return implementsTKeys<PopupControl>(control, ['getSelectedControl'])
+  return implementsTKeys<PopupControl>(control, ['getWindow'])
     ? control
     : undefined;
 }
 
 export interface ControlArgs {
   operationExecutor: OperationExecutor;
-  dictionary: LanguageDictionary;
-  imageRegistry: ImageRegistry;
   getSelectedCells(): CellRange[];
 }

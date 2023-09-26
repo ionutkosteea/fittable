@@ -1,6 +1,6 @@
-import { Value } from '../../model/table.js';
-import { Style } from '../../model/style.js';
-import { Table } from '../../model/table.js';
+import { DataType, Value } from '../../model/table/table.js';
+import { Style } from '../../model/table/style.js';
+import { Table } from '../../model/table/table.js';
 import { getViewModelConfig } from '../view-model-config.js';
 
 export interface TableViewer {
@@ -27,6 +27,9 @@ export interface TableViewer {
   forEachMergedCell(cell: (rowId: number, colId: number) => void): void;
   getCellStyle(rowId: number, colId: number): Style | undefined;
   getCellValue(rowId: number, colId: number): Value | undefined;
+  getCellDataType(rowId: number, colId: number): DataType | undefined;
+  getCellType(rowId: number, colId: number): DataType['name'];
+  getFormatedCellValue(rowId: number, colId: number): string | undefined;
   resetRowProperties(): this;
   resetColProperties(): this;
   resetMergedRegions(): this;

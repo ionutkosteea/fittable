@@ -1,25 +1,33 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 
-import {
-  WindowListener,
-  createWindowListener,
-  PopupControl,
-} from 'fittable-core/view-model';
+import { PopupControl } from 'fittable-core/view-model';
+
 import { PopupControlComponent } from '../../common/popup-control-component.model';
 
 @Component({
   selector: 'fit-settings-button',
-  templateUrl: './settings-button.component.html',
+  template: `
+    <div class="fit-relative-container">
+      <div
+        class="fit-settingsbar-button"
+        #button
+        [ngStyle]="{ backgroundImage: getIcon() }"
+        (click)="run()"
+        [title]="getLabel()"
+      >
+        &nbsp;
+      </div>
+      <fit-context-menu
+        [model]="getWindow()"
+        [left]="'auto'"
+        [top]="'1.25rem'"
+        [right]="0"
+        [iconCol]="'right'"
+      ></fit-context-menu>
+    </div>
+  `,
 })
-export class SettingsButtonComponent
-  extends PopupControlComponent
-  implements OnInit
-{
-  @Input() override model!: PopupControl;
-
-  public override windowListener!: WindowListener;
-
-  public ngOnInit(): void {
-    this.windowListener = createWindowListener(this.model.getWindow());
-  }
+export class SettingsButtonComponent extends PopupControlComponent {
+  @Input('model') override control!: PopupControl;
+  @ViewChild('button') buttonRef?: ElementRef;
 }

@@ -7,6 +7,9 @@ import {
   CellCoord,
   asTableStyles,
   createStyleWithUndefinedProperties,
+  DataType,
+  TableCellDataType,
+  asTableCellDataType,
 } from 'fittable-core/model';
 import {
   OperationDto,
@@ -23,8 +26,13 @@ import {
 import { CellValueOperationDtoVisitor } from '../../utils/cell/cell-value-operation-dto-visitor.js';
 import { CellValueOperationStepDto } from '../../operation-steps/cell/cell-value-operation-step.js';
 import { StyleOperationStepDto } from '../../operation-steps/style/style-operation-step.js';
+import { CellDataTypeOperationStepDto } from '../../operation-steps/cell/cell-data-type-operation-step.js';
 import { StyleUpdateOperationDtoBuilder } from '../style/style-update-operation-dto.js';
 import { StyleRemoveOperationDtoBuilder } from '../style/style-remove-operation-dto.js';
+import {
+  CellDataTypeOperationDtoArgs,
+  CellDataTypeOperationDtoBuilder,
+} from './cell-data-type-operation-dto.js';
 
 export type CellPasteOperationDtoArgs = OperationId<'cell-paste'> & {
   selectedCells: CellRange[];
@@ -34,6 +42,10 @@ export class CellPasteOperationDtoBuilder {
   public readonly cellValueStepDto: CellValueOperationStepDto = {
     id: 'cell-value',
     values: [],
+  };
+  public readonly cellDataTypeStepDto: CellDataTypeOperationStepDto = {
+    id: 'cell-data-type',
+    dataTypes: [],
   };
   public readonly styleStepDto: StyleOperationStepDto = {
     id: 'style-changes',
@@ -46,6 +58,10 @@ export class CellPasteOperationDtoBuilder {
     id: 'cell-value',
     values: [],
   };
+  public readonly undoCellDataTypeStepDto: CellDataTypeOperationStepDto = {
+    id: 'cell-data-type',
+    dataTypes: [],
+  };
   public readonly undoStyleStepDto: StyleOperationStepDto = {
     id: 'style-changes',
     createStyles: [],
@@ -54,9 +70,11 @@ export class CellPasteOperationDtoBuilder {
     cellStyleNames: [],
   };
   private readonly operationDto: OperationDto;
+  private readonly dataTypeTable?: Table & TableCellDataType;
   private readonly styledTable?: Table & TableStyles;
 
   private newValues: CellRangeAddressObjects<Value | undefined>;
+  private newDataTypes: CellRangeAddressObjects<DataType | undefined>;
   private newStyles: CellRangeAddressObjects<string | undefined>;
   private htmlTableNumberOfRows = 0;
   private htmlTableNumberOfCols = 0;
@@ -66,15 +84,25 @@ export class CellPasteOperationDtoBuilder {
     private readonly table: Table,
     private readonly args: CellPasteOperationDtoArgs
   ) {
+    this.dataTypeTable = asTableCellDataType(this.table);
     this.styledTable = asTableStyles(table);
     this.operationDto = {
       id: args.id,
-      steps: [this.cellValueStepDto, this.styleStepDto],
+      steps: [
+        this.cellValueStepDto,
+        this.cellDataTypeStepDto,
+        this.styleStepDto,
+      ],
       undoOperation: {
-        steps: [this.undoCellValueStepDto, this.undoStyleStepDto],
+        steps: [
+          this.undoCellValueStepDto,
+          this.undoCellDataTypeStepDto,
+          this.undoStyleStepDto,
+        ],
       },
     };
     this.newValues = new CellRangeAddressObjects();
+    this.newDataTypes = new CellRangeAddressObjects();
     this.newStyles = new CellRangeAddressObjects();
     if (this.styledTable) {
       this.maxStyleNameUid = getMaxStyleNameUid(this.styledTable);
@@ -91,6 +119,7 @@ export class CellPasteOperationDtoBuilder {
     );
     this.spreadCellsOverSelection();
     this.updateCellValues();
+    this.updateCellDataTypes();
     this.updateCellStyles();
     return this.operationDto;
   }
@@ -144,6 +173,7 @@ export class CellPasteOperationDtoBuilder {
     const rowId: number = cellRange.getFrom().getRowId() + htmlRowId;
     const colId: number = cellRange.getFrom().getColId() + htmlColId;
     this.prepareNewValue(rowId, colId, htmlCell);
+    this.prepareNewDataType(rowId, colId, htmlCell);
     this.prepareNewStyle(rowId, colId, htmlCell);
     this.htmlTableNumberOfRows = Math.max(
       this.htmlTableNumberOfRows,
@@ -190,7 +220,31 @@ export class CellPasteOperationDtoBuilder {
   ): void {
     let cellValue: string | undefined = htmlCell.innerHTML ?? undefined;
     cellValue = cellValue?.replaceAll('<br>', '\n');
-    this.newValues.set(cellValue, rowId, colId);
+    let value: Value | undefined = undefined;
+    if (cellValue !== undefined) {
+      try {
+        value = JSON.parse(cellValue);
+      } catch {
+        value = cellValue;
+      }
+    }
+    this.newValues.set(value, rowId, colId);
+  }
+
+  private prepareNewDataType(
+    rowId: number,
+    colId: number,
+    htmlCell: HTMLTableCellElement
+  ): void {
+    if (!this.dataTypeTable) return;
+    const dataTypeName: string | null = //
+      htmlCell.getAttribute('data-data-type-name');
+    if (!dataTypeName) return;
+    const dataType: DataType = { name: dataTypeName as DataType['name'] };
+    const dataTypeFormat: string | null = //
+      htmlCell.getAttribute('data-data-type-format');
+    if (dataTypeFormat) dataType.format = dataTypeFormat;
+    this.newDataTypes.set(dataType, rowId, colId);
   }
 
   private prepareNewStyle(
@@ -216,6 +270,7 @@ export class CellPasteOperationDtoBuilder {
       selectedNumberOfCols / this.htmlTableNumberOfCols
     );
     this.multiplyCellValues(multiplyNumberOfRows, multiplyNumberOfCols);
+    this.multiplyCellDataTypes(multiplyNumberOfRows, multiplyNumberOfCols);
     this.multiplyCellStyles(multiplyNumberOfRows, multiplyNumberOfCols);
   }
 
@@ -243,6 +298,33 @@ export class CellPasteOperationDtoBuilder {
       }
     );
     this.newValues.append(multipliedCellValues);
+  }
+
+  private multiplyCellDataTypes(
+    multiplyNumberOfRows: number,
+    multiplyNumberOfCols: number
+  ): void {
+    const multipliedCellDataTypes: CellRangeAddressObjects<
+      DataType | undefined
+    > = new CellRangeAddressObjects();
+    this.newDataTypes.forEach(
+      (dataType: DataType | undefined, cellRanges: CellRange[]): void => {
+        for (const cellRange of cellRanges) {
+          for (let i = 0; i < multiplyNumberOfRows; i++) {
+            for (let j = 0; j < multiplyNumberOfCols; j++) {
+              cellRange.forEachCell((rowId: number, colId: number): void => {
+                multipliedCellDataTypes.set(
+                  dataType,
+                  rowId + i * this.htmlTableNumberOfRows,
+                  colId + j * this.htmlTableNumberOfCols
+                );
+              });
+            }
+          }
+        }
+      }
+    );
+    this.newDataTypes.append(multipliedCellDataTypes);
   }
 
   private multiplyCellStyles(
@@ -285,6 +367,27 @@ export class CellPasteOperationDtoBuilder {
         }
       }
     );
+  }
+
+  private updateCellDataTypes(): void {
+    if (!this.dataTypeTable) return;
+    for (const dataType of this.newDataTypes.getAllObjects()) {
+      const selectedCells: CellRange[] =
+        this.newDataTypes.getAddress(dataType) ?? [];
+      const args: CellDataTypeOperationDtoArgs = {
+        id: 'cell-data-type',
+        selectedCells,
+        dataType,
+      };
+      const builder: CellDataTypeOperationDtoBuilder =
+        new CellDataTypeOperationDtoBuilder(this.dataTypeTable, args);
+      builder.build();
+      this.cellDataTypeStepDto.dataTypes = this.cellDataTypeStepDto.dataTypes //
+        .concat(builder.dataTypeStepDto.dataTypes);
+      this.undoCellDataTypeStepDto.dataTypes =
+        this.undoCellDataTypeStepDto.dataTypes //
+          .concat(builder.undoDataTypeStepDto.dataTypes);
+    }
   }
 
   private updateCellStyles(): void {

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { Table } from '../../../dist/model/table.js';
+import { Table } from '../../../dist/model/index.js';
 import {
   OperationDto,
   OperationDtoFactoryClass,

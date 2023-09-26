@@ -1,6 +1,5 @@
 export * from './model/common/rectangle.js';
 export * from './model/common/neighbor-cells.js';
-export * from './model/language-dictionary.js';
 export * from './model/image-registry.js';
 export * from './model/cell-editor.js';
 export * from './model/cell-selection.js';

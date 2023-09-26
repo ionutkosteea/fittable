@@ -49,24 +49,124 @@ const getFitTableDto = (): FitTableDto => ({
     },
   },
   mergedCells: { 14: { 1: { rowSpan: 2, colSpan: 2 } } },
-  cols: { 2: { width: 50 } },
+  cols: { 2: { width: 50 }, 4: { width: 140 } },
   rows: { 13: { height: 42 } },
   cells: {
-    1: { 1: { value: 'line1\nline2\nline3' } },
-    2: { 1: { styleName: 's0', value: 'Bold' } },
-    3: { 1: { styleName: 's1', value: 'Italic' } },
-    4: { 1: { styleName: 's2', value: 'Underline' } },
-    5: { 1: { styleName: 's3', value: 'Line-through' } },
-    6: { 1: { styleName: 's4', value: 'Font fantasy' } },
-    7: { 1: { styleName: 's5', value: 'Font size 16' } },
-    8: { 1: { styleName: 's6', value: 'Color' } },
-    9: { 1: { styleName: 's7', value: 'Backgroundcolor' } },
-    10: { 1: { styleName: 's8', value: 'Align bottom' } },
-    11: { 1: { styleName: 's9', value: 'Align right' } },
-    12: { 1: { styleName: 's10', value: 'Border' } },
+    1: {
+      1: { value: 'line1\nline2\nline3' },
+      3: { value: 1000, dataType: { name: 'string' } },
+      4: {
+        value: '2023-12-31 12:30:59',
+        dataType: { name: 'date-time', format: 'yyyy-MM-dd' },
+      },
+      5: { value: true },
+    },
+    2: {
+      1: { styleName: 's0', value: 'Bold' },
+      3: { value: 1000 },
+      4: {
+        value: '2023-12-31 12:30:59',
+        dataType: { name: 'date-time', format: 'dd.MM.yyyy' },
+      },
+      5: { value: false },
+    },
+    3: {
+      1: { styleName: 's1', value: 'Italic' },
+      3: {
+        value: 1000,
+        dataType: { name: 'number', format: '#.00' },
+      },
+      4: {
+        value: '2023-12-31 12:30:59',
+        dataType: { name: 'date-time', format: 'MM/dd/yyyy' },
+      },
+    },
+    4: {
+      1: { styleName: 's2', value: 'Underline' },
+      3: {
+        value: 1000,
+        dataType: { name: 'number', format: '#,#' },
+      },
+      4: {
+        value: '2023-12-31 12:30:59',
+        dataType: { name: 'date-time', format: 'hh:mm' },
+      },
+    },
+    5: {
+      1: { styleName: 's3', value: 'Line-through' },
+      3: {
+        value: 1000,
+        dataType: { name: 'number', format: '#,#.00' },
+      },
+      4: {
+        value: '2023-12-31 12:30:59',
+        dataType: { name: 'date-time', format: 'hh:mm:ss' },
+      },
+    },
+    6: {
+      1: { styleName: 's4', value: 'Font fantasy' },
+      3: {
+        value: 1000,
+        dataType: { name: 'number', format: '$#' },
+      },
+      4: {
+        value: '2023-12-31 12:30:59',
+        dataType: { name: 'date-time', format: 'dd-MM-yyy hh:mm' },
+      },
+    },
+    7: {
+      1: { styleName: 's5', value: 'Font size 16' },
+      3: {
+        value: 1000,
+        dataType: { name: 'number', format: '#.00 €' },
+      },
+      4: {
+        value: '2023-12-31 12:30:59',
+        dataType: { name: 'date-time', format: 'MM/dd/yy hh:mm:ss' },
+      },
+    },
+    8: {
+      1: { styleName: 's6', value: 'Color' },
+      3: {
+        value: 1000,
+        dataType: { name: 'number', format: 'CAD#,#' },
+      },
+    },
+    9: {
+      1: { styleName: 's7', value: 'Backgroundcolor' },
+      3: {
+        value: 1000,
+        dataType: { name: 'number', format: 'GBP #,#.00' },
+      },
+    },
+    10: {
+      1: { styleName: 's8', value: 'Align bottom' },
+      3: {
+        value: 0.1,
+        dataType: { name: 'number', format: '#%' },
+      },
+    },
+    11: {
+      1: { styleName: 's9', value: 'Align right' },
+      3: {
+        value: 0.1,
+        dataType: { name: 'number', format: '#.00%' },
+      },
+    },
+    12: {
+      1: { styleName: 's10', value: 'Border' },
+      3: {
+        value: 10,
+        dataType: { name: 'number', format: '#,# %' },
+      },
+    },
     13: {
       1: { value: 'Row height' },
       2: { value: 'Column width' },
+      3: {
+        value: 10,
+        dataType: { name: 'number', format: '#,#.00 %' },
+      },
     },
     14: { 1: { value: 'Merged cells' } },
   },

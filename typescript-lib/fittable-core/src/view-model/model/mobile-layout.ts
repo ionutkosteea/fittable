@@ -1,4 +1,4 @@
-import { CssStyle } from '../../model/style.js';
+import { CssStyle } from '../../model/table/style.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { CellSelectionPainter } from './cell-selection.js';
 import { ScrollContainer } from './scroll-container.js';

@@ -142,7 +142,7 @@
   right: 0;
   bottom: 0;
   margin: 0;
-  padding: 2px;
+  padding: 2px 4px;
   display: grid;
   place-items: inherit;
   text-decoration: inherit;
@@ -155,4 +155,10 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+.fit-table-cell-align-center {
+  text-align: center;
+}
+.fit-table-cell-align-right {
+  text-align: right;
 }

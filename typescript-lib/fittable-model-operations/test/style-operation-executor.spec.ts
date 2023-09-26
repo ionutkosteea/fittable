@@ -17,6 +17,7 @@ describe('Style Operation Executor', () => {
       .selectCell(0, 0)
       .runFontBold(true);
 
+    expect(executor.getStyle('s0')).toBeDefined();
     expect(executor.getStyle('s0')?.get('font-weight') === 'bold').toBeTruthy();
     expect(executor.getCellStyleName(0, 0) === 's0').toBeTruthy();
   });
@@ -28,6 +29,7 @@ describe('Style Operation Executor', () => {
       .selectCell(0, 0)
       .runFontBold(true);
 
+    expect(executor.getStyle('s0')).toBeDefined();
     expect(executor.getStyle('s0')?.get('font-weight') === 'bold').toBeTruthy();
     expect(executor.getCellStyleName(0, 0) === 's0').toBeTruthy();
   });
@@ -86,7 +88,7 @@ describe('Style Operation Executor', () => {
       .selectCell(1, 0)
       .runFontBold(true);
 
-    expect(executor.getStyle('s0')).toBeTruthy();
+    expect(executor.getStyle('s0')).toBeDefined();
     expect(executor.getCellStyleName(0, 0) === 's0').toBeTruthy();
     expect(executor.getCellStyleName(0, 0) === 's0').toBeTruthy();
   });

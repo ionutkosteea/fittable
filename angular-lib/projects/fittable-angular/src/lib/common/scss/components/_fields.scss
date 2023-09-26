@@ -43,9 +43,10 @@
   @include field;
   border: 1px solid var(--context-menu-border-color);
   background-color: var(--context-menu-background-color);
-  width: 2.5rem;
-  font-size: fit-map-get($font-size-map, medium);
+  width: 3rem;
   height: fit-map-get($size-map, medium);
+  font-size: fit-map-get($font-size-map, medium);
+  padding-left: 2px;
 }
 
 .fit-toolbar-combo {
@@ -121,7 +122,7 @@
   textarea {
     position: absolute;
     margin: 0px;
-    padding: 2px;
+    padding: 2px 4px;
     color: var(--cell-editor-color);
     background-color: var(--cell-editor-background-color);
     appearance: none;

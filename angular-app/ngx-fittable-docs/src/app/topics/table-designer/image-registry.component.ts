@@ -5,6 +5,7 @@ import { registerOperationConfig } from 'fittable-core/operations';
 import {
   createFittableDesigner,
   FittableDesigner,
+  getImageRegistry,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -50,26 +51,24 @@ export class ImageRegistryComponent implements ConsoleTopic, OnInit {
   }
 
   private createChangeIconButton(): void {
-    const undo: FitImageId = 'undo';
-    let defaultUndoImage: string | undefined;
+    let defaultUndoIcon: string | undefined;
     this.buttons.push({
       getLabel: (): string =>
-        defaultUndoImage ? 'Reset undo button icon' : 'Change undo button icon',
+        defaultUndoIcon ? 'Reset undo button icon' : 'Change undo button icon',
       run: (): void => {
-        if (defaultUndoImage) {
-          this.fit.viewModel.imageRegistry.setImage(undo, defaultUndoImage);
-          defaultUndoImage = undefined;
+        if (defaultUndoIcon) {
+          getImageRegistry<FitImageId>().set('undo', defaultUndoIcon);
+          defaultUndoIcon = undefined;
         } else {
-          defaultUndoImage = this.fit.viewModel.imageRegistry.getImageUrl(undo);
+          defaultUndoIcon = getImageRegistry<FitImageId>().getUrl('undo');
           const newUndoIcon = 'url(../../../assets/icons/undo-red.svg)';
-          this.fit.viewModel.imageRegistry.setImage(undo, newUndoIcon);
+          getImageRegistry<FitImageId>().set('undo', newUndoIcon);
         }
       },
     });
   }
 
   public getConsoleText(): string {
-    const undo: FitImageId = 'undo';
-    return 'Undo icon: ' + this.fit.viewModel.imageRegistry.getImageUrl(undo);
+    return 'Undo icon: ' + getImageRegistry<FitImageId>().getUrl('undo');
   }
 }

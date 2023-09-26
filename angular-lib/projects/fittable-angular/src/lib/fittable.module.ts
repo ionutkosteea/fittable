@@ -15,7 +15,6 @@ import { InputComponent } from './controls-view/input/input.component';
 import { PopupButtonComponent } from './controls-view/popup-button/popup-button.component';
 import { ColorPickerComponent } from './controls-view/color-picker/color-picker.component';
 import { ContextMenuComponent } from './controls-view/context-menu/context-menu.component';
-import { MenuItemComponent } from './controls-view/context-menu/menu-item/menu-item.component';
 import { BorderPopupButtonComponent } from './controls-view/border-popup/border-popup.component';
 import { BorderTypeComponent } from './controls-view/border-popup/border-type/border-type.component';
 import { StatusbarComponent } from './controls-view/statusbar/statusbar.component';
@@ -28,6 +27,7 @@ import {
   FilterPopupWindowComponent,
 } from './controls-view/filter-popup/filter-popup.component';
 import { TableComponent } from './table-view/table.component';
+import { ContextMenuButtonComponent } from './controls-view/context-menu/context-menu-button.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { TableComponent } from './table-view/table.component';
     PopupButtonComponent,
     ColorPickerComponent,
     ContextMenuComponent,
-    MenuItemComponent,
+    ContextMenuButtonComponent,
     BorderPopupButtonComponent,
     BorderTypeComponent,
     StatusbarComponent,

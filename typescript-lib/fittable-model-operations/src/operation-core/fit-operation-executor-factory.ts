@@ -34,7 +34,7 @@ import {
   RowRemoveOperationDtoFactory,
 } from '../operation-dtos/line/line-remove-operation-dto.js';
 import { StyleBorderOperationDtoFactory } from '../operation-dtos/style/style-border-operation-dto.js';
-import { StyleNameOperationDtoFactory } from '../operation-dtos/style/style-name-operation-dto.js';
+import { PaintFormatOperationDtoFactory } from '../operation-dtos/style/paint-format-operation-dto.js';
 import { StyleRemoveOperationDtoFactory } from '../operation-dtos/style/style-remove-operation-dto.js';
 import { StyleUpdateOperationDtoFactory } from '../operation-dtos/style/style-update-operation-dto.js';
 import { CellCutOperationDtoFactory } from '../operation-dtos/cell/cell-cut-operation-dto.js';
@@ -42,6 +42,8 @@ import { FitOperationExecutor } from './fit-operation-executor.js';
 import { MergedRegionsOperationStepFactory } from '../operation-steps/merged-regions/merged-regions-operation-step.js';
 import { CellMergeOperationDtoFactory } from '../operation-dtos/merged-regions/cell-merge-operation-dto.js';
 import { CellUnmergeOperationDtoFactory } from '../operation-dtos/merged-regions/cell-unmerge-operation-dto.js';
+import { CellDataTypeOperationStepFactory } from '../operation-steps/cell/cell-data-type-operation-step.js';
+import { CellDataTypeOperationDtoFactory } from '../operation-dtos/cell/cell-data-type-operation-dto.js';
 
 export class FitOperationExecutorFactory implements OperationExecutorFactory {
   public createOperationExecutor(): FitOperationExecutor {
@@ -53,6 +55,10 @@ export class FitOperationExecutorFactory implements OperationExecutorFactory {
       .bindOperationStepFactory('row-remove', RowRemoveOperationStepFactory)
       .bindOperationStepFactory('row-insert', RowInsertOperationStepFactory)
       .bindOperationStepFactory('cell-value', CellValueOperationStepFactory)
+      .bindOperationStepFactory(
+        'cell-data-type',
+        CellDataTypeOperationStepFactory
+      )
       .bindOperationStepFactory('cell-copy', CellCopyOperationStepFactory)
       .bindOperationStepFactory('cell-remove', CellRemoveOperationStepFactory)
       .bindOperationStepFactory(
@@ -67,13 +73,17 @@ export class FitOperationExecutorFactory implements OperationExecutorFactory {
       .bindOperationDtoFactory('column-insert', ColInsertOperationDtoFactory)
       .bindOperationDtoFactory('column-remove', ColRemoveOperationDtoFactory)
       .bindOperationDtoFactory('cell-value', CellValueOperationDtoFactory)
+      .bindOperationDtoFactory(
+        'cell-data-type',
+        CellDataTypeOperationDtoFactory
+      )
       .bindOperationDtoFactory('cell-cut', CellCutOperationDtoFactory)
       .bindOperationDtoFactory('cell-copy', CellCopyOperationDtoFactory)
       .bindOperationDtoFactory('cell-paste', CellPasteOperationDtoFactory)
       .bindOperationDtoFactory('cell-remove', CellRemoveOperationDtoFactory)
       .bindOperationDtoFactory('cell-merge', CellMergeOperationDtoFactory)
       .bindOperationDtoFactory('cell-unmerge', CellUnmergeOperationDtoFactory)
-      .bindOperationDtoFactory('style-name', StyleNameOperationDtoFactory)
+      .bindOperationDtoFactory('paint-format', PaintFormatOperationDtoFactory)
       .bindOperationDtoFactory('style-update', StyleUpdateOperationDtoFactory)
       .bindOperationDtoFactory('style-border', StyleBorderOperationDtoFactory)
       .bindOperationDtoFactory('style-remove', StyleRemoveOperationDtoFactory);

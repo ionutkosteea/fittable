@@ -19,7 +19,8 @@ export class FitWindowListener implements WindowListener {
   }
 
   private moveWindowIfPartlyHidden(): void {
-    const position: Coord = this.window.getPosition();
+    const position: Coord | undefined = this.window.getPosition();
+    if (!position) return;
     const width: number = this.window.getSize()?.getWidth() ?? 0;
     const height: number = this.window.getSize()?.getHeight() ?? 0;
     let moveX: number = position.x + width - window.innerWidth;

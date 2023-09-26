@@ -1,26 +1,26 @@
-import { SettingsBarArgs, SettingsBarFactory } from 'fittable-core/view-model';
+import { SettingsBarFactory, ThemeSwitcher } from 'fittable-core/view-model';
 
 import { FitContainer } from '../common/controls/fit-container.js';
 import { FitControl } from '../common/controls/fit-control.js';
 import { FitPopupControl } from '../common/controls/fit-popup-control.js';
 import { FitValueControl } from '../common/controls/fit-value-control.js';
 import { FitWindow } from '../common/controls/fit-window.js';
-import { FitImageId } from '../image-registry/fit-image-ids.js';
-import {
-  FitLanguageCode,
-  FitTextKey,
-} from '../language-dictionary/language-dictionary-keys.js';
 import { FitThemeName } from '../theme-switcher/fit-theme-switcher.js';
+import { FitLocale, getLanguageDictionary } from '../language/language-def.js';
+import { getImageRegistry } from '../image-registry/fit-image-registry.js';
 
 export type FitSettingsBarControlId =
   | 'settings-button'
   | 'language-label'
   | 'theme-label'
-  | FitLanguageCode
+  | FitLocale
   | FitThemeName;
 
 export class FitSettingsBarBuilder {
-  constructor(private readonly args: SettingsBarArgs) {}
+  constructor(
+    private readonly themeSwitcher: ThemeSwitcher,
+    private readonly reloadTableLocalsFn: (locale: string) => void
+  ) {}
 
   public build(): FitContainer<FitSettingsBarControlId> {
     return new FitContainer<FitSettingsBarControlId>() //
@@ -30,71 +30,75 @@ export class FitSettingsBarBuilder {
   private createButton(): FitPopupControl<string> {
     const window: FitWindow<string> = this.createWindow();
     const button: FitPopupControl<string> = new FitPopupControl(window) //
-      .setLabel((): string => this.getText('Settings'))
-      .setIcon((): string | undefined => this.getImageUrl('settings'));
+      .setLabel((): string => getLanguageDictionary().getText('Settings'))
+      .setIcon((): string | undefined => getImageRegistry().getUrl('settings'))
+      .setRun((): void => {
+        window.setVisible(true);
+      });
     return button;
   }
 
   private createWindow(): FitWindow<string> {
     const window: FitWindow<FitSettingsBarControlId> = new FitWindow();
-    this.addLanguages(window);
+    this.addLocals(window);
     this.addThemes(window);
     return window;
   }
 
-  private addLanguages(window: FitWindow<FitSettingsBarControlId>): void {
-    const languages: FitControl = new FitControl()
+  private addLocals(window: FitWindow<FitSettingsBarControlId>): void {
+    const controls: FitControl = new FitControl()
       .setType('label')
-      .setLabel((): string => this.getText('Languages'));
-    window.addControl('language-label', languages);
-    for (const lang of this.args.dictionary.getRegisteredLanguages()) {
-      const language: FitValueControl = new FitValueControl()
-        .setLabel((): string => this.getText(lang as FitTextKey))
-        .setValue(lang)
+      .setLabel((): string => getLanguageDictionary().getText('Languages'));
+    window.addControl('language-label', controls);
+    for (const locale of getLanguageDictionary().getAllLocales()) {
+      const control: FitValueControl = new FitValueControl()
+        .setType('menu-item')
+        .setLabel((): string => getLanguageDictionary().getText(locale))
+        .setValue(locale)
         .setRun((): void => {
-          this.args.dictionary.setCurrentLanguage(lang);
+          this.reloadTableLocalsFn(locale);
+          window.setVisible(false);
         });
-      language.setIcon((): string | undefined => {
-        return language.getValue() === this.args.dictionary.getCurrentLanguage()
-          ? this.getImageUrl('check')
+      control.setIcon((): string | undefined => {
+        return control.getValue() === getLanguageDictionary().getLocale()
+          ? getImageRegistry().getUrl('check')
           : undefined;
       });
-      window.addControl(lang as FitLanguageCode, language);
+      window.addControl(locale, control);
     }
   }
 
   private addThemes(window: FitWindow<FitSettingsBarControlId>): void {
-    if (!this.args.themeSwitcher) return;
+    if (!this.themeSwitcher) return;
     const themeSwitcher: FitControl = new FitControl()
       .setType('label')
-      .setLabel((): string => this.getText('Color themes'));
+      .setLabel((): string => getLanguageDictionary().getText('Color themes'));
     window.addControl('theme-label', themeSwitcher);
-    for (const themeName of this.args.themeSwitcher.getThemeNames()) {
+    for (const name of this.themeSwitcher.getThemeNames()) {
+      const themeName: FitThemeName = name as FitThemeName;
       const theme: FitValueControl = new FitValueControl()
-        .setLabel((): string => this.getText(themeName as FitTextKey))
+        .setType('menu-item')
+        .setLabel((): string => getLanguageDictionary().getText(themeName))
         .setValue(themeName)
         .setRun((): void => {
-          this.args.themeSwitcher?.switch(themeName);
+          this.themeSwitcher?.switch(themeName);
+          window.setVisible(false);
         });
       theme.setIcon((): string | undefined => {
-        return theme.getValue() ===
-          this.args.themeSwitcher?.getCurrentThemeName()
-          ? this.getImageUrl('check')
+        return theme.getValue() === this.themeSwitcher?.getCurrentThemeName()
+          ? getImageRegistry().getUrl('check')
           : undefined;
       });
-      window.addControl(themeName as FitThemeName, theme);
+      window.addControl(themeName, theme);
     }
   }
-
-  private readonly getText = (key: FitTextKey): string =>
-    this.args.dictionary.getText(key);
-
-  private readonly getImageUrl = (id: FitImageId): string | undefined =>
-    this.args.imageRegistry.getImageUrl(id);
 }
 
 export class FitSettingsBarFactory implements SettingsBarFactory {
-  public createSettingsBar(args: SettingsBarArgs): FitContainer<string> {
-    return new FitSettingsBarBuilder(args).build();
+  public createSettingsBar(
+    themeSwitcher: ThemeSwitcher,
+    reloadTableFn: (locale: string) => void
+  ): FitContainer<string> {
+    return new FitSettingsBarBuilder(themeSwitcher, reloadTableFn).build();
   }
 }

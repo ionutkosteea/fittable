@@ -1,5 +1,5 @@
-import { CellRange, createCellRange } from '../cell-range.js';
-import { CellCoord, createCellCoord } from '../cell-coord.js';
+import { CellRange, createCellRange } from '../table/cell-range.js';
+import { CellCoord, createCellCoord } from '../table/cell-coord.js';
 
 export class CellRangeList {
   private readonly ranges: CellRange[] = [];

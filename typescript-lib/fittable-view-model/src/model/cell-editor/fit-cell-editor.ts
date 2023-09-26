@@ -5,6 +5,8 @@ import {
   CellCoord,
   createCellCoord,
   createCellRange,
+  DataType,
+  createCellDateFormatter,
 } from 'fittable-core/model';
 import { OperationExecutor } from 'fittable-core/operations';
 import {
@@ -41,17 +43,36 @@ export class FitCellEditor implements CellEditor {
 
   private createCellControl(): InputControl {
     const input: FitInputControl = new FitInputControl();
-    input //
+    input
       .setLabel(() => 'Cell Editor')
       .setRun((): void => {
+        const value: Value | undefined = input.getValue();
         const args: FitUIOperationArgs = {
           id: 'cell-value',
           selectedCells: [createCellRange(this.cellCoord)],
-          value: input.getValue(),
+          value,
+          dataType: this.getDataType(value),
         };
         this.operationExecutor.run(args);
       });
     return input;
+  }
+
+  private getDataType(value?: Value): DataType | undefined {
+    const rowId: number = this.cellCoord.getRowId();
+    const colId: number = this.cellCoord.getColId();
+    const dataType: DataType | undefined = //
+      this.tableViewer.getCellDataType(rowId, colId);
+    if (dataType) return dataType;
+    try {
+      if (value && typeof value === 'string') {
+        const format = 'yyyy-MM-dd hh:mm:ss';
+        createCellDateFormatter().formatValue(value, format);
+        return { name: 'date-time', format };
+      }
+    } catch {
+      return undefined;
+    }
   }
 
   public getCellControl(): InputControl {

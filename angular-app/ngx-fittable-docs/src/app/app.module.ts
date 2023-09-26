@@ -16,6 +16,7 @@ import { PlaygroundComponent } from './topics/getting-started/playground/playgro
 import { RowHeightComponent } from './topics/table-model/row-height.component';
 import { ColWidthtComponent } from './topics/table-model/col-width.component';
 import { CellValueComponent } from './topics/table-model/cell-value.component';
+import { CellDataTypeComponent } from './topics/table-model/cell-data-type.component';
 import { CellStyleComponent } from './topics/table-model/cell-style.component';
 import { CellMergeComponent } from './topics/table-model/cell-merge.component';
 import { TableDtoComponent } from './topics/table-model/table-dto.component';
@@ -32,6 +33,7 @@ import { InsertColsRightComponent } from './topics/table-operations/insert-cols-
 import { RemoveColsComponent } from './topics/table-operations/remove-cols.component';
 import { ClearCellsComponent } from './topics/table-operations/clear-cells.component';
 import { CellValuesComponent } from './topics/table-operations/cell-values.component';
+import { CellDataTypesComponent } from './topics/table-operations/cell-data-types.component';
 import { RemoveCellsComponent } from './topics/table-operations/remove-cells.component';
 import { CutPasteCellsComponent } from './topics/table-operations/cut-paste-cells.component';
 import { CopyPasteCellsComponent } from './topics/table-operations/copy-paste-cells.component';
@@ -75,6 +77,7 @@ import { CustomStatusbarComponent } from './topics/table-designer/custom-view/cu
     RowHeightComponent,
     ColWidthtComponent,
     CellValueComponent,
+    CellDataTypeComponent,
     CellStyleComponent,
     CellMergeComponent,
     TableDtoComponent,
@@ -91,6 +94,7 @@ import { CustomStatusbarComponent } from './topics/table-designer/custom-view/cu
     RemoveColsComponent,
     ClearCellsComponent,
     CellValuesComponent,
+    CellDataTypesComponent,
     RemoveCellsComponent,
     CutPasteCellsComponent,
     CopyPasteCellsComponent,

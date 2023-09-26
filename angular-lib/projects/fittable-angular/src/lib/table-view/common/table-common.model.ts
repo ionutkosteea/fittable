@@ -42,6 +42,12 @@ export abstract class TableCommon {
     colId: number
   ): Value | undefined => this.viewModel.tableViewer.getCellValue(rowId, colId);
 
+  public readonly getFormatedCellValue = (
+    rowId: number,
+    colId: number
+  ): Value | undefined =>
+    this.viewModel.tableViewer.getFormatedCellValue(rowId, colId);
+
   public readonly isHiddenCell = (rowId: number, colId: number): boolean =>
     this.viewModel.tableViewer.isHiddenCell(rowId, colId);
 

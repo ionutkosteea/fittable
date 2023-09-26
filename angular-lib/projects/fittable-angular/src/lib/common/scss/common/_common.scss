@@ -39,7 +39,7 @@ $size-map: (
 }
 
 @mixin border() {
-  border-radius: 2px;
+  border-radius: 3px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;

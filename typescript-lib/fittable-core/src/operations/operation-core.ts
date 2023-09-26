@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { Table } from '../model/table.js';
+import { Table } from '../model/table/table.js';
 import { getOperationConfig } from './operation-config.js';
 
 export type OperationId<T extends string> = { id: T };

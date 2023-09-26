@@ -5,6 +5,9 @@ import {
   createCellRange4Dto,
   createDto4CellRangeList,
   CellRangeList,
+  DataType,
+  asTableCellDataType,
+  TableCellDataType,
 } from 'fittable-core/model';
 import {
   OperationDto,
@@ -18,6 +21,11 @@ import { CellValueOperationStepDto } from '../../operation-steps/cell/cell-value
 export type CellValueOperationDtoArgs = OperationId<'cell-value'> & {
   selectedCells: CellRange[];
   value?: Value;
+  dataType?: DataType;
+};
+type ValueAndDataType = {
+  value?: Value;
+  dataType?: DataType;
 };
 
 export class CellValueOperationDtoBuilder {
@@ -30,11 +38,14 @@ export class CellValueOperationDtoBuilder {
     values: [],
   };
   private readonly operationDto: OperationDto;
+  private readonly dataTypeTable?: Table & TableCellDataType;
+  private readonly updatableCells: CellRangeList = new CellRangeList();
 
   constructor(
     private readonly table: Table,
     private readonly args: CellValueOperationDtoArgs
   ) {
+    this.dataTypeTable = asTableCellDataType(table);
     this.operationDto = {
       id: args.id,
       steps: [this.cellValueStepDto],
@@ -45,42 +56,53 @@ export class CellValueOperationDtoBuilder {
   }
 
   public build(): OperationDto {
+    this.prepareUpdatableCells();
     this.updateCellValues();
     this.undoCellValues();
     return this.operationDto;
   }
 
-  private updateCellValues(): void {
-    const updatableCells: CellRangeList = new CellRangeList();
+  private prepareUpdatableCells(): void {
     for (const cellRange of this.args.selectedCells) {
       cellRange.forEachCell((rowId: number, colId: number): void => {
         const oldValue: Value | undefined = //
           this.table.getCellValue(rowId, colId);
-        if (oldValue !== this.args.value) updatableCells.addCell(rowId, colId);
+        if (oldValue !== this.args.value) {
+          this.updatableCells.addCell(rowId, colId);
+        }
       });
     }
+  }
+
+  private updateCellValues(): void {
     this.cellValueStepDto.values.push({
-      cellRanges: createDto4CellRangeList(updatableCells.getRanges()),
+      cellRanges: createDto4CellRangeList(this.updatableCells.getRanges()),
       value: this.args.value,
+      dataType: this.args.dataType,
     });
   }
 
   private undoCellValues(): void {
-    const undoValues: CellRangeAddressObjects<Value | undefined> =
+    const undoValues: CellRangeAddressObjects<ValueAndDataType | undefined> =
       new CellRangeAddressObjects();
     for (const values of this.cellValueStepDto.values) {
       for (const cellRangeDto of values.cellRanges)
         createCellRange4Dto(cellRangeDto).forEachCell(
           (rowId: number, colId: number): void => {
-            undoValues.set(this.table.getCellValue(rowId, colId), rowId, colId);
+            const value: Value | undefined = //
+              this.table.getCellValue(rowId, colId);
+            const dataType: DataType | undefined = //
+              this.dataTypeTable?.getCellDataType(rowId, colId);
+            undoValues.set({ value, dataType }, rowId, colId);
           }
         );
     }
     undoValues.forEach(
-      (value: Value | undefined, address: CellRange[]): void => {
+      (vdt: ValueAndDataType | undefined, address: CellRange[]): void => {
         this.undoCellValueStepDto.values.push({
           cellRanges: createDto4CellRangeList(address),
-          value,
+          value: vdt?.value,
+          dataType: vdt?.dataType,
         });
       }
     );

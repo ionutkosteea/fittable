@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.0] - 2023-09-26
+
+### Added
+
+- Introduce cell data-types and specific formats
+
 ## [v1.1.3] - 2023-08-17
 
 ### Fixed

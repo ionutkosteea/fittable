@@ -56,47 +56,40 @@ export class StyleUpdateOperationDtoBuilder {
       steps: [this.styleStepDto],
       undoOperation: { steps: [this.undoStyleStepDto] },
     };
-    this.updatableCellStyles = findUpdatableCellStyles(
-      table,
-      args.selectedCells,
-      args.styleSnippet
-    );
+    this.updatableCellStyles = //
+      findUpdatableCellStyles(table, args.selectedCells, args.styleSnippet);
     this.maxStyleNameUid = maxStyleNameUid ?? getMaxStyleNameUid(this.table);
   }
 
   public build(): OperationDto {
-    this.runStyleAction(
-      this.createStyleOrAttachExistingOne,
-      this.updateStyleOrAttachExistingOne
-    );
+    this.updateStyles();
     return this.operationDto;
   }
 
-  private runStyleAction(
-    createFn: (oldStyleName?: string) => void,
-    updateFn: (oldStyleName: string, isOldStyleOnSingleCell: boolean) => void
-  ): void {
+  private updateStyles(): void {
     const allCellsCnt: Map<string, number> = countAllCellStyleNames(this.table);
-    const selectedCellsCnt: Map<string, number> = countSelectedCellStyleNames(
-      this.table,
-      this.args.selectedCells
-    );
+    const selectedCellsCnt: Map<string, number> = //
+      countSelectedCellStyleNames(this.table, this.args.selectedCells);
     for (const oldStyleName of this.updatableCellStyles.keys()) {
       if (oldStyleName) {
         const numOfAllCells: number = allCellsCnt.get(oldStyleName) ?? 0;
         const numOfSelectedCells: number =
           selectedCellsCnt.get(oldStyleName) ?? 0;
-        if (numOfAllCells > numOfSelectedCells) createFn(oldStyleName);
-        else updateFn(oldStyleName, numOfAllCells === 1);
+        if (numOfAllCells > numOfSelectedCells) {
+          this.createStyleOrAttachExistingOne(oldStyleName);
+        } else {
+          this.updateStyleOrAttachExistingOne(
+            oldStyleName,
+            numOfAllCells === 1
+          );
+        }
       } else {
-        createFn();
+        this.createStyleOrAttachExistingOne();
       }
     }
   }
 
-  private readonly createStyleOrAttachExistingOne = (
-    oldStyleName?: string
-  ): void => {
+  private createStyleOrAttachExistingOne(oldStyleName?: string): void {
     let existingStyleName: string | undefined;
     if (oldStyleName) {
       const newStyle: Style = this.createNewStyle(oldStyleName);
@@ -111,7 +104,7 @@ export class StyleUpdateOperationDtoBuilder {
     } else {
       this.attachNewStyle(oldStyleName);
     }
-  };
+  }
 
   private attachNewStyle(oldStyleName?: string): void {
     const cellRanges: unknown[] = createDto4CellRangeList(
@@ -171,10 +164,10 @@ export class StyleUpdateOperationDtoBuilder {
     return undefined;
   }
 
-  private readonly updateStyleOrAttachExistingOne = (
+  private updateStyleOrAttachExistingOne(
     oldStyleName: string,
     isOldStyleOnSingleCell: boolean
-  ): void => {
+  ): void {
     const oldStyle: Style | undefined = this.table.getStyle(oldStyleName);
     if (!oldStyle) return;
     const newStyle: Style = this.updateStyleProperties(
@@ -194,7 +187,7 @@ export class StyleUpdateOperationDtoBuilder {
     } else {
       this.removeStyle(oldStyleName, oldStyle);
     }
-  };
+  }
 
   private updateStyleProperties(style: Style, newProperties: Style): Style {
     const newStyle: Style = style.clone();
@@ -240,7 +233,7 @@ export class StyleUpdateOperationDtoBuilder {
   private createUndoStyle(oldStyle: Style): unknown {
     const undoStyle: Style = oldStyle.clone();
     const updateStyle: Style = this.args.styleSnippet;
-    updateStyle.forEach((name: string) => {
+    updateStyle.forEach((name: string): boolean => {
       const oldValue: string | number | undefined = undoStyle.get(name);
       !oldValue && undoStyle.set(name, undefined);
       return true;

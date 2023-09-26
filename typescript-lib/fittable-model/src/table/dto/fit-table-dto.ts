@@ -1,4 +1,4 @@
-import { Value } from 'fittable-core/model';
+import { Value, DataType } from 'fittable-core/model';
 
 export type FitMapDto<Val> = { [key: string]: Val };
 
@@ -6,7 +6,11 @@ export type FitRowDto = { height?: number };
 
 export type FitColDto = { width?: number };
 
-export type FitCellDto = { value?: Value; styleName?: string };
+export type FitCellDto = {
+  value?: Value;
+  dataType?: DataType;
+  styleName?: string;
+};
 
 export type FitMergedCellDto = { rowSpan?: number; colSpan?: number };
 
@@ -33,6 +37,7 @@ export type FitStyleDto = Partial<typeof FIT_STYLE_DTO>;
 export type FitTableDto = {
   numberOfRows: number;
   numberOfCols: number;
+  locale?: string;
   styles?: FitMapDto<FitStyleDto>;
   rows?: FitMapDto<FitRowDto>;
   cols?: FitMapDto<FitColDto>;

@@ -1,44 +1,52 @@
-import { ImageRegistry, ImageRegistryFactory } from 'fittable-core/view-model';
+import {
+  ImageRegistry,
+  ImageRegistryFactory,
+  getImageRegistry as getCoreImageRegistry,
+} from 'fittable-core/view-model';
 
 import { FitImageId, FitImages } from './fit-image-ids.js';
 import { FIT_IMAGES, toSvgUrl } from './fit-images.js';
 
-export class FitImageRegistry implements ImageRegistry {
+export class FitImageRegistry implements ImageRegistry<FitImageId> {
   private images: FitImages = {};
 
-  public setImages(images: FitImages): this {
+  public setAll(images: FitImages): this {
     this.images = images;
     return this;
   }
 
-  public setImage(imgId: FitImageId, imgUrl: string): this {
-    this.images[imgId] = imgUrl;
+  public set(id: FitImageId, url: string): this {
+    this.images[id] = url;
     return this;
   }
 
-  public removeImage(imgId: FitImageId): this {
-    Reflect.deleteProperty(this.images, imgId);
+  public remove(id: FitImageId): this {
+    Reflect.deleteProperty(this.images, id);
     return this;
   }
 
-  public removeAllImages(): this {
+  public removeAll(): this {
     this.images = {};
     return this;
   }
 
-  public getImageIds(): FitImageId[] {
+  public getIds(): FitImageId[] {
     return Reflect.ownKeys(this.images) as FitImageId[];
   }
 
-  public getImageUrl(imgId: FitImageId): string | undefined {
-    const imgUrl: string | undefined = this.images[imgId];
-    !imgUrl && console.error('No image found for ID ' + imgId);
-    return imgUrl;
+  public getUrl(id: FitImageId): string | undefined {
+    const url: string | undefined = this.images[id];
+    !url && console.error(`No image was found for ID '${id}'.`);
+    return url;
   }
 }
 
 export class FitImageRegistryFactory implements ImageRegistryFactory {
-  public createImageRegistry(): ImageRegistry {
-    return new FitImageRegistry().setImages(toSvgUrl(FIT_IMAGES));
+  public createImageRegistry(): FitImageRegistry {
+    return new FitImageRegistry().setAll(toSvgUrl(FIT_IMAGES));
   }
+}
+
+export function getImageRegistry(): ImageRegistry<FitImageId> {
+  return getCoreImageRegistry<FitImageId>();
 }

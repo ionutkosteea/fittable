@@ -1,5 +1,6 @@
 import { Observable, Subscription } from 'rxjs';
 
+import { implementsTKeys } from 'fittable-core/common';
 import {
   CellRange,
   CellCoord,
@@ -22,6 +23,7 @@ import {
   Window,
   FocusableObject,
   CellSelectionRanges,
+  Scroller,
 } from 'fittable-core/view-model';
 
 import { FitUIOperationId } from '../operation-executor/operation-args.js';
@@ -31,7 +33,7 @@ import {
   FitUIOperationProperties,
   FitUIOperationScroll,
 } from '../operation-executor/operation-properties.js';
-import { Scroller } from 'fittable-core/view-model';
+import { ControlUpdater } from '../toolbar/controls/common/control-updater.js';
 
 type LastLines = {
   lastRow: number;
@@ -63,6 +65,7 @@ export class OperationSubscriptions {
   constructor(private args: OperationSubscriptionArgs) {}
 
   public init(): void {
+    this.updateToolbar();
     this.setSelectedBodyCells();
     this.setCurrentFocus();
     this.createUpdateSubscriptions();
@@ -75,6 +78,7 @@ export class OperationSubscriptions {
       this.args.cellSelection?.body
         .onEnd$()
         .subscribe((cellRanges: CellRange[]): void => {
+          this.updateToolbar();
           this.selectedBodyCells = cellRanges;
         })
     );
@@ -139,7 +143,7 @@ export class OperationSubscriptions {
       this.setSelectedCells(operationDto);
     } else {
       const operationId: FitUIOperationId = operationDto.id as FitUIOperationId;
-      if (operationId === 'style-name') {
+      if (operationId === 'paint-format') {
         properties.bodyCellRanges = //
           createDto4CellRangeList(this.args.cellSelection.body.getRanges());
       } else {
@@ -288,6 +292,9 @@ export class OperationSubscriptions {
           case 'cell-unmerge':
             this.refreshMergedRegions();
             break;
+          case 'cell-data-type':
+            if (action === 'Run') this.jumpToBottomCell();
+            break;
           case 'row-height':
             this.refreshRows();
             break;
@@ -306,7 +313,7 @@ export class OperationSubscriptions {
         if (this.getOperationProperties(operationDto)?.preventFocus) {
           this.args.cellEditor?.setCell(this.args.cellEditor.getCell());
         } else {
-          if (id === 'style-name-copy') {
+          if (id === 'paint-format-copy') {
             this.focusCellEditorControl();
             !this.args.cellSelection?.body.hasFocus() &&
               this.args.cellSelection?.body.setFocus(true);
@@ -314,6 +321,9 @@ export class OperationSubscriptions {
             this.focus(operationDto);
           }
         }
+        id !== 'paint-format' &&
+          id !== 'paint-format-copy' &&
+          setTimeout(this.updateToolbar, 100);
       })
     );
   }
@@ -389,6 +399,23 @@ export class OperationSubscriptions {
     this.args.cellEditor?.setCell(this.args.cellEditor?.getCell());
   }
 
+  private jumpToBottomCell(): void {
+    setTimeout((): void => {
+      if (this.selectedBodyCells.length !== 1) return;
+      const cellRange: CellRange = this.selectedBodyCells[0];
+      if (!cellRange.getFrom().equals(cellRange.getTo())) return;
+      const bottomCell: CellCoord | undefined = //
+        this.args.cellEditor?.getNeighborCells().getBottomCell();
+      if (!bottomCell) return;
+      this.args.cellEditor?.setCell(bottomCell);
+      this.args.cellSelection?.body
+        .removeRanges()
+        .createRange()
+        .addCell(bottomCell)
+        .end();
+    });
+  }
+
   private focus(operationDto: OperationDto): void {
     const undoState: FitUIOperationProperties | undefined =
       this.getOperationProperties(operationDto);
@@ -426,6 +453,14 @@ export class OperationSubscriptions {
       cellEditor?.getCellControl().setFocus(true);
     });
   }
+
+  private readonly updateToolbar = (): void => {
+    for (const control of this.args.toolbar?.getControls() ?? []) {
+      if (implementsTKeys<ControlUpdater>(control, ['updateByCellSelection'])) {
+        control.updateByCellSelection();
+      }
+    }
+  };
 
   private createFilterSubscriptions(): void {
     const operationExecutor: OperationExecutor = this.args.operationExecutor;

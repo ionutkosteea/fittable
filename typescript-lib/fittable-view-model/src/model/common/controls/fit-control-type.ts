@@ -1,10 +1,12 @@
 export type FitControlType =
-  | 'push-button'
+  | 'label'
   | 'input'
+  | 'button'
   | 'combo'
   | 'popup-button'
-  | 'color-picker'
   | 'border-popup-button'
+  | 'context-menu-button'
+  | 'color-picker'
   | 'menu-item'
-  | 'label'
+  | 'parent-menu-item'
   | 'separator';

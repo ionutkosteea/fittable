@@ -12,7 +12,13 @@ export class FitInputControlListener implements InputControlListener {
 
   public onInput(event: FitEvent): void {
     const htmlInput: FitHtmlInputElement = event.target as FitHtmlInputElement;
-    this.inputControl.setValue(Number(htmlInput.value));
+    const htmlValue: string | undefined = htmlInput.value ?? undefined;
+    try {
+      if (htmlValue) this.inputControl.setValue(JSON.parse(htmlValue));
+      else this.inputControl.setValue('');
+    } catch {
+      this.inputControl.setValue(htmlValue);
+    }
   }
 
   public onKeyDown(event: FitKeyboardEvent): void {

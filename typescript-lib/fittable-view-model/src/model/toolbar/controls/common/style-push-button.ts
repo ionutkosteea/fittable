@@ -1,16 +1,16 @@
 import { CellRange, createStyle, Style, Table } from 'fittable-core/model';
+import { ControlArgs } from 'fittable-core/view-model';
 
 import { getFirstCellStyle } from '../../../common/style-functions.js';
 import { FitUIOperationArgs } from '../../../operation-executor/operation-args.js';
 import { ControlUpdater } from './control-updater.js';
-import { FitControlArgs } from './fit-control-args.js';
 import { PushButton } from './push-button.js';
 
 export class StylePushButton extends PushButton implements ControlUpdater {
   private style?: Style;
   private pushed = false;
 
-  constructor(private readonly args: FitControlArgs) {
+  constructor(private readonly args: ControlArgs) {
     super();
     this.setPushed((): boolean => this.pushed);
     this.setRun(this.createRunFn);

@@ -1,7 +1,5 @@
 import { OperationExecutor } from '../../operations/operation-core.js';
-import { Table } from '../../model/table.js';
-import { LanguageDictionary } from './language-dictionary.js';
-import { ImageRegistry } from './image-registry.js';
+import { Table } from '../../model/table/table.js';
 import { CellSelection, CellSelectionPainter } from './cell-selection.js';
 import { CellEditor } from './cell-editor.js';
 import { Window, Container } from './controls.js';
@@ -17,8 +15,6 @@ import { MobileLayout } from './mobile-layout.js';
 export interface ViewModel {
   readonly table: Table;
   readonly operationExecutor?: OperationExecutor;
-  dictionary: LanguageDictionary;
-  imageRegistry: ImageRegistry;
   tableViewer: TableViewer;
   tableScrollContainer: ScrollContainer;
   mobileLayout: MobileLayout;

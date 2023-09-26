@@ -1,103 +1,132 @@
+import { getLanguageDictionary } from 'fittable-core/model';
+import { ControlArgs } from 'fittable-core/view-model';
+
 import { FitControl } from '../../common/controls/fit-control.js';
 import { FitUIOperationArgs } from '../../operation-executor/operation-args.js';
-import { FitControlArgs } from '../../toolbar/controls/common/fit-control-args.js';
+import { getImageRegistry } from '../../image-registry/fit-image-registry.js';
 
-export function createCellClearMenuItem(args: FitControlArgs): FitControl {
+export function createCellClearMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Clear cells'))
-    .setIcon((): string | undefined => args.imageRegistry.getImageUrl('clear'))
+    .setLabel((): string => getLanguageDictionary().getText('Clear cells'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('clear'))
     .setRun((): void => {
       const operationId: FitUIOperationArgs = {
         id: 'cell-value',
         selectedCells: args.getSelectedCells(),
       };
       args.operationExecutor.run(operationId);
+      hideWindowFn();
     });
 }
 
-export function createCellRemoveMenuItem(args: FitControlArgs): FitControl {
+export function createCellRemoveMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Remove cells'))
-    .setIcon((): string | undefined => args.imageRegistry.getImageUrl('remove'))
+    .setLabel((): string => getLanguageDictionary().getText('Remove cells'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('remove'))
     .setRun((): void => {
       const operationId: FitUIOperationArgs = {
         id: 'cell-remove',
         selectedCells: args.getSelectedCells(),
       };
       args.operationExecutor.run(operationId);
+      hideWindowFn();
     });
 }
 
-export function createCellCutMenuItem(args: FitControlArgs): FitControl {
+export function createCellCutMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Cut cells'))
-    .setIcon((): string | undefined => args.imageRegistry.getImageUrl('cut'))
+    .setLabel((): string => getLanguageDictionary().getText('Cut cells'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('cut'))
     .setRun((): void => {
       const operationId: FitUIOperationArgs = {
         id: 'cell-cut',
         selectedCells: args.getSelectedCells(),
       };
       args.operationExecutor.run(operationId);
+      hideWindowFn();
     });
 }
 
-export function createCellCopyMenuItem(args: FitControlArgs): FitControl {
+export function createCellCopyMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Copy cells'))
-    .setIcon((): string | undefined => args.imageRegistry.getImageUrl('copy'))
+    .setLabel((): string => getLanguageDictionary().getText('Copy cells'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('copy'))
     .setRun((): void => {
       const operationId: FitUIOperationArgs = {
         id: 'cell-copy',
         selectedCells: args.getSelectedCells(),
       };
       args.operationExecutor.run(operationId);
+      hideWindowFn();
     });
 }
 
-export function createCellPasteMenuItem(args: FitControlArgs): FitControl {
+export function createCellPasteMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Paste cells'))
-    .setIcon((): string | undefined => args.imageRegistry.getImageUrl('paste'))
+    .setLabel((): string => getLanguageDictionary().getText('Paste cells'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('paste'))
     .setRun((): void => {
       const operationId: FitUIOperationArgs = {
         id: 'cell-paste',
         selectedCells: args.getSelectedCells(),
       };
       args.operationExecutor.run(operationId);
+      hideWindowFn();
     });
 }
 
-export function createCellMergeMenuItem(args: FitControlArgs): FitControl {
+export function createCellMergeMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Merge cells'))
-    .setIcon((): string | undefined => args.imageRegistry.getImageUrl('merge'))
+    .setLabel((): string => getLanguageDictionary().getText('Merge cells'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('merge'))
     .setRun((): void => {
       const operationId: FitUIOperationArgs = {
         id: 'cell-merge',
         selectedCells: args.getSelectedCells(),
       };
       args.operationExecutor.run(operationId);
+      hideWindowFn();
     });
 }
 
-export function createCellUnmergeMenuItem(args: FitControlArgs): FitControl {
+export function createCellUnmergeMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Unmerge cells'))
-    .setIcon((): string | undefined =>
-      args.imageRegistry.getImageUrl('unmerge')
-    )
+    .setLabel((): string => getLanguageDictionary().getText('Unmerge cells'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('unmerge'))
     .setRun((): void => {
       const operationId: FitUIOperationArgs = {
         id: 'cell-unmerge',
         selectedCells: args.getSelectedCells(),
       };
       args.operationExecutor.run(operationId);
+      hideWindowFn();
     });
 }

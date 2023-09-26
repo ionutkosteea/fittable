@@ -1,4 +1,4 @@
-import { CellCoord } from '../../../model/cell-coord.js';
+import { CellCoord } from '../../../model/table/cell-coord.js';
 import { TableViewer } from '../table-viewer.js';
 
 export interface NeighborCells {

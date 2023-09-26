@@ -351,7 +351,7 @@ export class TableOperationExecutor {
 
   public runPaintFormat(sourceStyleName?: string): this {
     const args: FitOperationArgs = {
-      id: 'style-name',
+      id: 'paint-format',
       selectedCells: this.getSelectedCells(),
       styleName: sourceStyleName,
     };

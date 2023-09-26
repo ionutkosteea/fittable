@@ -1,12 +1,10 @@
 <div class="fit-relative-container">
-  <div class="fit-toolbar-button" [ngStyle]="{backgroundImage:getIcon()}" (click)="showPopupWindow()"
-    [title]="getLabel()">&nbsp;
-  </div>
+  <fit-button [model]="popupControl"></fit-button>
   <div class="fit-button-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">
     <div class="fit-padding-container">
       <div class="fit-border-type-menu">
-        <hr *ngFor="let id of getPopupIds()" [ngStyle]="getBorderStyle(''+id)" (click)="runPopup(id)" />
+        <hr *ngFor="let id of getControlIds()" [ngStyle]="getBorderStyle(id)" (click)="runControl(id)" />
       </div>
     </div>
   </div>

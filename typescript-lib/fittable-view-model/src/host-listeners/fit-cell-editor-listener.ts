@@ -33,7 +33,7 @@ export class FitCellEditorListener implements CellEditorListener {
   private enableControlKeys = false;
   private enableControlEdit = false;
   private cellValue?: Value;
-  private newCellValue?: string;
+  private newCellValue?: Value;
   private selectedCells: CellRange[] = [];
   private isMouseDown = false;
   private isGlobalMouseDown = false;
@@ -121,7 +121,8 @@ export class FitCellEditorListener implements CellEditorListener {
     if (this.enableControlEdit) {
       if (event.ctrlKey) {
         this.cellEditor.getCellControl().ctrlEnter();
-        this.newCellValue = this.getHtmlInput(event)?.value ?? '';
+        const htmlValue: string = this.getHtmlInput(event)?.value ?? '';
+        this.newCellValue = this.toValue(htmlValue);
       } else {
         this.applyNewCellValue();
         this.moveCellEditor(this.cellEditor.getNeighborCells().getBottomCell());
@@ -129,6 +130,14 @@ export class FitCellEditorListener implements CellEditorListener {
     } else {
       this.enableControlEditAndKeys(true);
       this.cellEditor.getCellControl().scrollToEnd();
+    }
+  }
+
+  private toValue(stringValue: string): Value {
+    try {
+      return JSON.parse(stringValue);
+    } catch {
+      return stringValue;
     }
   }
 
@@ -166,7 +175,8 @@ export class FitCellEditorListener implements CellEditorListener {
   }
 
   public onInput(event: FitEvent): void {
-    this.newCellValue = this.getHtmlInput(event)?.value ?? '';
+    const htmlValue: string = this.getHtmlInput(event)?.value ?? '';
+    this.newCellValue = this.toValue(htmlValue);
     this.selectedCells = this.selectedCellsFn();
   }
 

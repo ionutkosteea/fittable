@@ -60,8 +60,6 @@ describe('fittable-view-model.ts', (): void => {
     expect(viewModel.cellSelectionScroller).toBeDefined();
     expect(viewModel.colFilters).toBeDefined();
     expect(viewModel.contextMenu).toBeDefined();
-    expect(viewModel.dictionary).toBeDefined();
-    expect(viewModel.imageRegistry).toBeDefined();
     expect(viewModel.mobileLayout).toBeDefined();
     expect(viewModel.operationExecutor).toBeDefined();
     expect(viewModel.settingsBar).toBeDefined();
@@ -85,8 +83,6 @@ describe('fittable-view-model.ts', (): void => {
     expect(viewModel.cellSelectionScroller).toBeUndefined();
     expect(viewModel.colFilters).toBeUndefined();
     expect(viewModel.contextMenu).toBeUndefined();
-    expect(viewModel.dictionary).toBeDefined();
-    expect(viewModel.imageRegistry).toBeDefined();
     expect(viewModel.mobileLayout).toBeDefined();
     expect(viewModel.operationExecutor).toBeUndefined();
     expect(viewModel.settingsBar).toBeUndefined();

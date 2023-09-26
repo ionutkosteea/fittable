@@ -1,4 +1,4 @@
-import { LineRange, createLineRange } from '../line-range.js';
+import { LineRange, createLineRange } from '../table/line-range.js';
 
 export class LineRangeList {
   constructor(private ranges: LineRange[] = []) {}

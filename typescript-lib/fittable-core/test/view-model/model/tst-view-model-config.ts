@@ -2,8 +2,6 @@ import { CellRange, Table } from '../../../dist/model/index.js';
 import { OperationExecutor } from '../../../dist/operations/index.js';
 import {
   ImageRegistryFactory,
-  LanguageDictionary,
-  LanguageDictionaryFactory,
   MobileLayoutFactory,
   ScrollContainerFactory,
   ScrollContainerListenerFactory,
@@ -33,7 +31,6 @@ export class TstViewModelConfig implements ViewModelConfig {
   colWidths = 0;
   fontSize = 0;
   viewModelFactory = new TstViewModelFactory();
-  languageDictionaryFactory = new TstLanguageDictionaryFactory();
   imageRegistryFactory = new TstImageRegistryFactory();
   scrollContainerFactory = new TstScrollContainerFactory();
   tableViewerFactory = new TstTableViewerFactory();
@@ -52,14 +49,8 @@ export class TstViewModelFactory implements ViewModelFactory {
   }
 }
 
-class TstLanguageDictionaryFactory implements LanguageDictionaryFactory {
-  createDictionary(): LanguageDictionary {
-    throw new Error('Method not implemented.');
-  }
-}
-
 class TstImageRegistryFactory implements ImageRegistryFactory {
-  createImageRegistry(): ImageRegistry {
+  createImageRegistry(): ImageRegistry<string> {
     throw new Error('Method not implemented.');
   }
 }

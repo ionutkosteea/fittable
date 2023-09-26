@@ -1,5 +1,10 @@
-import { Style } from '../../../dist/model/style.js';
-import { Table, Value } from '../../../dist/model/table.js';
+import {
+  CssStyle,
+  Style,
+  DataType,
+  Table,
+  Value,
+} from '../../../dist/model/index.js';
 import { TableViewer } from '../../../dist/view-model/index.js';
 
 export class TstTableViewer implements TableViewer {
@@ -70,6 +75,15 @@ export class TstTableViewer implements TableViewer {
     throw new Error('Method not implemented.');
   }
   getCellValue(rowId: number, colId: number): Value | undefined {
+    throw new Error('Method not implemented.');
+  }
+  getCellDataType(rowId: number, colId: number): DataType | undefined {
+    throw new Error('Method not implemented.');
+  }
+  getCellType(rowId: number, colId: number): DataType['name'] {
+    throw new Error('Method not implemented.');
+  }
+  getFormatedCellValue(rowId: number, colId: number): string | undefined {
     throw new Error('Method not implemented.');
   }
   resetRowProperties(): this {

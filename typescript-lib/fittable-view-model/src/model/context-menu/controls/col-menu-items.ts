@@ -2,33 +2,44 @@ import {
   asTableCols,
   CellRange,
   createLineRange,
+  getLanguageDictionary,
   LineRange,
   LineRangeList,
   Table,
   Value,
 } from 'fittable-core/model';
-import { ViewModelConfig, getViewModelConfig } from 'fittable-core/view-model';
+import {
+  ControlArgs,
+  ViewModelConfig,
+  getViewModelConfig,
+} from 'fittable-core/view-model';
 
 import { FitControl } from '../../common/controls/fit-control.js';
 import { FitInputControl } from '../../common/controls/fit-input-control.js';
 import { FitUIOperationArgs } from '../../operation-executor/operation-args.js';
-import { FitControlArgs } from '../../toolbar/controls/common/fit-control-args.js';
+import { getImageRegistry } from '../../image-registry/fit-image-registry.js';
 
-export function createColResizeMenuItem(args: FitControlArgs): FitInputControl {
-  return new ColResizeMenuItem(args);
+export function createColResizeMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitInputControl {
+  return new ColResizeMenuItem(hideWindowFn, args);
 }
 
 class ColResizeMenuItem extends FitInputControl {
   private readonly config: ViewModelConfig = getViewModelConfig();
   private width?: number;
 
-  constructor(private readonly args: FitControlArgs) {
+  constructor(
+    private readonly hideWindowFn: () => void,
+    private readonly args: ControlArgs
+  ) {
     super();
     this.setType('menu-item');
-    this.setLabel((): string => args.dictionary.getText('Resize columns'));
-    this.setIcon((): string | undefined =>
-      args.imageRegistry.getImageUrl('width')
+    this.setLabel((): string =>
+      getLanguageDictionary().getText('Resize columns')
     );
+    this.setIcon((): string | undefined => getImageRegistry().getUrl('width'));
     this.setValid((): boolean =>
       this.width === undefined
         ? true
@@ -41,6 +52,7 @@ class ColResizeMenuItem extends FitInputControl {
     if (this.isValid()) {
       this.args.operationExecutor.run(this.getArgs());
       this.width = undefined;
+      this.hideWindowFn();
     } else {
       const oldValue: number | undefined = this.width;
       this.width = undefined;
@@ -75,14 +87,15 @@ class ColResizeMenuItem extends FitInputControl {
 }
 
 export function createColInsertLeftMenuItem(
-  args: FitControlArgs
+  hideWindowFn: () => void,
+  args: ControlArgs
 ): FitInputControl {
   const control: FitInputControl = new FitInputControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Insert columns left'))
-    .setIcon((): string | undefined =>
-      args.imageRegistry.getImageUrl('insertLeft')
+    .setLabel((): string =>
+      getLanguageDictionary().getText('Insert columns left')
     )
+    .setIcon((): string | undefined => getImageRegistry().getUrl('insertLeft'))
     .setValueFn(() => 1);
   control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
@@ -94,6 +107,7 @@ export function createColInsertLeftMenuItem(
       };
       args.operationExecutor.run(operationArgs);
       control.setValue(1);
+      hideWindowFn();
     } else {
       const oldValue: Value | undefined = control.getValue();
       control.setValue(1);
@@ -104,14 +118,15 @@ export function createColInsertLeftMenuItem(
 }
 
 export function createColInsertRightMenuItem(
-  args: FitControlArgs
+  hideWindowFn: () => void,
+  args: ControlArgs
 ): FitInputControl {
   const control: FitInputControl = new FitInputControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Insert columns right'))
-    .setIcon((): string | undefined =>
-      args.imageRegistry.getImageUrl('insertRight')
+    .setLabel((): string =>
+      getLanguageDictionary().getText('Insert columns right')
     )
+    .setIcon((): string | undefined => getImageRegistry().getUrl('insertRight'))
     .setValueFn(() => 1);
   control.setValid((): boolean => isPositiveInteger(control.getValue()));
   control.setRun((): void => {
@@ -124,6 +139,7 @@ export function createColInsertRightMenuItem(
       };
       args.operationExecutor.run(operationArgs);
       control.setValue(1);
+      hideWindowFn();
     } else {
       const oldValue: Value | undefined = control.getValue();
       control.setValue(1);
@@ -133,17 +149,21 @@ export function createColInsertRightMenuItem(
   return control;
 }
 
-export function createColRemoveMenuItem(args: FitControlArgs): FitControl {
+export function createColRemoveMenuItem(
+  hideWindowFn: () => void,
+  args: ControlArgs
+): FitControl {
   return new FitControl()
     .setType('menu-item')
-    .setLabel((): string => args.dictionary.getText('Remove columns'))
-    .setIcon((): string | undefined => args.imageRegistry.getImageUrl('remove'))
+    .setLabel((): string => getLanguageDictionary().getText('Remove columns'))
+    .setIcon((): string | undefined => getImageRegistry().getUrl('remove'))
     .setRun((): void => {
       const operationArgs: FitUIOperationArgs = {
         id: 'column-remove',
         selectedLines: getSelectedCols(args.getSelectedCells()),
       };
       args.operationExecutor.run(operationArgs);
+      hideWindowFn();
     });
 }
 

@@ -1,6 +1,5 @@
 import { Subscription } from 'rxjs';
 
-import { implementsTKeys } from 'fittable-core/common';
 import {
   ScrollContainer,
   CellEditor,
@@ -13,7 +12,6 @@ import {
   asPopupControl,
 } from 'fittable-core/view-model';
 
-import { ControlUpdater } from '../toolbar/controls/common/control-updater.js';
 import { FitSettingsBarControlId } from '../settings-bar/fit-settings-bar-factory.js';
 
 export type ViewModelSubscriptionsArgs = {
@@ -36,7 +34,6 @@ export class ViewModelSubscriptions {
       window.addEventListener('resize', this.onWindowResize);
       window.addEventListener('keydown', this.onWindowKeyDown);
     }
-    this.updateToolbarByCellSelection();
     this.focusActiveObject();
     this.focusBodyOnCellEditorMove();
     this.hideCellEditorOnFocusHeader();
@@ -53,19 +50,6 @@ export class ViewModelSubscriptions {
       }
     }
   };
-
-  private updateToolbarByCellSelection(): void {
-    for (const control of this.args.toolbar?.getControls() ?? []) {
-      if (implementsTKeys<ControlUpdater>(control, ['updateByCellSelection'])) {
-        control.updateByCellSelection();
-        const subscription: Subscription | undefined =
-          this.args.cellSelection?.body
-            .onEnd$()
-            .subscribe((): void => control.updateByCellSelection());
-        this.subscriptions.add(subscription);
-      }
-    }
-  }
 
   private focusActiveObject(): void {
     this.getFocusableObjects().forEach((obj: FocusableObject): void => {

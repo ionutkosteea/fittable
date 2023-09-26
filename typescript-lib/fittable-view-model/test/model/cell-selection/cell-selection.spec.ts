@@ -20,6 +20,7 @@ import { FIT_MODEL_CONFIG, FitTable } from 'fittable-model';
 import { FIT_VIEW_MODEL_CONFIG } from '../../../dist/index.js';
 
 const table: Table = new FitTable({
+  locale: 'en-US',
   numberOfRows: 2,
   numberOfCols: 2,
 });

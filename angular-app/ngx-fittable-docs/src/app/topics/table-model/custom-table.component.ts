@@ -54,6 +54,7 @@ export class CustomTableComponent extends ConsoleTopic implements OnInit {
       cellCoordFactory: FIT_MODEL_CONFIG.cellCoordFactory,
       cellRangeFactory: FIT_MODEL_CONFIG.cellRangeFactory,
       lineRangeFactory: FIT_MODEL_CONFIG.lineRangeFactory,
+      languageDictionaryFactory: FIT_MODEL_CONFIG.languageDictionaryFactory,
     });
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
@@ -88,7 +89,7 @@ class MatrixValueTable implements TableBasics {
     return row ? row[colId] : undefined;
   };
   setCellValue = (rowId: number, colId: number, value?: Value): this => {
-    if (value) {
+    if (value !== undefined) {
       if (!this.dto[rowId]) this.dto[rowId] = [];
       this.dto[rowId][colId] = value;
     } else if (this.dto[rowId] && this.dto[rowId][colId]) {

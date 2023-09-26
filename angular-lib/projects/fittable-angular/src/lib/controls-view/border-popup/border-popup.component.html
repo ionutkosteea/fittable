@@ -1,6 +1,5 @@
 <div class="fit-relative-container">
-  <div class="fit-toolbar-button" [ngStyle]="getButtonStyle()" (click)="showPopupWindow()" [title]="getLabel()">
-    &nbsp;</div>
+  <fit-button [model]="popupControl"></fit-button>
   <div class="fit-button-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
     (window:mousedown)="onGlobalMouseDown()">
     <div class="fit-padding-container">
@@ -17,7 +16,7 @@
       <hr class="fit-menu-separator" />
       <div class="fit-2col-container">
         <div class="fit-toolbar-button" *ngFor="let id of getRightPanelIDs()"
-          [ngStyle]="{backgroundImage:getPopupIcon(id)}" (click)="runPopup(id)" [title]="getPopupLabel(id)">&nbsp;
+          [ngStyle]="{backgroundImage:getControlIcon(id)}" (click)="runControl(id)" [title]="getControlLabel(id)">&nbsp;
         </div>
       </div>
     </div>

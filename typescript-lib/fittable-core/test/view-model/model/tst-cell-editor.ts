@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { CellCoord } from '../../../dist/model/cell-coord.js';
+import { CellCoord } from '../../../dist/model/index.js';
 import {
   CellEditor,
   InputControl,

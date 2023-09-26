@@ -288,7 +288,7 @@ abstract class LineRemoveOperationDtoBuilder {
           (rowId: number, colId: number): void => {
             const value: Value | undefined = //
               this.table.getCellValue(rowId, colId);
-            value && oldValues.set(value, rowId, colId);
+            value !== undefined && oldValues.set(value, rowId, colId);
           }
         );
       }

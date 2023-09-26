@@ -1,12 +1,13 @@
 import { Subject, Observable, Subscription } from 'rxjs';
 
 import {
+  ScrollContainer,
   Statusbar,
-  StatusbarArgs,
   StatusbarFactory,
+  TableViewer,
 } from 'fittable-core/view-model';
 
-import { FitTextKey } from '../language-dictionary/language-dictionary-keys.js';
+import { getLanguageDictionary } from '../language/language-def.js';
 
 export class FitStatusbar implements Statusbar {
   private text = '';
@@ -15,24 +16,27 @@ export class FitStatusbar implements Statusbar {
 
   private readonly subscriptions: Subscription[] = [];
 
-  constructor(private readonly args: StatusbarArgs) {
+  constructor(
+    private readonly tableViewer: TableViewer,
+    private readonly tableScrollContainer: ScrollContainer
+  ) {
     this.init();
   }
 
   private init(): void {
     this.subscriptions.push(this.onAfterRenderScroller$());
-    this.subscriptions.push(this.onAfterSetCurrentLanguage$());
+    this.subscriptions.push(this.onAfterSetLocale$());
   }
 
   private onAfterRenderScroller$(): Subscription {
-    return this.args.tableScrollContainer
+    return this.tableScrollContainer
       .onAfterRenderModel$()
       .subscribe((): void => this.updateText());
   }
 
-  private onAfterSetCurrentLanguage$(): Subscription {
-    return this.args.dictionary
-      .onAfterSetCurrentLanguage$()
+  private onAfterSetLocale$(): Subscription {
+    return getLanguageDictionary()
+      .onAfterSetLocale$()
       .subscribe((): void => this.updateText());
   }
 
@@ -41,11 +45,11 @@ export class FitStatusbar implements Statusbar {
   };
 
   private readonly createText = (): string =>
-    this.getTranslation('Rows') +
+    getLanguageDictionary().getText('Rows') +
     ': ' +
     this.getRenderedRows() +
     ' ' +
-    this.getTranslation('Columns') +
+    getLanguageDictionary().getText('Columns') +
     ': ' +
     this.getRederedCols();
 
@@ -54,14 +58,14 @@ export class FitStatusbar implements Statusbar {
   }
 
   public getRenderedRows(): string {
-    const numberOfRows: number = this.args.tableViewer.getNumberOfRows();
+    const numberOfRows: number = this.tableViewer.getNumberOfRows();
     const firstRow: number = this.getFirstRenderableRow();
     const lastRow: number = this.getLastRenderableRow();
     return numberOfRows + ' [' + firstRow + ',' + lastRow + ']';
   }
 
   public getRederedCols(): string {
-    const numberOfCols: number = this.args.tableViewer.getNumberOfCols();
+    const numberOfCols: number = this.tableViewer.getNumberOfCols();
     const firstCol: number = this.getFirstRenderableCol();
     const lastCol: number = this.getLastRenderableCol();
     return numberOfCols + ' [' + firstCol + ',' + lastCol + ']';
@@ -69,7 +73,7 @@ export class FitStatusbar implements Statusbar {
 
   private getFirstRenderableCol(): number {
     return (
-      this.args.tableScrollContainer
+      this.tableScrollContainer
         .getHorizontalScrollbar()
         ?.getFirstRenderableLine() ?? 0
     );
@@ -77,16 +81,16 @@ export class FitStatusbar implements Statusbar {
 
   private getLastRenderableCol(): number {
     const colId: number =
-      this.args.tableScrollContainer
+      this.tableScrollContainer
         .getHorizontalScrollbar()
         ?.getLastRenderableLine() ?? 0;
-    const numberOfCols: number = this.args.tableViewer.getNumberOfCols();
+    const numberOfCols: number = this.tableViewer.getNumberOfCols();
     return colId > 0 ? colId : numberOfCols > 0 ? numberOfCols - 1 : 0;
   }
 
   private getFirstRenderableRow(): number {
     return (
-      this.args.tableScrollContainer
+      this.tableScrollContainer
         .getVerticalScrollbar()
         ?.getFirstRenderableLine() ?? 0
     );
@@ -94,15 +98,12 @@ export class FitStatusbar implements Statusbar {
 
   private getLastRenderableRow(): number {
     const rowId: number =
-      this.args.tableScrollContainer
+      this.tableScrollContainer
         .getVerticalScrollbar()
         ?.getLastRenderableLine() ?? 0;
-    const numberOfRows: number = this.args.tableViewer.getNumberOfRows();
+    const numberOfRows: number = this.tableViewer.getNumberOfRows();
     return rowId > 0 ? rowId : numberOfRows > 0 ? numberOfRows - 1 : 0;
   }
-
-  private readonly getTranslation = (text: FitTextKey): string =>
-    this.args.dictionary.getText(text);
 
   public setFocus(focus: boolean, ignoreTrigger?: boolean): this {
     this.focus = focus;
@@ -124,7 +125,10 @@ export class FitStatusbar implements Statusbar {
 }
 
 export class FitStatusbarFactory implements StatusbarFactory {
-  public createStatusbar(args: StatusbarArgs): Statusbar {
-    return new FitStatusbar(args);
+  public createStatusbar(
+    tableViewer: TableViewer,
+    tableScrollContainer: ScrollContainer
+  ): Statusbar {
+    return new FitStatusbar(tableViewer, tableScrollContainer);
   }
 }

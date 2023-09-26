@@ -9,6 +9,9 @@ import {
   createCellRangeList4Dto,
   CellRangeList,
   asTableStyles,
+  DataType,
+  TableCellDataType,
+  asTableCellDataType,
 } from 'fittable-core/model';
 import {
   OperationDto,
@@ -24,6 +27,7 @@ import { CellRangeAddressObjects } from '../../utils/cell/cell-range-address-obj
 import { CellValueOperationStepDto } from '../../operation-steps/cell/cell-value-operation-step.js';
 import { StyleOperationStepDto } from '../../operation-steps/style/style-operation-step.js';
 import { CellRemoveOperationStepDto } from '../../operation-steps/cell/cell-remove-operation-step.js';
+import { CellDataTypeOperationStepDto } from '../../operation-steps/cell/cell-data-type-operation-step.js';
 
 export type CellRemoveOperationDtoArgs = OperationId<'cell-remove'> & {
   selectedCells: CellRange[];
@@ -47,6 +51,10 @@ export class CellRemoveOperationDtoBuilder {
     id: 'cell-value',
     values: [],
   };
+  public readonly undoCellDataTypesStepDto: CellDataTypeOperationStepDto = {
+    id: 'cell-data-type',
+    dataTypes: [],
+  };
   public readonly undoStyleStepDto: StyleOperationStepDto = {
     id: 'style-changes',
     createStyles: [],
@@ -65,7 +73,11 @@ export class CellRemoveOperationDtoBuilder {
       id: args.id,
       steps: [this.cellRemoveStepDto, this.styleStepDto],
       undoOperation: {
-        steps: [this.undoCellValueStepDto, this.undoStyleStepDto],
+        steps: [
+          this.undoCellValueStepDto,
+          this.undoCellDataTypesStepDto,
+          this.undoStyleStepDto,
+        ],
       },
     };
   }
@@ -73,6 +85,7 @@ export class CellRemoveOperationDtoBuilder {
   public build(): OperationDto {
     this.removeCells();
     this.undoCellValues();
+    this.undoCellDataTypes();
     if (this.styledTable) {
       this.undoStyleNames();
       this.removeStyles();
@@ -102,16 +115,43 @@ export class CellRemoveOperationDtoBuilder {
         (rowId: number, colId: number): void => {
           const value: Value | undefined = //
             this.table.getCellValue(rowId, colId);
-          value && oldValues.set(value, rowId, colId);
+          value !== undefined && oldValues.set(value, rowId, colId);
         }
       );
     }
-    oldValues.forEach((value: Value | undefined, address: CellRange[]) => {
-      this.undoCellValueStepDto.values.push({
-        value,
-        cellRanges: createDto4CellRangeList(address),
-      });
-    });
+    oldValues.forEach(
+      (value: Value | undefined, address: CellRange[]): void => {
+        this.undoCellValueStepDto.values.push({
+          value,
+          cellRanges: createDto4CellRangeList(address),
+        });
+      }
+    );
+  }
+
+  private undoCellDataTypes(): void {
+    const dataTypeTable: TableCellDataType | undefined = //
+      asTableCellDataType(this.table);
+    if (!dataTypeTable) return;
+    const oldDataTypes: CellRangeAddressObjects<DataType | undefined> =
+      new CellRangeAddressObjects();
+    for (const cellRangeDto of this.cellRemoveStepDto.cellRanges) {
+      createCellRange4Dto(cellRangeDto).forEachCell(
+        (rowId: number, colId: number): void => {
+          const dataType: DataType | undefined = //
+            dataTypeTable.getCellDataType(rowId, colId);
+          dataType && oldDataTypes.set(dataType, rowId, colId);
+        }
+      );
+    }
+    oldDataTypes.forEach(
+      (dataType: DataType | undefined, address: CellRange[]): void => {
+        this.undoCellDataTypesStepDto.dataTypes.push({
+          dataType,
+          cellRanges: createDto4CellRangeList(address),
+        });
+      }
+    );
   }
 
   private undoStyleNames(): void {

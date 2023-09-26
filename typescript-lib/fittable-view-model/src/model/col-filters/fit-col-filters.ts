@@ -7,6 +7,7 @@ import {
   ColFilterExecutor,
   createColFilterExecutor,
   asTableColFilter,
+  getLanguageDictionary,
 } from 'fittable-core/model';
 import { OperationExecutor } from 'fittable-core/operations';
 import {
@@ -18,8 +19,7 @@ import {
   ValueCondition,
 } from 'fittable-core/view-model';
 
-import { FitLanguageDictionary } from '../language-dictionary/fit-language-dictionary.js';
-import { FitImageRegistry } from '../image-registry/fit-image-registry.js';
+import { getImageRegistry } from '../image-registry/fit-image-registry.js';
 import { FitControl } from '../common/controls/fit-control.js';
 import { FitPopupControl } from '../common/controls/fit-popup-control.js';
 import { FitWindow } from '../common/controls/fit-window.js';
@@ -45,12 +45,6 @@ export type FitColFiltersControlId =
 
 type FitTable = Table & TableColFilter;
 
-type FitColFilterArgs = {
-  dictionary: FitLanguageDictionary;
-  imageRegistry: FitImageRegistry;
-  operationExecutor: OperationExecutor;
-};
-
 export class FitColFilters implements ColFilters {
   public readonly filterExecutor: ColFilterExecutor;
 
@@ -63,9 +57,9 @@ export class FitColFilters implements ColFilters {
   private readonly subscriptions: Subscription[] = [];
   private valueCheckListSubscriptions: Subscription[] = [];
 
-  constructor(private readonly args: FitColFilterArgs) {
+  constructor(private readonly operationExecutor: OperationExecutor) {
     const table: FitTable | undefined = //
-      asTableColFilter(args.operationExecutor.getTable());
+      asTableColFilter(operationExecutor.getTable());
     if (!table) throw new Error('Filter table was not found!');
     this.filterExecutor = createColFilterExecutor(table);
     this.valueConditions = new ColValueConditions();
@@ -86,15 +80,15 @@ export class FitColFilters implements ColFilters {
       .addControl('ok-button', this.createOkButton())
       .addControl('cancel-button', this.createCancelButton());
     return new FitPopupControl<FitColFiltersControlId>(window) //
-      .setLabel((): string => this.args.dictionary.getText('Filter'));
+      .setLabel((): string => getLanguageDictionary().getText('Filter'));
   }
 
   private createSearchInput(): FitInputControl {
     const input: FitInputControl = new FitInputControl() //
-      .setLabel((): string => this.args.dictionary.getText('Filter by value'))
-      .setIcon((): string | undefined =>
-        this.args.imageRegistry.getImageUrl('search')
-      );
+      .setLabel((): string =>
+        getLanguageDictionary().getText('Filter by value')
+      )
+      .setIcon((): string | undefined => getImageRegistry().getUrl('search'));
     let origList: FitPopupControl<string> | undefined;
     input.setRun((): void => {
       setTimeout((): void => {
@@ -133,7 +127,7 @@ export class FitColFilters implements ColFilters {
 
   private createClearButton(): FitControl {
     return new FitControl()
-      .setLabel((): string => this.args.dictionary.getText('Clear'))
+      .setLabel((): string => getLanguageDictionary().getText('Clear'))
       .setRun((): void => {
         for (const control of this.getValueCheckListContainer().getControls()) {
           const checkBox: FitCheckBoxControl = control as FitCheckBoxControl;
@@ -148,7 +142,7 @@ export class FitColFilters implements ColFilters {
 
   private createSelectAllButton(): FitControl {
     return new FitControl()
-      .setLabel((): string => this.args.dictionary.getText('Select all'))
+      .setLabel((): string => getLanguageDictionary().getText('Select all'))
       .setRun((): void => {
         for (const control of this.getValueCheckListContainer().getControls()) {
           const checkBox: FitCheckBoxControl = control as FitCheckBoxControl;
@@ -163,7 +157,7 @@ export class FitColFilters implements ColFilters {
 
   private createOkButton(): FitControl {
     return new FitControl()
-      .setLabel((): string => this.args.dictionary.getText('Ok'))
+      .setLabel((): string => getLanguageDictionary().getText('Ok'))
       .setRun((): void => {
         const stepDto: ColFilterOperationStepDto = {
           id: 'column-filter',
@@ -183,14 +177,14 @@ export class FitColFilters implements ColFilters {
           stepDto,
           undoStepDto,
         };
-        this.args.operationExecutor.run(args);
+        this.operationExecutor.run(args);
         this.getPopupWindow().setVisible(false);
       });
   }
 
   private createCancelButton(): FitControl {
     return new FitControl()
-      .setLabel((): string => this.args.dictionary.getText('Cancel'))
+      .setLabel((): string => getLanguageDictionary().getText('Cancel'))
       .setRun((): void => {
         this.getPopupWindow().setVisible(false);
       });
@@ -304,7 +298,7 @@ export class FitColFilters implements ColFilters {
 
   private readonly getLabel = (value?: string): string =>
     value === undefined || value === ''
-      ? '(' + this.args.dictionary.getText('Blank cells') + ')'
+      ? `(${getLanguageDictionary().getText('Blank cells')})`
       : value;
 
   private readonly getValueCheckListContainer = (): FitWindow<string> =>
@@ -318,10 +312,10 @@ export class FitColFilters implements ColFilters {
     this.popupButton.getWindow();
 
   private readonly getFilterOffIcon = (): string | undefined =>
-    this.args.imageRegistry.getImageUrl('filter');
+    getImageRegistry().getUrl('filter');
 
   private readonly getFilterOnIcon = (): string | undefined =>
-    this.args.imageRegistry.getImageUrl('filterBlue');
+    getImageRegistry().getUrl('filterBlue');
 
   public destroy(): void {
     this.valueCheckListSubscriptions //
@@ -331,7 +325,7 @@ export class FitColFilters implements ColFilters {
 }
 
 export class FitColFiltersFactory implements ColFiltersFactory {
-  public createColFilters(args: FitColFilterArgs): ColFilters {
-    return new FitColFilters(args);
+  public createColFilters(operationExecutor: OperationExecutor): ColFilters {
+    return new FitColFilters(operationExecutor);
   }
 }

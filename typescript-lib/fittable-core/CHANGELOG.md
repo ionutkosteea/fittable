@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.0] - 2023-09-26
+
+### Added
+
+- Introduce cell data-types and specific formats
+  - replace PopupControl.setSelectedControl with SelectorWindow.setControlId
+  - replace PopupControl.getSelectedControl with SelectorWindow.getControlId
+  - replace ViewModel.dictionary with getLanguageDictionary
+  - replace ViewModel.imageRegistry with getViewModelConfig
+  - rename DoubleKeyMap to TwoDimentionalMap
+
 ## [v3.0.1] - 2023-08-17
 
 ### Fixed

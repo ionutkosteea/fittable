@@ -7,7 +7,7 @@ export class FitWindow<Id extends string>
   implements Window
 {
   private visible = false;
-  private position: Coord = { x: 0, y: 0 };
+  private position?: Coord;
   private size?: Size;
 
   public isVisible(): boolean {
@@ -20,11 +20,11 @@ export class FitWindow<Id extends string>
     return this;
   }
 
-  public getPosition(): Coord {
+  public getPosition(): Coord | undefined {
     return this.position;
   }
 
-  public setPosition(coord: Coord): this {
+  public setPosition(coord?: Coord): this {
     this.position = coord;
     return this;
   }

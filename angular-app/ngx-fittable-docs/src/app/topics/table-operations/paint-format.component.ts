@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
+  DataType,
   createCellCoord,
   createCellRange,
-  createStyle,
+  createStyle4Dto,
   createTable,
   registerModelConfig,
 } from 'fittable-core/model';
@@ -12,7 +13,7 @@ import {
   createFittableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
-import { FitStyle, FitTable, FIT_MODEL_CONFIG } from 'fittable-model';
+import { FitTable, FIT_MODEL_CONFIG } from 'fittable-model';
 import {
   FitOperationArgs,
   FIT_OPERATION_CONFIG,
@@ -41,6 +42,9 @@ export class PaintFormatComponent extends ConsoleTopic implements OnInit {
     ];
   }
 
+  private styleName?: string;
+  private dataType?: DataType;
+
   public override ngOnInit(): void {
     // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
@@ -49,11 +53,16 @@ export class PaintFormatComponent extends ConsoleTopic implements OnInit {
       createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    this.fit = createFittableDesigner(
-      createTable<FitTable>()
-        .addStyle('s0', createStyle<FitStyle>().set('background-color', 'blue'))
-        .setCellStyleName(0, 0, 's0')
-    );
+    const table: FitTable = createTable<FitTable>()
+      .addStyle('s0', createStyle4Dto({ 'background-color': 'lightblue' }))
+      .setCellStyleName(0, 0, 's0')
+      .setCellValue(0, 0, 1.23)
+      .setCellDataType(0, 0, { name: 'number', format: '0#.##0' })
+      .setCellValue(1, 1, 7);
+    this.fit = createFittableDesigner(table);
+
+    this.styleName = table.getCellStyleName(0, 0);
+    this.dataType = table.getCellDataType(0, 0);
 
     this.subscriptions.add(this.writeToConsoleAfterRun$());
     this.subscriptions.add(this.writeToConsoleAfterUndo$());
@@ -62,11 +71,12 @@ export class PaintFormatComponent extends ConsoleTopic implements OnInit {
 
   public runOperation(): void {
     const args: FitOperationArgs = {
-      id: 'style-name',
+      id: 'paint-format',
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(3, 3)),
       ],
-      styleName: 's0',
+      styleName: this.styleName,
+      dataType: this.dataType,
     };
     this.fit.operationExecutor?.run(args);
   }

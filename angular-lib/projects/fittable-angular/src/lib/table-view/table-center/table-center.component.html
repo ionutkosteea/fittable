@@ -10,10 +10,10 @@
           [cellSelectionRanges]="getCellSelectionRanges()">
           <tr *ngFor="let rowId of getRowIds()" [ngStyle]="{'height.px':getRowHeight(rowId)}">
             <ng-container *ngFor="let colId of getColIds()">
-              <td class="fit-table-cell" *ngIf="!isHiddenCell(rowId,colId)" [ngStyle]="getCellStyle(rowId,colId)"
-                [rowSpan]="getRowSpan(rowId,colId)" [colSpan]="getColSpan(rowId,colId)" [attr.rowId]="rowId"
-                [attr.colId]="colId">
-                <p class="fit-table-cell-text">{{getCellValue(rowId, colId)}}</p>
+              <td [ngClass]="'fit-table-cell' + getDataTypeClass(rowId,colId)" *ngIf="!isHiddenCell(rowId,colId)"
+                [ngStyle]="getCellStyle(rowId,colId)" [rowSpan]="getRowSpan(rowId,colId)"
+                [colSpan]="getColSpan(rowId,colId)" [attr.rowId]="rowId" [attr.colId]="colId">
+                <p class="fit-table-cell-text">{{getFormatedCellValue(rowId, colId)}}</p>
               </td>
             </ng-container>
           </tr>

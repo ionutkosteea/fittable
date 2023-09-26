@@ -15,7 +15,6 @@ import { FitCellSelectionListenerFactory } from './host-listeners/fit-cell-selec
 import { FitScrollContainerListenerFactory } from './host-listeners/fit-scroll-container-listener.js';
 import { FitCellSelectionPainterFactory } from './model/cell-selection/fit-cell-selection-painter.js';
 import { FitImageRegistryFactory } from './model/image-registry/fit-image-registry.js';
-import { FitLanguageDictionaryFactory } from './model/language-dictionary/fit-language-dictionary.js';
 import { FitWindowListenerFactory } from './host-listeners/fit-window-listener.js';
 import { FitInputControlListenerFactory } from './host-listeners/fit-input-control-listener.js';
 import { FitCellSelectionScrollerFactory } from './model/cell-selection/fit-cell-selection-scroller.js';
@@ -35,7 +34,6 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   colHeaderTextFn: (colId: number): string => incrementLetter(colId),
   rowHeaderWidth: 40,
   colHeaderHeight: 21,
-  languageDictionaryFactory: new FitLanguageDictionaryFactory(),
   imageRegistryFactory: new FitImageRegistryFactory(),
   cellEditorFactory: new FitCellEditorFactory(),
   cellSelectionFactory: new FitCellSelectionFactory(),
@@ -63,7 +61,6 @@ export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
   rowHeights: FIT_VIEW_MODEL_CONFIG.rowHeights,
   colWidths: FIT_VIEW_MODEL_CONFIG.colWidths,
   viewModelFactory: FIT_VIEW_MODEL_CONFIG.viewModelFactory,
-  languageDictionaryFactory: FIT_VIEW_MODEL_CONFIG.languageDictionaryFactory,
   imageRegistryFactory: FIT_VIEW_MODEL_CONFIG.imageRegistryFactory,
   scrollContainerFactory: FIT_VIEW_MODEL_CONFIG.scrollContainerFactory,
   mobileLayoutFactory: FIT_VIEW_MODEL_CONFIG.mobileLayoutFactory,

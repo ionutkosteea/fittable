@@ -8,7 +8,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 
-import { CssStyle, CellRange } from 'fittable-core/model';
+import { CssStyle, CellRange, DataType } from 'fittable-core/model';
 import {
   ViewModel,
   CellEditorListener,
@@ -94,6 +94,20 @@ export class TableCenterComponent
   public readonly getTableFontFamily = (): string | undefined => {
     const fonts: Option[] | undefined = getViewModelConfig().fontFamily;
     return fonts ? fonts[0].value : undefined;
+  };
+
+  public readonly getDataTypeClass = (
+    rowId: number,
+    colId: number
+  ): ' fit-table-cell-align-center' | ' fit-table-cell-align-right' | '' => {
+    const cellType: DataType['name'] = //
+      this.viewModel.tableViewer.getCellType(rowId, colId);
+    if (cellType === 'number' || cellType === 'date-time') {
+      return ' fit-table-cell-align-right';
+    } else if (cellType === 'boolean') {
+      return ' fit-table-cell-align-center';
+    }
+    return '';
   };
 
   public ngOnDestroy(): void {

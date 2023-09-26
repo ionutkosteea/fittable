@@ -11,11 +11,9 @@ import {
   unregisterOperationConfig,
 } from 'fittable-core/operations';
 import {
-  createLanguageDictionary,
   createScrollContainer,
   createStatusbar,
   createTableViewer,
-  LanguageDictionary,
   registerViewModelConfig,
   ScrollContainer,
   Statusbar,
@@ -43,18 +41,14 @@ describe('Statusbar', (): void => {
   });
 
   it('statusbar text', (): void => {
-    const dictionary: LanguageDictionary = createLanguageDictionary();
     const table: Table = createTable() //
       .setNumberOfRows(10)
       .setNumberOfCols(5);
     const tableViewer: TableViewer = createTableViewer(table);
     const tableScrollContainer: ScrollContainer =
       createScrollContainer(tableViewer);
-    const statusbar: Statusbar = createStatusbar({
-      dictionary,
-      tableViewer,
-      tableScrollContainer,
-    });
+    const statusbar: Statusbar = //
+      createStatusbar(tableViewer, tableScrollContainer);
     tableScrollContainer
       .setSize(new TstSize(100, 200))
       .setScroller(new TstScroller(0, 0))

@@ -6,7 +6,6 @@ import {
   asPopupControl,
   Container,
   Control,
-  ControlMap,
   createFittableDesigner,
   FittableDesigner,
   PopupControl,
@@ -56,15 +55,16 @@ export class SettingsBarComponent implements SimpleTopic, OnInit {
 
   private insertNewLanguageControl(): void {
     const window: Window = this.getSettingsPopupWindow();
-    const controlMap: ControlMap = {};
+    const controlMap: Map<string, Control> = new Map();
     const languageLabelId: FitSettingsBarControlId = 'language-label';
     for (const id of window.getControlIds()) {
-      controlMap[id] = window.getControl(id);
+      controlMap.set(id, window.getControl(id));
       if (id === languageLabelId) {
-        controlMap['fr-FR'] = new FitControl()
+        const control = new FitControl()
           // Usually labels should be accessed via the language dictionary.
           .setLabel((): string => 'French')
           .setRun((): void => alert('No function added!'));
+        controlMap.set('fr-FR', control);
       }
     }
     window.setControls(controlMap);

@@ -1,12 +1,12 @@
 import { MissingFactoryError } from '../../common/factory-error.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { Images, ImageRegistry } from './image-registry.js';
+import { Images } from './image-registry.js';
 
 export type CssVariables = { [name: string]: string };
 
 export interface Theme {
   cssVariables: CssVariables;
-  images: Images;
+  images: Images<string>;
 }
 
 export interface ThemeSwitcher {
@@ -18,16 +18,14 @@ export interface ThemeSwitcher {
 }
 
 export interface ThemeSwitcherFactory {
-  createThemeSwitcher(imageRegistry: ImageRegistry): ThemeSwitcher;
+  createThemeSwitcher(): ThemeSwitcher;
 }
 
-export function createThemeSwitcher(
-  imageRegistry: ImageRegistry
-): ThemeSwitcher {
+export function createThemeSwitcher(): ThemeSwitcher {
   const factory: ThemeSwitcherFactory | undefined =
     getViewModelConfig().themeSwitcherFactory;
   if (factory) {
-    return factory.createThemeSwitcher(imageRegistry);
+    return factory.createThemeSwitcher();
   } else {
     throw new MissingFactoryError();
   }

@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 
 import { MissingFactoryError } from '../../common/factory-error.js';
-import { CellCoord } from '../../model/cell-coord.js';
-import { CellRange } from '../../model/cell-range.js';
+import { CellCoord } from '../../model/table/cell-coord.js';
+import { CellRange } from '../../model/table/cell-range.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { NeighborCells } from './common/neighbor-cells.js';
 import { Rectangle } from './common/rectangle.js';

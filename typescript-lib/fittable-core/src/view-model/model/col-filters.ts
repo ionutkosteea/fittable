@@ -1,10 +1,8 @@
 import { MissingFactoryError } from '../../common/factory-error.js';
-import { ColFilterExecutor } from '../../model/col-filter-executor.js';
+import { ColFilterExecutor } from '../../model/filter/col-filter-executor.js';
 import { OperationExecutor } from '../../operations/operation-core.js';
 import { getViewModelConfig } from '../view-model-config.js';
 import { PopupControl } from './controls.js';
-import { ImageRegistry } from './image-registry.js';
-import { LanguageDictionary } from './language-dictionary.js';
 import { ScrollContainer } from './scroll-container.js';
 
 export type ValueCondition = {
@@ -21,19 +19,15 @@ export interface ColFilters {
   destroy(): void;
 }
 
-export type ColFiltersArgs = {
-  dictionary: LanguageDictionary;
-  imageRegistry: ImageRegistry;
-  operationExecutor: OperationExecutor;
-};
-
 export interface ColFiltersFactory {
-  createColFilters(args: ColFiltersArgs): ColFilters;
+  createColFilters(operationExecutor: OperationExecutor): ColFilters;
 }
 
-export function createColFilters(args: ColFiltersArgs): ColFilters {
+export function createColFilters(
+  operationExecutor: OperationExecutor
+): ColFilters {
   const factory: ColFiltersFactory | undefined =
     getViewModelConfig().colFiltersFactory;
-  if (factory) return factory.createColFilters(args);
+  if (factory) return factory.createColFilters(operationExecutor);
   else throw new MissingFactoryError();
 }

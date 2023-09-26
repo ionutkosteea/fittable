@@ -5,6 +5,7 @@
   top: 0;
   left: 0;
   border-left: 1px solid var(--context-menu-border-color);
+  border-top: 1px solid var(--context-menu-border-color);
   color: var(--context-menu-color);
   background-color: var(--context-menu-background-color);
   overflow: auto;
@@ -63,53 +64,35 @@
   @include window;
   position: fixed;
   padding: fit-map-get($padding-map, large);
-  border-top: 1px solid var(--context-menu-border-color);
 }
 
 .fit-context-menu {
   @include window;
-  position: fixed;
   padding-top: fit-map-get($padding-map, large);
   padding-bottom: fit-map-get($padding-map, large);
-  border-top: 1px solid var(--context-menu-border-color);
   max-height: 90vh;
-  white-space: nowrap;
-}
-
-.fit-settingsbar-menu {
-  @extend .fit-context-menu;
-  position: absolute;
-  top: (fit-map-get($size-map, medium) + 0.125rem);
-  right: 0;
-  left: auto;
-}
-
-.fit-combo-menu {
-  @include window;
-  position: absolute;
-  top: (fit-map-get($size-map, large) + 0.125rem);
-  max-height: 18.75rem;
   white-space: nowrap;
 }
 
 .fit-button-menu {
   @include window;
   position: absolute;
-  top: (fit-map-get($size-map, large) + 0.125rem);
+  top: 2rem;
   overflow: unset;
 }
 
 .fit-menu-item {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: fit-map-get($gap-map, large);
   place-items: center normal;
   padding-left: fit-map-get($padding-map, large);
   padding-right: fit-map-get($padding-map, large);
   cursor: pointer;
-
   &:hover {
     background-color: var(--context-menu-background-hover-color);
+  }
+  & > :nth-child(2):not(:empty) {
+    margin-left: fit-map-get($gap-map, large);
   }
 }
 

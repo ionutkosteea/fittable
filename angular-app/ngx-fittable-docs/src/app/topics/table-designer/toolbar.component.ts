@@ -4,7 +4,7 @@ import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
   Container,
-  ControlMap,
+  Control,
   createFittableDesigner,
   FittableDesigner,
   registerViewModelConfig,
@@ -54,12 +54,13 @@ export class ToolbarComponent implements SimpleTopic, OnInit {
   private replaceUndoButton(): void {
     const toolbar: Container | undefined = this.fit.viewModel.toolbar;
     if (!toolbar) throw new Error('Toolbar is not defined.');
-    const undoControlType: FitControlType = 'push-button';
+    const undoControlType: FitControlType = 'button';
     const undoControlId: FitToolbarControlId = 'undo';
-    const controlMap: ControlMap = {};
+    const controlMap: Map<string, Control> = new Map();
     for (const id of toolbar.getControlIds()) {
+      let control: Control;
       if (id === undoControlId) {
-        controlMap[id] = new FitControl()
+        control = new FitControl()
           .setType(undoControlType)
           // Usually labels should be accessed via the language dictionary.
           .setLabel((): string => 'Undo')
@@ -67,8 +68,9 @@ export class ToolbarComponent implements SimpleTopic, OnInit {
           .setIcon((): string => 'url(../../../assets/icons/undo-red.svg)')
           .setRun((): void => alert('No function added!'));
       } else {
-        controlMap[id] = toolbar.getControl(id);
+        control = toolbar.getControl(id);
       }
+      controlMap.set(id, control);
     }
     toolbar.setControls(controlMap);
   }

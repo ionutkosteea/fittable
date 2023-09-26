@@ -52,7 +52,7 @@ export class FitStyle implements Style {
   }
 
   public toCss(): CssStyle {
-    return { ...this.dto };
+    return this.dto;
   }
 
   public toCssText(): string {

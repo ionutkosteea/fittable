@@ -7,7 +7,6 @@ import {
   ViewModel,
   FittableDesigner,
   ScrollContainer,
-  LanguageDictionary,
 } from 'fittable-core/view-model';
 
 @Component({
@@ -41,9 +40,6 @@ export class FittableComponent implements OnDestroy {
 
   public readonly getStatusbar = (): Statusbar =>
     this.designer.viewModel.statusbar as Statusbar;
-
-  public readonly getDictionary = (): LanguageDictionary =>
-    this.designer.viewModel.dictionary;
 
   public readonly hasSettingsBar = (): boolean =>
     this.designer.viewModel.settingsBar !== undefined;

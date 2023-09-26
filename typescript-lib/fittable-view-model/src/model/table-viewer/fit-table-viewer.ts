@@ -1,4 +1,4 @@
-import { DoubleKeyMap } from 'fittable-core/common';
+import { TwoDimensionalMap } from 'fittable-core/common';
 import {
   Value,
   Table,
@@ -11,6 +11,9 @@ import {
   asTableCols,
   asTableMergedRegions,
   TableStyles,
+  asTableCellDataType,
+  TableCellDataType,
+  DataType,
 } from 'fittable-core/model';
 import {
   getViewModelConfig,
@@ -24,12 +27,13 @@ export class FitTableViewer implements TableViewer {
   private height?: number;
   private rowPositions?: number[];
   private colPositions?: number[];
-  private hiddenCells?: DoubleKeyMap<boolean>;
+  private hiddenCells?: TwoDimensionalMap<boolean>;
   private config: ViewModelConfig;
   private rowTable?: TableRows;
   private colTable?: TableCols;
   private mergedRegionsTable?: TableMergedRegions;
   private styledTable?: TableStyles;
+  private cellDataTypeTable?: TableCellDataType;
 
   constructor(private table: Table) {
     this.config = getViewModelConfig();
@@ -42,6 +46,7 @@ export class FitTableViewer implements TableViewer {
     this.colTable = asTableCols(table);
     this.mergedRegionsTable = asTableMergedRegions(table);
     this.styledTable = asTableStyles(table);
+    this.cellDataTypeTable = asTableCellDataType(table);
     this.resetRowProperties();
     this.resetColProperties();
     this.resetMergedRegions();
@@ -168,26 +173,29 @@ export class FitTableViewer implements TableViewer {
 
   public isHiddenCell(rowId: number, colId: number): boolean {
     if (!this.hiddenCells) this.calculateHiddenCells();
-    return this.hiddenCells?.get(rowId, colId) ?? false;
+    return this.hiddenCells?.getValue(rowId, colId) ?? false;
   }
 
   public hasHiddenCells4Row(rowId: number): boolean {
     if (!this.hiddenCells) this.calculateHiddenCells();
-    return this.hiddenCells?.getAll(rowId) !== undefined;
+    return this.hiddenCells?.getRowValues(rowId) !== undefined;
   }
 
   public hasHiddenCells4Col(colId: number): boolean {
     if (!this.hiddenCells) this.calculateHiddenCells();
-    for (const key of this.hiddenCells?.keys() ?? []) {
+    for (const key of this.hiddenCells?.getRows() ?? []) {
       const rowId: number = key as unknown as number;
-      const value: boolean | undefined = this.hiddenCells?.get(rowId, colId);
+      const value: boolean | undefined = this.hiddenCells?.getValue(
+        rowId,
+        colId
+      );
       if (value) return true;
     }
     return false;
   }
 
   private calculateHiddenCells(): void {
-    this.hiddenCells = new DoubleKeyMap();
+    this.hiddenCells = new TwoDimensionalMap();
     this.mergedRegionsTable?.forEachMergedCell(
       (rowId: number, colId: number): void => {
         const rowSpan: number | undefined = //
@@ -199,7 +207,7 @@ export class FitTableViewer implements TableViewer {
         for (let i = rowId; i <= toRowId; i++) {
           for (let j = colId; j <= toColId; j++) {
             if (i === rowId && j === colId) continue;
-            this.hiddenCells?.set(i, j, true);
+            this.hiddenCells?.setValue(i, j, true);
           }
         }
       }
@@ -244,6 +252,30 @@ export class FitTableViewer implements TableViewer {
 
   public getCellValue(rowId: number, colId: number): Value | undefined {
     return this.table.getCellValue(rowId, colId);
+  }
+
+  public getCellDataType(rowId: number, colId: number): DataType | undefined {
+    return this.cellDataTypeTable?.getCellDataType(rowId, colId);
+  }
+
+  public getCellType(rowId: number, colId: number): DataType['name'] {
+    return this.cellDataTypeTable?.getCellType(rowId, colId) ?? 'string';
+  }
+
+  public getFormatedCellValue(
+    rowId: number,
+    colId: number
+  ): string | undefined {
+    const formattedValue: string | undefined =
+      this.cellDataTypeTable?.getFormatedCellValue(rowId, colId);
+    return formattedValue === undefined
+      ? this.toStringValue(rowId, colId)
+      : formattedValue;
+  }
+
+  private toStringValue(rowId: number, colId: number): string | undefined {
+    const value: Value | undefined = this.getCellValue(rowId, colId);
+    return value === undefined ? undefined : '' + value;
   }
 }
 

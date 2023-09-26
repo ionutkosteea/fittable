@@ -6,6 +6,7 @@ export type FitImageId =
   | 'alignRight'
   | 'alignTop'
   | 'arrowDown'
+  | 'arrowRight'
   | 'backgroundColor'
   | 'boldBlue'
   | 'bold'
@@ -52,6 +53,10 @@ export type FitImageId =
   | 'check'
   | 'filter'
   | 'filterBlue'
-  | 'search';
+  | 'search'
+  | 'automatic'
+  | 'text'
+  | 'number'
+  | 'date';
 
 export type FitImages = { [id in FitImageId]?: string };

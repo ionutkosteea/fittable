@@ -4,10 +4,8 @@ export function appendStyleStepsDto(
   source: StyleOperationStepDto,
   target: StyleOperationStepDto
 ): void {
-  source.createStyles.forEach((data) => target.createStyles.push(data));
-  source.updateStyles.forEach((data) => target.updateStyles.push(data));
-  source.removeStyles.forEach((name) => target.removeStyles.push(name));
-  source.cellStyleNames.forEach((styleName) =>
-    target.cellStyleNames.push(styleName)
-  );
+  target.createStyles = target.createStyles.concat(source.createStyles);
+  target.updateStyles = target.updateStyles.concat(source.updateStyles);
+  target.removeStyles = target.removeStyles.concat(source.removeStyles);
+  target.cellStyleNames = target.cellStyleNames.concat(source.cellStyleNames);
 }

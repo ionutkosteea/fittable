@@ -10,10 +10,10 @@
   padding-right: fit-map-get($size-map, large);
 }
 
-.fit-menu-label {
+.fit-title-label {
   color: var(--highlight-color);
   font-size: fit-map-get($font-size-map, large);
   line-height: fit-map-get($line-height-map, large);
-  padding-left: fit-map-get($size-map, medium);
-  padding-right: fit-map-get($size-map, medium);
+  padding-left: fit-map-get($padding-map, large);
+  padding-right: fit-map-get($padding-map, large);
 }

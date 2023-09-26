@@ -1,34 +1,37 @@
-import { PushButton } from './common/push-button.js';
-import { FitControlArgs } from './common/fit-control-args.js';
+import { getLanguageDictionary } from 'fittable-core/model';
+import { ControlArgs } from 'fittable-core/view-model';
 
-export function createUndoButton(args: FitControlArgs): PushButton {
+import { PushButton } from './common/push-button.js';
+import { getImageRegistry } from '../../image-registry/fit-image-registry.js';
+
+export function createUndoButton(args: ControlArgs): PushButton {
   const button: PushButton = new PushButton()
-    .setType('push-button')
-    .setLabel((): string => args.dictionary.getText('Undo'))
+    .setType('button')
+    .setLabel((): string => getLanguageDictionary().getText('Undo'))
     .setPushed((): boolean => args.operationExecutor.canUndo())
     .setRun((): void => {
       args.operationExecutor.undo();
     });
   button.setIcon((): string | undefined => {
     return button.isPushed()
-      ? args.imageRegistry.getImageUrl('undoBlue')
-      : args.imageRegistry.getImageUrl('undo');
+      ? getImageRegistry().getUrl('undoBlue')
+      : getImageRegistry().getUrl('undo');
   });
   return button;
 }
 
-export function createRedoButton(args: FitControlArgs): PushButton {
+export function createRedoButton(args: ControlArgs): PushButton {
   const button: PushButton = new PushButton()
-    .setType('push-button')
-    .setLabel((): string => args.dictionary.getText('Redo'))
+    .setType('button')
+    .setLabel((): string => getLanguageDictionary().getText('Redo'))
     .setPushed((): boolean => args.operationExecutor.canRedo())
     .setRun((): void => {
       args.operationExecutor.redo();
     });
   button.setIcon((): string | undefined => {
     return button.isPushed()
-      ? args.imageRegistry.getImageUrl('redoBlue')
-      : args.imageRegistry.getImageUrl('redo');
+      ? getImageRegistry().getUrl('redoBlue')
+      : getImageRegistry().getUrl('redo');
   });
   return button;
 }
