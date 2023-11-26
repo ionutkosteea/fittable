@@ -27,25 +27,27 @@
 .fit-settingsbar {
   @include bar(flex-start);
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1px;
+  right: 1px;
   padding: fit-map-get($padding-map, small);
   border-left: 1px dotted var(--highlight-color);
   border-bottom: 1px dotted var(--highlight-color);
+  border-top-right-radius: 4px;
   border-bottom-left-radius: 6px;
-  background-color: var(--toolbar-background-color);
+  background-color: var(--settings-bar-background-color);
 }
 
 .fit-toolbar {
   @include bar(flex-start);
+  align-items: center;
   flex-wrap: wrap;
-  padding-left: fit-map-get($padding-map, small);
-  padding-top: fit-map-get($padding-map, small);
-  padding-right: (fit-map-get($size-map, large) + fit-map-get($padding-map, small));
-  padding-bottom: fit-map-get($padding-map, small);
-  border-bottom: 1px solid var(--toolbar-border-color);
   color: var(--toolbar-color);
   background-color: var(--toolbar-background-color);
+  gap: 0.2188rem;
+  padding: 0.2188rem;
+  border: 1px solid var(--toolbar-border-color);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
 .fit-toolbar-button-bar {
@@ -54,11 +56,13 @@
 }
 
 .fit-statusbar {
-  padding: fit-map-get($padding-map, small);
-  border-top: 1px solid var(--statusbar-border-color);
+  padding: fit-map-get($padding-map, medium);
+  border: 1px solid var(--statusbar-border-color);
   background-color: var(--statusbar-background-color);
   color: var(--statusbar-color);
   width: auto;
   text-align: right;
   font-size: fit-map-get($font-size-map, small);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }

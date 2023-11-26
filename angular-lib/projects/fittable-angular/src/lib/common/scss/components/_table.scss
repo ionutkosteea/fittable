@@ -42,7 +42,7 @@
   overflow-y: scroll;
   &::-webkit-scrollbar {
     @include scrollbar-size();
-    background-color: var(--table-header-background-hover-color);
+    background-color: var(--scrollbar-background-color);
   }
 }
 .fit-table-row-header {
@@ -52,7 +52,7 @@
   overflow-y: hidden;
   &::-webkit-scrollbar {
     @include scrollbar-size();
-    background-color: var(--table-header-background-hover-color);
+    background-color: var(--scrollbar-background-color);
   }
 }
 .fit-table-body {
@@ -61,7 +61,7 @@
   overflow: scroll;
   &::-webkit-scrollbar {
     @include scrollbar-size();
-    background-color: var(--table-header-background-hover-color);
+    background-color: var(--scrollbar-background-color);
   }
   &::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-color);

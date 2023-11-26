@@ -1,6 +1,7 @@
 import { CssVariables } from 'fittable-core/view-model';
 
 export type FitCssColorVariable =
+  | '--settings-bar-background-color'
   | '--highlight-color'
   | '--toolbar-background-color'
   | '--toolbar-background-hover-color'
@@ -34,22 +35,23 @@ export type FitCssColorVariable =
 export type FitCssColorVariables = { [name in FitCssColorVariable]: string };
 
 export const FIT_CSS_COLOR_VARIABLES: FitCssColorVariables = {
+  '--settings-bar-background-color': '#ffffff',
   '--highlight-color': '#2987d6',
   '--toolbar-background-color': '#ffffff',
   '--toolbar-background-hover-color': 'rgba(96, 96, 96, 0.1)',
   '--toolbar-color': '#606060',
-  '--toolbar-border-color': '#b7b7b7',
+  '--toolbar-border-color': '#d5d5d5',
   '--toolbar-box-shadow-color': 'rgba(0, 0, 0, 0.25)',
-  '--scrollbar-background-color': '#ffffff',
-  '--scrollbar-color': '#b7b7b7',
+  '--scrollbar-background-color': '#f7f7f7',
+  '--scrollbar-color': '#d5d5d5',
   '--scrollbar-border-color': '#ffffff',
   '--table-header-background-color': '#ffffff',
   '--table-header-background-hover-color': 'rgba(96, 96, 96, 0.1)',
   '--table-header-color': '#606060',
-  '--table-header-border-color': '#b7b7b7',
+  '--table-header-border-color': '#d5d5d5',
   '--table-body-background-color': '#ffffff',
   '--table-body-color': '#000000',
-  '--table-body-border-color': '#b7b7b7',
+  '--table-body-border-color': '#d5d5d5',
   '--cell-editor-background-color': '#ffffff',
   '--cell-editor-color': '#000000',
   '--cell-editor-box-shadow-color': 'rgba(42, 135, 214, 1)',
@@ -58,11 +60,11 @@ export const FIT_CSS_COLOR_VARIABLES: FitCssColorVariables = {
   '--context-menu-background-color': '#ffffff',
   '--context-menu-background-hover-color': 'rgba(96, 96, 96, 0.1)',
   '--context-menu-color': '#606060',
-  '--context-menu-border-color': '#b7b7b7',
+  '--context-menu-border-color': '#d5d5d5',
   '--context-menu-box-shadow-color': 'rgba(0, 0, 0, 0.25)',
   '--statusbar-background-color': '#ffffff',
   '--statusbar-color': '#606060',
-  '--statusbar-border-color': '#b7b7b7',
+  '--statusbar-border-color': '#d5d5d5',
 };
 
 export function setCssVariable(

@@ -1,17 +1,14 @@
 @import "../common/common";
 
 .fit-bar-separator {
-  width: 0.5rem;
-  height: 0.5rem;
-  font-size: 0;
+  width: 1px;
+  height: 1.25rem;
+  background-color: var(--toolbar-border-color);
 }
 
 .fit-container-separator {
-  margin: 0;
-  padding: 0;
   height: 1px;
   background-color: var(--context-menu-border-color);
-  opacity: 0.5;
 }
 
 .fit-menu-separator {

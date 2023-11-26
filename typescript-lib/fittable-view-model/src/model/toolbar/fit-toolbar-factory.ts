@@ -48,12 +48,14 @@ export type FitToolbarControlId =
   | `${'separator'}${string}`;
 
 export class FitToolbarFactory implements ToolbarFactory {
+  private separatorCounter = 0;
+
   public createToolbar(args: ControlArgs): Container {
     const toolbar: FitContainer<FitToolbarControlId> = new FitContainer();
     toolbar
       .addControl('undo', createUndoButton(args))
       .addControl('redo', createRedoButton(args))
-      .addControl('separator1', new FitSeparator());
+      .addControl(this.getSeparatorId(), new FitSeparator());
     const hasCellSelection: boolean = args.getSelectedCells().length > 0;
     const isStyledTable: boolean =
       asTableStyles(args.operationExecutor.getTable()) !== undefined;
@@ -72,19 +74,23 @@ export class FitToolbarFactory implements ToolbarFactory {
   ): void {
     toolbar
       .addControl('paint-format', createPaintFormatButton(args))
-      .addControl('separator2', new FitSeparator())
+      .addControl(this.getSeparatorId(), new FitSeparator())
       .addControl('bold', createBoldButton(args))
       .addControl('italic', createItalicButton(args))
       .addControl('underline', createUnderlineButton(args))
       .addControl('strike', createStrikeButton(args))
+      .addControl(this.getSeparatorId(), new FitSeparator())
       .addControl('font-family', createFontFamilyCombo(args))
+      .addControl(this.getSeparatorId(), new FitSeparator())
       .addControl('font-size', createFontSizeInput(args))
+      .addControl(this.getSeparatorId(), new FitSeparator())
       .addControl('color', createColorPopup(args))
       .addControl('background-color', createBackgroundColorPopup(args))
+      .addControl(this.getSeparatorId(), new FitSeparator())
       .addControl('vertical-align', createVerticalAlignPopup(args))
       .addControl('horizontal-align', createHorizontalAlignPopup(args))
       .addControl('border', createBorderPopup(args))
-      .addControl('separator7', new FitSeparator());
+      .addControl(this.getSeparatorId(), new FitSeparator());
   }
 
   private addDataTypeUpdateControls(
@@ -92,5 +98,10 @@ export class FitToolbarFactory implements ToolbarFactory {
     args: ControlArgs
   ): void {
     toolbar.addControl('format', createDataTypePopup(args));
+  }
+
+  private getSeparatorId(): FitToolbarControlId {
+    this.separatorCounter++;
+    return `separator${this.separatorCounter}`;
   }
 }

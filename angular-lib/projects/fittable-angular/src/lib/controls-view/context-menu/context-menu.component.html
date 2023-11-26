@@ -3,7 +3,7 @@
   <ng-container *ngFor="let id of getControlIds()">
     <ng-container [ngSwitch]="getControlType(id)">
       <ng-container *ngSwitchCase="'separator'">
-        <hr class="fit-menu-separator" />
+        <div class="fit-menu-separator"></div>
       </ng-container>
       <ng-container *ngSwitchCase="'label'">
         <div class="fit-title-label">{{getControlLabel(id)}}</div>

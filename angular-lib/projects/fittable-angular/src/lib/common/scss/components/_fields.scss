@@ -32,7 +32,6 @@
 
 .fit-toolbar-input {
   @include field;
-  @include border;
   width: 2.5rem;
   text-align: center;
   font-size: fit-map-get($font-size-map, base);
@@ -51,7 +50,6 @@
 
 .fit-toolbar-combo {
   @include field;
-  @include border;
   cursor: pointer;
   width: 6.25rem;
   text-align: center;
