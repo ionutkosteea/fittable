@@ -113,7 +113,7 @@
   height: 6.25rem;
   overflow: auto;
   scroll-behavior: smooth;
-  background-color: var(--scrollbar-background-color);
+  background-color: var(--context-menu-background-color);
   font-size: 0.75rem; }
   .fit-col-filters-scroll-container .fit-full-size-container {
     position: relative;

@@ -57,7 +57,9 @@ export class BorderTypeComponent
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (!valueControl) throw new Error('Invalid value control for id ' + id);
     const parts: string[] = (valueControl.getValue() as string).split(' ');
-    return { borderBottom: parts[1] + 'px ' + parts[0] + ' #606060' };
+    return {
+      borderBottom: parts[1] + 'px ' + parts[0] + ' var(--toolbar-color)',
+    };
   }
 
   public ngOnDestroy(): void {
