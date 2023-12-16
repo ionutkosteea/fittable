@@ -101,7 +101,7 @@ export const images: FitImages = {
   check:
     "%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='14' viewBox='0 0 16 14' fill='none'%3E%3Cpath d='M5.25159 13.1417L0 7.89006L2.39323 5.49683L5.25159 8.36364L13.6068 0L16 2.39323L5.25159 13.1417Z' fill='%23C3C3C3'/%3E%3C/svg%3E",
   filter:
-    "%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7' fill='none'%3E%3Cpath d='M4.08333 7H6.41667V5.83333H4.08333V7ZM0 0V1.16667H10.5V0H0ZM1.75 4.08333H8.75V2.91667H1.75V4.08333Z' fill='%23C3C3C3'/%3E%3C/svg%3E",
+    "%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7' fill='none'%3E%3Cpath d='M4.08333 7H6.41667V5.83333H4.08333V7ZM0 0V1.16667H10.5V0H0ZM1.75 4.08333H8.75V2.91667H1.75V4.08333Z' fill='%23707070'/%3E%3C/svg%3E",
   filterBlue:
     "%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7' fill='none'%3E%3Cpath d='M4.08333 7H6.41667V5.83333H4.08333V7ZM0 0V1.16667H10.5V0H0ZM1.75 4.08333H8.75V2.91667H1.75V4.08333Z' fill='%23FF6F1A'/%3E%3C/svg%3E",
   search:

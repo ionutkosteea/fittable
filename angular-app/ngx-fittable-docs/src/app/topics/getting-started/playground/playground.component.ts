@@ -33,8 +33,8 @@ const getFitTableDto = (): FitTableDto => ({
   styles: {
     s0: { 'font-weight': 'bold' },
     s1: { 'font-style': 'italic' },
-    s2: { 'text-decoration': 'underline' },
-    s3: { 'text-decoration': 'line-through' },
+    s2: { 'text-decoration': 'line-through' },
+    s3: { 'text-decoration': 'underline' },
     s4: { 'font-family': 'fantasy' },
     s5: { 'font-size.px': 16 },
     s6: { color: '#5498ff' },
@@ -82,7 +82,7 @@ const getFitTableDto = (): FitTableDto => ({
       },
     },
     4: {
-      1: { styleName: 's2', value: 'Underline' },
+      1: { styleName: 's2', value: 'Line-through' },
       3: {
         value: 1000,
         dataType: { name: 'number', format: '#,#' },
@@ -93,7 +93,7 @@ const getFitTableDto = (): FitTableDto => ({
       },
     },
     5: {
-      1: { styleName: 's3', value: 'Line-through' },
+      1: { styleName: 's3', value: 'Underline' },
       3: {
         value: 1000,
         dataType: { name: 'number', format: '#,#.00' },

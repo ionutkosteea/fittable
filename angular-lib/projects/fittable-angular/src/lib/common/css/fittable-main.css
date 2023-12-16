@@ -180,7 +180,7 @@
   gap: 0.125rem;
   justify-content: flex-start;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   color: var(--toolbar-color);
   background-color: var(--toolbar-background-color);
   gap: 0.2188rem;
@@ -474,7 +474,8 @@
 
 .fit-table-container {
   flex: 1;
-  overflow: hidden; }
+  overflow: hidden;
+  border: 1px solid var(--table-header-border-color); }
 
 .fit-table-layout {
   display: grid;

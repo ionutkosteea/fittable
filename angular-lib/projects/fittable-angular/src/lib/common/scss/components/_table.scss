@@ -21,6 +21,7 @@
 .fit-table-container {
   flex: 1;
   overflow: hidden;
+  border: 1px solid var(--table-header-border-color);
 }
 .fit-table-layout {
   display: grid;

@@ -40,7 +40,7 @@
 .fit-toolbar {
   @include bar(flex-start);
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   color: var(--toolbar-color);
   background-color: var(--toolbar-background-color);
   gap: 0.2188rem;

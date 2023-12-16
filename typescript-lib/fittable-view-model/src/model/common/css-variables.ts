@@ -51,7 +51,7 @@ export const FIT_CSS_COLOR_VARIABLES: FitCssColorVariables = {
   '--table-header-border-color': '#d5d5d5',
   '--table-body-background-color': '#ffffff',
   '--table-body-color': '#000000',
-  '--table-body-border-color': '#d5d5d5',
+  '--table-body-border-color': '#c5c5c5',
   '--cell-editor-background-color': '#ffffff',
   '--cell-editor-color': '#000000',
   '--cell-editor-box-shadow-color': 'rgba(42, 135, 214, 1)',
