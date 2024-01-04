@@ -330,7 +330,10 @@
   width: 2.5rem;
   text-align: center;
   font-size: 0.875rem;
-  height: 1.75rem; }
+  height: 1.75rem;
+  border-radius: 4px; }
+  .fit-toolbar-input:hover {
+    background-color: var(--toolbar-background-hover-color); }
 
 .fit-menu-input {
   margin: 0;
@@ -365,7 +368,10 @@
   background-position: right center;
   background-origin: content-box;
   font-size: 0.875rem;
-  height: 1.75rem; }
+  height: 1.75rem;
+  border-radius: 4px; }
+  .fit-toolbar-combo:hover {
+    background-color: var(--toolbar-background-hover-color); }
 
 .fit-color-picker-combo {
   margin: 0;
