@@ -1,5 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
+import { ToolbarModule } from 'primeng/toolbar';
+import { ButtonModule } from 'primeng/button';
+import { SidebarModule } from 'primeng/sidebar';
+import { TreeModule } from 'primeng/tree';
 
 import { FittableModule } from 'fittable-angular';
 
@@ -109,7 +113,14 @@ describe('AppComponent', () => {
         CustomViewModelComponent,
         TableInteroperabilityComponent,
       ],
-      imports: [BrowserModule, FittableModule],
+      imports: [
+        BrowserModule,
+        ToolbarModule,
+        ButtonModule,
+        SidebarModule,
+        TreeModule,
+        FittableModule,
+      ],
     }).compileComponents();
   });
 

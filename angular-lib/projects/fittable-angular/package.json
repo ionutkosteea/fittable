@@ -1,6 +1,6 @@
 {
   "name": "fittable-angular",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Fittable is an Angular/TypeScript component optimized for handling large table structures with spreadsheet-like capabilities.",
   "homepage": "https://fittable-499b2.web.app",
   "author": {
@@ -17,16 +17,16 @@
     "url": "https://github.com/ionutkosteea/fittable/issues"
   },
   "peerDependencies": {
-    "@angular/common": "^16.2.0",
-    "@angular/core": "^16.2.0",
-    "fittable-model": "^2.0.0",
-    "fittable-model-operations": "^2.0.0",
-    "fittable-view-model": "^3.0.0"
+    "@angular/common": "^17.0.0",
+    "@angular/core": "^17.0.0",
+    "fittable-model": "^2.0.1",
+    "fittable-model-operations": "^2.0.1",
+    "fittable-view-model": "^3.0.1"
   },
   "dependencies": {
     "tslib": "^2.3.0",
     "rxjs": "~7.8.0",
-    "fittable-core": "^4.0.0"
+    "fittable-core": "^4.0.1"
   },
   "sideEffects": false,
   "keywords": [

@@ -43,8 +43,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 }
               ],
               "outputHashing": "all"
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngx-fittable-docs:build:production"
+              "buildTarget": "ngx-fittable-docs:build:production"
             },
             "development": {
-              "browserTarget": "ngx-fittable-docs:build:development"
+              "buildTarget": "ngx-fittable-docs:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-fittable-docs:build"
+            "buildTarget": "ngx-fittable-docs:build"
           }
         },
         "test": {

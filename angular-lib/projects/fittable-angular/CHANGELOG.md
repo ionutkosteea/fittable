@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v5.0.1] - 2024-01-06
+
+### Changed
+
+- Update dependencies
+- Toolbar flat design
+
 ## [v5.0.0] - 2023-09-26
 
 ### Added
