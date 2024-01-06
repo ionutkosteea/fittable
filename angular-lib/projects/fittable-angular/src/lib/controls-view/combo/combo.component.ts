@@ -23,7 +23,7 @@ import { PopupControlComponent } from '../common/popup-control-component.model';
         [top]="'2rem'"
         [maxHeight]="'18.75rem'"
         [controlStyleFn]="controlStyleFn"
-      ></fit-context-menu>
+      />
     </div>
   `,
 })

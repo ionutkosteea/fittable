@@ -2,98 +2,150 @@
   <header class="header">
     <p-toolbar>
       <div class="p-toolbar-group-start">
-        <p-button class="hamburger" icon="pi pi-bars" (onClick)="onHamburgerClick()"></p-button>
+        <p-button
+          class="hamburger"
+          icon="pi pi-bars"
+          (onClick)="onHamburgerClick()"
+        />
         <div class="logo">#Fittable</div>
       </div>
       <aside class="p-toolbar-group-end">
-        <p-button styleClass="p-button-rounded p-button-secondary p-button-outlined" title="npmjs" (click)="onNpmJs()">
+        <p-button
+          styleClass="p-button-rounded p-button-secondary p-button-outlined"
+          title="npmjs"
+          (click)="onNpmJs()"
+        >
           <img alt="npmjs" src="../assets/icons/npmjs.svg" />
         </p-button>
-        <p-button styleClass="p-button-rounded p-button-secondary p-button-outlined" title="GitHub"
-          (click)="onGitHub()">
+        <p-button
+          styleClass="p-button-rounded p-button-secondary p-button-outlined"
+          title="GitHub"
+          (click)="onGitHub()"
+        >
           <img alt="GitHub" src="../assets/icons/github.svg" />
         </p-button>
-        <p-button styleClass="p-button-rounded p-button-secondary p-button-outlined"
-          title="mailto:ionut.kosteea@gmail.com" (click)="onContact()">
+        <p-button
+          styleClass="p-button-rounded p-button-secondary p-button-outlined"
+          title="mailto:ionut.kosteea@gmail.com"
+          (click)="onContact()"
+        >
           <img alt="Contact" src="../assets/icons/e-mail.svg" />
         </p-button>
       </aside>
     </p-toolbar>
   </header>
   <nav class="navigation-tree navigation">
-    <navigation-tree [treeSelection$]="activeTopic$"></navigation-tree>
+    <navigation-tree [treeSelection$]="activeTopic$" />
   </nav>
   <main #main class="main">
-    <section *ngIf="activeTopic==='Introduction'">
-      <introduction></introduction>
+    <section *ngIf="activeTopic === 'Introduction'">
+      <introduction />
     </section>
-    <section *ngIf="activeTopic==='Playground'">
-      <playground></playground>
+    <section *ngIf="activeTopic === 'Playground'">
+      <playground />
     </section>
-    <section *ngIf="activeTopic==='Architecture'">
-      <architecture></architecture>
+    <section *ngIf="activeTopic === 'Architecture'">
+      <architecture />
     </section>
-    <section *ngIf="activeTopic==='Installation'">
-      <installation></installation>
+    <section *ngIf="activeTopic === 'Installation'">
+      <installation />
     </section>
-    <section *ngIf="activeTopic==='Row height'"><row-height></row-height></section>
-    <section *ngIf="activeTopic==='Column width'"><column-width></column-width></section>
-    <section *ngIf="activeTopic==='Cell value'"><cell-value></cell-value></section>
-    <section *ngIf="activeTopic==='Cell data-type'"><cell-data-type></cell-data-type></section>
-    <section *ngIf="activeTopic==='Cell style'"><cell-style></cell-style></section>
-    <section *ngIf="activeTopic==='Cell merge'"><cell-merge></cell-merge></section>
-    <section *ngIf="activeTopic==='Table DTO'"><table-dto></table-dto></section>
-    <section *ngIf="activeTopic==='Custom table'"><custom-table></custom-table></section>
-    <section *ngIf="activeTopic==='Update style'"><update-style></update-style></section>
-    <section *ngIf="activeTopic==='Paint format'"><paint-format></paint-format></section>
-    <section *ngIf="activeTopic==='Resize rows'"><resize-rows></resize-rows></section>
-    <section *ngIf="activeTopic==='Insert rows above'"><insert-rows-above></insert-rows-above></section>
-    <section *ngIf="activeTopic==='Insert rows below'"><insert-rows-below></insert-rows-below></section>
-    <section *ngIf="activeTopic==='Remove rows'"><remove-rows></remove-rows></section>
-    <section *ngIf="activeTopic==='Resize columns'"><resize-columns></resize-columns></section>
-    <section *ngIf="activeTopic==='Insert columns left'"><insert-columns-left></insert-columns-left></section>
-    <section *ngIf="activeTopic==='Insert columns right'"><insert-columns-right></insert-columns-right></section>
-    <section *ngIf="activeTopic==='Remove columns'"><remove-columns></remove-columns></section>
-    <section *ngIf="activeTopic==='Clear cells'"><clear-cells></clear-cells></section>
-    <section *ngIf="activeTopic==='Cell values'"><cell-values></cell-values></section>
-    <section *ngIf="activeTopic==='Cell data-types'"><cell-data-types></cell-data-types></section>
-    <section *ngIf="activeTopic==='Remove cells'"><remove-cells></remove-cells></section>
-    <section *ngIf="activeTopic==='Cut / Paste cells'"><cut-paste-cells></cut-paste-cells></section>
-    <section *ngIf="activeTopic==='Copy / Paste cells'"><copy-paste-cells></copy-paste-cells></section>
-    <section *ngIf="activeTopic==='Merge cells'"><merge-cells></merge-cells></section>
-    <section *ngIf="activeTopic==='Unmerge cells'"><unmerge-cells></unmerge-cells></section>
-    <section *ngIf="activeTopic==='Operation DTO'"><operation-dto></operation-dto></section>
-    <section *ngIf="activeTopic==='Custom operation'"><custom-operation></custom-operation></section>
-    <section *ngIf="activeTopic==='Table interoperability'"><table-interoperability></table-interoperability>
+    <section *ngIf="activeTopic === 'Row height'"><row-height /></section>
+    <section *ngIf="activeTopic === 'Column width'"><column-width /></section>
+    <section *ngIf="activeTopic === 'Cell value'"><cell-value /></section>
+    <section *ngIf="activeTopic === 'Cell data-type'">
+      <cell-data-type />
     </section>
-    <section *ngIf="activeTopic==='Row header'"><row-header></row-header></section>
-    <section *ngIf="activeTopic==='Column header'"><column-header></column-header></section>
-    <section *ngIf="activeTopic==='Row heights'"><row-heights></row-heights></section>
-    <section *ngIf="activeTopic==='Column widths'"><column-widths></column-widths></section>
-    <section *ngIf="activeTopic==='Column filters (1/2)'"><column-filters></column-filters></section>
-    <section *ngIf="activeTopic==='Column filters (2/2)'"><column-filter-executor></column-filter-executor>
+    <section *ngIf="activeTopic === 'Cell style'"><cell-style /></section>
+    <section *ngIf="activeTopic === 'Cell merge'"><cell-merge /></section>
+    <section *ngIf="activeTopic === 'Table DTO'"><table-dto /></section>
+    <section *ngIf="activeTopic === 'Custom table'"><custom-table /></section>
+    <section *ngIf="activeTopic === 'Update style'"><update-style /></section>
+    <section *ngIf="activeTopic === 'Paint format'"><paint-format /></section>
+    <section *ngIf="activeTopic === 'Resize rows'"><resize-rows /></section>
+    <section *ngIf="activeTopic === 'Insert rows above'">
+      <insert-rows-above />
     </section>
-    <section *ngIf="activeTopic==='Table scroll container'"><table-scroll-container></table-scroll-container></section>
-    <section *ngIf="activeTopic==='Cell selection'"><cell-selection></cell-selection></section>
-    <section *ngIf="activeTopic==='Cell editor'"><cell-editor></cell-editor></section>
-    <section *ngIf="activeTopic==='Language dictionary'"><language-dictionary></language-dictionary></section>
-    <section *ngIf="activeTopic==='Image registry'"><image-registry></image-registry></section>
-    <section *ngIf="activeTopic==='Theme switcher'"><theme-switcher></theme-switcher></section>
-    <section *ngIf="activeTopic==='Settings bar'"><settings-bar></settings-bar></section>
-    <section *ngIf="activeTopic==='Toolbar'">
-      <toolbar></toolbar>
+    <section *ngIf="activeTopic === 'Insert rows below'">
+      <insert-rows-below />
     </section>
-    <section *ngIf="activeTopic==='Context menu'"><context-menu></context-menu></section>
-    <section *ngIf="activeTopic==='Statusbar'">
-      <statusbar></statusbar>
+    <section *ngIf="activeTopic === 'Remove rows'"><remove-rows /></section>
+    <section *ngIf="activeTopic === 'Resize columns'">
+      <resize-columns />
     </section>
-    <section *ngIf="activeTopic==='Custom view model'"><custom-view-model></custom-view-model></section>
-    <section *ngIf="activeTopic==='Custom view'"><custom-view></custom-view></section>
+    <section *ngIf="activeTopic === 'Insert columns left'">
+      <insert-columns-left />
+    </section>
+    <section *ngIf="activeTopic === 'Insert columns right'">
+      <insert-columns-right />
+    </section>
+    <section *ngIf="activeTopic === 'Remove columns'">
+      <remove-columns />
+    </section>
+    <section *ngIf="activeTopic === 'Clear cells'"><clear-cells /></section>
+    <section *ngIf="activeTopic === 'Cell values'"><cell-values /></section>
+    <section *ngIf="activeTopic === 'Cell data-types'">
+      <cell-data-types />
+    </section>
+    <section *ngIf="activeTopic === 'Remove cells'"><remove-cells /></section>
+    <section *ngIf="activeTopic === 'Cut / Paste cells'">
+      <cut-paste-cells />
+    </section>
+    <section *ngIf="activeTopic === 'Copy / Paste cells'">
+      <copy-paste-cells />
+    </section>
+    <section *ngIf="activeTopic === 'Merge cells'"><merge-cells /></section>
+    <section *ngIf="activeTopic === 'Unmerge cells'"><unmerge-cells /></section>
+    <section *ngIf="activeTopic === 'Operation DTO'"><operation-dto /></section>
+    <section *ngIf="activeTopic === 'Custom operation'">
+      <custom-operation />
+    </section>
+    <section *ngIf="activeTopic === 'Table interoperability'">
+      <table-interoperability />
+    </section>
+    <section *ngIf="activeTopic === 'Row header'"><row-header /></section>
+    <section *ngIf="activeTopic === 'Column header'"><column-header /></section>
+    <section *ngIf="activeTopic === 'Row heights'"><row-heights /></section>
+    <section *ngIf="activeTopic === 'Column widths'"><column-widths /></section>
+    <section *ngIf="activeTopic === 'Column filters (1/2)'">
+      <column-filters />
+    </section>
+    <section *ngIf="activeTopic === 'Column filters (2/2)'">
+      <column-filter-executor />
+    </section>
+    <section *ngIf="activeTopic === 'Table scroll container'">
+      <table-scroll-container />
+    </section>
+    <section *ngIf="activeTopic === 'Cell selection'">
+      <cell-selection />
+    </section>
+    <section *ngIf="activeTopic === 'Cell editor'"><cell-editor /></section>
+    <section *ngIf="activeTopic === 'Language dictionary'">
+      <language-dictionary />
+    </section>
+    <section *ngIf="activeTopic === 'Image registry'">
+      <image-registry />
+    </section>
+    <section *ngIf="activeTopic === 'Theme switcher'">
+      <theme-switcher />
+    </section>
+    <section *ngIf="activeTopic === 'Settings bar'"><settings-bar /></section>
+    <section *ngIf="activeTopic === 'Toolbar'">
+      <toolbar />
+    </section>
+    <section *ngIf="activeTopic === 'Context menu'"><context-menu /></section>
+    <section *ngIf="activeTopic === 'Statusbar'">
+      <statusbar />
+    </section>
+    <section *ngIf="activeTopic === 'Custom view model'">
+      <custom-view-model />
+    </section>
+    <section *ngIf="activeTopic === 'Custom view'"><custom-view /></section>
   </main>
   <footer class="footer">&nbsp;</footer>
 </div>
 <p-sidebar [(visible)]="showSidebar">
   <div class="navigation-tree">
-    <navigation-tree [treeSelection$]="activeTopic$"></navigation-tree>
+    <navigation-tree [treeSelection$]="activeTopic$" />
   </div>
 </p-sidebar>

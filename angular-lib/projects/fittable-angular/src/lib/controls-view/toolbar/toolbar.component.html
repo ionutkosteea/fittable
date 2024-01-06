@@ -2,37 +2,34 @@
   <ng-container *ngFor="let id of getControlIDs()">
     <ng-container [ngSwitch]="getControlType(id)">
       <ng-container *ngSwitchCase="'button'">
-        <fit-button [model]="getControl(id)"></fit-button>
+        <fit-button [model]="getControl(id)" />
       </ng-container>
       <ng-container *ngSwitchCase="'combo'">
-        <fit-combo [model]="getPopupControl(id)" [controlStyleFn]="getComboControlStyle">
-        </fit-combo>
+        <fit-combo
+          [model]="getPopupControl(id)"
+          [controlStyleFn]="getComboControlStyle"
+        />
       </ng-container>
       <ng-container *ngSwitchCase="'input'">
-        <fit-input [model]="getInputControl(id)">
-        </fit-input>
+        <fit-input [model]="getInputControl(id)" />
       </ng-container>
       <ng-container *ngSwitchCase="'color-picker'">
-        <fit-color-picker [model]="getPopupControl(id)">
-        </fit-color-picker>
+        <fit-color-picker [model]="getPopupControl(id)" />
       </ng-container>
       <ng-container *ngSwitchCase="'popup-button'">
-        <fit-popup-button [model]="getPopupControl(id)">
-        </fit-popup-button>
+        <fit-popup-button [model]="getPopupControl(id)" />
       </ng-container>
       <ng-container *ngSwitchCase="'border-popup-button'">
-        <fit-border-popup [model]="getPopupControl(id)">
-        </fit-border-popup>
+        <fit-border-popup [model]="getPopupControl(id)" />
       </ng-container>
       <ng-container *ngSwitchCase="'context-menu-button'">
-        <fit-context-menu-button [model]="getPopupControl(id)">
-        </fit-context-menu-button>
+        <fit-context-menu-button [model]="getPopupControl(id)" />
       </ng-container>
       <ng-container *ngSwitchCase="'separator'">
         <div class="fit-bar-separator">&nbsp;</div>
       </ng-container>
       <ng-container *ngSwitchDefault>
-        <div>Unknown control type for ID: {{id}}</div>
+        <div>Unknown control type for ID: {{ id }}</div>
       </ng-container>
     </ng-container>
   </ng-container>

@@ -1,7 +1,14 @@
 <div class="fit-table-cell-editor" [ngStyle]="cellEditorStyle">
-  <textarea #textArea [ngStyle]="textAreaStyle" (mouseenter)="onTextAreaMouseEnter($event)"
-    (mousedown)="onTextAreaMouseDown($event)" (window:mousedown)="onGlobalMouseDown()"
-    (window:mouseup)="onGlobalMouseUp()" (keydown)="onTextAreaKeyDown($event)" (input)="onTextAreaInput($event)"
-    (contextmenu)="onTextAreaContextMenu($event)">
+  <textarea
+    #textArea
+    [ngStyle]="textAreaStyle"
+    (mouseenter)="onTextAreaMouseEnter($event)"
+    (mousedown)="onTextAreaMouseDown($event)"
+    (window:mousedown)="onGlobalMouseDown()"
+    (window:mouseup)="onGlobalMouseUp()"
+    (keydown)="onTextAreaKeyDown($event)"
+    (input)="onTextAreaInput($event)"
+    (contextmenu)="onTextAreaContextMenu($event)"
+  >
   </textarea>
 </div>

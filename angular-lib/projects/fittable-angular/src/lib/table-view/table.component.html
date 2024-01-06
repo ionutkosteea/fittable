@@ -1,13 +1,25 @@
 <div class="fit-table-layout">
-  <fit-table-left-top-corner class="fit-component" [viewModel]="viewModel"
-    [cellSelectionListener]="cellSelectionListener"></fit-table-left-top-corner>
-  <fit-table-top class="fit-component" #tableTopComponent [viewModel]="viewModel"
-    [cellSelectionListener]="cellSelectionListener">
-  </fit-table-top>
-  <fit-table-left class="fit-component" #tableLeftComponent [viewModel]="viewModel"
-    [cellSelectionListener]="cellSelectionListener">
-  </fit-table-left>
-  <fit-table-center class="fit-component" (onScroll$)="onScroll($event)" [viewModel]="viewModel"
-    [cellSelectionListener]="cellSelectionListener">
-  </fit-table-center>
+  <fit-table-left-top-corner
+    class="fit-component"
+    [viewModel]="viewModel"
+    [cellSelectionListener]="cellSelectionListener"
+  />
+  <fit-table-top
+    class="fit-component"
+    #tableTopComponent
+    [viewModel]="viewModel"
+    [cellSelectionListener]="cellSelectionListener"
+  />
+  <fit-table-left
+    class="fit-component"
+    #tableLeftComponent
+    [viewModel]="viewModel"
+    [cellSelectionListener]="cellSelectionListener"
+  />
+  <fit-table-center
+    class="fit-component"
+    (onScroll$)="onScroll($event)"
+    [viewModel]="viewModel"
+    [cellSelectionListener]="cellSelectionListener"
+  />
 </div>

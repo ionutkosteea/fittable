@@ -14,7 +14,7 @@ import {
       <fit-settings-button
         *ngFor="let id of getControlIds()"
         [model]="getPopupControl(id)"
-      ></fit-settings-button>
+      />
     </div>
   `,
 })

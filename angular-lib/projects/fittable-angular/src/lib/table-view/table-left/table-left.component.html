@@ -1,14 +1,31 @@
 <div #scroller class="fit-table-row-header" *ngIf="hasRowHeader()">
-  <div class="fit-full-size-container" [ngStyle]="{'width.px':getRowHeaderWidth(),'height.px':getBodyHeight()}">
+  <div
+    class="fit-full-size-container"
+    [ngStyle]="{
+      'width.px': getRowHeaderWidth(),
+      'height.px': getBodyHeight()
+    }"
+  >
     <div class="fit-offset-container" [ngStyle]="getRowHeaderOffset()">
       <table class="fit-table">
         <colgroup>
-          <col [ngStyle]="{'width.px':getRowHeaderWidth()}" />
+          <col [ngStyle]="{ 'width.px': getRowHeaderWidth() }" />
         </colgroup>
-        <tbody (contextmenu)="showContextMenu($event)" fitCellSelection [cellSelectionListener]="cellSelectionListener"
-          [cellSelectionRanges]="getCellSelectionRanges()">
-          <tr *ngFor="let rowId of getRowIds()" [ngStyle]="{'height.px':getRowHeight(rowId)}">
-            <th class="fit-table-header-cell" [attr.rowId]="rowId" [attr.colId]="0">
+        <tbody
+          (contextmenu)="showContextMenu($event)"
+          fitCellSelection
+          [cellSelectionListener]="cellSelectionListener"
+          [cellSelectionRanges]="getCellSelectionRanges()"
+        >
+          <tr
+            *ngFor="let rowId of getRowIds()"
+            [ngStyle]="{ 'height.px': getRowHeight(rowId) }"
+          >
+            <th
+              class="fit-table-header-cell"
+              [attr.rowId]="rowId"
+              [attr.colId]="0"
+            >
               <p class="fit-table-cell-text">{{ getRowLabel(rowId) }}</p>
             </th>
           </tr>
@@ -16,5 +33,9 @@
       </table>
     </div>
   </div>
-  <div class="fit-table-header-cell-selection" *ngFor="let rect of getCellSelectionRectangles()" [ngStyle]="rect"></div>
+  <div
+    class="fit-table-header-cell-selection"
+    *ngFor="let rect of getCellSelectionRectangles()"
+    [ngStyle]="rect"
+  ></div>
 </div>

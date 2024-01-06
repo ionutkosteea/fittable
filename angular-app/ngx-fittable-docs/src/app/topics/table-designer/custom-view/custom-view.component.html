@@ -1,43 +1,63 @@
 <div class="topic">
-  <h1 class="title">{{title}}</h1>
+  <h1 class="title">{{ title }}</h1>
   <h2 class="subtitle">Preview</h2>
   <div class="fittable">
     <div class="container">
-      <!-- <fit-toolbar *ngIf="hasToolbar()" [model]="getToolbar()"></fit-toolbar> -->
-      <custom-toolbar *ngIf="hasToolbar()" [model]="getToolbar()"></custom-toolbar>
-      <fit-table class="table" [viewModel]="getViewModel()"></fit-table>
-      <!-- <fit-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()"></fit-statusbar> -->
-      <custom-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()"></custom-statusbar>
-      <fit-settingsbar *ngIf="hasSettingsBar()" [model]="getSettingsBar()"></fit-settingsbar>
-      <!-- <fit-context-menu *ngIf="hasContextMenu()" [model]="getContextMenu()">
-      </fit-context-menu> -->
-      <custom-context-menu *ngIf="hasContextMenu()" [model]="getContextMenu()">
-      </custom-context-menu>
+      <!-- <fit-toolbar *ngIf="hasToolbar()" [model]="getToolbar()" /> -->
+      <custom-toolbar *ngIf="hasToolbar()" [model]="getToolbar()" />
+      <fit-table class="table" [viewModel]="getViewModel()" />
+      <!-- <fit-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()" /> -->
+      <custom-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()" />
+      <fit-settingsbar *ngIf="hasSettingsBar()" [model]="getSettingsBar()" />
+      <!-- <fit-context-menu *ngIf="hasContextMenu()" [model]="getContextMenu()" /> -->
+      <custom-context-menu
+        *ngIf="hasContextMenu()"
+        [model]="getContextMenu()"
+      />
     </div>
   </div>
   <h2 class="subtitle">Source code</h2>
   <h3 class="sub-subtitle">custom-view.component.ts</h3>
   <div class="code-snippet">
-    <img class="figure" src="../../../../assets/code-snippets/custom-view-component-ts.jpg" />
+    <img
+      class="figure"
+      src="../../../../assets/code-snippets/custom-view-component-ts.jpg"
+    />
   </div>
   <h3 class="sub-subtitle">custom-view.component.html</h3>
   <div class="code-snippet">
-    <img class="figure" src="../../../../assets/code-snippets/custom-view-component-html.jpg" />
+    <img
+      class="figure"
+      src="../../../../assets/code-snippets/custom-view-component-html.jpg"
+    />
   </div>
   <h3 class="sub-subtitle">custom-view.component.css</h3>
   <div class="code-snippet">
-    <img class="figure" src="../../../../assets/code-snippets/custom-view-component-css.jpg" />
+    <img
+      class="figure"
+      src="../../../../assets/code-snippets/custom-view-component-css.jpg"
+    />
   </div>
   <h3 class="sub-subtitle">custom-toolbar.component.ts</h3>
   <div class="code-snippet">
-    <img class="figure" class="figure" src="../../../../assets/code-snippets/custom-toolbar-ts.jpg" />
+    <img
+      class="figure"
+      class="figure"
+      src="../../../../assets/code-snippets/custom-toolbar-ts.jpg"
+    />
   </div>
   <h3 class="sub-subtitle">custom-context-menu.component.ts</h3>
   <div class="code-snippet">
-    <img class="figure" src="../../../../assets/code-snippets/custom-context-menu-ts.jpg" />
+    <img
+      class="figure"
+      src="../../../../assets/code-snippets/custom-context-menu-ts.jpg"
+    />
   </div>
   <h3 class="sub-subtitle">custom-statusbar.component.ts</h3>
   <div class="code-snippet">
-    <img class="figure" src="../../../../assets/code-snippets/custom-statusbar-ts.jpg" />
+    <img
+      class="figure"
+      src="../../../../assets/code-snippets/custom-statusbar-ts.jpg"
+    />
   </div>
 </div>

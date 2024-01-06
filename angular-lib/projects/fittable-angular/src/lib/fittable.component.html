@@ -1,10 +1,26 @@
 <div class="fit-table-main-container">
-  <fit-toolbar class="fit-component" *ngIf="hasToolbar()" [model]="getToolbar()"></fit-toolbar>
+  <fit-toolbar
+    class="fit-component"
+    *ngIf="hasToolbar()"
+    [model]="getToolbar()"
+  />
   <div class="fit-table-container">
-    <fit-table class="fit-component" [viewModel]="getViewModel()"></fit-table>
+    <fit-table class="fit-component" [viewModel]="getViewModel()" />
   </div>
-  <fit-statusbar class="fit-component" *ngIf="hasStatusbar()" [model]="getStatusbar()"></fit-statusbar>
-  <fit-settingsbar class="fit-component" *ngIf="hasSettingsBar()" [model]="getSettingsBar()"></fit-settingsbar>
-  <fit-context-menu class="fit-component" *ngIf="hasContextMenu()" [model]="getContextMenu()"
-    [position]="'fixed'"></fit-context-menu>
+  <fit-statusbar
+    class="fit-component"
+    *ngIf="hasStatusbar()"
+    [model]="getStatusbar()"
+  />
+  <fit-settingsbar
+    class="fit-component"
+    *ngIf="hasSettingsBar()"
+    [model]="getSettingsBar()"
+  />
+  <fit-context-menu
+    class="fit-component"
+    *ngIf="hasContextMenu()"
+    [model]="getContextMenu()"
+    [position]="'fixed'"
+  />
 </div>

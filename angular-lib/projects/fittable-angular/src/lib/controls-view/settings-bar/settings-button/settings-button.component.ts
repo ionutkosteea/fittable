@@ -23,7 +23,7 @@ import { PopupControlComponent } from '../../common/popup-control-component.mode
         [top]="'1.25rem'"
         [right]="0"
         [iconCol]="'right'"
-      ></fit-context-menu>
+      />
     </div>
   `,
 })

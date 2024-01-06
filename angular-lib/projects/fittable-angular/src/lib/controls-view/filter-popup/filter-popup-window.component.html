@@ -1,29 +1,68 @@
 <div class="fit-window" [ngStyle]="getWindowStyle()">
   <div class="fit-col-filters-search-input">
-    <div>{{getSearchInput().getLabel()}}</div>
-    <input [value]="getSearchInput().getValue() ?? ''" [ngStyle]="{backgroundImage:getSearchInput().getIcon()}"
-      (input)="onSearchInput($event)" />
+    <div>{{ getSearchInput().getLabel() }}</div>
+    <input
+      [value]="getSearchInput().getValue() ?? ''"
+      [ngStyle]="{ backgroundImage: getSearchInput().getIcon() }"
+      (input)="onSearchInput($event)"
+    />
   </div>
   <div class="fit-right-aligned-bar">
-    <button class="fit-col-filters-select-button"
-      (click)="getClearButton().run()">{{getClearButton().getLabel()}}</button>
-    <button class="fit-col-filters-select-button"
-      (click)="getSelectAllButton().run()">{{getSelectAllButton().getLabel()}}</button>
+    <button
+      class="fit-col-filters-select-button"
+      (click)="getClearButton().run()"
+    >
+      {{ getClearButton().getLabel() }}
+    </button>
+    <button
+      class="fit-col-filters-select-button"
+      (click)="getSelectAllButton().run()"
+    >
+      {{ getSelectAllButton().getLabel() }}
+    </button>
   </div>
-  <div class="fit-col-filters-scroll-container" fitScrollContainer [scrollContainer]="getScrollContainer()">
-    <div class="fit-full-size-container" *ngIf="hasCheckList()"
-      [ngStyle]="{'width': '100%', 'height.px':getCheckListHeight()}">
-      <div class="fit-mobile-grid" [ngStyle]="{transform:'translate3d(0px,'+getScrollOffsetY()+'px,0px)'}">
-        <div class="fit-col-filters-check-item" *ngFor="let id of getCheckBoxIds()" (click)="onCheckBoxClick(id)">
-          <input type="checkbox" [id]="id" [checked]="getCheckBox(id).isChecked() ? 'checked' : undefined" />
-          <label [for]="id" (click)="onCheckBoxClick(id)">{{getCheckBox(id).getLabel()}}</label>
+  <div
+    class="fit-col-filters-scroll-container"
+    fitScrollContainer
+    [scrollContainer]="getScrollContainer()"
+  >
+    <div
+      class="fit-full-size-container"
+      *ngIf="hasCheckList()"
+      [ngStyle]="{ width: '100%', 'height.px': getCheckListHeight() }"
+    >
+      <div
+        class="fit-mobile-grid"
+        [ngStyle]="{
+          transform: 'translate3d(0px,' + getScrollOffsetY() + 'px,0px)'
+        }"
+      >
+        <div
+          class="fit-col-filters-check-item"
+          *ngFor="let id of getCheckBoxIds()"
+          (click)="onCheckBoxClick(id)"
+        >
+          <input
+            type="checkbox"
+            [id]="id"
+            [checked]="getCheckBox(id).isChecked() ? 'checked' : undefined"
+          />
+          <label [for]="id" (click)="onCheckBoxClick(id)">{{
+            getCheckBox(id).getLabel()
+          }}</label>
         </div>
       </div>
     </div>
   </div>
   <div class="fit-center-aligned-bar">
-    <button class="fit-col-filters-action-button" (click)="getOkButton().run()">{{getOkButton().getLabel()}}</button>
-    <button class="fit-col-filters-action-button"
-      (click)="getCancelButton().run()">{{getCancelButton().getLabel()}}</button>
+    <button class="fit-col-filters-action-button" (click)="getOkButton().run()">
+      {{ getOkButton().getLabel() }}
+    </button>
+    <button
+      class="fit-col-filters-action-button"
+      (click)="getCancelButton().run()"
+    >
+      {{ getCancelButton().getLabel() }}
+    </button>
   </div>
 </div>

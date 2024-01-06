@@ -1,6 +1,12 @@
 <div class="navigation-tree">
-  <p-tree [value]="tree" [filter]="true" filterPlaceholder="Search" selectionMode="single" [(selection)]="treeSelection"
-    (onNodeSelect)="onNodeSelect($event)">
+  <p-tree
+    [value]="tree"
+    [filter]="true"
+    filterPlaceholder="Search"
+    selectionMode="single"
+    [(selection)]="treeSelection"
+    (onNodeSelect)="onNodeSelect($event)"
+  >
     <ng-template let-node pTemplate="default">
       <strong *ngIf="node.children" class="category">{{ node.label }}</strong>
       <span *ngIf="!node.children" class="link">{{ node.label }}</span>

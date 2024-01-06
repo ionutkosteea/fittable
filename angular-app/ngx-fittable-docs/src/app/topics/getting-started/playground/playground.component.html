@@ -1,11 +1,17 @@
 <div class="topic">
-  <h1 class="title">{{title}}</h1>
+  <h1 class="title">{{ title }}</h1>
   <div class="toolbar">
-    <p-button *ngFor="let item of navigation" [label]="item.label"
-      [icon]="item.isChecked() ? 'pi pi-check':'pi pi-times'"
-      [styleClass]="item.isChecked()?'p-button-sm':'p-button-sm p-button-secondary'" (onClick)="item.run()"></p-button>
+    <p-button
+      *ngFor="let item of navigation"
+      [label]="item.label"
+      [icon]="item.isChecked() ? 'pi pi-check' : 'pi pi-times'"
+      [styleClass]="
+        item.isChecked() ? 'p-button-sm' : 'p-button-sm p-button-secondary'
+      "
+      (onClick)="item.run()"
+    />
   </div>
   <div class="fittable fittable-height">
-    <ng-template #content></ng-template>
+    <ng-template #content />
   </div>
 </div>
