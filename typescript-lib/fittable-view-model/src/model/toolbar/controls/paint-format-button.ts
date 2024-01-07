@@ -7,10 +7,10 @@ import {
   Table,
 } from 'fittable-core/model';
 import {
-  OperationDto,
-  OperationDtoFactory,
-  OperationStep,
-  OperationStepFactory,
+  TableChanges,
+  TableChangesFactory,
+  TableChangeWritter,
+  TableChangeWritterFactory,
 } from 'fittable-core/operations';
 import { ControlArgs } from 'fittable-core/view-model';
 
@@ -50,13 +50,13 @@ class PaintFormatButton extends PushButton implements ControlUpdater {
   }
 
   private createStyleNameCopyOperation(): void {
-    this.args.operationExecutor.bindOperationStepFactory(
+    this.args.operationExecutor.bindTableChangeWritterFactory(
       operationId,
-      StyleNameCopyOperationStepFactory
+      StyleNameCopyChangeWritterFactory
     );
-    this.args.operationExecutor.bindOperationDtoFactory(
+    this.args.operationExecutor.bindTableChangesFactory(
       operationId,
-      StyleNameCopyOperationDtoFactory
+      StyleNameCopyChangesFactory
     );
   }
 
@@ -94,8 +94,8 @@ class PaintFormatButton extends PushButton implements ControlUpdater {
   }
 }
 
-class StyleNameCopyOperationStepFactory implements OperationStepFactory {
-  public createStep(): OperationStep {
+class StyleNameCopyChangeWritterFactory implements TableChangeWritterFactory {
+  public createTableChangeWritter(): TableChangeWritter {
     return {
       run: (): void => {
         // Operation copy should be throwable via the operation execution mechanism.
@@ -104,11 +104,11 @@ class StyleNameCopyOperationStepFactory implements OperationStepFactory {
   }
 }
 
-class StyleNameCopyOperationDtoFactory implements OperationDtoFactory {
-  public createOperationDto(): OperationDto | Promise<OperationDto> {
+class StyleNameCopyChangesFactory implements TableChangesFactory {
+  public createTableChanges(): TableChanges | Promise<TableChanges> {
     return {
       id: operationId,
-      steps: [{ id: operationId }],
+      changes: [{ id: operationId }],
     };
   }
 }

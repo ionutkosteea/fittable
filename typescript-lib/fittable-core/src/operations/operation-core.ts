@@ -3,34 +3,39 @@ import { Observable } from 'rxjs';
 import { Table } from '../model/table/table.js';
 import { getOperationConfig } from './operation-config.js';
 
-export type OperationId<T extends string> = { id: T };
+export type Args<Id extends string> = { id: Id };
 
-export type BaseOperationDto = {
-  steps: OperationId<string>[];
-  undoOperation?: BaseOperationDto;
+export type BaseTableChanges = {
+  changes: Args<string>[];
+  undoChanges?: BaseTableChanges;
 };
 
-export type OperationDto = OperationId<string> &
-  BaseOperationDto & { properties?: { [id: string]: unknown } };
+export type TableChanges = Args<string> &
+  BaseTableChanges & { properties?: { [id: string]: unknown } };
 
-export interface OperationDtoFactory {
-  createOperationDto(
+export interface TableChangesFactory {
+  createTableChanges(
     table: Table,
-    args: OperationId<string>
-  ): OperationDto | Promise<OperationDto>;
+    args: Args<string>
+  ): TableChanges | Promise<TableChanges>;
 }
 
-export type OperationDtoFactoryClass = { new (): OperationDtoFactory };
+export type TableChangesFactoryClass = { new (): TableChangesFactory };
 
-export interface OperationStep {
+export interface TableChangeWritter {
   run(): void;
 }
 
-export interface OperationStepFactory {
-  createStep(table: Table, stepDto: OperationId<string>): OperationStep;
+export interface TableChangeWritterFactory {
+  createTableChangeWritter(
+    table: Table,
+    change: Args<string>
+  ): TableChangeWritter;
 }
 
-export type OperationStepFactoryClass = { new (): OperationStepFactory };
+export type TableChangeWritterFactoryClass = {
+  new (): TableChangeWritterFactory;
+};
 
 export interface Operation {
   run(): void;
@@ -39,38 +44,38 @@ export interface Operation {
 }
 
 export interface OperationFactory {
-  createOperation(operationDto: OperationDto): Operation;
+  createOperation(changes: TableChanges): Operation;
 }
 
 export interface OperationExecutor {
-  bindOperationDtoFactory(
+  bindTableChangesFactory(
     operationId: string,
-    clazz: OperationDtoFactoryClass
+    clazz: TableChangesFactoryClass
   ): this;
-  unbindOperationDtoFactory(operationId: string): this;
-  bindOperationStepFactory(
-    stepId: string,
-    clazz: OperationStepFactoryClass
+  unbindTableChangesFactory(operationId: string): this;
+  bindTableChangeWritterFactory(
+    changeId: string,
+    clazz: TableChangeWritterFactoryClass
   ): this;
-  unbindOperationStepFactory(stepId: string): this;
+  unbindTableChangeWritterFactory(changeId: string): this;
   unbindFactories(): this;
   setTable(table: Table): this;
   getTable(): Table | undefined;
-  createOperationDto(
-    args: OperationId<string>
-  ): OperationDto | Promise<OperationDto>;
-  runOperationDto(operationDto: OperationDto | Promise<OperationDto>): this;
-  run(args: OperationId<string>): this;
-  onBeforeRun$(): Observable<OperationDto>;
-  onAfterRun$(): Observable<OperationDto>;
+  calculateTableChanges(
+    args: Args<string>
+  ): TableChanges | Promise<TableChanges>;
+  writeTableChanges(changes: TableChanges | Promise<TableChanges>): this;
+  run(args: Args<string>): this;
+  onBeforeRun$(): Observable<TableChanges>;
+  onAfterRun$(): Observable<TableChanges>;
   canUndo(): boolean;
   undo(): this;
-  onBeforeUndo$(): Observable<OperationDto>;
-  onAfterUndo$(): Observable<OperationDto>;
+  onBeforeUndo$(): Observable<TableChanges>;
+  onAfterUndo$(): Observable<TableChanges>;
   canRedo(): boolean;
   redo(): this;
-  onBeforeRedo$(): Observable<OperationDto>;
-  onAfterRedo$(): Observable<OperationDto>;
+  onBeforeRedo$(): Observable<TableChanges>;
+  onAfterRedo$(): Observable<TableChanges>;
   clearOperations(): this;
 }
 

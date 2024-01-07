@@ -1,46 +1,43 @@
 import { Table } from 'fittable-core/model';
 import {
-  OperationDto,
-  OperationDtoFactory,
+  TableChanges,
+  TableChangesFactory,
   OperationExecutor,
-  OperationId,
-  OperationStep,
-  OperationStepFactory,
+  Args,
+  TableChangeWritter,
+  TableChangeWritterFactory,
 } from 'fittable-core/operations';
 import { ValueCondition } from 'fittable-core/view-model';
 
-export type ColFilterOperationStepDto = OperationId<'column-filter'> & {
+export type ColFilterChange = Args<'column-filter'> & {
   colId: number;
   valueCondition?: ValueCondition;
 };
 
-class ColFilterOperationStep implements OperationStep {
+class ColFilterChangeWritter implements TableChangeWritter {
   public run(): void {
     // The operation is used just for handling filters through the operation execution stack. The actual filtering is done via specific listeners.
   }
 }
 
-class ColFilterOperationStepFactory implements OperationStepFactory {
-  public createStep(): OperationStep {
-    return new ColFilterOperationStep();
+class ColFilterChangeWritterFactory implements TableChangeWritterFactory {
+  public createTableChangeWritter(): TableChangeWritter {
+    return new ColFilterChangeWritter();
   }
 }
 
-export type ColFilterOperationArgs = OperationId<'column-filter'> & {
-  stepDto: ColFilterOperationStepDto;
-  undoStepDto: ColFilterOperationStepDto;
+export type ColFilterArgs = Args<'column-filter'> & {
+  changes: ColFilterChange;
+  undoChanges: ColFilterChange;
 };
 
-class ColFilterOperationDtoFactory implements OperationDtoFactory {
-  public createOperationDto(
-    table: Table,
-    args: ColFilterOperationArgs
-  ): OperationDto {
+class ColFilterChangesFactory implements TableChangesFactory {
+  public createTableChanges(table: Table, args: ColFilterArgs): TableChanges {
     return {
       id: args.id,
-      steps: [args.stepDto],
-      undoOperation: {
-        steps: [args.undoStepDto],
+      changes: [args.changes],
+      undoChanges: {
+        changes: [args.undoChanges],
       },
     };
   }
@@ -49,9 +46,9 @@ class ColFilterOperationDtoFactory implements OperationDtoFactory {
 export function bindColFilterOperationFactories(
   operationExecutor: OperationExecutor
 ): void {
-  const stepId: ColFilterOperationStepDto['id'] = 'column-filter';
-  const operationId: ColFilterOperationArgs['id'] = 'column-filter';
+  const changeId: ColFilterChange['id'] = 'column-filter';
+  const operationId: ColFilterArgs['id'] = 'column-filter';
   operationExecutor
-    .bindOperationStepFactory(stepId, ColFilterOperationStepFactory)
-    .bindOperationDtoFactory(operationId, ColFilterOperationDtoFactory);
+    .bindTableChangesFactory(operationId, ColFilterChangesFactory)
+    .bindTableChangeWritterFactory(changeId, ColFilterChangeWritterFactory);
 }

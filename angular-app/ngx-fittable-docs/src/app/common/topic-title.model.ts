@@ -30,7 +30,7 @@ export type TopicTitle =
   | 'Merge cells'
   | 'Merge cells'
   | 'Unmerge cells'
-  | 'Operation DTO'
+  | 'Table changes'
   | 'Custom operation'
   | 'Table interoperability'
   | 'Row header'

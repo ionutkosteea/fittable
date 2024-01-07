@@ -30,10 +30,7 @@ import {
   ColValueCondition,
 } from './col-value-conditions.js';
 import { ColValueScrollbar } from './col-value-scrollbar.js';
-import {
-  ColFilterOperationArgs,
-  ColFilterOperationStepDto,
-} from './col-filter-operation.js';
+import { ColFilterArgs, ColFilterChange } from './col-filter-operation.js';
 
 export type FitColFiltersControlId =
   | 'search-input'
@@ -159,7 +156,7 @@ export class FitColFilters implements ColFilters {
     return new FitControl()
       .setLabel((): string => getLanguageDictionary().getText('Ok'))
       .setRun((): void => {
-        const stepDto: ColFilterOperationStepDto = {
+        const change: ColFilterChange = {
           id: 'column-filter',
           colId: this.colId,
           valueCondition: {
@@ -167,15 +164,15 @@ export class FitColFilters implements ColFilters {
             values: [...this.valueConditions.current.values],
           },
         };
-        const undoStepDto: ColFilterOperationStepDto = {
+        const undoChange: ColFilterChange = {
           id: 'column-filter',
           colId: this.colId,
           valueCondition: this.valueConditions.store[this.colId],
         };
-        const args: ColFilterOperationArgs = {
+        const args: ColFilterArgs = {
           id: 'column-filter',
-          stepDto,
-          undoStepDto,
+          changes: change,
+          undoChanges: undoChange,
         };
         this.operationExecutor.run(args);
         this.getPopupWindow().setVisible(false);

@@ -33,9 +33,9 @@ export class InsertRowsBelowComponent extends ConsoleTopic implements OnInit {
   constructor() {
     super();
     this.typescriptCode = [
-      { image: 'insert-rows-below-ts-01.jpg' },
+      { image: 'on-init-table-values-ts.jpg' },
       { image: 'console-operation-ts-02.jpg' },
-      { image: 'insert-rows-below-ts-02.jpg' },
+      { image: 'insert-rows-below-ts.jpg' },
       { image: 'console-operation-ts-03.jpg' },
     ];
   }

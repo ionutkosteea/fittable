@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { createTable, registerModelConfig, Table } from 'fittable-core/model';
 import {
-  OperationDto,
+  TableChanges,
   registerOperationConfig,
 } from 'fittable-core/operations';
 import {
@@ -72,14 +72,14 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   ): Subscription | undefined {
     return fit1.operationExecutor
       ?.onAfterRun$()
-      .subscribe((dto: OperationDto): void => {
+      .subscribe((tableChanges: TableChanges): void => {
         let properties: OperationProperties =
-          dto.properties as OperationProperties;
+          tableChanges.properties as OperationProperties;
         if (properties.stopPropagation) return;
         properties = { stopPropagation: true, preventFocus: true };
-        fit2.operationExecutor?.runOperationDto({
-          id: dto.id,
-          steps: dto.steps,
+        fit2.operationExecutor?.writeTableChanges({
+          id: tableChanges.id,
+          changes: tableChanges.changes,
           properties,
         });
       });
@@ -91,16 +91,16 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   ): Subscription | undefined {
     return fit1.operationExecutor
       ?.onAfterUndo$()
-      .subscribe((dto: OperationDto): void => {
-        if (!dto.undoOperation) return;
+      .subscribe((tableChanges: TableChanges): void => {
+        if (!tableChanges.undoChanges) return;
         const properties: OperationProperties = {
-          ...dto.properties,
+          ...tableChanges.properties,
         } as OperationProperties;
         properties.stopPropagation = true;
         properties.preventFocus = true;
-        fit2.operationExecutor?.runOperationDto({
-          id: dto.id,
-          steps: dto.undoOperation.steps,
+        fit2.operationExecutor?.writeTableChanges({
+          id: tableChanges.id,
+          changes: tableChanges.undoChanges.changes,
           properties,
         });
       });
@@ -112,15 +112,15 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   ): Subscription | undefined {
     return fit1.operationExecutor
       ?.onAfterRedo$()
-      .subscribe((dto: OperationDto): void => {
+      .subscribe((tableChanges: TableChanges): void => {
         const properties: OperationProperties = {
-          ...dto.properties,
+          ...tableChanges.properties,
         } as OperationProperties;
         properties.stopPropagation = true;
         properties.preventFocus = true;
-        fit2.operationExecutor?.runOperationDto({
-          id: dto.id,
-          steps: dto.steps,
+        fit2.operationExecutor?.writeTableChanges({
+          id: tableChanges.id,
+          changes: tableChanges.changes,
           properties,
         });
       });

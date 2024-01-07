@@ -33,9 +33,9 @@ export class InsertColsLeftComponent extends ConsoleTopic implements OnInit {
   constructor() {
     super();
     this.typescriptCode = [
-      { image: 'insert-cols-left-ts-01.jpg' },
+      { image: 'on-init-table-values-ts.jpg' },
       { image: 'console-operation-ts-02.jpg' },
-      { image: 'insert-cols-left-ts-02.jpg' },
+      { image: 'insert-cols-left-ts.jpg' },
       { image: 'console-operation-ts-03.jpg' },
     ];
   }

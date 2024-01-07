@@ -95,7 +95,7 @@ export class NavigationTreeComponent implements OnInit, OnDestroy {
           { label: 'Copy / Paste cells' },
           { label: 'Merge cells' },
           { label: 'Unmerge cells' },
-          { label: 'Operation DTO' },
+          { label: 'Table changes' },
           { label: 'Custom operation' },
           { label: 'Table interoperability' },
         ],

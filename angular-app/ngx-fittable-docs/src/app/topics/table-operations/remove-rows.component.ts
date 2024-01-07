@@ -33,9 +33,9 @@ export class RemoveRowsComponent extends ConsoleTopic implements OnInit {
   constructor() {
     super();
     this.typescriptCode = [
-      { image: 'remove-rows-ts-01.jpg' },
+      { image: 'on-init-table-values-ts.jpg' },
       { image: 'console-operation-ts-02.jpg' },
-      { image: 'remove-rows-ts-02.jpg' },
+      { image: 'remove-rows-ts.jpg' },
       { image: 'console-operation-ts-03.jpg' },
     ];
   }

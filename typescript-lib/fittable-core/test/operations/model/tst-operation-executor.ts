@@ -2,30 +2,30 @@ import { Observable } from 'rxjs';
 
 import { Table } from '../../../dist/model/index.js';
 import {
-  OperationDto,
-  OperationDtoFactoryClass,
+  Args,
   OperationExecutor,
-  OperationId,
-  OperationStepFactoryClass,
+  TableChangeWritterFactoryClass,
+  TableChanges,
+  TableChangesFactoryClass,
 } from '../../../dist/operations/index.js';
 
 export class TstOperationExecutor implements OperationExecutor {
-  bindOperationDtoFactory(
+  bindTableChangesFactory(
     operationId: string,
-    clazz: OperationDtoFactoryClass
+    clazz: TableChangesFactoryClass
   ): this {
     throw new Error('Method not implemented.');
   }
-  unbindOperationDtoFactory(operationId: string): this {
+  unbindTableChangesFactory(operationId: string): this {
     throw new Error('Method not implemented.');
   }
-  bindOperationStepFactory(
-    stepId: string,
-    clazz: OperationStepFactoryClass
+  bindTableChangeWritterFactory(
+    changeId: string,
+    clazz: TableChangeWritterFactoryClass
   ): this {
     throw new Error('Method not implemented.');
   }
-  unbindOperationStepFactory(stepId: string): this {
+  unbindTableChangeWritterFactory(changeId: string): this {
     throw new Error('Method not implemented.');
   }
   unbindFactories(): this {
@@ -37,21 +37,21 @@ export class TstOperationExecutor implements OperationExecutor {
   getTable(): Table | undefined {
     throw new Error('Method not implemented.');
   }
-  createOperationDto(
-    args: OperationId<string>
-  ): OperationDto | Promise<OperationDto> {
+  calculateTableChanges(
+    args: Args<string>
+  ): TableChanges | Promise<TableChanges> {
     throw new Error('Method not implemented.');
   }
-  runOperationDto(operationDto: OperationDto | Promise<OperationDto>): this {
+  writeTableChanges(changes: TableChanges | Promise<TableChanges>): this {
     throw new Error('Method not implemented.');
   }
-  run(args: OperationId<string>): this {
+  run(args: Args<string>): this {
     throw new Error('Method not implemented.');
   }
-  onBeforeRun$(): Observable<OperationDto> {
+  onBeforeRun$(): Observable<TableChanges> {
     throw new Error('Method not implemented.');
   }
-  onAfterRun$(): Observable<OperationDto> {
+  onAfterRun$(): Observable<TableChanges> {
     throw new Error('Method not implemented.');
   }
   canUndo(): boolean {
@@ -60,10 +60,10 @@ export class TstOperationExecutor implements OperationExecutor {
   undo(): this {
     throw new Error('Method not implemented.');
   }
-  onBeforeUndo$(): Observable<OperationDto> {
+  onBeforeUndo$(): Observable<TableChanges> {
     throw new Error('Method not implemented.');
   }
-  onAfterUndo$(): Observable<OperationDto> {
+  onAfterUndo$(): Observable<TableChanges> {
     throw new Error('Method not implemented.');
   }
   canRedo(): boolean {
@@ -72,10 +72,10 @@ export class TstOperationExecutor implements OperationExecutor {
   redo(): this {
     throw new Error('Method not implemented.');
   }
-  onBeforeRedo$(): Observable<OperationDto> {
+  onBeforeRedo$(): Observable<TableChanges> {
     throw new Error('Method not implemented.');
   }
-  onAfterRedo$(): Observable<OperationDto> {
+  onAfterRedo$(): Observable<TableChanges> {
     throw new Error('Method not implemented.');
   }
   clearOperations(): this {

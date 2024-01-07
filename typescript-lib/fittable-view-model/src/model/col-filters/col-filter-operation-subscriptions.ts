@@ -11,9 +11,9 @@ import {
   Value,
 } from 'fittable-core/model';
 import {
-  OperationDto,
+  TableChanges,
   OperationExecutor,
-  OperationId,
+  Args,
 } from 'fittable-core/operations';
 import {
   ColFilters,
@@ -30,7 +30,7 @@ import { FitToolbarControlId } from '../toolbar/fit-toolbar-factory.js';
 import { FitContextMenuControlId } from '../context-menu/fit-context-menu-factory.js';
 import {
   bindColFilterOperationFactories,
-  ColFilterOperationStepDto,
+  ColFilterChange,
 } from './col-filter-operation.js';
 
 type FitTable = TableBasics & TableColFilter;
@@ -48,11 +48,11 @@ type CellValueDto = {
   cellRanges: unknown[];
   value?: Value;
 };
-type CellValueStepDto = OperationId<'cell-value'> & {
+type CellValueChange = Args<'cell-value'> & {
   values: CellValueDto[];
 };
-type CellValueOperationDto = OperationId<'cell-value'> & {
-  steps: CellValueStepDto[];
+type CellValueChanges = Args<'cell-value'> & {
+  changes: CellValueChange[];
 };
 
 export class ColFilterOperationSubscriptions {
@@ -73,16 +73,16 @@ export class ColFilterOperationSubscriptions {
   private applyFilterAfterRun$(): Subscription {
     return this.args.operationExecutor
       .onAfterRun$()
-      .subscribe((operationDto: OperationDto): void => {
+      .subscribe((tableChanges: TableChanges): void => {
         const id: FitUIOperationId = 'column-filter';
-        if (operationDto.id !== id) return;
-        const stepDto: ColFilterOperationStepDto = operationDto
-          .steps[0] as ColFilterOperationStepDto;
-        const condition: ValueCondition | undefined = stepDto.valueCondition;
+        if (tableChanges.id !== id) return;
+        const change: ColFilterChange = tableChanges
+          .changes[0] as ColFilterChange;
+        const condition: ValueCondition | undefined = change.valueCondition;
         if (condition && !this.isSelectAll(condition)) {
-          this.args.colFilters.getValueConditions()[stepDto.colId] = condition;
-        } else if (stepDto.colId in this.args.colFilters.getValueConditions()) {
-          delete this.args.colFilters.getValueConditions()[stepDto.colId];
+          this.args.colFilters.getValueConditions()[change.colId] = condition;
+        } else if (change.colId in this.args.colFilters.getValueConditions()) {
+          delete this.args.colFilters.getValueConditions()[change.colId];
         }
         this.applyFilter();
       });
@@ -91,19 +91,19 @@ export class ColFilterOperationSubscriptions {
   private applyFilterAfterUndo$(): Subscription {
     return this.args.operationExecutor
       .onAfterUndo$()
-      .subscribe((operationDto: OperationDto): void => {
+      .subscribe((tableChanges: TableChanges): void => {
         const id: FitUIOperationId = 'column-filter';
-        if (operationDto.id !== id) return;
-        if (!operationDto.undoOperation) return;
-        const stepDto: ColFilterOperationStepDto = operationDto
-          .steps[0] as ColFilterOperationStepDto;
-        const undoStepDto: ColFilterOperationStepDto = operationDto
-          .undoOperation.steps[0] as ColFilterOperationStepDto;
+        if (tableChanges.id !== id) return;
+        if (!tableChanges.undoChanges) return;
+        const change: ColFilterChange = tableChanges
+          .changes[0] as ColFilterChange;
+        const undoChange: ColFilterChange = tableChanges.undoChanges
+          .changes[0] as ColFilterChange;
         const conditions: { [colId: number]: ValueCondition } =
           this.args.colFilters.getValueConditions();
-        delete conditions[stepDto.colId];
-        if (undoStepDto.valueCondition) {
-          conditions[undoStepDto.colId] = undoStepDto.valueCondition;
+        delete conditions[change.colId];
+        if (undoChange.valueCondition) {
+          conditions[undoChange.colId] = undoChange.valueCondition;
         }
         this.applyFilter();
       });
@@ -112,20 +112,20 @@ export class ColFilterOperationSubscriptions {
   private applyFilterAfterRedo$(): Subscription {
     return this.args.operationExecutor
       .onAfterRedo$()
-      .subscribe((operationDto: OperationDto): void => {
+      .subscribe((tableChanges: TableChanges): void => {
         const id: FitUIOperationId = 'column-filter';
-        if (operationDto.id !== id) return;
-        if (!operationDto.undoOperation) return;
-        const stepDto: ColFilterOperationStepDto = operationDto
-          .steps[0] as ColFilterOperationStepDto;
-        const undoStepDto: ColFilterOperationStepDto = operationDto
-          .undoOperation.steps[0] as ColFilterOperationStepDto;
+        if (tableChanges.id !== id) return;
+        if (!tableChanges.undoChanges) return;
+        const changes: ColFilterChange = tableChanges
+          .changes[0] as ColFilterChange;
+        const undoChanges: ColFilterChange = tableChanges.undoChanges
+          .changes[0] as ColFilterChange;
         const conditions: { [colId: number]: ValueCondition } =
           this.args.colFilters.getValueConditions();
-        delete conditions[undoStepDto.colId];
-        const condition: ValueCondition | undefined = stepDto.valueCondition;
+        delete conditions[undoChanges.colId];
+        const condition: ValueCondition | undefined = changes.valueCondition;
         if (condition && !this.isSelectAll(condition)) {
-          conditions[stepDto.colId] = condition;
+          conditions[changes.colId] = condition;
         }
         this.applyFilter();
       });
@@ -198,18 +198,18 @@ export class ColFilterOperationSubscriptions {
   }
 
   private updateValueConditions(
-    operation$: Observable<OperationDto>,
-    cellValuesFn: (operationDto: OperationDto) => CellValueDto[]
+    operation$: Observable<TableChanges>,
+    cellValuesFn: (tableChanges: TableChanges) => CellValueDto[]
   ): void {
     const subscription: Subscription = operation$.subscribe(
-      (operationDto: OperationDto): void => {
+      (tableChanges: TableChanges): void => {
         const id: FitUIOperationId = 'cell-value';
-        if (operationDto.id !== id) return;
+        if (tableChanges.id !== id) return;
         const filterExecutor: ColFilterExecutor =
           this.args.colFilters.filterExecutor;
         const table: Table | undefined = filterExecutor.getFilteredTable();
         if (!table) return;
-        for (const valueDto of cellValuesFn(operationDto)) {
+        for (const valueDto of cellValuesFn(tableChanges)) {
           this.updateValueConditionsFromCellValueDto(table, valueDto);
         }
       }
@@ -218,18 +218,18 @@ export class ColFilterOperationSubscriptions {
   }
 
   private readonly getCellValues = (
-    operationDto: OperationDto
+    tableChanges: TableChanges
   ): CellValueDto[] => {
-    const dto: CellValueOperationDto = operationDto as CellValueOperationDto;
-    return dto.steps[0].values;
+    const changes: CellValueChanges = tableChanges as CellValueChanges;
+    return changes.changes[0].values;
   };
 
   private readonly getUndoCellValues = (
-    operationDto: OperationDto
+    tableChanges: TableChanges
   ): CellValueDto[] => {
-    const dto: CellValueOperationDto =
-      operationDto.undoOperation as CellValueOperationDto;
-    return dto.steps[0].values;
+    const changes: CellValueChanges =
+      tableChanges.undoChanges as CellValueChanges;
+    return changes.changes[0].values;
   };
 
   private updateValueConditionsFromCellValueDto(

@@ -11,7 +11,7 @@ import {
   createCellCoord4Dto,
   createDto4CellRangeList,
 } from 'fittable-core/model';
-import { OperationDto, OperationExecutor } from 'fittable-core/operations';
+import { TableChanges, OperationExecutor } from 'fittable-core/operations';
 import {
   ScrollContainer,
   CellEditor,
@@ -117,32 +117,32 @@ export class OperationSubscriptions {
     this.subscriptions.add(
       this.args.operationExecutor
         .onAfterRun$()
-        .subscribe((operationDto: OperationDto): void => {
-          if (!operationDto.properties) operationDto.properties = {};
-          this.markCurrentFocus(operationDto);
-          this.markSelectedCells(operationDto);
-          this.markCellEditorVisibility(operationDto);
-          this.markCellEditorCoord(operationDto);
-          this.markScrollPosition(operationDto);
+        .subscribe((tableChanges: TableChanges): void => {
+          if (!tableChanges.properties) tableChanges.properties = {};
+          this.markCurrentFocus(tableChanges);
+          this.markSelectedCells(tableChanges);
+          this.markCellEditorVisibility(tableChanges);
+          this.markCellEditorCoord(tableChanges);
+          this.markScrollPosition(tableChanges);
         })
     );
   }
 
-  private markCurrentFocus(operationDto: OperationDto): void {
+  private markCurrentFocus(tableChanges: TableChanges): void {
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (properties.focus) return;
     properties.focus = this.currentFocus;
   }
 
-  private markSelectedCells(operationDto: OperationDto): void {
+  private markSelectedCells(tableChanges: TableChanges): void {
     if (!this.args.cellSelection) return;
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (properties.bodyCellRanges) {
-      this.setSelectedCells(operationDto);
+      this.setSelectedCells(tableChanges);
     } else {
-      const operationId: FitUIOperationId = operationDto.id as FitUIOperationId;
+      const operationId: FitUIOperationId = tableChanges.id as FitUIOperationId;
       if (operationId === 'paint-format') {
         properties.bodyCellRanges = //
           createDto4CellRangeList(this.args.cellSelection.body.getRanges());
@@ -153,35 +153,35 @@ export class OperationSubscriptions {
     }
   }
 
-  private markCellEditorVisibility(operationDto: OperationDto): void {
+  private markCellEditorVisibility(tableChanges: TableChanges): void {
     if (!this.args.cellEditor) return;
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (properties.cellEditorVisibility === undefined) {
       const isVisible: boolean = this.args.cellEditor.isVisible();
       properties.cellEditorVisibility = isVisible;
     } else {
-      this.setCellEditorVisibility(operationDto);
+      this.setCellEditorVisibility(tableChanges);
     }
   }
 
-  private markCellEditorCoord(operationDto: OperationDto): void {
+  private markCellEditorCoord(tableChanges: TableChanges): void {
     if (!this.args.cellEditor) return;
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (properties.cellEditorCoord) {
-      this.setCellEditorCoord(operationDto);
+      this.setCellEditorCoord(tableChanges);
     } else {
       const cellCoord: CellCoord = this.args.cellEditor.getCell();
       properties.cellEditorCoord = cellCoord.getDto();
     }
   }
 
-  private markScrollPosition(operationDto: OperationDto): void {
+  private markScrollPosition(tableChanges: TableChanges): void {
     const properties: FitUIOperationProperties =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (properties.scroll) {
-      this.setScrollPosition(operationDto);
+      this.setScrollPosition(tableChanges);
     } else {
       const scroller: Scroller = this.args.tableScrollContainer.getScroller();
       const top: number = scroller.getTop();
@@ -190,21 +190,21 @@ export class OperationSubscriptions {
     }
   }
 
-  private afterUndoRedo(operation$: Observable<OperationDto>): void {
+  private afterUndoRedo(operation$: Observable<TableChanges>): void {
     this.subscriptions.add(
-      operation$.subscribe((operationDto: OperationDto): void => {
-        this.setSelectedCells(operationDto);
-        this.setCellEditorVisibility(operationDto);
-        this.setCellEditorCoord(operationDto);
-        this.setScrollPosition(operationDto);
+      operation$.subscribe((tableChanges: TableChanges): void => {
+        this.setSelectedCells(tableChanges);
+        this.setCellEditorVisibility(tableChanges);
+        this.setCellEditorCoord(tableChanges);
+        this.setScrollPosition(tableChanges);
       })
     );
   }
 
-  private setSelectedCells(operationDto: OperationDto): void {
+  private setSelectedCells(tableChanges: TableChanges): void {
     if (!this.args.cellSelection) return;
     const properties: FitUIOperationProperties | undefined =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (!properties) return;
     const selectedCellsDto: unknown[] | undefined = properties.bodyCellRanges;
     const selectedCells: CellRange[] | undefined =
@@ -231,19 +231,19 @@ export class OperationSubscriptions {
     this.args.cellSelection.colHeader?.end();
   }
 
-  private setCellEditorVisibility(operationDto: OperationDto): void {
+  private setCellEditorVisibility(tableChanges: TableChanges): void {
     if (!this.args.cellEditor) return;
     const properties: FitUIOperationProperties | undefined =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (!properties) return;
     const visibility: boolean | undefined = properties.cellEditorVisibility;
     visibility !== undefined && this.args.cellEditor.setVisible(visibility);
   }
 
-  private setCellEditorCoord(operationDto: OperationDto): void {
+  private setCellEditorCoord(tableChanges: TableChanges): void {
     if (!this.args.cellEditor) return;
     const properties: FitUIOperationProperties | undefined =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (!properties) return;
     const cellCoordDto: unknown | undefined = properties.cellEditorCoord;
     const cellCoord: CellCoord | undefined = cellCoordDto
@@ -252,9 +252,9 @@ export class OperationSubscriptions {
     cellCoord && this.args.cellEditor.setCell(cellCoord);
   }
 
-  private setScrollPosition(operationDto: OperationDto): void {
+  private setScrollPosition(tableChanges: TableChanges): void {
     const properties: FitUIOperationProperties | undefined =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (!properties) return;
     const scroll: FitUIOperationScroll | undefined = properties.scroll;
     if (!scroll) return;
@@ -271,12 +271,12 @@ export class OperationSubscriptions {
 
   private refreshAfterExecution(action: 'Run' | 'Undo' | 'Redo'): void {
     const operationExecutor: OperationExecutor = this.args.operationExecutor;
-    let action$: Observable<OperationDto> = operationExecutor.onAfterRun$();
+    let action$: Observable<TableChanges> = operationExecutor.onAfterRun$();
     if (action === 'Undo') action$ = operationExecutor.onAfterUndo$();
     else if (action === 'Redo') action$ = operationExecutor.onAfterRedo$();
     this.subscriptions.add(
-      action$.subscribe((operationDto: OperationDto): void => {
-        const id: FitUIOperationId = operationDto.id as FitUIOperationId;
+      action$.subscribe((tableChanges: TableChanges): void => {
+        const id: FitUIOperationId = tableChanges.id as FitUIOperationId;
         switch (id) {
           case 'cell-remove':
           case 'row-remove':
@@ -310,7 +310,7 @@ export class OperationSubscriptions {
             this.refreshMergedRegions();
             break;
         }
-        if (this.getOperationProperties(operationDto)?.preventFocus) {
+        if (this.getOperationProperties(tableChanges)?.preventFocus) {
           this.args.cellEditor?.setCell(this.args.cellEditor.getCell());
         } else {
           if (id === 'paint-format-copy') {
@@ -318,7 +318,7 @@ export class OperationSubscriptions {
             !this.args.cellSelection?.body.hasFocus() &&
               this.args.cellSelection?.body.setFocus(true);
           } else {
-            this.focus(operationDto);
+            this.focus(tableChanges);
           }
         }
         id !== 'paint-format' &&
@@ -416,9 +416,9 @@ export class OperationSubscriptions {
     });
   }
 
-  private focus(operationDto: OperationDto): void {
+  private focus(tableChanges: TableChanges): void {
     const undoState: FitUIOperationProperties | undefined =
-      this.getOperationProperties(operationDto);
+      this.getOperationProperties(tableChanges);
     if (!undoState) return;
     let cellSelection: CellSelectionRanges | undefined;
     const focus: FitUIOperationFocus | undefined = undoState.focus;
@@ -436,10 +436,10 @@ export class OperationSubscriptions {
   }
 
   private getOperationProperties(
-    operationDto: OperationDto
+    tableChanges: TableChanges
   ): FitUIOperationProperties {
-    if (operationDto.properties) {
-      return operationDto.properties as FitUIOperationProperties;
+    if (tableChanges.properties) {
+      return tableChanges.properties as FitUIOperationProperties;
     } else {
       throw new Error('Missing operation DTO properties!');
     }

@@ -39,7 +39,7 @@ import { CutPasteCellsComponent } from './topics/table-operations/cut-paste-cell
 import { CopyPasteCellsComponent } from './topics/table-operations/copy-paste-cells.component';
 import { MergeCellsComponent } from './topics/table-operations/merge-cells.component';
 import { UnmergeCellsComponent } from './topics/table-operations/unmerge-cells.component';
-import { OperationDtoComponent } from './topics/table-operations/operation-dto.component';
+import { TableChangesComponent } from './topics/table-operations/table-changes.component';
 import { CustomOperationComponent } from './topics/table-operations/custom-operation.component';
 import { RowHeaderComponent } from './topics/table-designer/row-header.component';
 import { ColHeaderComponent } from './topics/table-designer/col-header.component';
@@ -100,7 +100,7 @@ import { CustomStatusbarComponent } from './topics/table-designer/custom-view/cu
     CopyPasteCellsComponent,
     MergeCellsComponent,
     UnmergeCellsComponent,
-    OperationDtoComponent,
+    TableChangesComponent,
     CustomOperationComponent,
     RowHeaderComponent,
     ColHeaderComponent,

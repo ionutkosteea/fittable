@@ -5,82 +5,82 @@ import {
   Style,
   DataType,
 } from 'fittable-core/model';
-import { OperationId } from 'fittable-core/operations';
+import { Args } from 'fittable-core/operations';
 
-import { ColFilterOperationArgs } from '../col-filters/col-filter-operation.js';
+import { ColFilterArgs } from '../col-filters/col-filter-operation.js';
 
-type RowHeightArgs = OperationId<'row-height'> & {
+type RowHeightArgs = Args<'row-height'> & {
   selectedLines: LineRange[];
   dimension?: number;
 };
 
-type RowInsertArgs = OperationId<'row-insert'> & {
+type RowInsertArgs = Args<'row-insert'> & {
   selectedLines: LineRange[];
   numberOfNewLines: number;
   insertAfter?: boolean;
 };
 
-type RowRemoveArgs = OperationId<'row-remove'> & {
+type RowRemoveArgs = Args<'row-remove'> & {
   selectedLines: LineRange[];
 };
 
-type ColWidthArgs = OperationId<'column-width'> & {
+type ColWidthArgs = Args<'column-width'> & {
   selectedLines: LineRange[];
   dimension?: number;
 };
 
-type ColInsertArgs = OperationId<'column-insert'> & {
+type ColInsertArgs = Args<'column-insert'> & {
   selectedLines: LineRange[];
   numberOfNewLines: number;
   insertAfter?: boolean;
 };
 
-type ColRemoveArgs = OperationId<'column-remove'> & {
+type ColRemoveArgs = Args<'column-remove'> & {
   selectedLines: LineRange[];
 };
 
-type CellValueArgs = OperationId<'cell-value'> & {
+type CellValueArgs = Args<'cell-value'> & {
   selectedCells: CellRange[];
   value?: Value;
   dataType?: DataType;
 };
 
-type CellDataTypeArgs = OperationId<'cell-data-type'> & {
+type CellDataTypeArgs = Args<'cell-data-type'> & {
   selectedCells: CellRange[];
   dataType?: DataType;
 };
 
-type CellRemoveArgs = OperationId<'cell-remove'> & {
+type CellRemoveArgs = Args<'cell-remove'> & {
   selectedCells: CellRange[];
 };
 
-type CellCutArgs = OperationId<'cell-cut'> & {
+type CellCutArgs = Args<'cell-cut'> & {
   selectedCells: CellRange[];
 };
 
-type CellCopyArgs = OperationId<'cell-copy'> & {
+type CellCopyArgs = Args<'cell-copy'> & {
   selectedCells: CellRange[];
 };
 
-type CellPasteArgs = OperationId<'cell-paste'> & {
+type CellPasteArgs = Args<'cell-paste'> & {
   selectedCells: CellRange[];
 };
 
-type CellMergeArgs = OperationId<'cell-merge'> & {
+type CellMergeArgs = Args<'cell-merge'> & {
   selectedCells: CellRange[];
 };
 
-type CellUnmergeArgs = OperationId<'cell-unmerge'> & {
+type CellUnmergeArgs = Args<'cell-unmerge'> & {
   selectedCells: CellRange[];
 };
 
-type PaintFormatArgs = OperationId<'paint-format'> & {
+type PaintFormatArgs = Args<'paint-format'> & {
   selectedCells: CellRange[];
   styleName?: string;
   dataType?: DataType;
 };
 
-type StyleUpdateArgs = OperationId<'style-update'> & {
+type StyleUpdateArgs = Args<'style-update'> & {
   selectedCells: CellRange[];
   styleSnippet: Style;
 };
@@ -106,7 +106,7 @@ export type BorderStyle = {
   color: string;
 };
 
-export type StyleBorderArgs = OperationId<'style-border'> & {
+export type StyleBorderArgs = Args<'style-border'> & {
   selectedCells: CellRange[];
   borderStyle: BorderStyle;
 };
@@ -129,6 +129,6 @@ export type FitUIOperationArgs =
   | PaintFormatArgs
   | StyleUpdateArgs
   | StyleBorderArgs
-  | ColFilterOperationArgs;
+  | ColFilterArgs;
 
 export type FitUIOperationId = FitUIOperationArgs['id'] | 'paint-format-copy';

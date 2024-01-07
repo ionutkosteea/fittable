@@ -72,7 +72,7 @@ export class ColFiltersComponent implements ConsoleTopic, OnInit {
         const colId = 0;
         const args: FitUIOperationArgs = {
           id: 'column-filter',
-          stepDto: {
+          changes: {
             id: 'column-filter',
             colId,
             valueCondition: {
@@ -80,7 +80,7 @@ export class ColFiltersComponent implements ConsoleTopic, OnInit {
               values: ['[100,0]', '[200,0]', '[300,0]'],
             },
           },
-          undoStepDto: {
+          undoChanges: {
             id: 'column-filter',
             colId,
             valueCondition:

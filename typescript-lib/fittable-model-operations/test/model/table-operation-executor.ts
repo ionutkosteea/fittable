@@ -23,7 +23,7 @@ import {
   OperationExecutor,
   createOperationExecutor,
   registerOperationConfig,
-  OperationDto,
+  TableChanges,
 } from 'fittable-core/operations';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
 
@@ -160,7 +160,7 @@ export class TableOperationExecutor {
     return this;
   }
 
-  public onAfterUndo$(): Observable<OperationDto> {
+  public onAfterUndo$(): Observable<TableChanges> {
     return this.executor.onAfterUndo$();
   }
 
@@ -173,7 +173,7 @@ export class TableOperationExecutor {
     return this;
   }
 
-  public onAfterRedo$(): Observable<OperationDto> {
+  public onAfterRedo$(): Observable<TableChanges> {
     return this.executor.onAfterRedo$();
   }
 
@@ -359,7 +359,7 @@ export class TableOperationExecutor {
     return this;
   }
 
-  public onAfterRun$(): Observable<OperationDto> {
+  public onAfterRun$(): Observable<TableChanges> {
     return this.executor.onAfterRun$();
   }
 

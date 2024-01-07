@@ -9,11 +9,11 @@ import {
   Value,
 } from 'fittable-core/model';
 import {
-  OperationId,
-  OperationDto,
-  OperationDtoFactory,
-  OperationStep,
-  OperationStepFactory,
+  Args,
+  TableChanges,
+  TableChangesFactory,
+  TableChangeWritter,
+  TableChangeWritterFactory,
   registerOperationConfig,
 } from 'fittable-core/operations';
 import {
@@ -57,83 +57,83 @@ export class CustomOperationComponent extends ConsoleTopic implements OnInit {
     this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
 
     this.fit.operationExecutor
-      ?.bindOperationStepFactory('dummy-step', DummyOperationStepFactory)
-      .bindOperationDtoFactory('dummy-operation', DummyOperationDtoFactory);
+      ?.bindTableChangesFactory('dummy-operation', DummyChangesFactory)
+      .bindTableChangeWritterFactory('dummy-change', DummyChangeWritterFactory);
   }
 
   public runOperation(): void {
-    const args: DummyOperationDtoArgs = {
+    const args: DummyArgs = {
       id: 'dummy-operation',
       cellCoord: createCellCoord(1, 1),
       value: 'Dummy value',
     };
-    const operationDto: OperationDto = this.fit.operationExecutor //
-      ?.createOperationDto(args) as OperationDto;
-    this.consoleText = JSON.stringify(operationDto, null, 2);
-    this.fit.operationExecutor?.runOperationDto(operationDto);
+    const changes: TableChanges = this.fit.operationExecutor //
+      ?.calculateTableChanges(args) as TableChanges;
+    this.consoleText = JSON.stringify(changes, null, 2);
+    this.fit.operationExecutor?.writeTableChanges(changes);
   }
 }
 
-type DummyOperationStepDto = OperationId<'dummy-step'> & {
+type DummyChange = Args<'dummy-change'> & {
   rowId?: number;
   colId?: number;
   value?: Value;
 };
-class DummyOperationStep implements OperationStep {
-  constructor(private table: Table, private stepDto: DummyOperationStepDto) {}
+class DummyChangeWritter implements TableChangeWritter {
+  constructor(private table: Table, private change: DummyChange) {}
   run(): void {
-    const rowId: number | undefined = this.stepDto.rowId;
-    const colId: number | undefined = this.stepDto.colId;
+    const rowId: number | undefined = this.change.rowId;
+    const colId: number | undefined = this.change.colId;
     if (!rowId || !colId) return;
-    this.table.setCellValue(rowId, colId, this.stepDto.value);
+    this.table.setCellValue(rowId, colId, this.change.value);
   }
 }
-class DummyOperationStepFactory implements OperationStepFactory {
-  public createStep(
+class DummyChangeWritterFactory implements TableChangeWritterFactory {
+  public createTableChangeWritter(
     table: Table,
-    stepDto: DummyOperationStepDto
-  ): OperationStep {
-    return new DummyOperationStep(table, stepDto);
+    change: DummyChange
+  ): TableChangeWritter {
+    return new DummyChangeWritter(table, change);
   }
 }
 
-type DummyOperationDtoArgs = OperationId<'dummy-operation'> & {
+type DummyArgs = Args<'dummy-operation'> & {
   cellCoord: CellCoord;
   value: Value;
 };
-class DummyOperationDtoBuilder {
-  private dummyOperationStepDto: DummyOperationStepDto = {
-    id: 'dummy-step',
+class DummyChangesBuilder {
+  private dummyChange: DummyChange = {
+    id: 'dummy-change',
   };
-  private undoDummyOperationStepDto: DummyOperationStepDto = {
-    id: 'dummy-step',
+  private dummyUndoChange: DummyChange = {
+    id: 'dummy-change',
   };
-  private operationDto: OperationDto;
-  constructor(private table: Table, private args: DummyOperationDtoArgs) {
-    this.operationDto = {
+  private changes: TableChanges;
+  constructor(private table: Table, private args: DummyArgs) {
+    this.changes = {
       id: args.id,
-      steps: [this.dummyOperationStepDto],
-      undoOperation: { steps: [this.undoDummyOperationStepDto] },
+      changes: [this.dummyChange],
+      undoChanges: { changes: [this.dummyUndoChange] },
     };
   }
-  build(): OperationDto {
+  build(): TableChanges {
     if (this.getOldValue() !== this.args.value) {
       this.prepareUpdate();
       this.prepareUndo();
     }
-    return this.operationDto;
+    return this.changes;
   }
   private prepareUpdate(): void {
-    this.dummyOperationStepDto.rowId = this.args.cellCoord.getRowId();
-    this.dummyOperationStepDto.colId = this.args.cellCoord.getColId();
-    this.dummyOperationStepDto.value = this.args.value;
+    this.dummyChange.rowId = this.args.cellCoord.getRowId();
+    this.dummyChange.colId = this.args.cellCoord.getColId();
+    this.dummyChange.value = this.args.value;
   }
   private prepareUndo(): void {
     const rowId: number = this.args.cellCoord.getRowId();
     const colId: number = this.args.cellCoord.getColId();
-    this.undoDummyOperationStepDto.rowId = rowId;
-    this.undoDummyOperationStepDto.colId = colId;
-    this.undoDummyOperationStepDto.value = this.getOldValue();
+    this.dummyUndoChange.rowId = rowId;
+    this.dummyUndoChange.colId = colId;
+    this.dummyUndoChange.value = this.getOldValue();
   }
   private getOldValue(): Value | undefined {
     const rowId: number = this.args.cellCoord.getRowId();
@@ -141,11 +141,11 @@ class DummyOperationDtoBuilder {
     return this.table.getCellValue(rowId, colId);
   }
 }
-class DummyOperationDtoFactory implements OperationDtoFactory {
-  createOperationDto(
+class DummyChangesFactory implements TableChangesFactory {
+  createTableChanges(
     table: Table,
-    args: DummyOperationDtoArgs
-  ): OperationDto | Promise<OperationDto> {
-    return new DummyOperationDtoBuilder(table, args).build();
+    args: DummyArgs
+  ): TableChanges | Promise<TableChanges> {
+    return new DummyChangesBuilder(table, args).build();
   }
 }

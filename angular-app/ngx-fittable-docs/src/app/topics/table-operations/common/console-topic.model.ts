@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs';
 
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import {
-  OperationDto,
+  TableChanges,
   registerOperationConfig,
 } from 'fittable-core/operations';
 import {
@@ -59,31 +59,31 @@ export abstract class ConsoleTopic implements OnInit, OnDestroy {
   protected writeToConsoleAfterRun$(): Subscription | undefined {
     return this.fit.operationExecutor
       ?.onAfterRun$()
-      .subscribe((operationDto: OperationDto): void => {
-        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
+      .subscribe((tableChanges: TableChanges): void => {
+        this.consoleText = 'Operation id: ' + tableChanges.id + '\n';
         this.consoleText +=
-          'Operation steps: ' + JSON.stringify(operationDto.steps, null, 2);
+          'Operation changes: ' + JSON.stringify(tableChanges.changes, null, 2);
       });
   }
 
   protected writeToConsoleAfterUndo$(): Subscription | undefined {
     return this.fit.operationExecutor
       ?.onAfterUndo$()
-      .subscribe((operationDto: OperationDto): void => {
-        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
+      .subscribe((tableChanges: TableChanges): void => {
+        this.consoleText = 'Operation id: ' + tableChanges.id + '\n';
         this.consoleText +=
-          'Operation steps: ' +
-          JSON.stringify(operationDto.undoOperation?.steps, null, 2);
+          'Operation changes: ' +
+          JSON.stringify(tableChanges.undoChanges?.changes, null, 2);
       });
   }
 
   protected writeToConsoleAfterRedo$(): Subscription | undefined {
     return this.fit.operationExecutor
       ?.onAfterRedo$()
-      .subscribe((operationDto: OperationDto): void => {
-        this.consoleText = 'Operation id: ' + operationDto.id + '\n';
+      .subscribe((tableChanges: TableChanges): void => {
+        this.consoleText = 'Operation id: ' + tableChanges.id + '\n';
         this.consoleText +=
-          'Operation steps: ' + JSON.stringify(operationDto.steps, null, 2);
+          'Operation changes: ' + JSON.stringify(tableChanges.changes, null, 2);
       });
   }
 
