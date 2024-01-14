@@ -9,6 +9,7 @@ import {
   OnDestroy,
   AfterViewInit,
 } from '@angular/core';
+import { NgFor, NgStyle } from '@angular/common';
 
 import { Value } from 'fittable-core/model';
 import {
@@ -20,8 +21,13 @@ import {
   asSelectorWindow,
 } from 'fittable-core/view-model';
 
+import { ButtonComponent } from '../button/button.component';
+import { PopupMenuComponent } from '../popup-menu/popup-menu.component';
+
 @Component({
   selector: 'fit-color-picker',
+  standalone: true,
+  imports: [NgStyle, NgFor, ButtonComponent, PopupMenuComponent],
   templateUrl: './color-picker.component.html',
   styleUrls: ['../common/scss/utils.scss', './color-picker.component.scss'],
 })

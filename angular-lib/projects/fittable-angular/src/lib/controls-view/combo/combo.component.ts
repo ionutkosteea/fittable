@@ -1,12 +1,16 @@
 import { Component, Input } from '@angular/core';
+import { NgStyle } from '@angular/common';
 
 import { CssStyle } from 'fittable-core/model';
 import { Control, PopupControl, Window } from 'fittable-core/view-model';
 
 import { createToggleStyle } from '../common/style-functions.model';
+import { ContextMenuComponent } from '../context-menu/context-menu.component';
 
 @Component({
   selector: 'fit-combo',
+  standalone: true,
+  imports: [NgStyle, ContextMenuComponent],
   templateUrl: './combo.component.html',
   styleUrl: './combo.component.scss',
 })

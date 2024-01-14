@@ -12,7 +12,7 @@ import {
   createScrollContainerListener,
 } from 'fittable-core/view-model';
 
-@Directive({ selector: '[fitScrollContainer]' })
+@Directive({ selector: '[fitScrollContainer]', standalone: true })
 export class ScrollContainerDirective implements OnInit {
   @Input() scrollContainer!: ScrollContainer;
   private scrollContainerListener!: ScrollContainerListener;

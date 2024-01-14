@@ -8,6 +8,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { NgStyle } from '@angular/common';
 
 import { CssStyle, Value, CellCoord } from 'fittable-core/model';
 import {
@@ -21,6 +22,8 @@ import {
 
 @Component({
   selector: 'fit-cell-editor',
+  standalone: true,
+  imports: [NgStyle],
   templateUrl: './cell-editor.component.html',
   styleUrl: 'cell-editor.component.scss',
 })

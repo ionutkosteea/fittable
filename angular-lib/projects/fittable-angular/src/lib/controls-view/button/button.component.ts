@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { NgStyle } from '@angular/common';
 
 import { CssStyle } from 'fittable-core/model';
 import { Control } from 'fittable-core/view-model';
@@ -7,6 +8,8 @@ import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
   selector: 'fit-button',
+  standalone: true,
+  imports: [NgStyle],
   template: `
     <button
       [ngStyle]="getStyle()"

@@ -2,7 +2,7 @@ import { Directive, HostListener, Input } from '@angular/core';
 
 import { CellEditorListener } from 'fittable-core/view-model';
 
-@Directive({ selector: '[fitCellEditorOpen]' })
+@Directive({ selector: '[fitCellEditorOpen]', standalone: true })
 export class CellEditorOpenDirective {
   @Input() cellEditorListener?: CellEditorListener;
 

@@ -1,4 +1,10 @@
 import { Component, Input } from '@angular/core';
+import {
+  NgFor,
+  NgSwitch,
+  NgSwitchCase,
+  NgSwitchDefault,
+} from '@angular/common';
 
 import { CssStyle, CssValue, Value } from 'fittable-core/model';
 import {
@@ -13,9 +19,32 @@ import {
 } from 'fittable-core/view-model';
 
 import { ControlType } from '../common/control-type.model';
+import { ButtonComponent } from '../button/button.component';
+import { ComboComponent } from '../combo/combo.component';
+import { InputComponent } from '../input/input.component';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { PopupButtonComponent } from '../popup-button/popup-button.component';
+import { BorderPopupComponent } from '../border-popup/border-popup.component';
+import { ContextMenuComponent } from '../context-menu/context-menu.component';
+import { ContextMenuButtonComponent } from '../context-menu/context-menu-button.component';
 
 @Component({
   selector: 'fit-toolbar',
+  standalone: true,
+  imports: [
+    NgFor,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    ButtonComponent,
+    ComboComponent,
+    InputComponent,
+    ColorPickerComponent,
+    PopupButtonComponent,
+    BorderPopupComponent,
+    ContextMenuComponent,
+    ContextMenuButtonComponent,
+  ],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss',
 })

@@ -9,11 +9,20 @@ import {
   getViewModelConfig,
 } from 'fittable-core/view-model';
 
+import { TableLeftTopCornerComponent } from './table-left-top-corner/table-left-top-corner.component';
 import { TableTopComponent } from './table-top/table-top.component';
 import { TableLeftComponent } from './table-left/table-left.component';
+import { TableCenterComponent } from './table-center/table-center.component';
 
 @Component({
   selector: 'fit-table',
+  standalone: true,
+  imports: [
+    TableLeftTopCornerComponent,
+    TableTopComponent,
+    TableLeftComponent,
+    TableCenterComponent,
+  ],
   templateUrl: 'table.component.html',
   styleUrl: './table.component.scss',
 })

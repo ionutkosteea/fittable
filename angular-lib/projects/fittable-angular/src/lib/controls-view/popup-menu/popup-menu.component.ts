@@ -1,4 +1,5 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { NgStyle } from '@angular/common';
 
 import { CssStyle } from 'fittable-core/model';
 import {
@@ -11,6 +12,8 @@ import { createWindowStyle } from '../common/style-functions.model';
 
 @Component({
   selector: 'fit-popup-menu',
+  standalone: true,
+  imports: [NgStyle],
   template: `
     <div class="popup-menu" [ngStyle]="getWindowStyle()">
       <ng-content />

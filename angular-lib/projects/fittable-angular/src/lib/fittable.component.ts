@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 import {
   Container,
@@ -9,8 +10,23 @@ import {
   ScrollContainer,
 } from 'fittable-core/view-model';
 
+import { ToolbarComponent } from './controls-view/toolbar/toolbar.component';
+import { TableComponent } from './table-view/table.component';
+import { StatusbarComponent } from './controls-view/statusbar/statusbar.component';
+import { SettingsBarComponent } from './controls-view/settings-bar/settings-bar.component';
+import { ContextMenuComponent } from './controls-view/context-menu/context-menu.component';
+
 @Component({
   selector: 'fittable',
+  standalone: true,
+  imports: [
+    NgIf,
+    ToolbarComponent,
+    TableComponent,
+    StatusbarComponent,
+    SettingsBarComponent,
+    ContextMenuComponent,
+  ],
   templateUrl: './fittable.component.html',
   styleUrls: ['./fittable.component.scss'],
 })

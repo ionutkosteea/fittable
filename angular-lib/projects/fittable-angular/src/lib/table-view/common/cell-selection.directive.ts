@@ -5,7 +5,7 @@ import {
   CellSelectionRanges,
 } from 'fittable-core/view-model';
 
-@Directive({ selector: '[fitCellSelection]' })
+@Directive({ selector: '[fitCellSelection]', standalone: true })
 export class CellSelectionDirective {
   @Input() cellSelectionListener?: CellSelectionListener;
   @Input() cellSelectionRanges?: CellSelectionRanges;

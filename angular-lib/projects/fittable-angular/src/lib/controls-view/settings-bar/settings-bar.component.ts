@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { NgFor } from '@angular/common';
 
 import {
   Container,
@@ -7,8 +8,12 @@ import {
   asPopupControl,
 } from 'fittable-core/view-model';
 
+import { SettingsButtonComponent } from './settings-button/settings-button.component';
+
 @Component({
   selector: 'fit-settingsbar',
+  standalone: true,
+  imports: [NgFor, SettingsButtonComponent],
   template: `
     <div class="settings-bar">
       <fit-settings-button

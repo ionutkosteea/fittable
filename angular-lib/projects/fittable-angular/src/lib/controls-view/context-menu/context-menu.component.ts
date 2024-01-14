@@ -7,6 +7,15 @@ import {
   OnInit,
   HostListener,
 } from '@angular/core';
+import {
+  NgClass,
+  NgFor,
+  NgIf,
+  NgStyle,
+  NgSwitch,
+  NgSwitchCase,
+  NgSwitchDefault,
+} from '@angular/common';
 
 import { CssStyle, Value, createStyle4Dto } from 'fittable-core/model';
 import {
@@ -31,6 +40,16 @@ import { ControlType } from '../common/control-type.model';
 
 @Component({
   selector: 'fit-context-menu',
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    NgStyle,
+    NgClass,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+  ],
   templateUrl: './context-menu.component.html',
   styleUrls: ['../common/scss/utils.scss', './context-menu.component.scss'],
 })

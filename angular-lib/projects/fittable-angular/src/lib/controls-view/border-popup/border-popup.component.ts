@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 
 import {
   PopupControl,
@@ -6,10 +7,25 @@ import {
   Control,
   asPopupControl,
 } from 'fittable-core/view-model';
+
 import { ControlType } from '../common/control-type.model';
+import { ButtonComponent } from '../button/button.component';
+import { PopupMenuComponent } from '../popup-menu/popup-menu.component';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+
+import { BorderTypeComponent } from './border-type/border-type.component';
 
 @Component({
   selector: 'fit-border-popup',
+  standalone: true,
+  imports: [
+    NgFor,
+    NgIf,
+    ButtonComponent,
+    PopupMenuComponent,
+    BorderTypeComponent,
+    ColorPickerComponent,
+  ],
   templateUrl: './border-popup.component.html',
   styleUrls: ['../common/scss/utils.scss', './border-popup.component.scss'],
 })

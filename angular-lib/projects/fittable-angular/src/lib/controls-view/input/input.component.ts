@@ -8,6 +8,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { NgStyle } from '@angular/common';
 
 import { CssStyle } from 'fittable-core/model';
 import {
@@ -20,6 +21,8 @@ import { createToggleStyle } from '../common/style-functions.model';
 
 @Component({
   selector: 'fit-input',
+  standalone: true,
+  imports: [NgStyle],
   template: `
     <input
       #inputField

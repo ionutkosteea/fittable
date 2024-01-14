@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
 
 import { CssStyle, getModelConfig } from 'fittable-core/model';
 import {
@@ -9,9 +10,23 @@ import {
 } from 'fittable-core/view-model';
 
 import { TableCommon } from '../common/table-common.model';
+import { CellSelectionDirective } from '../common/cell-selection.directive';
+import {
+  FilterPopupButtonComponent,
+  FilterPopupWindowComponent,
+} from '../../controls-view/filter-popup/filter-popup.component';
 
 @Component({
   selector: 'fit-table-top',
+  standalone: true,
+  imports: [
+    NgStyle,
+    NgFor,
+    NgIf,
+    CellSelectionDirective,
+    FilterPopupButtonComponent,
+    FilterPopupWindowComponent,
+  ],
   templateUrl: './table-top.component.html',
   styleUrls: [
     '../common/scss/table.scss',

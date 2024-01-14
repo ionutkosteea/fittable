@@ -7,6 +7,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
+import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 
 import { CssStyle, CellRange, DataType } from 'fittable-core/model';
 import {
@@ -23,9 +24,24 @@ import {
 } from 'fittable-core/view-model';
 
 import { TableCommon } from '../common/table-common.model';
+import { ScrollContainerDirective } from '../../controls-view/common/scroll-container.directive';
+import { CellEditorComponent } from '../../controls-view/cell-editor/cell-editor.component';
+import { CellEditorOpenDirective } from '../../controls-view/cell-editor/cell-editor.directive';
+import { CellSelectionDirective } from '../common/cell-selection.directive';
 
 @Component({
   selector: 'fit-table-center',
+  standalone: true,
+  imports: [
+    NgStyle,
+    NgClass,
+    NgFor,
+    NgIf,
+    ScrollContainerDirective,
+    CellSelectionDirective,
+    CellEditorOpenDirective,
+    CellEditorComponent,
+  ],
   templateUrl: './table-center.component.html',
   styleUrls: ['../common/scss/table.scss', './table-center.component.scss'],
 })
