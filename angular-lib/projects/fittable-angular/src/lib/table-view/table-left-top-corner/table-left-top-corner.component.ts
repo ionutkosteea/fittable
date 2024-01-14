@@ -12,15 +12,21 @@ import { TableCommon } from '../common/table-common.model';
 @Component({
   selector: 'fit-table-left-top-corner',
   templateUrl: './table-left-top-corner.component.html',
+  styleUrls: [
+    '../common/scss/table.scss',
+    '../common/scss/table-header.scss',
+    './table-left-top-corner.component.scss',
+  ],
 })
 export class TableLeftTopCornerComponent extends TableCommon {
-  @Input() override viewModel!: ViewModel;
+  @Input({ required: true }) override viewModel!: ViewModel;
   @Input() cellSelectionListener?: CellSelectionListener;
 
-  public readonly getCellSelectionRanges = ():
-    | CellSelectionRanges
-    | undefined => this.viewModel.cellSelection?.pageHeader;
+  getCellSelectionRanges(): CellSelectionRanges | undefined {
+    return this.viewModel.cellSelection?.pageHeader;
+  }
 
-  public readonly getCellSelectionRectangles = (): CssStyle[] =>
-    this.viewModel.mobileLayout.pageHeaderSelectionRectangles;
+  getCellSelectionRectangles(): CssStyle[] {
+    return this.viewModel.mobileLayout.pageHeaderSelectionRectangles;
+  }
 }

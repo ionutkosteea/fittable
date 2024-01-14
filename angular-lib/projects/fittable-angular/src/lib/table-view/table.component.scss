@@ -1,0 +1,9 @@
+.table {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "pageHeader colHeader"
+    "rowHeader body";
+  height: 100%;
+}

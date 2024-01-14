@@ -1,0 +1,23 @@
+.table-header-row {
+  position: relative;
+}
+
+.table-header-cell {
+  position: relative;
+  background-clip: padding-box;
+  position: relative;
+  color: var(--table-header-color);
+  font-size: 0.625rem;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--table-header-border-color);
+  box-sizing: border-box;
+}
+
+.table-header-cell-selection {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: var(--table-header-background-hover-color);
+  pointer-events: none;
+}

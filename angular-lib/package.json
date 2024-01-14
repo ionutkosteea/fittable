@@ -26,12 +26,12 @@
     "fittable-core": "^4.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "0.14.2"
+    "zone.js": "~0.14.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.9",
     "@angular/cli": "^17.0.9",
-    "@angular/compiler-cli": "~17.0.0",
+    "@angular/compiler-cli": "^17.0.0",
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
@@ -42,9 +42,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "sass": "^1.69.7",
-    "ng-packagr": "^17.0.3",
-    "typescript": "5.2.2"
+    "ng-packagr": "^17.0.0",
+    "typescript": "~5.2.2"
   },
   "peerDependencies": {
     "fittable-model": "^2.0.1",

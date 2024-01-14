@@ -1,0 +1,13 @@
+@import "../../common/scss/core";
+
+:host {
+  position: relative;
+  font-size: 0;
+}
+
+button {
+  @include icon(center);
+  @include button();
+  width: fit-map-get($size-map, medium);
+  height: fit-map-get($size-map, medium);
+}

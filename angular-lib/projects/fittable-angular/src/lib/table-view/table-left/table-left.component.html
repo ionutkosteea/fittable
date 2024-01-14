@@ -1,13 +1,13 @@
-<div #scroller class="fit-table-row-header" *ngIf="hasRowHeader()">
+<div class="table-left" *ngIf="hasRowHeader()" #scroller>
   <div
-    class="fit-full-size-container"
+    class="full-size-container"
     [ngStyle]="{
       'width.px': getRowHeaderWidth(),
       'height.px': getBodyHeight()
     }"
   >
-    <div class="fit-offset-container" [ngStyle]="getRowHeaderOffset()">
-      <table class="fit-table">
+    <div class="offset-container" [ngStyle]="getRowHeaderOffset()">
+      <table class="table">
         <colgroup>
           <col [ngStyle]="{ 'width.px': getRowHeaderWidth() }" />
         </colgroup>
@@ -21,12 +21,8 @@
             *ngFor="let rowId of getRowIds()"
             [ngStyle]="{ 'height.px': getRowHeight(rowId) }"
           >
-            <th
-              class="fit-table-header-cell"
-              [attr.rowId]="rowId"
-              [attr.colId]="0"
-            >
-              <p class="fit-table-cell-text">{{ getRowLabel(rowId) }}</p>
+            <th class="table-header-cell" [attr.rowId]="rowId" [attr.colId]="0">
+              <p class="table-cell-text">{{ getRowLabel(rowId) }}</p>
             </th>
           </tr>
         </tbody>
@@ -34,7 +30,7 @@
     </div>
   </div>
   <div
-    class="fit-table-header-cell-selection"
+    class="table-header-cell-selection"
     *ngFor="let rect of getCellSelectionRectangles()"
     [ngStyle]="rect"
   ></div>

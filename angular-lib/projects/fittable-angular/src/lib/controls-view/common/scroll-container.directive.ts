@@ -15,12 +15,11 @@ import {
 @Directive({ selector: '[fitScrollContainer]' })
 export class ScrollContainerDirective implements OnInit {
   @Input() scrollContainer!: ScrollContainer;
-
   private scrollContainerListener!: ScrollContainerListener;
 
   constructor(private readonly divRef: ElementRef) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.scrollContainerListener = createScrollContainerListener(
       this.divRef.nativeElement,
       this.scrollContainer

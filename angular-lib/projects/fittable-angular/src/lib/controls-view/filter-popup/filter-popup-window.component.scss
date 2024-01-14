@@ -1,0 +1,110 @@
+@import "../common/scss/core";
+
+.popup-button {
+  @include icon(center);
+  @include button();
+  position: absolute;
+  top: 5px;
+  right: 2px;
+  width: 12px;
+  height: 8px;
+}
+
+.popup-window {
+  @include window;
+  position: fixed;
+  padding: fit-map-get($padding-map, large);
+}
+
+.search-input {
+  font-size: fit-map-get($font-size-map, medium);
+  line-height: fit-map-get($line-height-map, medium);
+  input {
+    color: var(--context-menu-color);
+    background-color: var(--context-menu-background-color);
+    border: 1px solid var(--context-menu-border-color);
+    margin: 0;
+    padding: fit-map-get($padding-map, small);
+    width: 100%;
+    border-radius: 4px;
+    font-size: inherit;
+    height: 1.25rem;
+    background-position: bottom 0.15rem right 0.15rem;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+  }
+}
+
+.right-aligned-bar {
+  @include bar(flex-end);
+  padding: fit-map-get($padding-map, medium) 0;
+}
+
+.select-button {
+  font-size: fit-map-get($font-size-map, medium);
+  padding: fit-map-get($padding-map, small);
+  border-radius: 0.25rem;
+  background-color: var(--context-menu-background-color);
+  border: 1px solid var(--context-menu-border-color);
+  color: var(--context-menu-color);
+  cursor: pointer;
+  &:active {
+    border-color: var(--context-menu-background-color);
+  }
+}
+
+.scroll-container {
+  width: 100%;
+  height: 6.25rem;
+  overflow: auto;
+  scroll-behavior: smooth;
+  background-color: var(--context-menu-background-color);
+  font-size: fit-map-get($font-size-map, medium);
+
+  .full-size-container {
+    position: relative;
+    width: 0px; // to be set in HTML
+    height: 0px; // to be set in HTML
+
+    .mobile-container {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      min-width: 100%;
+      transform: translate3d(0px, 0px, 0px); // to be set in HTML
+    }
+  }
+}
+
+.check-item {
+  display: flex;
+  place-items: center;
+  white-space: nowrap;
+  cursor: pointer;
+  height: 20px;
+  background-color: var(--context-menu-background-color);
+  &:hover {
+    background-color: var(--context-menu-background-hover-color);
+  }
+  input {
+    cursor: inherit;
+  }
+  label {
+    cursor: inherit;
+  }
+}
+
+.center-aligned-bar {
+  @include bar(center);
+  padding: fit-map-get($padding-map, medium) 0;
+}
+
+.action-button {
+  @include border;
+  padding: fit-map-get($padding-map, small);
+  color: var(--context-menu-background-color);
+  background-color: var(--highlight-color);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}

@@ -4,12 +4,13 @@ import { Statusbar } from 'fittable-core/view-model';
 
 @Component({
   selector: 'fit-statusbar',
-  template: '<div class="fit-statusbar">{{model.getText()}}</div>',
+  template: '<div class="statusbar">{{model.getText()}}</div>',
+  styleUrl: './statusbar.component.scss',
 })
 export class StatusbarComponent implements OnDestroy {
   @Input() model!: Statusbar;
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.model.destroy();
   }
 }

@@ -1,0 +1,16 @@
+:host {
+  position: relative;
+}
+
+hr {
+  padding-top: 16px;
+  border-top-color: var(--toolbar-color);
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  width: 100px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--toolbar-background-hover-color);
+  }
+}

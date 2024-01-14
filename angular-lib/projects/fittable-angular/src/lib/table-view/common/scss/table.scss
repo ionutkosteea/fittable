@@ -1,0 +1,45 @@
+.full-size-container {
+  position: relative;
+  box-sizing: border-box;
+  width: 0; // to be be set in HTML
+  height: 0; // to be be set in HTML
+}
+
+.offset-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate3d(0px, 0px, 0px); // to be set in HTML
+}
+
+.table {
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+  cursor: default;
+  border-collapse: collapse;
+  box-sizing: border-box;
+}
+
+.table-cell-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 2px 4px;
+  display: grid;
+  place-items: inherit;
+  text-decoration: inherit;
+  box-sizing: border-box;
+  white-space: break-spaces;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

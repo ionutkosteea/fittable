@@ -1,16 +1,16 @@
 <div
-  class="fit-table-body"
+  class="table-center"
   (scroll)="onScroll($event)"
   fitScrollContainer
   [scrollContainer]="getScrollContainer()"
 >
   <div
-    class="fit-full-size-container"
+    class="full-size-container"
     [ngStyle]="{ 'width.px': getBodyWidth(), 'height.px': getBodyHeight() }"
   >
-    <div class="fit-offset-container" [ngStyle]="getBodyOffset()">
+    <div class="offset-container" [ngStyle]="getBodyOffset()">
       <table
-        class="fit-table"
+        class="table"
         [ngStyle]="{
           'font-size.px': getTableFontSize(),
           'font-family': getTableFontFamily()
@@ -36,7 +36,7 @@
           >
             <ng-container *ngFor="let colId of getColIds()">
               <td
-                [ngClass]="'fit-table-cell' + getDataTypeClass(rowId, colId)"
+                [ngClass]="'table-cell' + getDataTypeClass(rowId, colId)"
                 *ngIf="!isHiddenCell(rowId, colId)"
                 [ngStyle]="getCellStyle(rowId, colId)"
                 [rowSpan]="getRowSpan(rowId, colId)"
@@ -45,7 +45,7 @@
                 [attr.colId]="colId"
               >
                 <!-- prettier-ignore -->
-                <p class="fit-table-cell-text">{{ getFormatedCellValue(rowId, colId) }}</p>
+                <p class="table-cell-text">{{ getFormatedCellValue(rowId, colId) }}</p>
               </td>
             </ng-container>
           </tr>
@@ -54,7 +54,7 @@
     </div>
   </div>
   <div
-    class="fit-table-cell-selection"
+    class="table-cell-selection"
     *ngFor="let rect of getCellSelectionRectangles()"
     [ngStyle]="rect"
   ></div>

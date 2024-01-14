@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 
 import {
   Container,
@@ -12,42 +12,52 @@ import {
 @Component({
   selector: 'fittable',
   templateUrl: './fittable.component.html',
-  styleUrls: ['./common/css/fittable-main.css'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./fittable.component.scss'],
 })
 export class FittableComponent implements OnDestroy {
-  @Input() designer!: FittableDesigner;
+  @Input({ required: true }) designer!: FittableDesigner;
 
-  public readonly getViewModel = (): ViewModel => this.designer.viewModel;
-
-  public readonly getTableScrollContainer = (): ScrollContainer =>
-    this.designer.viewModel.tableScrollContainer;
-
-  public readonly hasToolbar = (): boolean =>
-    this.designer.viewModel.toolbar !== undefined;
-
-  public readonly getToolbar = (): Container =>
-    this.designer.viewModel.toolbar as Container;
-
-  public readonly hasContextMenu = (): boolean =>
-    this.designer.viewModel.contextMenu !== undefined;
-
-  public readonly getContextMenu = (): Window =>
-    this.designer.viewModel.contextMenu as Window;
-
-  public readonly hasStatusbar = (): boolean =>
-    this.designer.viewModel.statusbar !== undefined;
-
-  public readonly getStatusbar = (): Statusbar =>
-    this.designer.viewModel.statusbar as Statusbar;
-
-  public readonly hasSettingsBar = (): boolean =>
-    this.designer.viewModel.settingsBar !== undefined;
-
-  public readonly getSettingsBar = (): Container =>
-    this.designer.viewModel.settingsBar as Container;
-
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.designer.viewModel.destroy();
+  }
+
+  getViewModel(): ViewModel {
+    return this.designer.viewModel;
+  }
+
+  getTableScrollContainer(): ScrollContainer {
+    return this.designer.viewModel.tableScrollContainer;
+  }
+
+  hasToolbar(): boolean {
+    return this.designer.viewModel.toolbar !== undefined;
+  }
+
+  getToolbar(): Container {
+    return this.designer.viewModel.toolbar as Container;
+  }
+
+  hasContextMenu(): boolean {
+    return this.designer.viewModel.contextMenu !== undefined;
+  }
+
+  getContextMenu(): Window {
+    return this.designer.viewModel.contextMenu as Window;
+  }
+
+  hasStatusbar(): boolean {
+    return this.designer.viewModel.statusbar !== undefined;
+  }
+
+  getStatusbar(): Statusbar {
+    return this.designer.viewModel.statusbar as Statusbar;
+  }
+
+  hasSettingsBar(): boolean {
+    return this.designer.viewModel.settingsBar !== undefined;
+  }
+
+  getSettingsBar(): Container {
+    return this.designer.viewModel.settingsBar as Container;
   }
 }

@@ -6,7 +6,6 @@ import {
   EventEmitter,
   Output,
   AfterViewInit,
-  OnInit,
 } from '@angular/core';
 
 import {
@@ -17,43 +16,38 @@ import {
   Window,
 } from 'fittable-core/view-model';
 
-import { WindowComponent } from '../../common/window-component.model';
-
 @Component({
   selector: 'fit-border-type',
   templateUrl: './border-type.component.html',
+  styleUrls: ['../../common/scss/utils.scss', './border-type.component.scss'],
 })
-export class BorderTypeComponent
-  extends WindowComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
-  @Input('model') popupControl!: PopupControl;
+export class BorderTypeComponent implements AfterViewInit, OnDestroy {
+  @Input({ required: true }) model!: PopupControl;
   @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
-
   private readonly subscriptions: Subscription[] = [];
 
-  public override getWindow(): Window {
-    return this.popupControl.getWindow();
-  }
-
-  public ngOnInit(): void {
-    this.init();
-  }
-
-  public ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.subscriptions.push(this.onWindowSetVisible$());
   }
 
-  private onWindowSetVisible$(): Subscription {
-    return this.getWindow()
-      .onAfterSetFocus$()
-      .subscribe((focus: boolean) => {
-        this.isVisibleEvent.emit(focus);
-      });
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
   }
 
-  public getBorderStyle(id: string): { borderBottom: string } {
-    const control: Control = this.popupControl.getWindow().getControl(id);
+  getWindow(): Window {
+    return this.model.getWindow();
+  }
+
+  getControlIds(): string[] {
+    return this.getWindow().getControlIds();
+  }
+
+  runControl(id: string): void {
+    this.getWindow().getControl(id).run();
+  }
+
+  getBorderStyle(id: string): { borderBottom: string } {
+    const control: Control = this.model.getWindow().getControl(id);
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (!valueControl) throw new Error('Invalid value control for id ' + id);
     const parts: string[] = (valueControl.getValue() as string).split(' ');
@@ -62,7 +56,11 @@ export class BorderTypeComponent
     };
   }
 
-  public ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+  private onWindowSetVisible$(): Subscription {
+    return this.getWindow()
+      .onAfterSetFocus$()
+      .subscribe((focus: boolean) => {
+        this.isVisibleEvent.emit(focus);
+      });
   }
 }

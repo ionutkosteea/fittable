@@ -5,6 +5,7 @@ import {
   AfterViewInit,
   ViewChild,
   OnInit,
+  HostListener,
 } from '@angular/core';
 
 import { CssStyle, Value, createStyle4Dto } from 'fittable-core/model';
@@ -14,6 +15,7 @@ import {
   InputControlListener,
   PopupControl,
   Window,
+  WindowListener,
   asInputControl,
   asPopupControl,
   createInputControlListener,
@@ -21,18 +23,19 @@ import {
   getImageRegistry,
 } from 'fittable-core/view-model';
 
-import { WindowComponent } from '../common/window-component.model';
-import { createToggleStyle } from '../common/style-functions.model';
+import {
+  createToggleStyle,
+  createWindowStyle,
+} from '../common/style-functions.model';
+import { ControlType } from '../common/control-type.model';
 
 @Component({
   selector: 'fit-context-menu',
   templateUrl: './context-menu.component.html',
+  styleUrls: ['../common/scss/utils.scss', './context-menu.component.scss'],
 })
-export class ContextMenuComponent
-  extends WindowComponent
-  implements OnInit, AfterViewInit
-{
-  @Input('model') window!: Window;
+export class ContextMenuComponent implements OnInit, AfterViewInit {
+  @Input({ required: true }) model!: Window;
   @Input() position: 'absolute' | 'fixed' = 'absolute';
   @Input() left: number | string = 0;
   @Input() top: number | string = 0;
@@ -43,43 +46,46 @@ export class ContextMenuComponent
   @Input() inputHeight?: number | string;
   @Input() iconCol: 'left' | 'right' = 'left';
   @Input() controlStyleFn?: (control: Control) => CssStyle | null;
-
   @ViewChild('menuWindow') menuWindowRef!: ElementRef;
-
+  private windowListener!: WindowListener;
   private readonly inputListeners: Map<string, InputControlListener> =
     new Map();
   private isTextFieldMouseDown = false;
   private isSubMenu = false;
 
-  public ngOnInit(): void {
-    this.init();
+  ngOnInit(): void {
+    this.windowListener = createWindowListener(this.model);
   }
 
-  public ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     const htmlMenu: HTMLElement = this.menuWindowRef.nativeElement;
-    this.window //
+    this.model //
       .setSize({
         getWidth: (): number => htmlMenu.clientWidth,
         getHeight: (): number => htmlMenu.clientHeight,
       });
   }
 
-  public override getWindow(): Window {
-    return this.window;
+  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
+    this.windowListener.onMouseDown(event);
   }
 
-  public onMouseEnter(): void {
-    if (this.getWindow().isVisible()) return;
-    this.getWindow().setVisible(true);
+  @HostListener('window:mousedown') onGlobalMouseDown(): void {
+    this.windowListener.onGlobalMouseDown();
+  }
+
+  onMouseEnter(): void {
+    if (this.model.isVisible()) return;
+    this.model.setVisible(true);
     this.isSubMenu = true;
   }
 
-  public onMouseLeave(): void {
-    this.isSubMenu && this.getWindow().setVisible(false);
+  onMouseLeave(): void {
+    this.isSubMenu && this.model.setVisible(false);
   }
 
-  public override getWindowStyle(): CssStyle {
-    const style: CssStyle = super.getWindowStyle();
+  getWindowStyle(): CssStyle {
+    const style: CssStyle = createWindowStyle(this.model);
     style['position'] = this.position;
     style['left'] = this.left;
     style['top'] = this.top;
@@ -89,11 +95,31 @@ export class ContextMenuComponent
     return style;
   }
 
-  public hasControlIcon(id: string): boolean {
+  getControlIds(): string[] {
+    return this.model.getControlIds();
+  }
+
+  getControl(id: string): Control {
+    return this.model.getControl(id);
+  }
+
+  getControlType(id: string): ControlType {
+    return this.getControl(id).getType() as ControlType;
+  }
+
+  getControlLabel(id: string): string {
+    return this.getControl(id).getLabel();
+  }
+
+  getControlIcon(id: string): string | undefined {
+    return this.getControl(id).getIcon();
+  }
+
+  hasControlIcon(id: string): boolean {
     return this.getControlIcon(id) !== undefined;
   }
 
-  public getControlStyle(id: string): CssStyle | null {
+  getControlStyle(id: string): CssStyle | null {
     const control: Control = this.getControl(id);
     let style: CssStyle | null = createToggleStyle(control);
     if (this.controlStyleFn) {
@@ -108,7 +134,7 @@ export class ContextMenuComponent
     return style;
   }
 
-  public override runControl(id: string): void {
+  runControl(id: string): void {
     const control: Control = this.getControl(id);
     if (this.isTextFieldMouseDown) {
       this.isTextFieldMouseDown = false;
@@ -117,45 +143,70 @@ export class ContextMenuComponent
     }
   }
 
-  public getArrowRightIcon(): string | undefined {
+  getArrowRightIcon(): string | undefined {
     return getImageRegistry().getUrl('arrowRight');
   }
 
-  public hasTextField(id: string): boolean {
+  hasTextField(id: string): boolean {
     return this.getInputControl(id) !== undefined;
   }
 
-  public getTextFieldValue(id: string): Value | undefined {
+  getTextFieldValue(id: string): Value | undefined {
     return this.getInputControl(id)?.getValue();
   }
 
-  public isTextFieldDisabled(id: string): boolean {
+  isTextFieldDisabled(id: string): boolean {
     return this.getInputControl(id)?.isDisabled() ?? false;
   }
 
-  public getTextFieldType(id: string): 'text' | 'number' {
+  getTextFieldType(id: string): 'text' | 'number' {
     return typeof this.getTextFieldValue(id) === 'string' ? 'text' : 'number';
   }
 
-  public getTextFieldMin(id: string): number | null {
+  getTextFieldMin(id: string): number | null {
     return typeof this.getTextFieldValue(id) === 'string' ? null : 1;
   }
 
-  public onTextFieldMouseDown(): void {
+  onTextFieldMouseDown(): void {
     this.isTextFieldMouseDown = true;
   }
 
-  public onTextFieldInput(id: string, event: Event): void {
+  onTextFieldInput(id: string, event: Event): void {
     this.getInputListener(id)?.onInput(event);
   }
 
-  public onTextFieldKeyDown(id: string, event: KeyboardEvent): void {
+  onTextFieldKeyDown(id: string, event: KeyboardEvent): void {
     this.getInputListener(id)?.onKeyDown(event);
-    event.key === 'Enter' && this.window.setVisible(false);
+    event.key === 'Enter' && this.model.setVisible(false);
   }
 
-  public onTextFieldFocusOut(id: string): void {
+  onTextFieldFocusOut(id: string): void {
     this.getInputListener(id)?.onFocusOut();
+  }
+
+  getMenuItemWindow(id: string): Window {
+    const popupControl: PopupControl | undefined = //
+      asPopupControl(this.getControl(id));
+    if (popupControl) return popupControl.getWindow();
+    else throw new Error(`Invalid popup control for id '${id}'`);
+  }
+
+  onMenuItemMouseEnter(id: string, event: MouseEvent): void {
+    const popupControl: PopupControl | undefined = //
+      asPopupControl(this.getControl(id));
+    if (!popupControl) {
+      throw new Error(`Invalid popup control with id '${id}'.`);
+    }
+    const menuItem: HTMLElement = event.target as HTMLElement;
+    const rect: DOMRect = menuItem.getBoundingClientRect();
+    popupControl
+      .getWindow()
+      .setPosition({ x: rect.left + rect.width - 10, y: rect.top });
+    createWindowListener(popupControl.getWindow()).onShow();
+  }
+
+  onMenuItemMouseLeave(id: string): void {
+    asPopupControl(this.getControl(id))?.getWindow().setVisible(false);
   }
 
   private getInputListener(id: string): InputControlListener | undefined {
@@ -175,27 +226,5 @@ export class ContextMenuComponent
     const menuItem: InputControl | undefined = //
       asInputControl(this.getControl(id));
     return menuItem;
-  }
-
-  public getMenuItemWindow(id: string): Window {
-    return this.getPopupControl(id).getWindow();
-  }
-
-  public onMenuItemMouseEnter(id: string, event: MouseEvent): void {
-    const popupControl: PopupControl | undefined = //
-      asPopupControl(this.getControl(id));
-    if (!popupControl) {
-      throw new Error(`Invalid popup control with id '${id}'.`);
-    }
-    const menuItem: HTMLElement = event.target as HTMLElement;
-    const rect: DOMRect = menuItem.getBoundingClientRect();
-    popupControl
-      .getWindow()
-      .setPosition({ x: rect.left + rect.width - 10, y: rect.top });
-    createWindowListener(popupControl.getWindow()).onShow();
-  }
-
-  public onMenuItemMouseLeave(id: string): void {
-    asPopupControl(this.getControl(id))?.getWindow().setVisible(false);
   }
 }

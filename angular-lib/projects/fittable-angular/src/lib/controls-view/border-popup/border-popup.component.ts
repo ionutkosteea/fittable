@@ -1,59 +1,67 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { PopupControl, Window } from 'fittable-core/view-model';
-
-import { WindowComponent } from '../common/window-component.model';
+import {
+  PopupControl,
+  Window,
+  Control,
+  asPopupControl,
+} from 'fittable-core/view-model';
+import { ControlType } from '../common/control-type.model';
 
 @Component({
   selector: 'fit-border-popup',
   templateUrl: './border-popup.component.html',
+  styleUrls: ['../common/scss/utils.scss', './border-popup.component.scss'],
 })
-export class BorderPopupButtonComponent
-  extends WindowComponent
-  implements OnInit
-{
-  @Input('model') popupControl!: PopupControl;
-  private isColorPickerVisible = false;
-  private isBorderTypeVisible = false;
+export class BorderPopupComponent {
+  @Input({ required: true }) model!: PopupControl;
+  isColorPickerVisible = false;
+  isBorderTypeVisible = false;
 
-  public getWindow(): Window {
-    return this.popupControl.getWindow();
+  getWindow(): Window {
+    return this.model.getWindow();
   }
 
-  public ngOnInit(): void {
-    this.init();
-  }
-
-  public showColorPicker(show: boolean): void {
+  showColorPicker(show: boolean): void {
     this.isColorPickerVisible = show;
   }
 
-  public showBorderType(show: boolean): void {
+  showBorderType(show: boolean): void {
     this.isBorderTypeVisible = show;
   }
 
-  public getLeftPanelIDs(): string[] {
+  getLeftPanelIDs(): string[] {
     return this.getWindow()
       .getControlIds()
       .slice(0, this.getFirstSepartorIndex());
   }
 
-  public getRightPanelIDs(): string[] {
+  getRightPanelIDs(): string[] {
     return this.getWindow()
       .getControlIds()
       .slice(this.getFirstSepartorIndex() + 1);
   }
 
-  public getFirstSepartorIndex(): number {
-    const ids: (string | number)[] = this.getControlIds();
+  getControl(id: string): Control {
+    return this.getWindow().getControl(id);
+  }
+
+  getPopupControl(id: string): PopupControl {
+    const popupControl: PopupControl | undefined = //
+      asPopupControl(this.getControl(id));
+    if (popupControl) return popupControl;
+    else throw Error(`Invalid popup control for id: ${id}`);
+  }
+
+  getControlType(id: string): ControlType {
+    return this.getControl(id).getType() as ControlType;
+  }
+
+  getFirstSepartorIndex(): number {
+    const ids: (string | number)[] = this.getWindow().getControlIds();
     for (let i = 0; i < ids.length; i++) {
       if (this.getControlType('' + ids[i]) === 'separator') return i;
     }
     return 0;
-  }
-
-  public override onGlobalMouseDown(): void {
-    if (this.isColorPickerVisible || this.isBorderTypeVisible) return;
-    super.onGlobalMouseDown();
   }
 }

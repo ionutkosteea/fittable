@@ -28,16 +28,21 @@ import { createWindowStyle } from '../common/style-functions.model';
 
 @Component({
   selector: 'fit-filter-popup-button',
-  template:
-    '<div class="fit-col-filters-button" [ngStyle]="{backgroundImage: getPopupButton().getIcon()}" [title]="getLabel()">&nbsp;</div>',
+  template: `
+    <button
+      class="popup-button"
+      [ngStyle]="{ backgroundImage: getPopupButton().getIcon() }"
+      [title]="getLabel()"
+    ></button>
+  `,
+  styleUrls: ['./filter-popup-window.component.scss'],
 })
 export class FilterPopupButtonComponent implements OnInit {
   @Input() colFilters!: ColFilters;
   @Input() colId!: number;
-
   private windowListener!: WindowListener;
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.windowListener = //
       createWindowListener(this.getPopupButton().getWindow());
   }
@@ -51,10 +56,13 @@ export class FilterPopupButtonComponent implements OnInit {
     });
   }
 
-  public readonly getLabel = (): string => this.getPopupButton().getLabel();
+  getLabel(): string {
+    return this.getPopupButton().getLabel();
+  }
 
-  public readonly getPopupButton = (): PopupControl =>
-    this.colFilters.getPopupButton(this.colId);
+  getPopupButton(): PopupControl {
+    return this.colFilters.getPopupButton(this.colId);
+  }
 }
 
 type ControlId =
@@ -68,21 +76,30 @@ type ControlId =
 @Component({
   selector: 'fit-filter-popup-window',
   templateUrl: './filter-popup-window.component.html',
+  styleUrls: ['./filter-popup-window.component.scss'],
 })
 export class FilterPopupWindowComponent implements AfterViewInit {
   @Input() colFilters!: ColFilters;
-
   private windowListener!: WindowListener;
 
-  public ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.windowListener = //
       createWindowListener(this.getPopupButton().getWindow());
   }
 
-  public readonly getWindowStyle = (): CssStyle =>
-    createWindowStyle(this.getPopupWindow());
+  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
+    this.windowListener.onMouseDown(event);
+  }
 
-  public getSearchInput(): InputControl {
+  @HostListener('window:mousedown') onGlobalMouseDown(): void {
+    this.windowListener.onGlobalMouseDown();
+  }
+
+  getWindowStyle(): CssStyle {
+    return createWindowStyle(this.getPopupWindow());
+  }
+
+  getSearchInput(): InputControl {
     const controlId: ControlId = 'search-input';
     const control: Control = this.getPopupWindow().getControl(controlId);
     const input: InputControl | undefined = asInputControl(control);
@@ -90,27 +107,32 @@ export class FilterPopupWindowComponent implements AfterViewInit {
     else throw new Error('Search input control was not found!');
   }
 
-  public onSearchInput(event: Event): void {
+  onSearchInput(event: Event): void {
     const input: HTMLInputElement = event.target as HTMLInputElement;
     this.getSearchInput().setValue(input.value).run();
   }
 
-  public getScrollContainer = (): ScrollContainer =>
-    this.colFilters.getValueScrollContainer();
+  getScrollContainer(): ScrollContainer {
+    return this.colFilters.getValueScrollContainer();
+  }
 
-  public getScrollOffsetY = (): number =>
-    this.getScrollContainer().getInnerOffsetY();
+  getScrollOffsetY(): number {
+    return this.getScrollContainer().getInnerOffsetY();
+  }
 
-  public getCheckListHeight = (): number =>
-    this.getCheckBoxContainer().getControlIds().length * 20;
+  getCheckListHeight(): number {
+    return this.getCheckBoxContainer().getControlIds().length * 20;
+  }
 
-  public hasCheckList = (): boolean =>
-    this.getCheckBoxContainer().getControlIds().length > 0;
+  hasCheckList(): boolean {
+    return this.getCheckBoxContainer().getControlIds().length > 0;
+  }
 
-  public getCheckBoxIds = (): RangeIterator =>
-    this.getScrollContainer().getRenderableRows();
+  getCheckBoxIds(): RangeIterator {
+    return this.getScrollContainer().getRenderableRows();
+  }
 
-  public getCheckBox(id: number): CheckBoxControl {
+  getCheckBox(id: number): CheckBoxControl {
     const control: Control | undefined = //
       this.getCheckBoxContainer().getControl('' + id);
     const checkBox: CheckBoxControl | undefined = asCheckBoxControl(control);
@@ -118,27 +140,27 @@ export class FilterPopupWindowComponent implements AfterViewInit {
     else throw new Error('Invalid check box control');
   }
 
-  public onCheckBoxClick(id: number): void {
+  onCheckBoxClick(id: number): void {
     const checkBox: CheckBoxControl = this.getCheckBox(id);
     checkBox.setChecked(!checkBox.isChecked());
   }
 
-  public getSelectAllButton(): Control {
+  getSelectAllButton(): Control {
     const controlId: ControlId = 'select-all-button';
     return this.getPopupWindow().getControl(controlId);
   }
 
-  public getClearButton(): Control {
+  getClearButton(): Control {
     const controlId: ControlId = 'clear-button';
     return this.getPopupWindow().getControl(controlId);
   }
 
-  public getOkButton(): Control {
+  getOkButton(): Control {
     const controlId: ControlId = 'ok-button';
     return this.getPopupWindow().getControl(controlId);
   }
 
-  public getCancelButton(): Control {
+  getCancelButton(): Control {
     const controlId: ControlId = 'cancel-button';
     return this.getPopupWindow().getControl(controlId);
   }
@@ -151,17 +173,11 @@ export class FilterPopupWindowComponent implements AfterViewInit {
     else throw new Error('Invalid value check list control');
   }
 
-  private readonly getPopupWindow = (): Window =>
-    this.getPopupButton().getWindow();
-
-  private readonly getPopupButton = (): PopupControl =>
-    this.colFilters.getPopupButton(0);
-
-  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
-    this.windowListener.onMouseDown(event);
+  private getPopupWindow(): Window {
+    return this.getPopupButton().getWindow();
   }
 
-  @HostListener('window:mousedown') onGlobalMouseDown(): void {
-    this.windowListener.onGlobalMouseDown();
+  private getPopupButton(): PopupControl {
+    return this.colFilters.getPopupButton(0);
   }
 }

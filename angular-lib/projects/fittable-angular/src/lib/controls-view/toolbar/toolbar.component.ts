@@ -17,32 +17,37 @@ import { ControlType } from '../common/control-type.model';
 @Component({
   selector: 'fit-toolbar',
   templateUrl: './toolbar.component.html',
+  styleUrl: './toolbar.component.scss',
 })
 export class ToolbarComponent {
   @Input() model!: Container;
 
-  public readonly getControlIDs = (): string[] => this.model.getControlIds();
+  getControlIDs(): string[] {
+    return this.model.getControlIds();
+  }
 
-  public readonly getControlType = (id: string): ControlType =>
-    this.getControl(id).getType() as ControlType;
+  getControlType(id: string): ControlType {
+    return this.getControl(id).getType() as ControlType;
+  }
 
-  public readonly getControl = (id: string): Control =>
-    this.model.getControl(id);
+  getControl(id: string): Control {
+    return this.model.getControl(id);
+  }
 
-  public getInputControl(id: string): InputControl {
+  getInputControl(id: string): InputControl {
     const input: InputControl | undefined = asInputControl(this.getControl(id));
     if (input) return input;
     else throw new Error('Invalid input control for id ' + id);
   }
 
-  public getPopupControl(id: string): PopupControl {
+  getPopupControl(id: string): PopupControl {
     const control: Control = this.getControl(id);
     const popup: PopupControl | undefined = asPopupControl(control);
     if (popup) return popup;
     else throw new Error('Invalid popup control for id ' + id);
   }
 
-  public getComboControlStyle(control: Control): CssStyle | null {
+  getComboControlStyle(control: Control): CssStyle | null {
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (!valueControl) throw new Error('Invalid valud control');
     const value: Value | undefined = valueControl.getValue();

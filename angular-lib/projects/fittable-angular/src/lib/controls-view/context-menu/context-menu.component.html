@@ -1,32 +1,28 @@
 <div
-  class="fit-context-menu"
+  class="context-menu"
   #menuWindow
   [ngStyle]="getWindowStyle()"
-  (mousedown)="onMouseDown($event)"
-  (window:mousedown)="onGlobalMouseDown()"
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
 >
   <ng-container *ngFor="let id of getControlIds()">
     <ng-container [ngSwitch]="getControlType(id)">
       <ng-container *ngSwitchCase="'separator'">
-        <div class="fit-menu-separator"></div>
+        <hr class="sep-v" />
       </ng-container>
       <ng-container *ngSwitchCase="'label'">
-        <div class="fit-title-label">{{ getControlLabel(id) }}</div>
+        <div class="title">{{ getControlLabel(id) }}</div>
       </ng-container>
       <ng-container *ngSwitchCase="'menu-item'">
         <div
-          class="fit-menu-item"
+          class="item"
           [ngStyle]="getControlStyle(id)"
           (mousedown)="runControl(id)"
         >
           <ng-container *ngIf="hasControlIcon(id); else noIcon">
             <div
               [ngClass]="
-                iconCol === 'left'
-                  ? 'fit-left-icon-label'
-                  : 'fit-right-icon-label'
+                iconCol === 'left' ? 'item-left-icon' : 'item-right-icon'
               "
               [ngStyle]="{ backgroundImage: getControlIcon(id) }"
             >
@@ -36,7 +32,7 @@
           <ng-template #noIcon>{{ getControlLabel(id) }}</ng-template>
           <div>
             <input
-              class="fit-menu-input"
+              class="item-input"
               *ngIf="hasTextField(id)"
               [ngStyle]="{ width: inputWidth, height: inputHeight }"
               [value]="getTextFieldValue(id)"
@@ -53,7 +49,7 @@
       </ng-container>
       <ng-container *ngSwitchCase="'parent-menu-item'">
         <div
-          class="fit-menu-item"
+          class="item"
           [ngStyle]="getControlStyle(id)"
           (mouseenter)="onMenuItemMouseEnter(id, $event)"
           (mouseleave)="onMenuItemMouseLeave(id)"
@@ -61,9 +57,7 @@
           <ng-container *ngIf="hasControlIcon(id); else noIcon">
             <div
               [ngClass]="
-                iconCol === 'left'
-                  ? 'fit-left-icon-label'
-                  : 'fit-right-icon-label'
+                iconCol === 'left' ? 'item-left-icon' : 'item-right-icon'
               "
               [ngStyle]="{ backgroundImage: getControlIcon(id) }"
             >
@@ -84,7 +78,6 @@
           </div>
         </div>
         <fit-context-menu
-          class="fit-component"
           [model]="getMenuItemWindow(id)"
           [position]="'fixed'"
           [inputWidth]="'100%'"

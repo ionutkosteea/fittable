@@ -1,0 +1,9 @@
+@import "../common/scss/core";
+
+.popup-menu {
+  @include window;
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  overflow: unset;
+}

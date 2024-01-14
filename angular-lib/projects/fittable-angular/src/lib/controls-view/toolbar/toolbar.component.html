@@ -1,4 +1,4 @@
-<div class="fit-toolbar">
+<div class="toolbar">
   <ng-container *ngFor="let id of getControlIDs()">
     <ng-container [ngSwitch]="getControlType(id)">
       <ng-container *ngSwitchCase="'button'">
@@ -26,7 +26,7 @@
         <fit-context-menu-button [model]="getPopupControl(id)" />
       </ng-container>
       <ng-container *ngSwitchCase="'separator'">
-        <div class="fit-bar-separator">&nbsp;</div>
+        <div class="separator">&nbsp;</div>
       </ng-container>
       <ng-container *ngSwitchDefault>
         <div>Unknown control type for ID: {{ id }}</div>

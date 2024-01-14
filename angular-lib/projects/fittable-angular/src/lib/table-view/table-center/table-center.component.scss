@@ -1,0 +1,54 @@
+@import "../common/scss/core";
+
+:host {
+  display: contents;
+}
+
+.table-center {
+  @include table-header(--table-body-background-color);
+  grid-area: body;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    @include scrollbar-size();
+    background-color: var(--scrollbar-background-color);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-color);
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: var(--scrollbar-color);
+  }
+}
+
+.table-cell {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  border-left: 1px dotted var(--table-body-border-color);
+  border-top: 1px dotted var(--table-body-border-color);
+  border-right: 1px dotted var(--table-body-border-color);
+  border-bottom: 1px dotted var(--table-body-border-color);
+  background-clip: padding-box;
+  font-size: var(--font-size);
+  font-family: var(--font-family);
+  color: var(--table-body-color);
+  box-sizing: border-box;
+}
+
+.table-cell-selection {
+  position: absolute;
+  background-color: var(--cell-selection-background-color);
+  pointer-events: none;
+  box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -webkit-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -moz-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  border: none;
+}
+
+.table-cell-align-center {
+  text-align: center;
+}
+
+.table-cell-align-right {
+  text-align: right;
+}

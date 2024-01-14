@@ -19,7 +19,7 @@ import { ScrollContainerDirective } from './controls-view/common/scroll-containe
 import { CellSelectionDirective } from './table-view/common/cell-selection.directive';
 import { ToolbarComponent } from './controls-view/toolbar/toolbar.component';
 import { ButtonComponent } from './controls-view/button/button.component';
-import { BorderPopupButtonComponent } from './controls-view/border-popup/border-popup.component';
+import { BorderPopupComponent } from './controls-view/border-popup/border-popup.component';
 import { BorderTypeComponent } from './controls-view/border-popup/border-type/border-type.component';
 import { CellEditorComponent } from './controls-view/cell-editor/cell-editor.component';
 import { CellEditorOpenDirective } from './controls-view/cell-editor/cell-editor.directive';
@@ -37,6 +37,7 @@ import { SettingsButtonComponent } from './controls-view/settings-bar/settings-b
 import { StatusbarComponent } from './controls-view/statusbar/statusbar.component';
 import { TableComponent } from './table-view/table.component';
 import { ContextMenuButtonComponent } from './controls-view/context-menu/context-menu-button.component';
+import { PopupMenuComponent } from './controls-view/popup-menu/popup-menu.component';
 
 describe('FittableComponent', () => {
   let component: FittableComponent;
@@ -63,10 +64,11 @@ describe('FittableComponent', () => {
         ComboComponent,
         InputComponent,
         PopupButtonComponent,
+        PopupMenuComponent,
         ColorPickerComponent,
         ContextMenuButtonComponent,
         ContextMenuComponent,
-        BorderPopupButtonComponent,
+        BorderPopupComponent,
         BorderTypeComponent,
         StatusbarComponent,
         CellEditorOpenDirective,

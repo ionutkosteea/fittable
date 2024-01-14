@@ -1,0 +1,10 @@
+@import "../common/scss/core";
+
+:host {
+  position: relative;
+}
+
+.button-bar {
+  @include bar(center);
+  padding: fit-map-get($padding-map, small);
+}

@@ -1,33 +1,29 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 
-import { PopupControl } from 'fittable-core/view-model';
-
-import { PopupControlComponent } from '../../common/popup-control-component.model';
+import { PopupControl, Window } from 'fittable-core/view-model';
 
 @Component({
   selector: 'fit-settings-button',
-  template: `
-    <div class="fit-relative-container">
-      <div
-        class="fit-settingsbar-button"
-        #button
-        [ngStyle]="{ backgroundImage: getIcon() }"
-        (click)="run()"
-        [title]="getLabel()"
-      >
-        &nbsp;
-      </div>
-      <fit-context-menu
-        [model]="getWindow()"
-        [left]="'auto'"
-        [top]="'1.25rem'"
-        [right]="0"
-        [iconCol]="'right'"
-      />
-    </div>
-  `,
+  templateUrl: './settings-button.component.html',
+  styleUrls: ['./settings-button.component.scss'],
 })
-export class SettingsButtonComponent extends PopupControlComponent {
-  @Input('model') override control!: PopupControl;
+export class SettingsButtonComponent {
+  @Input({ required: true }) model!: PopupControl;
   @ViewChild('button') buttonRef?: ElementRef;
+
+  getIcon(): string | undefined {
+    return this.model.getIcon();
+  }
+
+  getLabel(): string {
+    return this.model.getLabel();
+  }
+
+  run(): void {
+    this.model.run();
+  }
+
+  getWindow(): Window {
+    return this.model.getWindow();
+  }
 }

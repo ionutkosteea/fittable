@@ -15,16 +15,63 @@ import { TableLeftComponent } from './table-left/table-left.component';
 @Component({
   selector: 'fit-table',
   templateUrl: 'table.component.html',
+  styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnInit {
-  @Input() viewModel!: ViewModel;
+  @Input({ required: true }) viewModel!: ViewModel;
   @ViewChild('tableTopComponent') tableTopComponent?: TableTopComponent;
   @ViewChild('tableLeftComponent') tableLeftComponent?: TableLeftComponent;
+  cellSelectionListener?: CellSelectionListener;
 
-  public cellSelectionListener?: CellSelectionListener;
-
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.cellSelectionListener = this.createCellSelectionListener();
+  }
+
+  onScroll(div: { scrollLeft: number; scrollTop: number }): void {
+    this.tableTopComponent?.scrollerRef?.nativeElement //
+      .scrollTo(div.scrollLeft, 0);
+    this.tableLeftComponent?.scrollerRef?.nativeElement //
+      .scrollTo(0, div.scrollTop);
+  }
+
+  getColHeaderHeight(): number {
+    return this.viewModel.tableViewer.getColHeaderHeight();
+  }
+
+  getRowHeaderWidth(): number {
+    return this.viewModel.tableViewer.getRowHeaderWidth();
+  }
+
+  getTableScrollContainer(): ScrollContainer {
+    return this.viewModel.tableScrollContainer;
+  }
+
+  getTableBodyWidth(): number {
+    return this.viewModel.tableViewer.getBodyWidth();
+  }
+
+  getTableBodyHeight(): number {
+    return this.viewModel.tableViewer.getBodyHeight();
+  }
+
+  hasRowHeader(): boolean {
+    return getViewModelConfig().rowHeaderWidth ? true : false;
+  }
+
+  hasColHeader(): boolean {
+    return getViewModelConfig().colHeaderHeight ? true : false;
+  }
+
+  getBodyOffset(): CssStyle {
+    return this.viewModel.mobileLayout.bodyOffset;
+  }
+
+  getRowHeaderOffset(): CssStyle {
+    return this.viewModel.mobileLayout.rowHeaderOffset;
+  }
+
+  getColHeaderOffset(): CssStyle {
+    return this.viewModel.mobileLayout.colHeaderOffset;
   }
 
   private createCellSelectionListener(): CellSelectionListener | undefined {
@@ -34,41 +81,4 @@ export class TableComponent implements OnInit {
       createCellSelectionListener(wm.cellSelection, wm.cellSelectionScroller)
     );
   }
-
-  public onScroll(div: { scrollLeft: number; scrollTop: number }): void {
-    this.tableTopComponent?.scrollerRef?.nativeElement //
-      .scrollTo(div.scrollLeft, 0);
-    this.tableLeftComponent?.scrollerRef?.nativeElement //
-      .scrollTo(0, div.scrollTop);
-  }
-
-  public readonly getColHeaderHeight = (): number =>
-    this.viewModel.tableViewer.getColHeaderHeight();
-
-  public readonly getRowHeaderWidth = (): number =>
-    this.viewModel.tableViewer.getRowHeaderWidth();
-
-  public readonly getTableScrollContainer = (): ScrollContainer =>
-    this.viewModel.tableScrollContainer;
-
-  public readonly getTableBodyWidth = (): number =>
-    this.viewModel.tableViewer.getBodyWidth();
-
-  public readonly getTableBodyHeight = (): number =>
-    this.viewModel.tableViewer.getBodyHeight();
-
-  public readonly hasRowHeader = (): boolean =>
-    getViewModelConfig().rowHeaderWidth ? true : false;
-
-  public readonly hasColHeader = (): boolean =>
-    getViewModelConfig().colHeaderHeight ? true : false;
-
-  public readonly getBodyOffset = (): CssStyle =>
-    this.viewModel.mobileLayout.bodyOffset;
-
-  public readonly getRowHeaderOffset = (): CssStyle =>
-    this.viewModel.mobileLayout.rowHeaderOffset;
-
-  public readonly getColHeaderOffset = (): CssStyle =>
-    this.viewModel.mobileLayout.colHeaderOffset;
 }

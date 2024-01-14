@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
@@ -21,12 +21,7 @@ import { TopicTitle } from '../../../common/topic-title.model';
 @Component({
   selector: 'custom-view',
   templateUrl: './custom-view.component.html',
-  styleUrls: [
-    './custom-view.component.css',
-    '../../common/common.css',
-    '../../../../../node_modules/fittable-angular/src/lib/common/css/fittable-main.css',
-  ],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./custom-view.component.css', '../../common/common.css'],
 })
 export class CustomViewComponent {
   public title: TopicTitle = 'Custom view';

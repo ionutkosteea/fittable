@@ -1,0 +1,93 @@
+@import "../common/scss/core";
+
+:host {
+  position: relative;
+}
+
+.button-color {
+  position: absolute;
+  top: 0.8125rem;
+  left: 0.4375rem;
+  width: 14px;
+  height: 3px;
+  border: none;
+  cursor: pointer;
+}
+
+.color-none-button {
+  @include icon(left center);
+  padding-left: fit-map-get($size-map, large);
+  cursor: pointer;
+  font-size: fit-map-get($font-size-map, medium);
+  line-height: fit-map-get($line-height-map, medium);
+
+  &:hover {
+    background-color: var(--context-menu-background-hover-color);
+  }
+}
+
+.color-panel {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: fit-map-get($gap-map, small);
+  place-items: center;
+}
+
+.color-button {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  border: 1px solid var(--toolbar-border-color);
+  border-radius: 2px;
+}
+
+.custom-color-separator {
+  height: 1px;
+  background-color: var(--context-menu-border-color);
+}
+
+.custom-color-picker {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: fit-map-get($gap-map, small);
+  font-size: fit-map-get($font-size-map, small);
+  color: var(--toolbar-color);
+}
+
+.custom-color-combo {
+  border: 1px solid var(--toolbar-border-color);
+  display: flex;
+  flex: 1;
+  input {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    border: none;
+    height: 14px;
+    cursor: pointer;
+    background-color: var(--toolbar-background-color);
+  }
+  // combo arrow
+  span {
+    margin: 0;
+    padding: 0;
+    height: 14px;
+    line-height: 14px;
+  }
+}
+
+.custom-color-button {
+  @include border;
+  border: none;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+}

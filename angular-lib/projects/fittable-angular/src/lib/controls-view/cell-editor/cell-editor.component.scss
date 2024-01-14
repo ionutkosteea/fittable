@@ -1,0 +1,49 @@
+.cell-editor {
+  position: absolute;
+  margin: 0px;
+  padding: 0px;
+  left: 0px;
+  top: 0px;
+  width: 0px;
+  height: 0px;
+  box-sizing: border-box;
+}
+
+textarea {
+  position: absolute;
+  margin: 0px;
+  padding: 2px 4px;
+  color: var(--cell-editor-color);
+  background-color: var(--cell-editor-background-color);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -webkit-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  -moz-box-shadow: var(--cell-editor-box-shadow-color) 0px 0px 0px 2px;
+  border: none;
+  box-sizing: border-box;
+  resize: both;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-scrollbar-width: none;
+  &:focus {
+    outline: none;
+  }
+  &::-webkit-scrollbar {
+    background-color: var(--cell-editor-background-color);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--cell-editor-background-color);
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--cell-editor-background-color);
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: var(--cell-editor-background-color);
+  }
+  &::-webkit-resizer {
+    border: none;
+  }
+}

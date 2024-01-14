@@ -1,11 +1,10 @@
-<div class="fit-relative-container">
-  <fit-button [model]="popupControl"></fit-button>
-  <div class="fit-button-menu" [ngStyle]="getWindowStyle()" (mousedown)="onMouseDown($event)"
-    (window:mousedown)="onGlobalMouseDown()">
-    <div class="fit-padding-container">
-      <div class="fit-border-type-menu">
-        <hr *ngFor="let id of getControlIds()" [ngStyle]="getBorderStyle(id)" (click)="runControl(id)" />
-      </div>
-    </div>
+<fit-button [model]="model" />
+<fit-popup-menu [model]="getWindow()">
+  <div class="pad-s">
+    <hr
+      *ngFor="let id of getControlIds()"
+      [ngStyle]="getBorderStyle(id)"
+      (click)="runControl(id)"
+    />
   </div>
-</div>
+</fit-popup-menu>

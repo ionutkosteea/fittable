@@ -1,0 +1,93 @@
+$font-size-map: (
+  base: 0.875rem,
+  small: 0.625rem,
+  medium: 0.75rem,
+  large: 1rem
+);
+$line-height-map: (
+  base: 1.75rem,
+  // small: 0.75rem,
+  medium: 1.2rem,
+  large: 2rem
+);
+$padding-map: (
+  small: 0.25rem,
+  medium: 0.5rem,
+  large: 0.875rem
+);
+$gap-map: (
+  small: 0.125rem,
+  // medium: 0.25rem,
+  large: 0.5rem
+);
+$size-map: (
+  // small: 0.5rem,
+  medium: 1rem,
+  large: 1.75rem
+);
+
+@function fit-map-get($map, $key) {
+  @if map-has-key($map, $key) {
+    @return map-get($map, $key);
+  }
+  @error "Unknown `#{$key}` in `#{$map}`.";
+}
+
+@mixin border() {
+  border-radius: 3px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+  box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
+}
+
+@mixin icon($position) {
+  background-repeat: no-repeat;
+  background-position: $position;
+}
+
+@mixin window {
+  @include border;
+  top: 0;
+  left: 0;
+  border-left: 1px solid var(--context-menu-border-color);
+  border-top: 1px solid var(--context-menu-border-color);
+  color: var(--context-menu-color);
+  background-color: var(--context-menu-background-color);
+  overflow: auto;
+  z-index: 10;
+  font-size: fit-map-get($font-size-map, base);
+  line-height: fit-map-get($line-height-map, base);
+  box-sizing: border-box;
+}
+
+@mixin bar($h-align) {
+  display: flex;
+  gap: fit-map-get($gap-map, small);
+  justify-content: $h-align;
+}
+
+@mixin button() {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  vertical-align: middle;
+  border: none;
+  outline: 0 none;
+  appearance: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+@mixin field {
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  border: none;
+  color: inherit;
+  background-color: inherit;
+  box-sizing: border-box;
+}

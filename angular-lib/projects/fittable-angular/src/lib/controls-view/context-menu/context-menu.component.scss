@@ -1,0 +1,52 @@
+@import "../common/scss/core";
+
+.context-menu {
+  @include window;
+  padding-top: fit-map-get($padding-map, large);
+  padding-bottom: fit-map-get($padding-map, large);
+  max-height: 90vh;
+  white-space: nowrap;
+}
+
+.title {
+  color: var(--highlight-color);
+  font-size: fit-map-get($font-size-map, large);
+  line-height: fit-map-get($line-height-map, large);
+  padding-left: fit-map-get($padding-map, large);
+  padding-right: fit-map-get($padding-map, large);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  place-items: center normal;
+  padding-left: fit-map-get($padding-map, large);
+  padding-right: fit-map-get($padding-map, large);
+  cursor: pointer;
+  &:hover {
+    background-color: var(--context-menu-background-hover-color);
+  }
+  & > :nth-child(2):not(:empty) {
+    margin-left: fit-map-get($gap-map, large);
+  }
+}
+
+.item-left-icon {
+  @include icon(left center);
+  padding-left: fit-map-get($size-map, large);
+}
+
+.item-right-icon {
+  @include icon(right center);
+  padding-right: fit-map-get($size-map, large);
+}
+
+.item-input {
+  @include field;
+  border: 1px solid var(--context-menu-border-color);
+  background-color: var(--context-menu-background-color);
+  width: 3rem;
+  height: fit-map-get($size-map, medium);
+  font-size: fit-map-get($font-size-map, medium);
+  padding-left: 2px;
+}

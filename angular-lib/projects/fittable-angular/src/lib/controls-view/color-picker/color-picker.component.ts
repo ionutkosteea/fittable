@@ -8,10 +8,9 @@ import {
   EventEmitter,
   OnDestroy,
   AfterViewInit,
-  OnInit,
 } from '@angular/core';
 
-import { CssStyle, Value } from 'fittable-core/model';
+import { Value } from 'fittable-core/model';
 import {
   PopupControl,
   Control,
@@ -21,40 +20,25 @@ import {
   asSelectorWindow,
 } from 'fittable-core/view-model';
 
-import { WindowComponent } from '../common/window-component.model';
-import { PopupControlComponent } from '../common/popup-control-component.model';
-
 @Component({
   selector: 'fit-color-picker',
   templateUrl: './color-picker.component.html',
+  styleUrls: ['../common/scss/utils.scss', './color-picker.component.scss'],
 })
-export class ColorPickerComponent
-  extends WindowComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
-  @Input('model') control!: PopupControl;
+export class ColorPickerComponent implements AfterViewInit, OnDestroy {
+  @Input({ required: true }) model!: PopupControl;
   @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('colorPicker') colorPickerRef!: ElementRef;
 
   public isColorPickerVisible = false;
   private numberDefaultOfColors = 0;
   private readonly subscriptions: Subscription[] = [];
-  private popupComponent?: FitPopupControlComponent;
 
-  public ngOnInit(): void {
-    this.popupComponent = new FitPopupControlComponent(this.control);
-    this.init();
+  public getWindow(): Window {
+    return this.model.getWindow();
   }
 
-  public getStyle(): CssStyle | null {
-    return this.popupComponent?.getStyle() ?? null;
-  }
-
-  public getLabel(): string {
-    return this.popupComponent?.getLabel() ?? '';
-  }
-
-  public getValue(): string | undefined {
+  public getSelectedColor(): string | undefined {
     const window: Window = this.getWindow();
     const id: string | undefined = asSelectorWindow(window)?.getControlId();
     if (!id) return undefined;
@@ -64,11 +48,11 @@ export class ColorPickerComponent
   }
 
   public run(): void {
-    this.popupComponent?.run();
+    this.model.run();
   }
 
-  public override getWindow(): Window {
-    return this.control.getWindow();
+  public runControl(id: string): void {
+    return this.getWindow().getControl(id).run();
   }
 
   public ngAfterViewInit(): void {
@@ -77,31 +61,36 @@ export class ColorPickerComponent
   }
 
   private onWindowSetVisible$(): Subscription {
-    return this.getWindow()
+    return this.model
+      .getWindow()
       .onAfterSetFocus$()
       .subscribe((focus: boolean): void => this.isVisibleEvent.emit(focus));
   }
 
-  public readonly getColorNoneId = (): string => this.getControlIds()[0];
+  public readonly getColorNoneId = (): string =>
+    this.getWindow().getControlIds()[0];
 
   public readonly getColorNoneIcon = (): string | undefined =>
-    this.getControl(this.getColorNoneId()).getIcon();
+    this.getWindow().getControl(this.getColorNoneId()).getIcon();
 
   public readonly getColorNoneLabel = (): string | undefined =>
-    this.getControl(this.getColorNoneId()).getLabel();
+    this.getWindow().getControl(this.getColorNoneId()).getLabel();
 
   public readonly getColorIds = (): string[] =>
     this.getWindow().hasFocus()
-      ? this.getControlIds().slice(1, this.numberDefaultOfColors)
+      ? this.model
+          .getWindow()
+          .getControlIds()
+          .slice(1, this.numberDefaultOfColors)
       : [];
 
   public readonly getCustomColorIds = (): string[] =>
     this.getWindow().hasFocus()
-      ? this.getControlIds().slice(this.numberDefaultOfColors)
+      ? this.getWindow().getControlIds().slice(this.numberDefaultOfColors)
       : [];
 
   public getColorValue(id: string): Value | undefined {
-    const control: Control = this.getControl(id);
+    const control: Control = this.getWindow().getControl(id);
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (!valueControl) throw new Error('Invalid value control for id ' + id);
     return valueControl.getValue();
@@ -134,11 +123,5 @@ export class ColorPickerComponent
 
   public ngOnDestroy(): void {
     this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
-  }
-}
-
-class FitPopupControlComponent extends PopupControlComponent {
-  constructor(public control: PopupControl) {
-    super();
   }
 }

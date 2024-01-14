@@ -9,100 +9,116 @@ import {
 export abstract class TableCommon {
   protected abstract viewModel: ViewModel;
 
-  public readonly hasColHeader = (): boolean =>
-    this.viewModel.tableViewer.hasColHeader();
+  hasColHeader(): boolean {
+    return this.viewModel.tableViewer.hasColHeader();
+  }
 
-  public readonly getColLabel = (
-    colId: number
-  ): string | number | undefined => {
+  getColLabel(colId: number): string | number | undefined {
     const labelFn: ((colId: number) => string | number) | undefined =
       getViewModelConfig().colHeaderTextFn;
     return labelFn && labelFn(colId);
-  };
+  }
 
-  public readonly getRowLabel = (
-    rowId: number
-  ): string | number | undefined => {
+  getRowLabel(rowId: number): string | number | undefined {
     const labelFn: ((rowId: number) => string | number) | undefined =
       getViewModelConfig().rowHeaderTextFn;
     return labelFn && labelFn(rowId);
+  }
+
+  hasRowHeader(): boolean {
+    return this.viewModel.tableViewer.hasRowHeader();
+  }
+
+  getCellStyle = (rowId: number, colId: number): CssStyle | null => {
+    return (
+      this.viewModel.tableViewer.getCellStyle(rowId, colId)?.toCss() ?? null
+    );
   };
 
-  public readonly hasRowHeader = (): boolean =>
-    this.viewModel.tableViewer.hasRowHeader();
+  getCellValue(rowId: number, colId: number): Value | undefined {
+    return this.viewModel.tableViewer.getCellValue(rowId, colId);
+  }
 
-  public readonly getCellStyle = (
-    rowId: number,
-    colId: number
-  ): CssStyle | null =>
-    this.viewModel.tableViewer.getCellStyle(rowId, colId)?.toCss() ?? null;
+  getFormatedCellValue(rowId: number, colId: number): Value | undefined {
+    return this.viewModel.tableViewer.getFormatedCellValue(rowId, colId);
+  }
 
-  public readonly getCellValue = (
-    rowId: number,
-    colId: number
-  ): Value | undefined => this.viewModel.tableViewer.getCellValue(rowId, colId);
+  isHiddenCell(rowId: number, colId: number): boolean {
+    return this.viewModel.tableViewer.isHiddenCell(rowId, colId);
+  }
 
-  public readonly getFormatedCellValue = (
-    rowId: number,
-    colId: number
-  ): Value | undefined =>
-    this.viewModel.tableViewer.getFormatedCellValue(rowId, colId);
+  getRowSpan(rowId: number, colId: number): number {
+    return this.viewModel.tableViewer.getRowSpan(rowId, colId);
+  }
 
-  public readonly isHiddenCell = (rowId: number, colId: number): boolean =>
-    this.viewModel.tableViewer.isHiddenCell(rowId, colId);
+  getColSpan(rowId: number, colId: number) {
+    return this.viewModel.tableViewer.getColSpan(rowId, colId);
+  }
 
-  public readonly getRowSpan = (rowId: number, colId: number): number =>
-    this.viewModel.tableViewer.getRowSpan(rowId, colId);
+  getRowIds(): RangeIterator {
+    return this.viewModel.tableScrollContainer.getRenderableRows();
+  }
 
-  public readonly getColSpan = (rowId: number, colId: number) =>
-    this.viewModel.tableViewer.getColSpan(rowId, colId);
+  getColIds(): RangeIterator {
+    return this.viewModel.tableScrollContainer.getRenderableCols();
+  }
 
-  public readonly getRowIds = (): RangeIterator =>
-    this.viewModel.tableScrollContainer.getRenderableRows();
+  getColWidth(colId: number): number {
+    return this.viewModel.tableViewer.getColWidth(colId);
+  }
 
-  public readonly getColIds = (): RangeIterator =>
-    this.viewModel.tableScrollContainer.getRenderableCols();
+  getRowHeight(rowId: number): number {
+    return this.viewModel.tableViewer.getRowHeight(rowId);
+  }
 
-  public readonly getColWidth = (colId: number): number =>
-    this.viewModel.tableViewer.getColWidth(colId);
+  showContextMenu(event: MouseEvent): void {
+    return (
+      this.viewModel.contextMenu &&
+      createWindowListener(this.viewModel.contextMenu).onShow(event)
+    );
+  }
 
-  public readonly getRowHeight = (rowId: number): number =>
-    this.viewModel.tableViewer.getRowHeight(rowId);
+  getScrollLeft(): number {
+    return this.viewModel.tableScrollContainer.getScroller().getLeft();
+  }
 
-  public readonly showContextMenu = (event: MouseEvent): void =>
-    this.viewModel.contextMenu &&
-    createWindowListener(this.viewModel.contextMenu).onShow(event);
+  getScrollTop(): number {
+    return this.viewModel.tableScrollContainer.getScroller().getTop();
+  }
 
-  public readonly getScrollLeft = (): number =>
-    this.viewModel.tableScrollContainer.getScroller().getLeft();
+  getOffsetX(): number {
+    return this.viewModel.tableScrollContainer.getInnerOffsetX();
+  }
 
-  public readonly getScrollTop = (): number =>
-    this.viewModel.tableScrollContainer.getScroller().getTop();
+  getOffsetY(): number {
+    return this.viewModel.tableScrollContainer.getInnerOffsetY();
+  }
 
-  public readonly getOffsetX = (): number =>
-    this.viewModel.tableScrollContainer.getInnerOffsetX();
+  getRowHeaderWidth(): number {
+    return this.viewModel.tableViewer.getRowHeaderWidth();
+  }
 
-  public readonly getOffsetY = (): number =>
-    this.viewModel.tableScrollContainer.getInnerOffsetY();
+  getColHeaderHeight(): number {
+    return this.viewModel.tableViewer.getColHeaderHeight();
+  }
 
-  public readonly getRowHeaderWidth = (): number =>
-    this.viewModel.tableViewer.getRowHeaderWidth();
+  getBodyHeight(): number {
+    return this.viewModel.tableViewer.getBodyHeight();
+  }
 
-  public readonly getColHeaderHeight = (): number =>
-    this.viewModel.tableViewer.getColHeaderHeight();
+  getBodyWidth(): number {
+    return this.viewModel.tableViewer.getBodyWidth();
+  }
 
-  public readonly getBodyHeight = (): number =>
-    this.viewModel.tableViewer.getBodyHeight();
+  getBodyOffset(): CssStyle {
+    return this.viewModel.mobileLayout.bodyOffset;
+  }
 
-  public readonly getBodyWidth = (): number =>
-    this.viewModel.tableViewer.getBodyWidth();
+  getRowHeaderOffset(): CssStyle {
+    return this.viewModel.mobileLayout.rowHeaderOffset;
+  }
 
-  public readonly getBodyOffset = (): CssStyle =>
-    this.viewModel.mobileLayout.bodyOffset;
-
-  public readonly getRowHeaderOffset = (): CssStyle =>
-    this.viewModel.mobileLayout.rowHeaderOffset;
-
-  public readonly getColHeaderOffset = (): CssStyle =>
-    this.viewModel.mobileLayout.colHeaderOffset;
+  getColHeaderOffset(): CssStyle {
+    return this.viewModel.mobileLayout.colHeaderOffset;
+  }
 }

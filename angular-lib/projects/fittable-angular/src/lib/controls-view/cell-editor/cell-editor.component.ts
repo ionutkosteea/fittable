@@ -22,27 +22,59 @@ import {
 @Component({
   selector: 'fit-cell-editor',
   templateUrl: './cell-editor.component.html',
+  styleUrl: 'cell-editor.component.scss',
 })
 export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() cellEditorListener!: CellEditorListener;
   @Input() getCellStyle!: (rowId: number, colId: number) => CssStyle | null;
   @ViewChild('textArea') textAreaRef!: ElementRef;
+  cellEditorStyle: CssStyle = {};
+  textAreaStyle: CssStyle = {};
+  private subscriptions: Subscription[] = [];
 
-  public cellEditorStyle: CssStyle = {};
-  public textAreaStyle: CssStyle = {};
-  private readonly subscriptions: Subscription[] = [];
-
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.initCellEditor();
     this.createCellEditorSubscriptions();
     this.createCellEditorInputSubscriptions();
   }
 
-  public ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.updateTextAreaDimensions();
     this.updateTextAreaValue(
       this.cellEditorListener.cellEditor.getCellControl().getValue()
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+  }
+
+  onTextAreaMouseEnter(event: MouseEvent): void {
+    this.cellEditorListener.onMouseEnter(event);
+  }
+
+  onTextAreaMouseDown(event: MouseEvent): void {
+    this.cellEditorListener.onMouseDown(event);
+  }
+
+  onGlobalMouseDown(): void {
+    this.cellEditorListener.onGlobalMouseDown();
+  }
+
+  onGlobalMouseUp(): void {
+    this.cellEditorListener.onGlobalMouseUp();
+  }
+
+  onTextAreaKeyDown(event: KeyboardEvent): void {
+    this.cellEditorListener.onKeyDown(event);
+  }
+
+  onTextAreaInput(event: Event): void {
+    this.cellEditorListener.onInput(event);
+  }
+
+  onTextAreaContextMenu(event: MouseEvent): void {
+    this.cellEditorListener.onContextMenu(event);
   }
 
   private initCellEditor(): void {
@@ -195,31 +227,7 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.textAreaRef.nativeElement as HTMLTextAreaElement;
   }
 
-  private readonly getInputControl = (): InputControl =>
-    this.cellEditorListener.cellEditor.getCellControl();
-
-  public readonly onTextAreaMouseEnter = (event: MouseEvent): void =>
-    this.cellEditorListener.onMouseEnter(event);
-
-  public readonly onTextAreaMouseDown = (event: MouseEvent): void =>
-    this.cellEditorListener.onMouseDown(event);
-
-  public readonly onGlobalMouseDown = (): void =>
-    this.cellEditorListener.onGlobalMouseDown();
-
-  public readonly onGlobalMouseUp = (): void =>
-    this.cellEditorListener.onGlobalMouseUp();
-
-  public readonly onTextAreaKeyDown = (event: KeyboardEvent): void =>
-    this.cellEditorListener.onKeyDown(event);
-
-  public readonly onTextAreaInput = (event: Event): void =>
-    this.cellEditorListener.onInput(event);
-
-  public readonly onTextAreaContextMenu = (event: MouseEvent): void =>
-    this.cellEditorListener.onContextMenu(event);
-
-  public ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+  private getInputControl(): InputControl {
+    return this.cellEditorListener.cellEditor.getCellControl();
   }
 }

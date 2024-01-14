@@ -12,16 +12,22 @@ import { TableCommon } from '../common/table-common.model';
 @Component({
   selector: 'fit-table-left',
   templateUrl: './table-left.component.html',
+  styleUrls: [
+    '../common/scss/table.scss',
+    '../common/scss/table-header.scss',
+    './table-left.component.scss',
+  ],
 })
 export class TableLeftComponent extends TableCommon {
-  @Input() override viewModel!: ViewModel;
+  @Input({ required: true }) override viewModel!: ViewModel;
   @Input() cellSelectionListener?: CellSelectionListener;
   @ViewChild('scroller') scrollerRef?: ElementRef;
 
-  public readonly getCellSelectionRanges = ():
-    | CellSelectionRanges
-    | undefined => this.viewModel.cellSelection?.rowHeader;
+  getCellSelectionRanges(): CellSelectionRanges | undefined {
+    return this.viewModel.cellSelection?.rowHeader;
+  }
 
-  public readonly getCellSelectionRectangles = (): CssStyle[] =>
-    this.viewModel.mobileLayout.rowHeaderSelectionRectangles;
+  getCellSelectionRectangles(): CssStyle[] {
+    return this.viewModel.mobileLayout.rowHeaderSelectionRectangles;
+  }
 }

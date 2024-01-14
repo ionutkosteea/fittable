@@ -1,0 +1,14 @@
+@import "../common/scss/core";
+
+.settings-bar {
+  @include bar(flex-start);
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  padding: fit-map-get($padding-map, small);
+  border-left: 1px dotted var(--highlight-color);
+  border-bottom: 1px dotted var(--highlight-color);
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  background-color: var(--settings-bar-background-color);
+}

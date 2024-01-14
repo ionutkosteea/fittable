@@ -1,0 +1,14 @@
+<input
+  [ngStyle]="getStyle()"
+  [value]="getLabel()"
+  [title]="getLabel()"
+  (click)="run()"
+  readonly
+  type="text"
+/>
+<fit-context-menu
+  [model]="getWindow()"
+  [top]="'2rem'"
+  [maxHeight]="'18.75rem'"
+  [controlStyleFn]="controlStyleFn"
+/>

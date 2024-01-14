@@ -1,13 +1,13 @@
-<div class="fit-table-page-header" *ngIf="hasRowHeader() && hasColHeader()">
+<ng-container *ngIf="hasRowHeader() && hasColHeader()">
   <div
-    class="fit-full-size-container"
+    class="full-size-container"
     [ngStyle]="{
       'width.px': getRowHeaderWidth(),
       'height.px': getColHeaderHeight() + 1
     }"
   >
-    <div class="fit-offset-container">
-      <table class="fit-table">
+    <div class="offset-container">
+      <table class="table">
         <colgroup>
           <col [ngStyle]="{ 'width.px': getRowHeaderWidth() }" />
         </colgroup>
@@ -17,10 +17,10 @@
           [cellSelectionRanges]="getCellSelectionRanges()"
         >
           <tr
-            class="fit-table-header-row"
+            class="table-header-row"
             [ngStyle]="{ 'height.px': getColHeaderHeight() }"
           >
-            <th class="fit-table-header-cell" [attr.rowId]="0" [attr.colId]="0">
+            <th class="table-header-cell" [attr.rowId]="0" [attr.colId]="0">
               &nbsp;
             </th>
           </tr>
@@ -29,8 +29,8 @@
     </div>
   </div>
   <div
-    class="fit-table-header-cell-selection"
+    class="table-header-cell-selection"
     *ngFor="let rect of getCellSelectionRectangles()"
     [ngStyle]="rect"
   ></div>
-</div>
+</ng-container>

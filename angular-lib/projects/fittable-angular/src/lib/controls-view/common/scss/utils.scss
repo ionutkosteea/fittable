@@ -1,0 +1,10 @@
+@import "./core";
+
+.pad-s {
+  padding: fit-map-get($padding-map, small);
+}
+
+.sep-v {
+  margin: 0.4rem 0;
+  border-top: 1px solid var(--context-menu-border-color);
+}

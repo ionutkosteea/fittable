@@ -1,0 +1,13 @@
+@import "../common/scss/core";
+
+input {
+  @include field;
+  width: 2.5rem;
+  text-align: center;
+  font-size: fit-map-get($font-size-map, base);
+  height: fit-map-get($size-map, large);
+  border-radius: 4px;
+  &:hover {
+    background-color: var(--toolbar-background-hover-color);
+  }
+}

@@ -1,0 +1,20 @@
+@import "../common/scss/core";
+
+.toolbar {
+  @include bar(flex-start);
+  align-items: center;
+  flex-wrap: wrap-reverse;
+  color: var(--toolbar-color);
+  background-color: var(--toolbar-background-color);
+  gap: 0.2188rem;
+  padding: 0.2188rem;
+  border: 1px solid var(--toolbar-border-color);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.separator {
+  width: 1px;
+  height: 1.25rem;
+  background-color: var(--toolbar-border-color);
+}

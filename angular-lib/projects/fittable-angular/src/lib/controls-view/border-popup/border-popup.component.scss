@@ -1,0 +1,12 @@
+@import "../common/scss/core";
+
+:host {
+  position: relative;
+}
+
+.grid-2col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: fit-map-get($gap-map, small);
+  place-items: center;
+}

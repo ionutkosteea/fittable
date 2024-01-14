@@ -10,23 +10,26 @@ import {
 @Component({
   selector: 'fit-settingsbar',
   template: `
-    <div class="fit-settingsbar">
+    <div class="settings-bar">
       <fit-settings-button
         *ngFor="let id of getControlIds()"
         [model]="getPopupControl(id)"
       />
     </div>
   `,
+  styleUrls: ['./settings-bar.component.scss'],
 })
 export class SettingsBarComponent {
   @Input() model!: Container;
 
-  public readonly getControlIds = (): string[] => this.model.getControlIds();
+  getControlIds(): string[] {
+    return this.model.getControlIds();
+  }
 
-  public getPopupControl(id: string): PopupControl {
+  getPopupControl(id: string): PopupControl {
     const control: Control = this.model.getControl(id);
     const popup: PopupControl | undefined = asPopupControl(control);
     if (popup) return popup;
-    else throw new Error('Invalid popup control for id ' + id);
+    else throw new Error(`Invalid popup control for id '${id}'`);
   }
 }

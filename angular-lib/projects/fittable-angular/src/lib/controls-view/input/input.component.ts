@@ -22,7 +22,6 @@ import { createToggleStyle } from '../common/style-functions.model';
   selector: 'fit-input',
   template: `
     <input
-      class="fit-toolbar-input"
       #inputField
       type="number"
       min="1"
@@ -32,37 +31,22 @@ import { createToggleStyle } from '../common/style-functions.model';
       [title]="getLabel()"
     />
   `,
+  styleUrl: './input.component.scss',
 })
 export class InputComponent implements OnInit, OnDestroy {
   @Input() model!: InputControl;
   @ViewChild('inputField') inputFieldRef!: ElementRef;
-
   private inputControlListener!: InputControlListener;
   private readonly subscriptions: Subscription[] = [];
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.inputControlListener = createInputControlListener(this.model);
     this.subscriptions.push(this.onFocus$());
   }
 
-  private onFocus$(): Subscription {
-    return this.model.onSetFocus$().subscribe((focus: boolean): void => {
-      const htmlInput: HTMLElement = this.getHtmlInput();
-      if (focus) htmlInput.focus();
-      else htmlInput.blur();
-    });
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
   }
-
-  private readonly getHtmlInput = (): HTMLInputElement =>
-    this.inputFieldRef.nativeElement;
-
-  public readonly getStyle = (): CssStyle | null =>
-    createToggleStyle(this.model);
-
-  public readonly getDisabled = (): string | null =>
-    this.model.isDisabled() ? 'disabled' : null;
-
-  public readonly getLabel = (): string | undefined => this.model.getLabel();
 
   @HostListener('input', ['$event']) onInput(event: KeyboardEvent): void {
     this.inputControlListener.onInput(event);
@@ -76,7 +60,27 @@ export class InputComponent implements OnInit, OnDestroy {
     this.inputControlListener.onFocusOut();
   }
 
-  public ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+  getStyle(): CssStyle | null {
+    return createToggleStyle(this.model);
+  }
+
+  getDisabled(): string | null {
+    return this.model.isDisabled() ? 'disabled' : null;
+  }
+
+  getLabel(): string | undefined {
+    return this.model.getLabel();
+  }
+
+  private onFocus$(): Subscription {
+    return this.model.onSetFocus$().subscribe((focus: boolean): void => {
+      const htmlInput: HTMLElement = this.getHtmlInput();
+      if (focus) htmlInput.focus();
+      else htmlInput.blur();
+    });
+  }
+
+  private getHtmlInput(): HTMLInputElement {
+    return this.inputFieldRef.nativeElement;
   }
 }

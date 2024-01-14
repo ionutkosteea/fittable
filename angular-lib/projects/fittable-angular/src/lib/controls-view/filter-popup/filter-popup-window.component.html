@@ -1,5 +1,5 @@
-<div class="fit-window" [ngStyle]="getWindowStyle()">
-  <div class="fit-col-filters-search-input">
+<div class="popup-window" [ngStyle]="getWindowStyle()">
+  <div class="search-input">
     <div>{{ getSearchInput().getLabel() }}</div>
     <input
       [value]="getSearchInput().getValue() ?? ''"
@@ -7,38 +7,32 @@
       (input)="onSearchInput($event)"
     />
   </div>
-  <div class="fit-right-aligned-bar">
-    <button
-      class="fit-col-filters-select-button"
-      (click)="getClearButton().run()"
-    >
+  <div class="right-aligned-bar">
+    <button class="select-button" (click)="getClearButton().run()">
       {{ getClearButton().getLabel() }}
     </button>
-    <button
-      class="fit-col-filters-select-button"
-      (click)="getSelectAllButton().run()"
-    >
+    <button class="select-button" (click)="getSelectAllButton().run()">
       {{ getSelectAllButton().getLabel() }}
     </button>
   </div>
   <div
-    class="fit-col-filters-scroll-container"
+    class="scroll-container"
     fitScrollContainer
     [scrollContainer]="getScrollContainer()"
   >
     <div
-      class="fit-full-size-container"
+      class="full-size-container"
       *ngIf="hasCheckList()"
       [ngStyle]="{ width: '100%', 'height.px': getCheckListHeight() }"
     >
       <div
-        class="fit-mobile-grid"
+        class="mobile-container"
         [ngStyle]="{
           transform: 'translate3d(0px,' + getScrollOffsetY() + 'px,0px)'
         }"
       >
         <div
-          class="fit-col-filters-check-item"
+          class="check-item"
           *ngFor="let id of getCheckBoxIds()"
           (click)="onCheckBoxClick(id)"
         >
@@ -54,14 +48,11 @@
       </div>
     </div>
   </div>
-  <div class="fit-center-aligned-bar">
-    <button class="fit-col-filters-action-button" (click)="getOkButton().run()">
+  <div class="center-aligned-bar">
+    <button class="action-button" (click)="getOkButton().run()">
       {{ getOkButton().getLabel() }}
     </button>
-    <button
-      class="fit-col-filters-action-button"
-      (click)="getCancelButton().run()"
-    >
+    <button class="action-button" (click)="getCancelButton().run()">
       {{ getCancelButton().getLabel() }}
     </button>
   </div>

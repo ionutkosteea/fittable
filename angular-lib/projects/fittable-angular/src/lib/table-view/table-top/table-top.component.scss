@@ -1,0 +1,16 @@
+@import "../common/scss/core";
+
+:host {
+  display: contents;
+}
+
+.table-left-top {
+  @include table-header(--table-header-background-color);
+  grid-area: colHeader;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    @include scrollbar-size();
+    background-color: var(--scrollbar-background-color);
+  }
+}

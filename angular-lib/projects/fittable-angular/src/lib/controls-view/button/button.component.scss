@@ -1,0 +1,12 @@
+@import "../common/scss/core";
+
+button {
+  @include icon(center);
+  @include button();
+  width: fit-map-get($size-map, large);
+  height: fit-map-get($size-map, large);
+  border-radius: 4px;
+  &:hover {
+    background-color: var(--toolbar-background-hover-color);
+  }
+}

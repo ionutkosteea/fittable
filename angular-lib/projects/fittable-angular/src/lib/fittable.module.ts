@@ -13,9 +13,10 @@ import { ButtonComponent } from './controls-view/button/button.component';
 import { ComboComponent } from './controls-view/combo/combo.component';
 import { InputComponent } from './controls-view/input/input.component';
 import { PopupButtonComponent } from './controls-view/popup-button/popup-button.component';
+import { PopupMenuComponent } from './controls-view/popup-menu/popup-menu.component';
 import { ColorPickerComponent } from './controls-view/color-picker/color-picker.component';
 import { ContextMenuComponent } from './controls-view/context-menu/context-menu.component';
-import { BorderPopupButtonComponent } from './controls-view/border-popup/border-popup.component';
+import { BorderPopupComponent } from './controls-view/border-popup/border-popup.component';
 import { BorderTypeComponent } from './controls-view/border-popup/border-type/border-type.component';
 import { StatusbarComponent } from './controls-view/statusbar/statusbar.component';
 import { CellEditorOpenDirective } from './controls-view/cell-editor/cell-editor.directive';
@@ -43,10 +44,11 @@ import { ContextMenuButtonComponent } from './controls-view/context-menu/context
     ComboComponent,
     InputComponent,
     PopupButtonComponent,
+    PopupMenuComponent,
     ColorPickerComponent,
     ContextMenuComponent,
     ContextMenuButtonComponent,
-    BorderPopupButtonComponent,
+    BorderPopupComponent,
     BorderTypeComponent,
     StatusbarComponent,
     CellEditorOpenDirective,

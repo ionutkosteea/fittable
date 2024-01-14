@@ -1,0 +1,13 @@
+<button
+  #button
+  [ngStyle]="{ backgroundImage: getIcon() }"
+  [title]="getLabel()"
+  (click)="run()"
+></button>
+<fit-context-menu
+  [model]="getWindow()"
+  [left]="'auto'"
+  [top]="'1.25rem'"
+  [right]="0"
+  [iconCol]="'right'"
+/>

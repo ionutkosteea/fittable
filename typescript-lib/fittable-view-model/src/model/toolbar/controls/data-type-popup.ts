@@ -48,6 +48,7 @@ class DataTypePopup extends FitPopupControl<string> implements ControlUpdater {
       asTableCellDataType(table);
     if (!dataTypeTable) return;
     const selectedCells: CellRange[] = this.args.getSelectedCells();
+    if (selectedCells.length === 0) return;
     const cellCoord: CellCoord = selectedCells[0].getFrom();
     const dataType: DataType | undefined = //
       dataTypeTable.getCellDataType(cellCoord.getRowId(), cellCoord.getColId());
