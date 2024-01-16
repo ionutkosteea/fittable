@@ -4,8 +4,8 @@
   display: contents;
 }
 
-.table-left-top {
-  @include table-header(--table-header-background-color);
+.scroll-container {
+  @include table-container(--table-header-background-color);
   grid-area: colHeader;
   overflow-x: hidden;
   overflow-y: scroll;

@@ -1,4 +1,4 @@
-<div class="table-left-top" *ngIf="hasColHeader()" #scroller>
+<div class="scroll-container" *ngIf="hasColHeader()" #scroller>
   <div
     class="full-size-container"
     [ngStyle]="{
@@ -21,11 +21,11 @@
           [cellSelectionRanges]="getCellSelectionRanges()"
         >
           <tr
-            class="table-header-row"
+            class="header-row"
             [ngStyle]="{ 'height.px': getColHeaderHeight() }"
           >
             <th
-              class="table-header-cell"
+              class="header-cell"
               *ngFor="let colId of getColIds()"
               [attr.rowId]="0"
               [attr.colId]="colId"
@@ -43,7 +43,7 @@
     </div>
   </div>
   <div
-    class="table-header-cell-selection"
+    class="header-cell-selection"
     *ngFor="let rect of getCellSelectionRectangles()"
     [ngStyle]="rect"
   ></div>

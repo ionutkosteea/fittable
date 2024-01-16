@@ -1,8 +1,8 @@
-.table-header-row {
+.header-row {
   position: relative;
 }
 
-.table-header-cell {
+.header-cell {
   position: relative;
   background-clip: padding-box;
   position: relative;
@@ -14,7 +14,7 @@
   box-sizing: border-box;
 }
 
-.table-header-cell-selection {
+.header-cell-selection {
   position: absolute;
   left: 0;
   top: 0;

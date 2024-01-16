@@ -1,5 +1,5 @@
 <div
-  class="table-center"
+  class="scroll-container"
   (scroll)="onScroll($event)"
   fitScrollContainer
   [scrollContainer]="getScrollContainer()"
@@ -36,7 +36,7 @@
           >
             <ng-container *ngFor="let colId of getColIds()">
               <td
-                [ngClass]="'table-cell' + getDataTypeClass(rowId, colId)"
+                [ngClass]="'cell' + getDataTypeClass(rowId, colId)"
                 *ngIf="!isHiddenCell(rowId, colId)"
                 [ngStyle]="getCellStyle(rowId, colId)"
                 [rowSpan]="getRowSpan(rowId, colId)"
@@ -45,7 +45,7 @@
                 [attr.colId]="colId"
               >
                 <!-- prettier-ignore -->
-                <p class="table-cell-text">{{ getFormatedCellValue(rowId, colId) }}</p>
+                <p class="cell-text">{{ getFormatedCellValue(rowId, colId) }}</p>
               </td>
             </ng-container>
           </tr>
@@ -54,7 +54,7 @@
     </div>
   </div>
   <div
-    class="table-cell-selection"
+    class="cell-selection"
     *ngFor="let rect of getCellSelectionRectangles()"
     [ngStyle]="rect"
   ></div>

@@ -1,7 +1,6 @@
-@mixin table-header($bg-color) {
+@mixin table-container($bg-color) {
   background-color: var($bg-color);
   position: relative;
-  box-sizing: border-box;
 }
 
 @mixin scrollbar-size {

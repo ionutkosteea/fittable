@@ -1,4 +1,4 @@
-<div class="table-left" *ngIf="hasRowHeader()" #scroller>
+<div class="scroll-container" *ngIf="hasRowHeader()" #scroller>
   <div
     class="full-size-container"
     [ngStyle]="{
@@ -21,8 +21,8 @@
             *ngFor="let rowId of getRowIds()"
             [ngStyle]="{ 'height.px': getRowHeight(rowId) }"
           >
-            <th class="table-header-cell" [attr.rowId]="rowId" [attr.colId]="0">
-              <p class="table-cell-text">{{ getRowLabel(rowId) }}</p>
+            <th class="header-cell" [attr.rowId]="rowId" [attr.colId]="0">
+              <p class="cell-text">{{ getRowLabel(rowId) }}</p>
             </th>
           </tr>
         </tbody>
@@ -30,7 +30,7 @@
     </div>
   </div>
   <div
-    class="table-header-cell-selection"
+    class="header-cell-selection"
     *ngFor="let rect of getCellSelectionRectangles()"
     [ngStyle]="rect"
   ></div>

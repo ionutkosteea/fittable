@@ -35,16 +35,24 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
   @Input({ required: true }) model!: PopupControl;
   @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('colorPicker') colorPickerRef!: ElementRef;
-
-  public isColorPickerVisible = false;
+  isColorPickerVisible = false;
   private numberDefaultOfColors = 0;
   private readonly subscriptions: Subscription[] = [];
 
-  public getWindow(): Window {
+  ngAfterViewInit(): void {
+    this.numberDefaultOfColors = this.getWindow().getControlIds().length;
+    this.subscriptions.push(this.onWindowSetVisible$());
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+  }
+
+  getWindow(): Window {
     return this.model.getWindow();
   }
 
-  public getSelectedColor(): string | undefined {
+  getSelectedColor(): string | undefined {
     const window: Window = this.getWindow();
     const id: string | undefined = asSelectorWindow(window)?.getControlId();
     if (!id) return undefined;
@@ -53,60 +61,53 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
     return value ? '' + value : undefined;
   }
 
-  public run(): void {
+  run(): void {
     this.model.run();
   }
 
-  public runControl(id: string): void {
+  runControl(id: string): void {
     return this.getWindow().getControl(id).run();
   }
 
-  public ngAfterViewInit(): void {
-    this.numberDefaultOfColors = this.getWindow().getControlIds().length;
-    this.subscriptions.push(this.onWindowSetVisible$());
+  getColorNoneId(): string {
+    return this.getWindow().getControlIds()[0];
   }
 
-  private onWindowSetVisible$(): Subscription {
-    return this.model
-      .getWindow()
-      .onAfterSetFocus$()
-      .subscribe((focus: boolean): void => this.isVisibleEvent.emit(focus));
+  getColorNoneIcon(): string | undefined {
+    return this.getWindow().getControl(this.getColorNoneId()).getIcon();
   }
 
-  public readonly getColorNoneId = (): string =>
-    this.getWindow().getControlIds()[0];
+  getColorNoneLabel(): string | undefined {
+    return this.getWindow().getControl(this.getColorNoneId()).getLabel();
+  }
 
-  public readonly getColorNoneIcon = (): string | undefined =>
-    this.getWindow().getControl(this.getColorNoneId()).getIcon();
-
-  public readonly getColorNoneLabel = (): string | undefined =>
-    this.getWindow().getControl(this.getColorNoneId()).getLabel();
-
-  public readonly getColorIds = (): string[] =>
-    this.getWindow().hasFocus()
+  getColorIds(): string[] {
+    return this.getWindow().hasFocus()
       ? this.model
           .getWindow()
           .getControlIds()
           .slice(1, this.numberDefaultOfColors)
       : [];
+  }
 
-  public readonly getCustomColorIds = (): string[] =>
-    this.getWindow().hasFocus()
+  getCustomColorIds(): string[] {
+    return this.getWindow().hasFocus()
       ? this.getWindow().getControlIds().slice(this.numberDefaultOfColors)
       : [];
+  }
 
-  public getColorValue(id: string): Value | undefined {
+  getColorValue(id: string): Value | undefined {
     const control: Control = this.getWindow().getControl(id);
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (!valueControl) throw new Error('Invalid value control for id ' + id);
     return valueControl.getValue();
   }
 
-  public onSelectCustomColor(): void {
+  onSelectCustomColor(): void {
     this.isColorPickerVisible = true;
   }
 
-  public addCustomColor(): void {
+  addCustomColor(): void {
     const customColor: string = this.colorPickerRef.nativeElement.value;
     this.getWindow().addControl(
       customColor,
@@ -127,7 +128,10 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
     this.isColorPickerVisible = false;
   }
 
-  public ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
+  private onWindowSetVisible$(): Subscription {
+    return this.model
+      .getWindow()
+      .onAfterSetFocus$()
+      .subscribe((focus: boolean): void => this.isVisibleEvent.emit(focus));
   }
 }

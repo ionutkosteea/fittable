@@ -17,10 +17,10 @@
           [cellSelectionRanges]="getCellSelectionRanges()"
         >
           <tr
-            class="table-header-row"
+            class="header-row"
             [ngStyle]="{ 'height.px': getColHeaderHeight() }"
           >
-            <th class="table-header-cell" [attr.rowId]="0" [attr.colId]="0">
+            <th class="header-cell" [attr.rowId]="0" [attr.colId]="0">
               &nbsp;
             </th>
           </tr>
@@ -29,7 +29,7 @@
     </div>
   </div>
   <div
-    class="table-header-cell-selection"
+    class="header-cell-selection"
     *ngFor="let rect of getCellSelectionRectangles()"
     [ngStyle]="rect"
   ></div>

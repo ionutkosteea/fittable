@@ -4,8 +4,8 @@
   display: contents;
 }
 
-.table-center {
-  @include table-header(--table-body-background-color);
+.scroll-container {
+  @include table-container(--table-body-background-color);
   grid-area: body;
   overflow: scroll;
   &::-webkit-scrollbar {
@@ -20,7 +20,7 @@
   }
 }
 
-.table-cell {
+.cell {
   position: relative;
   padding: 0;
   margin: 0;
@@ -35,7 +35,7 @@
   box-sizing: border-box;
 }
 
-.table-cell-selection {
+.cell-selection {
   position: absolute;
   background-color: var(--cell-selection-background-color);
   pointer-events: none;
@@ -45,10 +45,10 @@
   border: none;
 }
 
-.table-cell-align-center {
+.cell-align-center {
   text-align: center;
 }
 
-.table-cell-align-right {
+.cell-align-right {
   text-align: right;
 }

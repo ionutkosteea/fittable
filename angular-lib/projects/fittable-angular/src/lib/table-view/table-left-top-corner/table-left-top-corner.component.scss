@@ -1,6 +1,6 @@
 @import "../common/scss/core";
 
 :host {
-  @include table-header(--table-header-background-color);
+  @include table-container(--table-header-background-color);
   grid-area: pageHeader;
 }

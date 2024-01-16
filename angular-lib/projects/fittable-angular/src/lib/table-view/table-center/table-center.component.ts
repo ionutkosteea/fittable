@@ -103,13 +103,13 @@ export class TableCenterComponent
   getDataTypeClass(
     rowId: number,
     colId: number
-  ): ' fit-table-cell-align-center' | ' fit-table-cell-align-right' | '' {
+  ): ' cell-align-center' | ' cell-align-right' | '' {
     const cellType: DataType['name'] = //
       this.viewModel.tableViewer.getCellType(rowId, colId);
     if (cellType === 'number' || cellType === 'date-time') {
-      return ' fit-table-cell-align-right';
+      return ' cell-align-right';
     } else if (cellType === 'boolean') {
-      return ' fit-table-cell-align-center';
+      return ' cell-align-center';
     }
     return '';
   }
