@@ -15,6 +15,9 @@ import {
   TableBasics,
   asTableStyles,
   TableMergedRegions,
+  DataType,
+  asTableCellDataType,
+  TableCellDataType,
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -51,6 +54,7 @@ import {
   ColInsertChange,
 } from '../../table-change-writter/line/line-insert-change-writter.js';
 import { CellValueChange } from '../../table-change-writter/cell/cell-value-change-writter.js';
+import { DataTypeChange } from '../../table-change-writter/cell/cell-data-type-change-writter.js';
 import { StyleChange } from '../../table-change-writter/style/style-change-writter.js';
 import {
   IncreaseRegionDto,
@@ -92,6 +96,10 @@ abstract class LineRemoveChangesBuilder {
     id: 'cell-value',
     values: [],
   };
+  protected dataTypeUndoChange: DataTypeChange = {
+    id: 'cell-data-type',
+    dataTypes: [],
+  };
   protected styleUndoChange: StyleChange = {
     id: 'style-update',
     cellStyleNames: [],
@@ -106,6 +114,7 @@ abstract class LineRemoveChangesBuilder {
     increaseRegions: [],
   };
 
+  protected readonly dataTypeTable?: TableBasics & TableCellDataType;
   protected readonly styledTable?: TableBasics & TableStyles;
   protected readonly mergedRegionsTable?: TableBasics & TableMergedRegions;
 
@@ -113,6 +122,7 @@ abstract class LineRemoveChangesBuilder {
     protected readonly table: Table,
     protected readonly args: LineRemoveArgs
   ) {
+    this.dataTypeTable = asTableCellDataType(table);
     this.styledTable = asTableStyles(table);
     this.mergedRegionsTable = asTableMergedRegions(table);
   }
@@ -232,7 +242,8 @@ abstract class LineRemoveChangesBuilder {
     this.undoLineDimensions();
     this.undoRemovedLines();
     this.undoCellValues();
-    this.styledTable && this.undoStyles();
+    this.undoDataTypes();
+    this.undoStyles();
   }
 
   private undoLineDimensions(): void {
@@ -301,7 +312,32 @@ abstract class LineRemoveChangesBuilder {
     );
   }
 
+  private undoDataTypes(): void {
+    if (!this.dataTypeTable) return;
+    const oldDataTypes: CellRangeAddressObjects<DataType | undefined> =
+      new CellRangeAddressObjects();
+    this.lineRemoveChange.lineRanges.forEach(
+      (removableLineRange: unknown): void => {
+        this.getTableLinesHelper().forEachLineCell(
+          createLineRange4Dto(removableLineRange),
+          (rowId: number, colId: number): void => {
+            const dataType: DataType | undefined = //
+              this.dataTypeTable?.getCellDataType(rowId, colId);
+            dataType !== undefined && oldDataTypes.set(dataType, rowId, colId);
+          }
+        );
+      }
+    );
+    oldDataTypes.forEach(
+      (dataType: DataType | undefined, address: CellRange[]): void => {
+        const cellRanges: unknown[] = createDto4CellRangeList(address);
+        this.dataTypeUndoChange.dataTypes.push({ cellRanges, dataType });
+      }
+    );
+  }
+
   private undoStyles(): void {
+    if (!this.styledTable) return;
     this.undoRemovedCellStyleNames();
     this.undoRemovedStyles();
   }
@@ -430,6 +466,7 @@ export class RowRemoveChangesBuilder extends LineRemoveChangesBuilder {
           rowInsertUndoChange,
           rowHeightUndoChange,
           this.cellValueUndoChange,
+          this.dataTypeUndoChange,
           this.styleUndoChange,
           this.mergedRegionsUndoChange,
         ],
@@ -527,6 +564,7 @@ export class ColRemoveChangesBuilder extends LineRemoveChangesBuilder {
           colInsertUndoChange,
           colWidthUndoChange,
           this.cellValueUndoChange,
+          this.dataTypeUndoChange,
           this.styleUndoChange,
           this.mergedRegionsUndoChange,
         ],
