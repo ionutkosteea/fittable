@@ -19,21 +19,21 @@
 .item {
   display: grid;
   grid-template-columns: 1fr auto;
-  place-items: center normal;
+  align-items: center;
   padding-left: fit-map-get($padding-map, large);
   padding-right: fit-map-get($padding-map, large);
   cursor: pointer;
   &:hover {
     background-color: var(--context-menu-background-hover-color);
   }
-  & > :nth-child(2):not(:empty) {
-    margin-left: fit-map-get($gap-map, large);
+  & > :nth-child(2):not(:placeholder-shown) {
+    margin-left: 12px;
   }
 }
 
 .item-left-icon {
   @include icon(left center);
-  padding-left: fit-map-get($size-map, large);
+  padding-left: calc(14px + 12px);
 }
 
 .item-right-icon {

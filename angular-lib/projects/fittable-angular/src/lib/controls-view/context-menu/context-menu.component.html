@@ -30,21 +30,19 @@
             </div>
           </ng-container>
           <ng-template #noIcon>{{ getControlLabel(id) }}</ng-template>
-          <div>
-            <input
-              class="item-input"
-              *ngIf="hasTextField(id)"
-              [ngStyle]="{ width: inputWidth, height: inputHeight }"
-              [value]="getTextFieldValue(id)"
-              [disabled]="isTextFieldDisabled(id) ? 'disabled' : null"
-              (mousedown)="onTextFieldMouseDown()"
-              (keydown)="onTextFieldKeyDown(id, $event)"
-              (input)="onTextFieldInput(id, $event)"
-              (focusout)="onTextFieldFocusOut(id)"
-              [type]="getTextFieldType(id)"
-              [min]="getTextFieldMin(id)"
-            />
-          </div>
+          <input
+            *ngIf="hasTextField(id)"
+            class="item-input"
+            [ngStyle]="{ width: inputWidth, height: inputHeight }"
+            [value]="getTextFieldValue(id)"
+            [min]="getTextFieldMin(id)"
+            [disabled]="isTextFieldDisabled(id) ? 'disabled' : null"
+            (mousedown)="onTextFieldMouseDown()"
+            (keydown)="onTextFieldKeyDown(id, $event)"
+            (input)="onTextFieldInput(id, $event)"
+            (focusout)="onTextFieldFocusOut(id)"
+            [type]="getTextFieldType(id)"
+          />
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'parent-menu-item'">
