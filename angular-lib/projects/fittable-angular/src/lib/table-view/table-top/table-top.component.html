@@ -1,54 +1,50 @@
-<div class="scroll-container" *ngIf="hasColHeader()" #scroller>
-  <div
-    class="full-size-container"
-    [ngStyle]="{
-      'width.px': getBodyWidth(),
-      'height.px': getColHeaderHeight() + 1
-    }"
-  >
-    <div class="offset-container" [ngStyle]="getColHeaderOffset()">
-      <table class="table">
-        <colgroup>
-          <col
-            *ngFor="let colId of getColIds()"
-            [ngStyle]="{ 'width.px': getColWidth(colId) }"
-          />
-        </colgroup>
-        <thead
-          (contextmenu)="showContextMenu($event)"
-          fitCellSelection
-          [cellSelectionListener]="cellSelectionListener"
-          [cellSelectionRanges]="getCellSelectionRanges()"
-        >
-          <tr
-            class="header-row"
-            [ngStyle]="{ 'height.px': getColHeaderHeight() }"
+@if (hasColHeader()) {
+  <div class="scroll-container" #scroller>
+    <div
+      class="full-size-container"
+      [ngStyle]="{
+        'width.px': getBodyWidth(),
+        'height.px': getColHeaderHeight() + 1
+      }"
+    >
+      <div class="offset-container" [ngStyle]="getColHeaderOffset()">
+        <table class="table">
+          <colgroup>
+            @for (colId of getColIds(); track $index) {
+              <col [ngStyle]="{ 'width.px': getColWidth(colId) }" />
+            }
+          </colgroup>
+          <thead
+            (contextmenu)="showContextMenu($event)"
+            fitCellSelection
+            [cellSelectionListener]="cellSelectionListener"
+            [cellSelectionRanges]="getCellSelectionRanges()"
           >
-            <th
-              class="header-cell"
-              *ngFor="let colId of getColIds()"
-              [attr.rowId]="0"
-              [attr.colId]="colId"
+            <tr
+              class="header-row"
+              [ngStyle]="{ 'height.px': getColHeaderHeight() }"
             >
-              {{ getColLabel(colId) }}
-              <fit-filter-popup-button
-                *ngIf="hasColFilters()"
-                [colFilters]="getColFilters()"
-                [colId]="colId"
-              />
-            </th>
-          </tr>
-        </thead>
-      </table>
+              @for (colId of getColIds(); track $index) {
+                <th class="header-cell" [attr.rowId]="0" [attr.colId]="colId">
+                  {{ getColLabel(colId) }}
+                  @if (hasColFilters()) {
+                    <fit-filter-popup-button
+                      [colFilters]="getColFilters()"
+                      [colId]="colId"
+                    />
+                  }
+                </th>
+              }
+            </tr>
+          </thead>
+        </table>
+      </div>
     </div>
+    @for (rect of getCellSelectionRectangles(); track $index) {
+      <div class="header-cell-selection" [ngStyle]="rect"></div>
+    }
+    @if (hasColFilters()) {
+      <fit-filter-popup-window [colFilters]="getColFilters()" />
+    }
   </div>
-  <div
-    class="header-cell-selection"
-    *ngFor="let rect of getCellSelectionRectangles()"
-    [ngStyle]="rect"
-  ></div>
-  <fit-filter-popup-window
-    *ngIf="hasColFilters()"
-    [colFilters]="getColFilters()"
-  />
-</div>
+}

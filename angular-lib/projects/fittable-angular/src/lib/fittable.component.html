@@ -1,11 +1,15 @@
-<fit-toolbar *ngIf="hasToolbar()" [model]="getToolbar()" />
+@if (hasToolbar()) {
+  <fit-toolbar [model]="getToolbar()" />
+}
 <div class="table-container">
   <fit-table [viewModel]="getViewModel()" />
 </div>
-<fit-statusbar *ngIf="hasStatusbar()" [model]="getStatusbar()" />
-<fit-settingsbar *ngIf="hasSettingsBar()" [model]="getSettingsBar()" />
-<fit-context-menu
-  *ngIf="hasContextMenu()"
-  [model]="getContextMenu()"
-  [position]="'fixed'"
-/>
+@if (hasStatusbar()) {
+  <fit-statusbar [model]="getStatusbar()" />
+}
+@if (hasSettingsBar()) {
+  <fit-settingsbar [model]="getSettingsBar()" />
+}
+@if (hasContextMenu()) {
+  <fit-context-menu [model]="getContextMenu()" [position]="'fixed'" />
+}

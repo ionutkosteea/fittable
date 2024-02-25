@@ -16,12 +16,13 @@
   </div>
   <div class="pad-s">
     <div class="color-panel">
-      <div
-        class="color-button"
-        *ngFor="let id of getColorIds()"
-        (click)="runControl(id)"
-        [ngStyle]="{ backgroundColor: getColorValue(id) }"
-      ></div>
+      @for (id of getColorIds(); track $index) {
+        <div
+          class="color-button"
+          (click)="runControl(id)"
+          [ngStyle]="{ backgroundColor: getColorValue(id) }"
+        ></div>
+      }
     </div>
   </div>
   <div class="pad-s">
@@ -29,12 +30,13 @@
   </div>
   <div class="pad-s">
     <div class="color-panel">
-      <div
-        class="color-button"
-        *ngFor="let id of getCustomColorIds()"
-        (click)="runControl(id)"
-        [ngStyle]="{ backgroundColor: getColorValue(id) }"
-      ></div>
+      @for (id of getCustomColorIds(); track $index) {
+        <div
+          class="color-button"
+          (click)="runControl(id)"
+          [ngStyle]="{ backgroundColor: getColorValue(id) }"
+        ></div>
+      }
     </div>
   </div>
   <div class="pad-s">

@@ -1,36 +1,36 @@
 <div class="toolbar">
-  <ng-container *ngFor="let id of getControlIDs()">
-    <ng-container [ngSwitch]="getControlType(id)">
-      <ng-container *ngSwitchCase="'button'">
+  @for (id of getControlIDs(); track $index) {
+    @switch (getControlType(id)) {
+      @case ("button") {
         <fit-button [model]="getControl(id)" />
-      </ng-container>
-      <ng-container *ngSwitchCase="'combo'">
+      }
+      @case ("combo") {
         <fit-combo
           [model]="getPopupControl(id)"
           [controlStyleFn]="getComboControlStyle"
         />
-      </ng-container>
-      <ng-container *ngSwitchCase="'input'">
+      }
+      @case ("input") {
         <fit-input [model]="getInputControl(id)" />
-      </ng-container>
-      <ng-container *ngSwitchCase="'color-picker'">
+      }
+      @case ("color-picker") {
         <fit-color-picker [model]="getPopupControl(id)" />
-      </ng-container>
-      <ng-container *ngSwitchCase="'popup-button'">
+      }
+      @case ("popup-button") {
         <fit-popup-button [model]="getPopupControl(id)" />
-      </ng-container>
-      <ng-container *ngSwitchCase="'border-popup-button'">
+      }
+      @case ("border-popup-button") {
         <fit-border-popup [model]="getPopupControl(id)" />
-      </ng-container>
-      <ng-container *ngSwitchCase="'context-menu-button'">
+      }
+      @case ("context-menu-button") {
         <fit-context-menu-button [model]="getPopupControl(id)" />
-      </ng-container>
-      <ng-container *ngSwitchCase="'separator'">
+      }
+      @case ("separator") {
         <div class="separator">&nbsp;</div>
-      </ng-container>
-      <ng-container *ngSwitchDefault>
+      }
+      @default {
         <div>Unknown control type for ID: {{ id }}</div>
-      </ng-container>
-    </ng-container>
-  </ng-container>
+      }
+    }
+  }
 </div>

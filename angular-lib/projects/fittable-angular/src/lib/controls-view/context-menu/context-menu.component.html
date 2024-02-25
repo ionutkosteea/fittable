@@ -5,21 +5,21 @@
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
 >
-  <ng-container *ngFor="let id of getControlIds()">
-    <ng-container [ngSwitch]="getControlType(id)">
-      <ng-container *ngSwitchCase="'separator'">
+  @for (id of getControlIds(); track $index) {
+    @switch (getControlType(id)) {
+      @case ("separator") {
         <hr class="sep-v" />
-      </ng-container>
-      <ng-container *ngSwitchCase="'label'">
+      }
+      @case ("label") {
         <div class="title">{{ getControlLabel(id) }}</div>
-      </ng-container>
-      <ng-container *ngSwitchCase="'menu-item'">
+      }
+      @case ("menu-item") {
         <div
           class="item"
           [ngStyle]="getControlStyle(id)"
           (mousedown)="runControl(id)"
         >
-          <ng-container *ngIf="hasControlIcon(id); else noIcon">
+          @if (hasControlIcon(id)) {
             <div
               [ngClass]="
                 iconCol === 'left' ? 'item-left-icon' : 'item-right-icon'
@@ -28,31 +28,33 @@
             >
               {{ getControlLabel(id) }}
             </div>
-          </ng-container>
-          <ng-template #noIcon>{{ getControlLabel(id) }}</ng-template>
-          <input
-            *ngIf="hasTextField(id)"
-            class="item-input"
-            [ngStyle]="{ width: inputWidth, height: inputHeight }"
-            [value]="getTextFieldValue(id)"
-            [min]="getTextFieldMin(id)"
-            [disabled]="isTextFieldDisabled(id) ? 'disabled' : null"
-            (mousedown)="onTextFieldMouseDown()"
-            (keydown)="onTextFieldKeyDown(id, $event)"
-            (input)="onTextFieldInput(id, $event)"
-            (focusout)="onTextFieldFocusOut(id)"
-            [type]="getTextFieldType(id)"
-          />
+          } @else {
+            {{ getControlLabel(id) }}
+          }
+          @if (hasTextField(id)) {
+            <input
+              class="item-input"
+              [ngStyle]="{ width: inputWidth, height: inputHeight }"
+              [value]="getTextFieldValue(id)"
+              [min]="getTextFieldMin(id)"
+              [disabled]="isTextFieldDisabled(id) ? 'disabled' : null"
+              (mousedown)="onTextFieldMouseDown()"
+              (keydown)="onTextFieldKeyDown(id, $event)"
+              (input)="onTextFieldInput(id, $event)"
+              (focusout)="onTextFieldFocusOut(id)"
+              [type]="getTextFieldType(id)"
+            />
+          }
         </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="'parent-menu-item'">
+      }
+      @case ("parent-menu-item") {
         <div
           class="item"
           [ngStyle]="getControlStyle(id)"
           (mouseenter)="onMenuItemMouseEnter(id, $event)"
           (mouseleave)="onMenuItemMouseLeave(id)"
         >
-          <ng-container *ngIf="hasControlIcon(id); else noIcon">
+          @if (hasControlIcon(id)) {
             <div
               [ngClass]="
                 iconCol === 'left' ? 'item-left-icon' : 'item-right-icon'
@@ -61,8 +63,9 @@
             >
               {{ getControlLabel(id) }}
             </div>
-          </ng-container>
-          <ng-template #noIcon>{{ getControlLabel(id) }}</ng-template>
+          } @else {
+            {{ getControlLabel(id) }}
+          }
           <div
             [ngStyle]="{
               width: '16px',
@@ -81,10 +84,10 @@
           [inputWidth]="'100%'"
           [inputHeight]="'1.4rem'"
         />
-      </ng-container>
-      <ng-container *ngSwitchDefault>
+      }
+      @default {
         <div>Unknown control type for ID: {{ id }}</div>
-      </ng-container>
-    </ng-container>
-  </ng-container>
+      }
+    }
+  }
 </div>

@@ -1,37 +1,36 @@
-<div class="scroll-container" *ngIf="hasRowHeader()" #scroller>
-  <div
-    class="full-size-container"
-    [ngStyle]="{
-      'width.px': getRowHeaderWidth(),
-      'height.px': getBodyHeight()
-    }"
-  >
-    <div class="offset-container" [ngStyle]="getRowHeaderOffset()">
-      <table class="table">
-        <colgroup>
-          <col [ngStyle]="{ 'width.px': getRowHeaderWidth() }" />
-        </colgroup>
-        <tbody
-          (contextmenu)="showContextMenu($event)"
-          fitCellSelection
-          [cellSelectionListener]="cellSelectionListener"
-          [cellSelectionRanges]="getCellSelectionRanges()"
-        >
-          <tr
-            *ngFor="let rowId of getRowIds()"
-            [ngStyle]="{ 'height.px': getRowHeight(rowId) }"
+@if (hasRowHeader()) {
+  <div class="scroll-container" #scroller>
+    <div
+      class="full-size-container"
+      [ngStyle]="{
+        'width.px': getRowHeaderWidth(),
+        'height.px': getBodyHeight()
+      }"
+    >
+      <div class="offset-container" [ngStyle]="getRowHeaderOffset()">
+        <table class="table">
+          <colgroup>
+            <col [ngStyle]="{ 'width.px': getRowHeaderWidth() }" />
+          </colgroup>
+          <tbody
+            (contextmenu)="showContextMenu($event)"
+            fitCellSelection
+            [cellSelectionListener]="cellSelectionListener"
+            [cellSelectionRanges]="getCellSelectionRanges()"
           >
-            <th class="header-cell" [attr.rowId]="rowId" [attr.colId]="0">
-              <p class="cell-text">{{ getRowLabel(rowId) }}</p>
-            </th>
-          </tr>
-        </tbody>
-      </table>
+            @for (rowId of getRowIds(); track $index) {
+              <tr [ngStyle]="{ 'height.px': getRowHeight(rowId) }">
+                <th class="header-cell" [attr.rowId]="rowId" [attr.colId]="0">
+                  <p class="cell-text">{{ getRowLabel(rowId) }}</p>
+                </th>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
+    @for (rect of getCellSelectionRectangles(); track $index) {
+      <div class="header-cell-selection" [ngStyle]="rect"></div>
+    }
   </div>
-  <div
-    class="header-cell-selection"
-    *ngFor="let rect of getCellSelectionRectangles()"
-    [ngStyle]="rect"
-  ></div>
-</div>
+}

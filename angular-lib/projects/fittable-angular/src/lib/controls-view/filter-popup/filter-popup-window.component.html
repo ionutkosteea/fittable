@@ -20,33 +20,32 @@
     fitScrollContainer
     [scrollContainer]="getScrollContainer()"
   >
-    <div
-      class="full-size-container"
-      *ngIf="hasCheckList()"
-      [ngStyle]="{ width: '100%', 'height.px': getCheckListHeight() }"
-    >
+    @if (hasCheckList()) {
       <div
-        class="mobile-container"
-        [ngStyle]="{
-          transform: 'translate3d(0px,' + getScrollOffsetY() + 'px,0px)'
-        }"
+        class="full-size-container"
+        [ngStyle]="{ width: '100%', 'height.px': getCheckListHeight() }"
       >
         <div
-          class="check-item"
-          *ngFor="let id of getCheckBoxIds()"
-          (click)="onCheckBoxClick(id)"
+          class="mobile-container"
+          [ngStyle]="{
+            transform: 'translate3d(0px,' + getScrollOffsetY() + 'px,0px)'
+          }"
         >
-          <input
-            type="checkbox"
-            [id]="id"
-            [checked]="getCheckBox(id).isChecked() ? 'checked' : undefined"
-          />
-          <label [for]="id" (click)="onCheckBoxClick(id)">{{
-            getCheckBox(id).getLabel()
-          }}</label>
+          @for (id of getCheckBoxIds(); track $index) {
+            <div class="check-item" (click)="onCheckBoxClick(id)">
+              <input
+                type="checkbox"
+                [id]="id"
+                [checked]="getCheckBox(id).isChecked() ? 'checked' : undefined"
+              />
+              <label [for]="id" (click)="onCheckBoxClick(id)">{{
+                getCheckBox(id).getLabel()
+              }}</label>
+            </div>
+          }
         </div>
       </div>
-    </div>
+    }
   </div>
   <div class="center-aligned-bar">
     <button class="action-button" (click)="getOkButton().run()">

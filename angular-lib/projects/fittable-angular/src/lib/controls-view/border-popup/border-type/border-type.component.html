@@ -1,10 +1,8 @@
 <fit-button [model]="model" />
 <fit-popup-menu [model]="getWindow()">
   <div class="pad-s">
-    <hr
-      *ngFor="let id of getControlIds()"
-      [ngStyle]="getBorderStyle(id)"
-      (click)="runControl(id)"
-    />
+    @for (id of getControlIds(); track $index) {
+      <hr [ngStyle]="getBorderStyle(id)" (click)="runControl(id)" />
+    }
   </div>
 </fit-popup-menu>

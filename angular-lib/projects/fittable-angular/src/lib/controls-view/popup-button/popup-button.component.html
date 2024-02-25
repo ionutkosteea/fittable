@@ -1,6 +1,8 @@
 <fit-button [model]="model" />
 <fit-popup-menu [model]="getWindow()">
   <div class="button-bar">
-    <fit-button *ngFor="let id of getControlIds()" [model]="getControl(id)" />
+    @for (id of getControlIds(); track $index) {
+      <fit-button [model]="getControl(id)" />
+    }
   </div>
 </fit-popup-menu>

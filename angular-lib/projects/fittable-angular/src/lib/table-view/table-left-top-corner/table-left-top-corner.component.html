@@ -1,4 +1,4 @@
-<ng-container *ngIf="hasRowHeader() && hasColHeader()">
+@if (hasRowHeader() && hasColHeader()) {
   <div
     class="full-size-container"
     [ngStyle]="{
@@ -28,9 +28,7 @@
       </table>
     </div>
   </div>
-  <div
-    class="header-cell-selection"
-    *ngFor="let rect of getCellSelectionRectangles()"
-    [ngStyle]="rect"
-  ></div>
-</ng-container>
+  @for (rect of getCellSelectionRectangles(); track $index) {
+    <div class="header-cell-selection" [ngStyle]="rect"></div>
+  }
+}

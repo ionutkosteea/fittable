@@ -5,25 +5,25 @@
 >
   <div class="pad-s">
     <div class="grid-2col">
-      <ng-container *ngFor="let id of getLeftPanelIDs()">
-        <fit-border-type
-          *ngIf="getControlType(id) === 'popup-button'"
-          [model]="getPopupControl(id)"
-          (isVisibleEvent)="showBorderType($event)"
-        />
-        <fit-color-picker
-          *ngIf="getControlType(id) === 'color-picker'"
-          [model]="getPopupControl(id)"
-          (isVisibleEvent)="showColorPicker($event)"
-        />
-      </ng-container>
+      @for (id of getLeftPanelIDs(); track $index) {
+        @if (getControlType(id) === "popup-button") {
+          <fit-border-type
+            [model]="getPopupControl(id)"
+            (isVisibleEvent)="showBorderType($event)"
+          />
+        } @else if (getControlType(id) === "color-picker") {
+          <fit-color-picker
+            [model]="getPopupControl(id)"
+            (isVisibleEvent)="showColorPicker($event)"
+          />
+        }
+      }
     </div>
     <hr class="sep-v" />
     <div class="grid-2col">
-      <fit-button
-        *ngFor="let id of getRightPanelIDs()"
-        [model]="getControl(id)"
-      />
+      @for (id of getRightPanelIDs(); track $index) {
+        <fit-button [model]="getControl(id)" />
+      }
     </div>
   </div>
 </fit-popup-menu>

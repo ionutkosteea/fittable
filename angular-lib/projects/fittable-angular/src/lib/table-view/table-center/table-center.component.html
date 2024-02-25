@@ -17,10 +17,9 @@
         }"
       >
         <colgroup>
-          <col
-            *ngFor="let colId of getColIds()"
-            [ngStyle]="{ 'width.px': getColWidth(colId) }"
-          />
+          @for (colId of getColIds(); track $index) {
+            <col [ngStyle]="{ 'width.px': getColWidth(colId) }" />
+          }
         </colgroup>
         <tbody
           (contextmenu)="showContextMenu($event)"
@@ -30,37 +29,36 @@
           [cellSelectionListener]="cellSelectionListener"
           [cellSelectionRanges]="getCellSelectionRanges()"
         >
-          <tr
-            *ngFor="let rowId of getRowIds()"
-            [ngStyle]="{ 'height.px': getRowHeight(rowId) }"
-          >
-            <ng-container *ngFor="let colId of getColIds()">
-              <td
-                [ngClass]="'cell' + getDataTypeClass(rowId, colId)"
-                *ngIf="!isHiddenCell(rowId, colId)"
-                [ngStyle]="getCellStyle(rowId, colId)"
-                [rowSpan]="getRowSpan(rowId, colId)"
-                [colSpan]="getColSpan(rowId, colId)"
-                [attr.rowId]="rowId"
-                [attr.colId]="colId"
-              >
-                <!-- prettier-ignore -->
-                <p class="cell-text">{{ getFormatedCellValue(rowId, colId) }}</p>
-              </td>
-            </ng-container>
-          </tr>
+          @for (rowId of getRowIds(); track $index) {
+            <tr [ngStyle]="{ 'height.px': getRowHeight(rowId) }">
+              @for (colId of getColIds(); track $index) {
+                @if (!isHiddenCell(rowId, colId)) {
+                  <td
+                    [ngClass]="'cell' + getDataTypeClass(rowId, colId)"
+                    [ngStyle]="getCellStyle(rowId, colId)"
+                    [rowSpan]="getRowSpan(rowId, colId)"
+                    [colSpan]="getColSpan(rowId, colId)"
+                    [attr.rowId]="rowId"
+                    [attr.colId]="colId"
+                  >
+                    <!-- prettier-ignore -->
+                    <p class="cell-text">{{ getFormatedCellValue(rowId, colId) }}</p>
+                  </td>
+                }
+              }
+            </tr>
+          }
         </tbody>
       </table>
     </div>
   </div>
-  <div
-    class="cell-selection"
-    *ngFor="let rect of getCellSelectionRectangles()"
-    [ngStyle]="rect"
-  ></div>
-  <fit-cell-editor
-    *ngIf="cellEditorListener !== undefined"
-    [cellEditorListener]="cellEditorListener"
-    [getCellStyle]="getCellStyle"
-  />
+  @for (rect of getCellSelectionRectangles(); track $index) {
+    <div class="cell-selection" [ngStyle]="rect"></div>
+  }
+  @if (cellEditorListener) {
+    <fit-cell-editor
+      [cellEditorListener]="cellEditorListener"
+      [getCellStyle]="getCellStyle"
+    />
+  }
 </div>
