@@ -32,13 +32,11 @@
 }
 
 .item-left-icon {
-  @include icon(left center);
-  padding-left: calc(14px + 12px);
+  padding-right: fit-map-get($size-map, small);
 }
 
 .item-right-icon {
-  @include icon(right center);
-  padding-right: fit-map-get($size-map, large);
+  padding-left: fit-map-get($size-map, small);
 }
 
 .item-input {

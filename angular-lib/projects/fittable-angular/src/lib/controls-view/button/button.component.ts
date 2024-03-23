@@ -5,13 +5,16 @@ import { CssStyle } from 'fittable-core/model';
 import { Control } from 'fittable-core/view-model';
 
 import { createToggleStyle } from '../common/style-functions.model';
+import { SvgImageDirective } from '../../common/svg-image.directive';
 
 @Component({
   selector: 'fit-button',
   standalone: true,
-  imports: [NgStyle],
+  imports: [NgStyle, SvgImageDirective],
   template: `
     <button
+      fitSvgImage
+      [svgContent]="getImage()"
       [ngStyle]="getStyle()"
       [title]="getLabel()"
       (click)="run()"
@@ -22,15 +25,16 @@ import { createToggleStyle } from '../common/style-functions.model';
 export class ButtonComponent {
   @Input({ required: true }) model!: Control;
 
-  getStyle(): CssStyle {
-    let style: CssStyle | null = createToggleStyle(this.model);
-    if (style) style['background-image'] = this.model.getIcon();
-    else style = { 'background-image': this.model.getIcon() };
-    return style;
+  getImage(): string | undefined {
+    return this.model.getIcon();
   }
 
   getLabel(): string {
     return this.model.getLabel();
+  }
+
+  getStyle(): CssStyle | null {
+    return createToggleStyle(this.model);
   }
 
   run(): void {

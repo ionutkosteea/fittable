@@ -1,6 +1,7 @@
 <button
   #button
-  [ngStyle]="{ backgroundImage: getIcon() }"
+  fitSvgImage
+  [svgContent]="getIcon()"
   [title]="getLabel()"
   (click)="run()"
 ></button>

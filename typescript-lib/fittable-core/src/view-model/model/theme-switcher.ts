@@ -1,12 +1,10 @@
 import { MissingFactoryError } from '../../common/factory-error.js';
 import { getViewModelConfig } from '../view-model-config.js';
-import { Images } from './image-registry.js';
 
 export type CssVariables = { [name: string]: string };
 
 export interface Theme {
   cssVariables: CssVariables;
-  images: Images<string>;
 }
 
 export interface ThemeSwitcher {

@@ -1,9 +1,9 @@
 <div class="popup-window" [ngStyle]="getWindowStyle()">
+  <div class="search-label">{{ getSearchInput().getLabel() }}</div>
   <div class="search-input">
-    <div>{{ getSearchInput().getLabel() }}</div>
+    <span fitSvgImage [svgContent]="getSearchInput().getIcon()"></span>
     <input
       [value]="getSearchInput().getValue() ?? ''"
-      [ngStyle]="{ backgroundImage: getSearchInput().getIcon() }"
       (input)="onSearchInput($event)"
     />
   </div>

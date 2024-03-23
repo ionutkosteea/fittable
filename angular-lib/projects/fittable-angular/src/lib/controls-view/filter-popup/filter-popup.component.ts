@@ -5,7 +5,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 import { RangeIterator } from 'fittable-core/common';
 import { CssStyle } from 'fittable-core/model';
@@ -25,17 +25,19 @@ import {
   createWindowListener,
 } from 'fittable-core/view-model';
 
+import { SvgImageDirective } from '../../common/svg-image.directive';
 import { createWindowStyle } from '../common/style-functions.model';
 import { ScrollContainerDirective } from '../common/scroll-container.directive';
 
 @Component({
   selector: 'fit-filter-popup-button',
   standalone: true,
-  imports: [NgStyle],
+  imports: [CommonModule, SvgImageDirective],
   template: `
     <button
       class="popup-button"
-      [ngStyle]="{ backgroundImage: getPopupButton().getIcon() }"
+      fitSvgImage
+      [svgContent]="getPopupButton().getIcon()"
       [title]="getLabel()"
     ></button>
   `,
@@ -80,7 +82,7 @@ type ControlId =
 @Component({
   selector: 'fit-filter-popup-window',
   standalone: true,
-  imports: [NgStyle, NgIf, NgFor, ScrollContainerDirective],
+  imports: [CommonModule, ScrollContainerDirective, SvgImageDirective],
   templateUrl: './filter-popup-window.component.html',
   styleUrls: ['./filter-popup-window.component.scss'],
 })

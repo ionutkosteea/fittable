@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
@@ -21,7 +21,7 @@ import { Button, ConsoleTopic } from './common/console-topic.model';
   templateUrl: './common/console-topic.html',
   styleUrls: ['../common/common.css'],
 })
-export class ImageRegistryComponent implements ConsoleTopic, OnInit {
+export class ImageRegistryComponent implements ConsoleTopic, OnInit, OnDestroy {
   public readonly title: TopicTitle = 'Image registry';
   public readonly htmlCode: CodeSnippet[] = [
     { image: 'fittable-component-html.jpg' },
@@ -33,6 +33,7 @@ export class ImageRegistryComponent implements ConsoleTopic, OnInit {
   ];
   public readonly buttons: Button[] = [];
   public fit!: FittableDesigner;
+  private defaultUndoIcon?: string;
 
   public ngOnInit(): void {
     // The register functions should be called, in most cases, from the Angular main module.
@@ -42,30 +43,26 @@ export class ImageRegistryComponent implements ConsoleTopic, OnInit {
       createFitViewModelConfig({
         cellEditor: true,
         toolbar: true,
-      })
+      }),
     );
+    this.defaultUndoIcon = getImageRegistry<FitImageId>().getUrl('undo');
+    getImageRegistry<FitImageId>().set('undo', this.getNewUndoIcon());
 
     this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
-
-    this.createChangeIconButton();
   }
 
-  private createChangeIconButton(): void {
-    let defaultUndoIcon: string | undefined;
-    this.buttons.push({
-      getLabel: (): string =>
-        defaultUndoIcon ? 'Reset undo button icon' : 'Change undo button icon',
-      run: (): void => {
-        if (defaultUndoIcon) {
-          getImageRegistry<FitImageId>().set('undo', defaultUndoIcon);
-          defaultUndoIcon = undefined;
-        } else {
-          defaultUndoIcon = getImageRegistry<FitImageId>().getUrl('undo');
-          const newUndoIcon = 'url(../../../assets/icons/undo-red.svg)';
-          getImageRegistry<FitImageId>().set('undo', newUndoIcon);
-        }
-      },
-    });
+  private getNewUndoIcon(): string {
+    return `<svg width="14" height="16" viewBox="0 0 14 16" fill="none"
+xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M10.904 16C12.681 12.781 12.98 7.87 6 8.034V12L0 6L6 0V3.881C14.359 3.663 15.29 11.259 10.904 16Z"
+    fill="#FF0000"/>
+</svg>`;
+  }
+
+  public ngOnDestroy(): void {
+    this.defaultUndoIcon &&
+      getImageRegistry<FitImageId>().set('undo', this.defaultUndoIcon);
   }
 
   public getConsoleText(): string {

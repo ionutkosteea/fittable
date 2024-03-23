@@ -21,7 +21,7 @@ $gap-map: (
   large: 0.5rem
 );
 $size-map: (
-  // small: 0.5rem,
+  small: 0.5rem,
   medium: 1rem,
   large: 1.75rem
 );
@@ -41,11 +41,6 @@ $size-map: (
   -webkit-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   -moz-box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
   box-shadow: 1px 1px 2px 0px var(--toolbar-box-shadow-color);
-}
-
-@mixin icon($position) {
-  background-repeat: no-repeat;
-  background-position: $position;
 }
 
 @mixin window {
@@ -70,6 +65,9 @@ $size-map: (
 }
 
 @mixin button() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0;
   padding: 0;
   background-color: transparent;

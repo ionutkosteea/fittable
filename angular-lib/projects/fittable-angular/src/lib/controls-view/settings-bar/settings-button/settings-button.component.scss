@@ -6,8 +6,8 @@
 }
 
 button {
-  @include icon(center);
   @include button();
   width: fit-map-get($size-map, medium);
   height: fit-map-get($size-map, medium);
+  color: var(--highlight-color);
 }

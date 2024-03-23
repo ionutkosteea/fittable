@@ -6,7 +6,7 @@
 
 .button-color {
   position: absolute;
-  top: 0.8125rem;
+  top: 0.75rem;
   left: 0.4375rem;
   width: 14px;
   height: 3px;
@@ -15,14 +15,19 @@
 }
 
 .color-none-button {
-  @include icon(left center);
-  padding-left: fit-map-get($size-map, large);
+  display: flex;
   cursor: pointer;
   font-size: fit-map-get($font-size-map, medium);
   line-height: fit-map-get($line-height-map, medium);
 
   &:hover {
     background-color: var(--context-menu-background-hover-color);
+  }
+
+  span:first-child {
+    display: flex;
+    align-items: center;
+    margin-right: fit-map-get($size-map, small);
   }
 }
 

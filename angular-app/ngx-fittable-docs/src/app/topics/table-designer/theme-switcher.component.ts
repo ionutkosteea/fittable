@@ -13,9 +13,7 @@ import { FIT_MODEL_CONFIG } from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
 import {
   FitThemeName,
-  FIT_IMAGES,
   FIT_VIEW_MODEL_CONFIG,
-  toSvgUrl,
   FitCssColorVariables,
   FIT_CSS_COLOR_VARIABLES,
 } from 'fittable-view-model';
@@ -69,7 +67,7 @@ export class ThemeSwitcherComponent implements ConsoleTopic, OnInit {
     cssVariables['--table-header-background-color'] = 'lightyellow';
     cssVariables['--cell-selection-background-color'] =
       'rgba(255, 255, 227, 0.25)';
-    const theme: Theme = { cssVariables, images: toSvgUrl(FIT_IMAGES) };
+    const theme: Theme = { cssVariables };
     const themeName: CustomThemeName = 'Lemon';
     this.fit.viewModel.themeSwitcher
       ?.registerTheme(themeName, theme)
@@ -99,7 +97,7 @@ export class ThemeSwitcherComponent implements ConsoleTopic, OnInit {
     return JSON.stringify(
       themeSwitcher.getTheme(currentThemeName)?.cssVariables,
       null,
-      2
+      2,
     );
   }
 }

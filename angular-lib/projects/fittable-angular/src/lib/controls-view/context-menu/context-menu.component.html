@@ -20,14 +20,23 @@
           (mousedown)="runControl(id)"
         >
           @if (hasControlIcon(id)) {
-            <div
-              [ngClass]="
-                iconCol === 'left' ? 'item-left-icon' : 'item-right-icon'
-              "
-              [ngStyle]="{ backgroundImage: getControlIcon(id) }"
-            >
-              {{ getControlLabel(id) }}
-            </div>
+            @if (iconCol === "left") {
+              <div>
+                <span
+                  class="item-left-icon"
+                  fitSvgImage
+                  [svgContent]="getControlIcon(id)"
+                ></span>
+                <span>{{ getControlLabel(id) }}</span>
+              </div>
+            } @else {
+              <span>{{ getControlLabel(id) }}</span>
+              <span
+                class="item-right-icon"
+                fitSvgImage
+                [svgContent]="getControlIcon(id)"
+              ></span>
+            }
           } @else {
             {{ getControlLabel(id) }}
           }
@@ -55,28 +64,18 @@
           (mouseleave)="onMenuItemMouseLeave(id)"
         >
           @if (hasControlIcon(id)) {
-            <div
-              [ngClass]="
-                iconCol === 'left' ? 'item-left-icon' : 'item-right-icon'
-              "
-              [ngStyle]="{ backgroundImage: getControlIcon(id) }"
-            >
-              {{ getControlLabel(id) }}
+            <div>
+              <span
+                class="item-left-icon"
+                fitSvgImage
+                [svgContent]="getControlIcon(id)"
+              ></span>
+              <span>{{ getControlLabel(id) }}</span>
             </div>
           } @else {
             {{ getControlLabel(id) }}
           }
-          <div
-            [ngStyle]="{
-              width: '16px',
-              height: '16px',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'right center',
-              backgroundImage: getArrowRightIcon()
-            }"
-          >
-            &nbsp;
-          </div>
+          <span fitSvgImage [svgContent]="getArrowRightIcon()"></span>
         </div>
         <fit-context-menu
           [model]="getMenuItemWindow(id)"

@@ -7,15 +7,7 @@ import {
   OnInit,
   HostListener,
 } from '@angular/core';
-import {
-  NgClass,
-  NgFor,
-  NgIf,
-  NgStyle,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 import { CssStyle, Value, createStyle4Dto } from 'fittable-core/model';
 import {
@@ -32,6 +24,7 @@ import {
   getImageRegistry,
 } from 'fittable-core/view-model';
 
+import { SvgImageDirective } from '../../common/svg-image.directive';
 import {
   createToggleStyle,
   createWindowStyle,
@@ -41,15 +34,7 @@ import { ControlType } from '../common/control-type.model';
 @Component({
   selector: 'fit-context-menu',
   standalone: true,
-  imports: [
-    NgIf,
-    NgFor,
-    NgStyle,
-    NgClass,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
-  ],
+  imports: [CommonModule, SvgImageDirective],
   templateUrl: './context-menu.component.html',
   styleUrls: ['../common/scss/utils.scss', './context-menu.component.scss'],
 })

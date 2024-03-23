@@ -6,12 +6,9 @@
 />
 <fit-popup-menu [model]="getWindow()">
   <div class="pad-s">
-    <div
-      class="color-none-button"
-      [ngStyle]="{ backgroundImage: getColorNoneIcon() }"
-      (click)="runControl(getColorNoneId())"
-    >
-      {{ getColorNoneLabel() }}
+    <div class="color-none-button">
+      <span fitSvgImage [svgContent]="getColorNoneIcon()"></span>
+      <span>{{ getColorNoneLabel() }}</span>
     </div>
   </div>
   <div class="pad-s">

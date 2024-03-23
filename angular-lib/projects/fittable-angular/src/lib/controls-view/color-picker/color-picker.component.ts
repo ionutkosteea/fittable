@@ -9,7 +9,7 @@ import {
   OnDestroy,
   AfterViewInit,
 } from '@angular/core';
-import { NgFor, NgStyle } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 import { Value } from 'fittable-core/model';
 import {
@@ -21,13 +21,19 @@ import {
   asSelectorWindow,
 } from 'fittable-core/view-model';
 
+import { SvgImageDirective } from '../../common/svg-image.directive';
 import { ButtonComponent } from '../button/button.component';
 import { PopupMenuComponent } from '../popup-menu/popup-menu.component';
 
 @Component({
   selector: 'fit-color-picker',
   standalone: true,
-  imports: [NgStyle, NgFor, ButtonComponent, PopupMenuComponent],
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    PopupMenuComponent,
+    SvgImageDirective,
+  ],
   templateUrl: './color-picker.component.html',
   styleUrls: ['../common/scss/utils.scss', './color-picker.component.scss'],
 })
@@ -123,7 +129,7 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
         run = (): void => {
           // Do nothing!
         };
-      })()
+      })(),
     );
     this.isColorPickerVisible = false;
   }

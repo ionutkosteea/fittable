@@ -5,7 +5,7 @@ import {
 } from 'fittable-core/view-model';
 
 import { FitImageId, FitImages } from './fit-image-ids.js';
-import { FIT_IMAGES, toSvgUrl } from './fit-images.js';
+import { FIT_IMAGES } from './fit-images.js';
 
 export class FitImageRegistry implements ImageRegistry<FitImageId> {
   private images: FitImages = {};
@@ -43,7 +43,7 @@ export class FitImageRegistry implements ImageRegistry<FitImageId> {
 
 export class FitImageRegistryFactory implements ImageRegistryFactory {
   public createImageRegistry(): FitImageRegistry {
-    return new FitImageRegistry().setAll(toSvgUrl(FIT_IMAGES));
+    return new FitImageRegistry().setAll(FIT_IMAGES);
   }
 }
 

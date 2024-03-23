@@ -3,12 +3,13 @@ import { NgStyle } from '@angular/common';
 
 import { PopupControl, Window } from 'fittable-core/view-model';
 
+import { SvgImageDirective } from '../../../common/svg-image.directive';
 import { ContextMenuComponent } from '../../context-menu/context-menu.component';
 
 @Component({
   selector: 'fit-settings-button',
   standalone: true,
-  imports: [NgStyle, ContextMenuComponent],
+  imports: [NgStyle, SvgImageDirective, ContextMenuComponent],
   templateUrl: './settings-button.component.html',
   styleUrls: ['./settings-button.component.scss'],
 })

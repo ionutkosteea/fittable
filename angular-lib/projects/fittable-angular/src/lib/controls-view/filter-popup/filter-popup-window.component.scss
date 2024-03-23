@@ -1,13 +1,16 @@
 @import "../common/scss/core";
 
 .popup-button {
-  @include icon(center);
   @include button();
   position: absolute;
   top: 5px;
   right: 2px;
   width: 12px;
   height: 8px;
+  color: var(--table-header-border-color);
+  &:hover {
+    color: var(--highlight-color);
+  }
 }
 
 .popup-window {
@@ -16,22 +19,37 @@
   padding: fit-map-get($padding-map, large);
 }
 
+.search-label,
 .search-input {
   font-size: fit-map-get($font-size-map, medium);
   line-height: fit-map-get($line-height-map, medium);
-  input {
-    color: var(--context-menu-color);
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--context-menu-border-color);
+  border-radius: 4px;
+  span {
+    display: flex;
+    align-items: center;
+    margin: 0 2px;
+    color: var(--context-menu-border-color);
     background-color: var(--context-menu-background-color);
-    border: 1px solid var(--context-menu-border-color);
+  }
+  input {
+    flex: 1;
+    border: none;
     margin: 0;
     padding: fit-map-get($padding-map, small);
-    width: 100%;
-    border-radius: 4px;
     font-size: inherit;
     height: 1.25rem;
-    background-position: bottom 0.15rem right 0.15rem;
-    background-repeat: no-repeat;
     box-sizing: border-box;
+    color: var(--context-menu-color);
+    background-color: transparent;
+    &:focus {
+      outline: none;
+    }
   }
 }
 

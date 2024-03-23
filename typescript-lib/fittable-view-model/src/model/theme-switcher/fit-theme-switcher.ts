@@ -5,7 +5,6 @@ import {
 } from 'fittable-core/view-model';
 
 import { setCssVariables } from '../common/css-variables.js';
-import { getImageRegistry } from '../image-registry/fit-image-registry.js';
 import { lightTheme } from './light-theme/theme.js';
 import { darkTheme } from './dark-theme/theme.js';
 
@@ -31,7 +30,6 @@ export class FitThemeSwitcher implements ThemeSwitcher {
   public switch(name: FitThemeName): this {
     const theme: Theme | undefined = this.themes[name];
     if (!theme) throw new Error('Invalid theme name ' + name);
-    getImageRegistry().setAll(theme.images);
     setCssVariables(theme.cssVariables);
     this.currentThemeName = name;
     return this;
