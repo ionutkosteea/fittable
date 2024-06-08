@@ -8,8 +8,10 @@ import {
   EventEmitter,
   OnDestroy,
   AfterViewInit,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { Value } from 'fittable-core/model';
 import {
@@ -21,19 +23,13 @@ import {
   asSelectorWindow,
 } from 'fittable-core/view-model';
 
-import { SvgImageDirective } from '../../common/svg-image.directive';
 import { ButtonComponent } from '../button/button.component';
 import { PopupMenuComponent } from '../popup-menu/popup-menu.component';
 
 @Component({
   selector: 'fit-color-picker',
   standalone: true,
-  imports: [
-    CommonModule,
-    ButtonComponent,
-    PopupMenuComponent,
-    SvgImageDirective,
-  ],
+  imports: [CommonModule, ButtonComponent, PopupMenuComponent],
   templateUrl: './color-picker.component.html',
   styleUrls: ['../common/scss/utils.scss', './color-picker.component.scss'],
 })
@@ -44,6 +40,7 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
   isColorPickerVisible = false;
   private numberDefaultOfColors = 0;
   private readonly subscriptions: Subscription[] = [];
+  private readonly domSanitizer = inject(DomSanitizer);
 
   ngAfterViewInit(): void {
     this.numberDefaultOfColors = this.getWindow().getControlIds().length;
@@ -79,8 +76,10 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
     return this.getWindow().getControlIds()[0];
   }
 
-  getColorNoneIcon(): string | undefined {
-    return this.getWindow().getControl(this.getColorNoneId()).getIcon();
+  getColorNoneIcon(): SafeHtml | undefined {
+    const htmlContent =
+      this.getWindow().getControl(this.getColorNoneId()).getIcon() ?? '';
+    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
   }
 
   getColorNoneLabel(): string | undefined {

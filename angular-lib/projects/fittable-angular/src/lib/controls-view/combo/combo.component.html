@@ -1,11 +1,14 @@
-<input
-  [ngStyle]="getStyle()"
-  [value]="getLabel()"
-  [title]="getLabel()"
-  (click)="run()"
-  readonly
-  type="text"
-/>
+<div class="combo">
+  <input
+    [ngStyle]="getStyle()"
+    [value]="getLabel()"
+    [title]="getLabel()"
+    (click)="run()"
+    readonly
+    type="text"
+  />
+  <span [innerHTML]="getIcon()" (click)="run()"> </span>
+</div>
 <fit-context-menu
   [model]="getWindow()"
   [top]="'2rem'"

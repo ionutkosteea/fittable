@@ -3,23 +3,26 @@ import { ControlArgs } from 'fittable-core/view-model';
 
 import { getFirstCellStyle } from '../../../common/style-functions.js';
 import { FitUIOperationArgs } from '../../../operation-executor/operation-args.js';
+import { FitToggleControl } from '../../../common/controls/fit-toggle-control.js';
 import { ControlUpdater } from './control-updater.js';
-import { PushButton } from './push-button.js';
 
-export class StylePushButton extends PushButton implements ControlUpdater {
+export class StylePushButton
+  extends FitToggleControl
+  implements ControlUpdater
+{
   private style?: Style;
   private pushed = false;
 
   constructor(private readonly args: ControlArgs) {
     super();
-    this.setPushed((): boolean => this.pushed);
+    this.setOnFn((): boolean => this.pushed);
     this.setRun(this.createRunFn);
   }
 
   private readonly createRunFn = (): void => {
     if (!this.style) throw new Error('Style is not defined!');
     const selectedCells: CellRange[] = this.args.getSelectedCells();
-    const style: Style = this.isPushed()
+    const style: Style = this.isOn()
       ? this.getUndefinedStyle()
       : this.style.clone();
     const args: FitUIOperationArgs = {

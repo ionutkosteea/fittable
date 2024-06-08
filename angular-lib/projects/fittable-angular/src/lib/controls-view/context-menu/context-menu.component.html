@@ -24,8 +24,7 @@
               <div>
                 <span
                   class="item-left-icon"
-                  fitSvgImage
-                  [svgContent]="getControlIcon(id)"
+                  [innerHTML]="getControlIcon(id)"
                 ></span>
                 <span>{{ getControlLabel(id) }}</span>
               </div>
@@ -33,8 +32,7 @@
               <span>{{ getControlLabel(id) }}</span>
               <span
                 class="item-right-icon"
-                fitSvgImage
-                [svgContent]="getControlIcon(id)"
+                [innerHTML]="getControlIcon(id)"
               ></span>
             }
           } @else {
@@ -67,15 +65,14 @@
             <div>
               <span
                 class="item-left-icon"
-                fitSvgImage
-                [svgContent]="getControlIcon(id)"
+                [innerHTML]="getControlIcon(id)"
               ></span>
               <span>{{ getControlLabel(id) }}</span>
             </div>
           } @else {
             {{ getControlLabel(id) }}
           }
-          <span fitSvgImage [svgContent]="getArrowRightIcon()"></span>
+          <span [innerHTML]="getArrowRightIcon()"></span>
         </div>
         <fit-context-menu
           [model]="getMenuItemWindow(id)"

@@ -1,7 +1,7 @@
 <div class="popup-window" [ngStyle]="getWindowStyle()">
   <div class="search-label">{{ getSearchInput().getLabel() }}</div>
   <div class="search-input">
-    <span fitSvgImage [svgContent]="getSearchInput().getIcon()"></span>
+    <span [innerHTML]="getSearchInputIcon()"></span>
     <input
       [value]="getSearchInput().getValue() ?? ''"
       (input)="onSearchInput($event)"
@@ -36,7 +36,7 @@
               <input
                 type="checkbox"
                 [id]="id"
-                [checked]="getCheckBox(id).isChecked() ? 'checked' : undefined"
+                [checked]="getCheckBox(id).isOn() ? 'checked' : undefined"
               />
               <label [for]="id" (click)="onCheckBoxClick(id)">{{
                 getCheckBox(id).getLabel()

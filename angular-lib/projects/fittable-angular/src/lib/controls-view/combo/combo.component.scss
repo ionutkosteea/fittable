@@ -4,21 +4,28 @@
   position: relative;
 }
 
-input {
-  @include field;
-  cursor: pointer;
-  width: 6.25rem;
-  text-align: center;
-  padding-right: 0.625rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-origin: content-box;
-  font-size: fit-map-get($font-size-map, base);
-  height: fit-map-get($size-map, large);
+.combo {
   border-radius: 4px;
   &:hover {
     background-color: var(--toolbar-background-hover-color);
+  }
+  input {
+    @include field;
+    width: 6.25rem;
+    text-align: center;
+    padding-right: 0.625rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: fit-map-get($font-size-map, base);
+    height: fit-map-get($size-map, large);
+    cursor: pointer;
+    background-color: transparent;
+    &:focus {
+      outline: none;
+    }
+  }
+  span {
+    margin-right: fit-map-get($size-map, small);
+    cursor: pointer;
   }
 }

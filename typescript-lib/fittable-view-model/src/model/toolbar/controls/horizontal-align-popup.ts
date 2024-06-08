@@ -14,7 +14,8 @@ class HorizontalAlignPopupBuilder {
   private combo: StyleCombo;
 
   constructor(args: ControlArgs) {
-    this.combo = new StyleCombo('text-align', args);
+    this.combo = new StyleCombo('text-align', args) //
+      .setChangeSelectionIcon(true);
   }
 
   public build(): StyleCombo {

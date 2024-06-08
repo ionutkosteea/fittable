@@ -45,15 +45,13 @@ export function asInputControl(control?: Control): InputControl | undefined {
     : undefined;
 }
 
-export interface CheckBoxControl extends Control {
-  isChecked(): boolean;
-  setChecked(checked: boolean): this;
+export interface ToggleControl extends Control {
+  isOn(): boolean;
+  setOn(on: boolean): this;
 }
 
-export function asCheckBoxControl(
-  control?: Control
-): CheckBoxControl | undefined {
-  return implementsTKeys<CheckBoxControl>(control, ['isChecked'])
+export function asToggleControl(control?: Control): ToggleControl | undefined {
+  return implementsTKeys<ToggleControl>(control, ['isOn'])
     ? control
     : undefined;
 }

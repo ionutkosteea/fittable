@@ -1,10 +1,6 @@
-<button
-  #button
-  fitSvgImage
-  [svgContent]="getIcon()"
-  [title]="getLabel()"
-  (click)="run()"
-></button>
+<button #button [title]="getLabel()" (click)="run()">
+  <div class="icon" [innerHTML]="getIcon()"></div>
+</button>
 <fit-context-menu
   [model]="getWindow()"
   [left]="'auto'"

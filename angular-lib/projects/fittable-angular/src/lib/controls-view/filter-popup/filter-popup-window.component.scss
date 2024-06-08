@@ -11,6 +11,15 @@
   &:hover {
     color: var(--highlight-color);
   }
+  &.is-on {
+    color: var(--highlight-color);
+  }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  pointer-events: none;
 }
 
 .popup-window {

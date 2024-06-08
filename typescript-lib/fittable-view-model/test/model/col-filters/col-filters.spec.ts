@@ -15,9 +15,9 @@ import {
   unregisterOperationConfig,
 } from 'fittable-core/operations';
 import {
-  asCheckBoxControl,
+  asToggleControl,
   asPopupControl,
-  CheckBoxControl,
+  ToggleControl,
   ColFilters,
   Control,
   createColFilters,
@@ -76,10 +76,10 @@ describe('Column filters', (): void => {
     const valueCheckList: PopupControl | undefined = //
       asPopupControl(popupWindow.getControl(valueCheckListId));
     if (!valueCheckList) throw Error('Invalid value check list');
-    const checkBox: CheckBoxControl | undefined = //
-      asCheckBoxControl(valueCheckList.getWindow().getControl('1'));
+    const checkBox: ToggleControl | undefined = //
+      asToggleControl(valueCheckList.getWindow().getControl('1'));
     if (!checkBox) throw Error('Invalid value check box');
-    checkBox.setChecked(true);
+    checkBox.setOn(true);
     const okButtonId: FitColFiltersControlId = 'ok-button';
     const okButton: Control = popupWindow.getControl(okButtonId);
     okButton.run();

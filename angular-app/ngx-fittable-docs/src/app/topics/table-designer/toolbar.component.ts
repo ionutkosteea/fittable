@@ -43,7 +43,7 @@ export class ToolbarComponent implements SimpleTopic, OnInit {
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
-      createFitViewModelConfig({ toolbar: true, cellEditor: true })
+      createFitViewModelConfig({ toolbar: true, cellEditor: true }),
     );
 
     this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
@@ -65,7 +65,13 @@ export class ToolbarComponent implements SimpleTopic, OnInit {
           // Usually labels should be accessed via the language dictionary.
           .setLabel((): string => 'Undo')
           // Usually images should be accessed via the image registry.
-          .setIcon((): string => 'url(../../../assets/icons/undo-red.svg)')
+          .setIcon(
+            (): string => `
+<svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M10.904 16C12.681 12.781 12.98 7.87 6 8.034V12L0 6L6 0V3.881C14.359 3.663 15.29
+  11.259 10.904 16Z" fill="#FF0000"/>
+</svg>`,
+          )
           .setRun((): void => alert('No function added!'));
       } else {
         control = toolbar.getControl(id);

@@ -4,8 +4,10 @@ import {
   HostListener,
   Input,
   OnInit,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { RangeIterator } from 'fittable-core/common';
 import { CssStyle } from 'fittable-core/model';
@@ -15,31 +17,31 @@ import {
   WindowListener,
   Control,
   asPopupControl,
-  CheckBoxControl,
+  ToggleControl,
   Container,
   InputControl,
   asInputControl,
   Window,
   ScrollContainer,
-  asCheckBoxControl,
+  asToggleControl,
   createWindowListener,
 } from 'fittable-core/view-model';
 
-import { SvgImageDirective } from '../../common/svg-image.directive';
 import { createWindowStyle } from '../common/style-functions.model';
 import { ScrollContainerDirective } from '../common/scroll-container.directive';
 
 @Component({
   selector: 'fit-filter-popup-button',
   standalone: true,
-  imports: [CommonModule, SvgImageDirective],
+  imports: [CommonModule],
   template: `
     <button
       class="popup-button"
-      fitSvgImage
-      [svgContent]="getPopupButton().getIcon()"
+      [ngClass]="{ 'is-on': isOn() }"
       [title]="getLabel()"
-    ></button>
+    >
+      <div class="icon" [innerHTML]="getIcon()"></div>
+    </button>
   `,
   styleUrls: ['./filter-popup-window.component.scss'],
 })
@@ -47,6 +49,7 @@ export class FilterPopupButtonComponent implements OnInit {
   @Input() colFilters!: ColFilters;
   @Input() colId!: number;
   private windowListener!: WindowListener;
+  private readonly domSanitizer = inject(DomSanitizer);
 
   ngOnInit(): void {
     this.windowListener = //
@@ -66,6 +69,15 @@ export class FilterPopupButtonComponent implements OnInit {
     return this.getPopupButton().getLabel();
   }
 
+  getIcon(): SafeHtml | undefined {
+    const htmlContent = this.getPopupButton().getIcon() ?? '';
+    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
+  }
+
+  isOn(): boolean {
+    return asToggleControl(this.getPopupButton())?.isOn() ?? false;
+  }
+
   getPopupButton(): PopupControl {
     return this.colFilters.getPopupButton(this.colId);
   }
@@ -82,13 +94,14 @@ type ControlId =
 @Component({
   selector: 'fit-filter-popup-window',
   standalone: true,
-  imports: [CommonModule, ScrollContainerDirective, SvgImageDirective],
+  imports: [CommonModule, ScrollContainerDirective],
   templateUrl: './filter-popup-window.component.html',
   styleUrls: ['./filter-popup-window.component.scss'],
 })
 export class FilterPopupWindowComponent implements AfterViewInit {
   @Input() colFilters!: ColFilters;
   private windowListener!: WindowListener;
+  private readonly domSanitizer = inject(DomSanitizer);
 
   ngAfterViewInit(): void {
     this.windowListener = //
@@ -113,6 +126,11 @@ export class FilterPopupWindowComponent implements AfterViewInit {
     const input: InputControl | undefined = asInputControl(control);
     if (input) return input;
     else throw new Error('Search input control was not found!');
+  }
+
+  getSearchInputIcon(): SafeHtml | undefined {
+    const htmlContent = this.getSearchInput().getIcon() ?? '';
+    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
   }
 
   onSearchInput(event: Event): void {
@@ -140,17 +158,17 @@ export class FilterPopupWindowComponent implements AfterViewInit {
     return this.getScrollContainer().getRenderableRows();
   }
 
-  getCheckBox(id: number): CheckBoxControl {
+  getCheckBox(id: number): ToggleControl {
     const control: Control | undefined = //
       this.getCheckBoxContainer().getControl('' + id);
-    const checkBox: CheckBoxControl | undefined = asCheckBoxControl(control);
+    const checkBox: ToggleControl | undefined = asToggleControl(control);
     if (checkBox) return checkBox;
     else throw new Error('Invalid check box control');
   }
 
   onCheckBoxClick(id: number): void {
-    const checkBox: CheckBoxControl = this.getCheckBox(id);
-    checkBox.setChecked(!checkBox.isChecked());
+    const checkBox: ToggleControl = this.getCheckBox(id);
+    checkBox.setOn(!checkBox.isOn());
   }
 
   getSelectAllButton(): Control {

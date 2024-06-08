@@ -25,11 +25,18 @@ export class StyleCombo
   extends FitPopupControl<string>
   implements ControlUpdater
 {
+  private canChangeSelectionIcon = false;
+
   constructor(
     private readonly styleAttName: string,
     private readonly args: ControlArgs
   ) {
     super(new StyleComboWindow(styleAttName, args));
+  }
+
+  public setChangeSelectionIcon(canChange: boolean): this {
+    this.canChangeSelectionIcon = canChange;
+    return this;
   }
 
   public override getWindow(): StyleComboWindow {
@@ -51,6 +58,8 @@ export class StyleCombo
         const valueControl: ValueControl = this.getValueControl(id);
         if (valueControl.getValue() === attValue) {
           selectorWindow.setControlId(id);
+          this.canChangeSelectionIcon &&
+            this.setIcon(() => valueControl.getIcon());
           isSelectedControlId = true;
           return;
         }
@@ -63,7 +72,10 @@ export class StyleCombo
         selectorWindow.addControl(value, newControl).setControlId(value);
       }
     } else {
-      selectorWindow.setControlId(selectorWindow.getControlIds()[0]);
+      const controlId = selectorWindow.getControlIds()[0];
+      this.canChangeSelectionIcon &&
+        this.setIcon(() => selectorWindow.getControl(controlId).getIcon());
+      selectorWindow.setControlId(controlId);
     }
   }
 

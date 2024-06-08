@@ -18,17 +18,17 @@ import {
   FitUIOperationArgs,
   FitUIOperationId,
 } from '../../operation-executor/operation-args.js';
-import { PushButton } from './common/push-button.js';
-import { ControlUpdater } from './common/control-updater.js';
 import { getImageRegistry } from '../../image-registry/fit-image-registry.js';
+import { FitToggleControl } from '../../common/controls/fit-toggle-control.js';
+import { ControlUpdater } from './common/control-updater.js';
 
-export function createPaintFormatButton(args: ControlArgs): PushButton {
+export function createPaintFormatButton(args: ControlArgs): FitToggleControl {
   return new PaintFormatButton(args);
 }
 
 const operationId: FitUIOperationId = 'paint-format-copy';
 
-class PaintFormatButton extends PushButton implements ControlUpdater {
+class PaintFormatButton extends FitToggleControl implements ControlUpdater {
   private pushed = false;
   private styleName?: string;
   private dataType?: DataType;
@@ -39,13 +39,11 @@ class PaintFormatButton extends PushButton implements ControlUpdater {
     this.setLabel((): string =>
       getLanguageDictionary().getText('Paint format')
     );
-    this.setPushed((): boolean => this.pushed);
+    this.setOnFn((): boolean => this.pushed);
     this.setRun(this.createRunFn);
-    this.setIcon((): string | undefined => {
-      return this.pushed
-        ? getImageRegistry().getUrl('paintFormatBlue')
-        : getImageRegistry().getUrl('paintFormat');
-    });
+    this.setIcon((): string | undefined =>
+      getImageRegistry().getUrl('paintFormat')
+    );
     this.createStyleNameCopyOperation();
   }
 
@@ -78,7 +76,7 @@ class PaintFormatButton extends PushButton implements ControlUpdater {
   };
 
   public updateByCellSelection(): void {
-    if (!this.isPushed()) return;
+    if (!this.isOn()) return;
     this.pasteCellData();
     this.pushed = false;
   }

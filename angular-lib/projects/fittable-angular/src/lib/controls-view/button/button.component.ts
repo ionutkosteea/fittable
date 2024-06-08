@@ -1,32 +1,36 @@
-import { Component, Input } from '@angular/core';
-import { NgStyle } from '@angular/common';
+import { Component, Input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { CssStyle } from 'fittable-core/model';
-import { Control } from 'fittable-core/view-model';
+import { Control, asToggleControl } from 'fittable-core/view-model';
 
 import { createToggleStyle } from '../common/style-functions.model';
-import { SvgImageDirective } from '../../common/svg-image.directive';
 
 @Component({
   selector: 'fit-button',
   standalone: true,
-  imports: [NgStyle, SvgImageDirective],
+  imports: [CommonModule],
   template: `
     <button
-      fitSvgImage
-      [svgContent]="getImage()"
       [ngStyle]="getStyle()"
+      [ngClass]="{ 'is-on': isOn() }"
       [title]="getLabel()"
       (click)="run()"
-    ></button>
+    >
+      <div class="icon" [innerHTML]="getIcon()"></div>
+    </button>
   `,
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
   @Input({ required: true }) model!: Control;
 
-  getImage(): string | undefined {
-    return this.model.getIcon();
+  private readonly domSanitizer = inject(DomSanitizer);
+
+  getIcon(): SafeHtml | undefined {
+    const htmlContent = this.model.getIcon() ?? '';
+    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
   }
 
   getLabel(): string {
@@ -35,6 +39,10 @@ export class ButtonComponent {
 
   getStyle(): CssStyle | null {
     return createToggleStyle(this.model);
+  }
+
+  isOn(): boolean {
+    return asToggleControl(this.model)?.isOn() ?? false;
   }
 
   run(): void {

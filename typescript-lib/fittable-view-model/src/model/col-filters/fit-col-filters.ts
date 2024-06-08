@@ -24,13 +24,14 @@ import { FitControl } from '../common/controls/fit-control.js';
 import { FitPopupControl } from '../common/controls/fit-popup-control.js';
 import { FitWindow } from '../common/controls/fit-window.js';
 import { FitInputControl } from '../common/controls/fit-input-control.js';
-import { FitCheckBoxControl } from '../common/controls/fit-check-box-control.js';
+import { FitToggleControl } from '../common/controls/fit-toggle-control.js';
 import {
   ColValueConditions,
   ColValueCondition,
 } from './col-value-conditions.js';
 import { ColValueScrollbar } from './col-value-scrollbar.js';
 import { ColFilterArgs, ColFilterChange } from './col-filter-operation.js';
+import { ColFilterPopupButton } from './col-filter-popup-button.js';
 
 export type FitColFiltersControlId =
   | 'search-input'
@@ -46,7 +47,7 @@ export class FitColFilters implements ColFilters {
   public readonly filterExecutor: ColFilterExecutor;
 
   private colId!: number;
-  private popupButton!: FitPopupControl<FitColFiltersControlId>;
+  private popupButton!: ColFilterPopupButton<FitColFiltersControlId>;
   private valueConditions!: ColValueConditions;
   private valueScrollContainer!: ScrollContainer;
   private isSearchMode = false;
@@ -67,7 +68,7 @@ export class FitColFilters implements ColFilters {
     this.subscriptions.push(this.clearValueCheckListControls$());
   }
 
-  private createPopupButton(): FitPopupControl<FitColFiltersControlId> {
+  private createPopupButton(): ColFilterPopupButton<FitColFiltersControlId> {
     const window: FitWindow<FitColFiltersControlId> = new FitWindow();
     window
       .addControl('search-input', this.createSearchInput())
@@ -76,8 +77,9 @@ export class FitColFilters implements ColFilters {
       .addControl('select-all-button', this.createSelectAllButton())
       .addControl('ok-button', this.createOkButton())
       .addControl('cancel-button', this.createCancelButton());
-    return new FitPopupControl<FitColFiltersControlId>(window) //
-      .setLabel((): string => getLanguageDictionary().getText('Filter'));
+    return new ColFilterPopupButton<FitColFiltersControlId>(window) //
+      .setLabel((): string => getLanguageDictionary().getText('Filter'))
+      .setIcon((): string | undefined => this.getFilterIcon());
   }
 
   private createSearchInput(): FitInputControl {
@@ -99,7 +101,7 @@ export class FitColFilters implements ColFilters {
           const origWindow: FitWindow<string> = origList.getWindow();
           let counter = 0;
           for (const id of origWindow.getControlIds()) {
-            const checkBox = origWindow.getControl(id) as FitCheckBoxControl;
+            const checkBox = origWindow.getControl(id) as FitToggleControl;
             const valueAsString: string | undefined = //
               this.getValueAsString(checkBox.getValue());
             if (valueAsString?.includes(inputValue)) {
@@ -127,8 +129,8 @@ export class FitColFilters implements ColFilters {
       .setLabel((): string => getLanguageDictionary().getText('Clear'))
       .setRun((): void => {
         for (const control of this.getValueCheckListContainer().getControls()) {
-          const checkBox: FitCheckBoxControl = control as FitCheckBoxControl;
-          checkBox.setChecked(false);
+          const checkBox: FitToggleControl = control as FitToggleControl;
+          checkBox.setOn(false);
         }
         if (!this.isSearchMode) {
           this.valueConditions.current.mode = 'Clear';
@@ -142,8 +144,8 @@ export class FitColFilters implements ColFilters {
       .setLabel((): string => getLanguageDictionary().getText('Select all'))
       .setRun((): void => {
         for (const control of this.getValueCheckListContainer().getControls()) {
-          const checkBox: FitCheckBoxControl = control as FitCheckBoxControl;
-          checkBox.setChecked(true);
+          const checkBox: FitToggleControl = control as FitToggleControl;
+          checkBox.setOn(true);
         }
         if (!this.isSearchMode) {
           this.valueConditions.current.mode = 'Select all';
@@ -190,10 +192,8 @@ export class FitColFilters implements ColFilters {
   public getPopupButton(
     colId: number
   ): FitPopupControl<FitColFiltersControlId> {
-    return this.popupButton.setIcon((): string | undefined =>
-      colId in this.valueConditions.store
-        ? this.getFilterOnIcon()
-        : this.getFilterOffIcon()
+    return this.popupButton.setOnFn(
+      (): boolean => colId in this.valueConditions.store
     );
   }
 
@@ -228,7 +228,7 @@ export class FitColFilters implements ColFilters {
       const value: Value | undefined = table.getCellValue(rowId, this.colId);
       const valueAsString: string | undefined = this.getValueAsString(value);
       const label: string = this.getLabel(valueAsString);
-      const checkBox: FitCheckBoxControl = new FitCheckBoxControl()
+      const checkBox: FitToggleControl = new FitToggleControl()
         .setLabel((): string => label)
         .setValue(value);
       this.updateCheckBox(checkBox, valueAsString);
@@ -245,19 +245,19 @@ export class FitColFilters implements ColFilters {
     }
   }
 
-  private updateCheckBox(checkBox: FitCheckBoxControl, value?: string): void {
+  private updateCheckBox(checkBox: FitToggleControl, value?: string): void {
     if (this.valueConditions.current.mode === 'Select all') {
-      checkBox.setChecked(!this.valueConditions.current.values.has(value));
+      checkBox.setOn(!this.valueConditions.current.values.has(value));
     } else {
-      checkBox.setChecked(this.valueConditions.current.values.has(value));
+      checkBox.setOn(this.valueConditions.current.values.has(value));
     }
   }
 
   private updateValueConditions$(
-    checkBox: FitCheckBoxControl,
+    checkBox: FitToggleControl,
     value?: string
   ): Subscription {
-    return checkBox.onAfterSetChecked$().subscribe((checked: boolean): void => {
+    return checkBox.onAfterSetOn$().subscribe((checked: boolean): void => {
       const condition: ColValueCondition = this.valueConditions.current;
       if (condition.mode === 'Select all') {
         if (checked) {
@@ -308,11 +308,8 @@ export class FitColFilters implements ColFilters {
   private readonly getPopupWindow = (): FitWindow<FitColFiltersControlId> =>
     this.popupButton.getWindow();
 
-  private readonly getFilterOffIcon = (): string | undefined =>
+  private readonly getFilterIcon = (): string | undefined =>
     getImageRegistry().getUrl('filter');
-
-  private readonly getFilterOnIcon = (): string | undefined =>
-    getImageRegistry().getUrl('filterBlue');
 
   public destroy(): void {
     this.valueCheckListSubscriptions //

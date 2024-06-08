@@ -6,8 +6,10 @@ import {
   ViewChild,
   OnInit,
   HostListener,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { CssStyle, Value, createStyle4Dto } from 'fittable-core/model';
 import {
@@ -24,7 +26,6 @@ import {
   getImageRegistry,
 } from 'fittable-core/view-model';
 
-import { SvgImageDirective } from '../../common/svg-image.directive';
 import {
   createToggleStyle,
   createWindowStyle,
@@ -34,7 +35,7 @@ import { ControlType } from '../common/control-type.model';
 @Component({
   selector: 'fit-context-menu',
   standalone: true,
-  imports: [CommonModule, SvgImageDirective],
+  imports: [CommonModule],
   templateUrl: './context-menu.component.html',
   styleUrls: ['../common/scss/utils.scss', './context-menu.component.scss'],
 })
@@ -54,6 +55,7 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
   private windowListener!: WindowListener;
   private readonly inputListeners: Map<string, InputControlListener> =
     new Map();
+  private readonly domSanitizer = inject(DomSanitizer);
   private isTextFieldMouseDown = false;
   private isSubMenu = false;
 
@@ -115,8 +117,9 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
     return this.getControl(id).getLabel();
   }
 
-  getControlIcon(id: string): string | undefined {
-    return this.getControl(id).getIcon();
+  getControlIcon(id: string): SafeHtml | undefined {
+    const htmlContent = this.getControl(id).getIcon() ?? '';
+    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
   }
 
   hasControlIcon(id: string): boolean {
@@ -147,8 +150,9 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getArrowRightIcon(): string | undefined {
-    return getImageRegistry().getUrl('arrowRight');
+  getArrowRightIcon(): SafeHtml | undefined {
+    const htmlContent = getImageRegistry().getUrl('arrowRight') ?? '';
+    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
   }
 
   hasTextField(id: string): boolean {

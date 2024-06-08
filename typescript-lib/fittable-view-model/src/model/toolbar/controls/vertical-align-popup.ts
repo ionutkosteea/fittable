@@ -14,7 +14,8 @@ class VerticalAlignPopupBuilder {
   private combo: StyleCombo;
 
   constructor(args: ControlArgs) {
-    this.combo = new StyleCombo('place-items', args);
+    this.combo = new StyleCombo('place-items', args) //
+      .setChangeSelectionIcon(true);
   }
 
   public build(): StyleCombo {

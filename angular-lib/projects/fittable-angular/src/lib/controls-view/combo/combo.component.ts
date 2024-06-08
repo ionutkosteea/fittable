@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { NgStyle } from '@angular/common';
+import { Component, Input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { CssStyle } from 'fittable-core/model';
 import { Control, PopupControl, Window } from 'fittable-core/view-model';
@@ -10,19 +11,22 @@ import { ContextMenuComponent } from '../context-menu/context-menu.component';
 @Component({
   selector: 'fit-combo',
   standalone: true,
-  imports: [NgStyle, ContextMenuComponent],
+  imports: [CommonModule, ContextMenuComponent],
   templateUrl: './combo.component.html',
   styleUrl: './combo.component.scss',
 })
 export class ComboComponent {
   @Input({ required: true }) model!: PopupControl;
   @Input() controlStyleFn?: (control: Control) => CssStyle | null;
+  private readonly domSanitizer = inject(DomSanitizer);
 
-  getStyle(): CssStyle {
-    let style: CssStyle | null = createToggleStyle(this.model);
-    if (style) style['background-image'] = this.model.getIcon();
-    else style = { 'background-image': this.model.getIcon() };
-    return style;
+  getStyle(): CssStyle | null {
+    return createToggleStyle(this.model);
+  }
+
+  getIcon(): SafeHtml | undefined {
+    const htmlContent = this.model.getIcon() ?? '';
+    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
   }
 
   getLabel(): string {
