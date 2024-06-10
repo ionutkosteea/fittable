@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -24,28 +24,28 @@ import { createToggleStyle } from '../common/style-functions.model';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
-  @Input({ required: true }) model!: Control;
+  model = input.required<Control>();
 
   private readonly domSanitizer = inject(DomSanitizer);
 
   getIcon(): SafeHtml | undefined {
-    const htmlContent = this.model.getIcon() ?? '';
+    const htmlContent = this.model().getIcon() ?? '';
     return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
   }
 
   getLabel(): string {
-    return this.model.getLabel();
+    return this.model().getLabel();
   }
 
   getStyle(): CssStyle | null {
-    return createToggleStyle(this.model);
+    return createToggleStyle(this.model());
   }
 
   isOn(): boolean {
-    return asToggleControl(this.model)?.isOn() ?? false;
+    return asToggleControl(this.model())?.isOn() ?? false;
   }
 
   run(): void {
-    !this.model.isDisabled() && this.model.isValid() && this.model.run();
+    !this.model().isDisabled() && this.model().isValid() && this.model().run();
   }
 }

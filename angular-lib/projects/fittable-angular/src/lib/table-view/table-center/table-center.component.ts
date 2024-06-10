@@ -1,11 +1,11 @@
 import { Subscription } from 'rxjs';
 import {
   Component,
-  Input,
   OnInit,
   OnDestroy,
-  Output,
-  EventEmitter,
+  input,
+  output,
+  signal
 } from '@angular/core';
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 
@@ -47,17 +47,16 @@ import { CellSelectionDirective } from '../common/cell-selection.directive';
 })
 export class TableCenterComponent
   extends TableCommon
-  implements OnInit, OnDestroy
-{
-  @Input({ required: true }) override viewModel!: ViewModel;
-  @Input() cellSelectionListener?: CellSelectionListener;
-  @Output() onScroll$: EventEmitter<{ scrollLeft: number; scrollTop: number }> =
-    new EventEmitter();
-  cellEditorListener?: CellEditorListener;
+  implements OnInit, OnDestroy {
+  override viewModel = input.required<ViewModel>();
+  cellSelectionListener = input<CellSelectionListener>();
+  onScroll$ = output<{ scrollLeft: number; scrollTop: number }>();
+
+  protected readonly cellEditorListener = signal<CellEditorListener | undefined>(undefined);
   private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
   ngOnInit(): void {
-    this.cellEditorListener = this.createCellEditorListener();
+    this.cellEditorListener.set(this.createCellEditorListener());
     this.subscriptions.add(this.openCellEditorContextMenu$());
   }
 
@@ -76,19 +75,19 @@ export class TableCenterComponent
   }
 
   getScrollContainer(): ScrollContainer {
-    return this.viewModel.tableScrollContainer;
+    return this.viewModel().tableScrollContainer;
   }
 
   getCellSelectionRanges(): CellSelectionRanges | undefined {
-    return this.viewModel.cellSelection?.body;
+    return this.viewModel().cellSelection?.body;
   }
 
   getSelectedCells(): CellRange[] {
-    return this.viewModel.cellSelection?.body.getRanges() ?? [];
+    return this.viewModel().cellSelection?.body.getRanges() ?? [];
   }
 
   getCellSelectionRectangles(): CssStyle[] {
-    return this.viewModel.mobileLayout.bodySelectionRectangles;
+    return this.viewModel().mobileLayout.bodySelectionRectangles;
   }
 
   getTableFontSize(): number {
@@ -105,7 +104,7 @@ export class TableCenterComponent
     colId: number
   ): ' cell-align-center' | ' cell-align-right' | '' {
     const cellType: DataType['name'] = //
-      this.viewModel.tableViewer.getCellType(rowId, colId);
+      this.viewModel().tableViewer.getCellType(rowId, colId);
     if (cellType === 'number' || cellType === 'date-time') {
       return ' cell-align-right';
     } else if (cellType === 'boolean') {
@@ -115,24 +114,14 @@ export class TableCenterComponent
   }
 
   private createCellEditorListener(): CellEditorListener | undefined {
-    return (
-      this.viewModel.cellEditor &&
-      createCellEditorListener(
-        this.viewModel.cellEditor,
-        (): CellRange[] => this.viewModel.cellSelection?.body.getRanges() ?? []
-      )
-    );
+    const cellEditor = this.viewModel().cellEditor;
+    return cellEditor && createCellEditorListener(cellEditor, (): CellRange[] => this.viewModel().cellSelection?.body.getRanges() ?? []);
   }
 
   private openCellEditorContextMenu$(): Subscription | undefined {
-    return (
-      this.viewModel.contextMenu &&
-      this.cellEditorListener
-        ?.onContextMenu$()
-        .subscribe((event: FitMouseEvent): void => {
-          this.viewModel.contextMenu &&
-            createWindowListener(this.viewModel.contextMenu).onShow(event);
-        })
-    );
+    const contextMenu = this.viewModel().contextMenu;
+    return contextMenu && this.cellEditorListener()?.onContextMenu$().subscribe((event: FitMouseEvent): void => {
+      this.viewModel().contextMenu && createWindowListener(contextMenu).onShow(event);
+    })
   }
 }

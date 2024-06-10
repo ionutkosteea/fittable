@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, input } from '@angular/core';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 
 import { CssStyle, getModelConfig } from 'fittable-core/model';
@@ -35,27 +35,29 @@ import {
   ],
 })
 export class TableTopComponent extends TableCommon {
-  @Input({ required: true }) override viewModel!: ViewModel;
-  @Input() cellSelectionListener?: CellSelectionListener;
+  override viewModel = input.required<ViewModel>();
+  cellSelectionListener = input<CellSelectionListener>();
+
   @ViewChild('scroller') scrollerRef?: ElementRef;
 
   getCellSelectionRanges(): CellSelectionRanges | undefined {
-    return this.viewModel.cellSelection?.colHeader;
+    return this.viewModel().cellSelection?.colHeader;
   }
 
   getCellSelectionRectangles(): CssStyle[] {
-    return this.viewModel.mobileLayout.colHeaderSelectionRectangles;
+    return this.viewModel().mobileLayout.colHeaderSelectionRectangles;
   }
 
   hasColFilters(): boolean {
     return (
       getModelConfig().colFilterExecutorFactory !== undefined &&
-      this.viewModel.colFilters !== undefined
+      this.viewModel().colFilters !== undefined
     );
   }
 
   getColFilters(): ColFilters {
-    if (this.viewModel.colFilters) return this.viewModel.colFilters;
+    const colFilters = this.viewModel().colFilters;
+    if (colFilters) return colFilters;
     else throw new Error('Column filters are not defined!');
   }
 }

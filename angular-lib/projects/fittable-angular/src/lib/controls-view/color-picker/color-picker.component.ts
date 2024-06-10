@@ -1,14 +1,14 @@
 import { Observable, Subscription } from 'rxjs';
 import {
   Component,
-  Input,
   ElementRef,
   ViewChild,
-  Output,
-  EventEmitter,
   OnDestroy,
   AfterViewInit,
   inject,
+  input,
+  output,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -34,10 +34,11 @@ import { PopupMenuComponent } from '../popup-menu/popup-menu.component';
   styleUrls: ['../common/scss/utils.scss', './color-picker.component.scss'],
 })
 export class ColorPickerComponent implements AfterViewInit, OnDestroy {
-  @Input({ required: true }) model!: PopupControl;
-  @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
+  model = input.required<PopupControl>();
+  isVisibleEvent = output<boolean>();
+
   @ViewChild('colorPicker') colorPickerRef!: ElementRef;
-  isColorPickerVisible = false;
+  protected readonly isColorPickerVisible = signal(false);
   private numberDefaultOfColors = 0;
   private readonly subscriptions: Subscription[] = [];
   private readonly domSanitizer = inject(DomSanitizer);
@@ -52,7 +53,7 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
   }
 
   getWindow(): Window {
-    return this.model.getWindow();
+    return this.model().getWindow();
   }
 
   getSelectedColor(): string | undefined {
@@ -65,7 +66,7 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
   }
 
   run(): void {
-    this.model.run();
+    this.model().run();
   }
 
   runControl(id: string): void {
@@ -88,10 +89,10 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
 
   getColorIds(): string[] {
     return this.getWindow().hasFocus()
-      ? this.model
-          .getWindow()
-          .getControlIds()
-          .slice(1, this.numberDefaultOfColors)
+      ? this.model()
+        .getWindow()
+        .getControlIds()
+        .slice(1, this.numberDefaultOfColors)
       : [];
   }
 
@@ -109,7 +110,7 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
   }
 
   onSelectCustomColor(): void {
-    this.isColorPickerVisible = true;
+    this.isColorPickerVisible.set(true);
   }
 
   addCustomColor(): void {
@@ -130,11 +131,11 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
         };
       })(),
     );
-    this.isColorPickerVisible = false;
+    this.isColorPickerVisible.set(false);
   }
 
   private onWindowSetVisible$(): Subscription {
-    return this.model
+    return this.model()
       .getWindow()
       .onAfterSetFocus$()
       .subscribe((focus: boolean): void => this.isVisibleEvent.emit(focus));

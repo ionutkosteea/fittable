@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { NgFor } from '@angular/common';
 
 import { Control, PopupControl, Window } from 'fittable-core/view-model';
@@ -14,10 +14,10 @@ import { PopupMenuComponent } from '../popup-menu/popup-menu.component';
   styleUrls: ['./popup-button.component.scss'],
 })
 export class PopupButtonComponent {
-  @Input({ required: true }) model!: PopupControl;
+  model = input.required<PopupControl>();
 
   getWindow(): Window {
-    return this.model.getWindow();
+    return this.model().getWindow();
   }
 
   getControlIds(): string[] {

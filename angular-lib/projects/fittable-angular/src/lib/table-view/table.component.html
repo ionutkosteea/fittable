@@ -1,21 +1,21 @@
 <div class="table">
   <fit-table-left-top-corner
-    [viewModel]="viewModel"
-    [cellSelectionListener]="cellSelectionListener"
+    [viewModel]="viewModel()"
+    [cellSelectionListener]="cellSelectionListener()"
   />
   <fit-table-top
     #tableTopComponent
-    [viewModel]="viewModel"
-    [cellSelectionListener]="cellSelectionListener"
+    [viewModel]="viewModel()"
+    [cellSelectionListener]="cellSelectionListener()"
   />
   <fit-table-left
     #tableLeftComponent
-    [viewModel]="viewModel"
-    [cellSelectionListener]="cellSelectionListener"
+    [viewModel]="viewModel()"
+    [cellSelectionListener]="cellSelectionListener()"
   />
   <fit-table-center
     (onScroll$)="onScroll($event)"
-    [viewModel]="viewModel"
-    [cellSelectionListener]="cellSelectionListener"
+    [viewModel]="viewModel()"
+    [cellSelectionListener]="cellSelectionListener()"
   />
 </div>

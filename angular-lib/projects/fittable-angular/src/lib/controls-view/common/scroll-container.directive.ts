@@ -3,7 +3,7 @@ import {
   OnInit,
   ElementRef,
   HostListener,
-  Input,
+  input,
 } from '@angular/core';
 
 import {
@@ -14,15 +14,16 @@ import {
 
 @Directive({ selector: '[fitScrollContainer]', standalone: true })
 export class ScrollContainerDirective implements OnInit {
-  @Input() scrollContainer!: ScrollContainer;
+  scrollContainer = input.required<ScrollContainer>();
+
   private scrollContainerListener!: ScrollContainerListener;
 
-  constructor(private readonly divRef: ElementRef) {}
+  constructor(private readonly divRef: ElementRef) { }
 
   ngOnInit(): void {
     this.scrollContainerListener = createScrollContainerListener(
       this.divRef.nativeElement,
-      this.scrollContainer
+      this.scrollContainer()
     );
   }
 

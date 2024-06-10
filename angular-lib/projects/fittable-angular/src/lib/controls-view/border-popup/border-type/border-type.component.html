@@ -1,4 +1,4 @@
-<fit-button [model]="model" />
+<fit-button [model]="model()" />
 <fit-popup-menu [model]="getWindow()">
   <div class="pad-s">
     @for (id of getControlIds(); track $index) {

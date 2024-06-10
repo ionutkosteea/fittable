@@ -1,5 +1,5 @@
 import { Subject, Subscription } from 'rxjs';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, input } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { TreeNodeSelectEvent } from 'primeng/tree';
 
@@ -17,7 +17,8 @@ export interface Composite {
   styleUrls: ['./navigation-tree.component.css'],
 })
 export class NavigationTreeComponent implements OnInit, OnDestroy {
-  @Input() treeSelection$: Subject<TreeNode<TopicTitle>> = new Subject();
+  treeSelection$ = input<Subject<TreeNode<TopicTitle>>>(new Subject());
+
   public tree: TreeNode<TopicTitle>[];
   public treeSelection: TreeNode<TopicTitle> | TreeNode<TopicTitle>[] | null;
   private firstSelection: TreeNode<TopicTitle>;
@@ -30,7 +31,7 @@ export class NavigationTreeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.subscription = this.treeSelection$.subscribe(
+    this.subscription = this.treeSelection$().subscribe(
       (selection: TreeNode<TopicTitle>): void => {
         this.treeSelection = selection;
       }
@@ -41,7 +42,7 @@ export class NavigationTreeComponent implements OnInit, OnDestroy {
     if (event.node.children) {
       event.node.expanded = !event.node.expanded;
     } else {
-      this.treeSelection$.next(event.node);
+      this.treeSelection$().next(event.node);
     }
   }
 

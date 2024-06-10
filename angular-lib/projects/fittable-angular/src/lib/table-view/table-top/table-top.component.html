@@ -17,7 +17,7 @@
           <thead
             (contextmenu)="showContextMenu($event)"
             fitCellSelection
-            [cellSelectionListener]="cellSelectionListener"
+            [cellSelectionListener]="cellSelectionListener()"
             [cellSelectionRanges]="getCellSelectionRanges()"
           >
             <tr

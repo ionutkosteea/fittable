@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { PopupControl, Window } from 'fittable-core/view-model';
 
@@ -10,7 +10,7 @@ import { ContextMenuComponent } from './context-menu.component';
   standalone: true,
   imports: [ButtonComponent, ContextMenuComponent],
   template: `
-    <fit-button [model]="model"></fit-button>
+    <fit-button [model]="model()"></fit-button>
     <fit-context-menu [model]="getWindow()" [top]="'2rem'"></fit-context-menu>
   `,
   styles: [
@@ -22,9 +22,9 @@ import { ContextMenuComponent } from './context-menu.component';
   ],
 })
 export class ContextMenuButtonComponent {
-  @Input({ required: true }) model!: PopupControl;
+  model = input.required<PopupControl>();
 
   getWindow(): Window {
-    return this.model.getWindow();
+    return this.model().getWindow();
   }
 }

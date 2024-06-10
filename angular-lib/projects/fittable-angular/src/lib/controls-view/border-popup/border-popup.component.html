@@ -1,7 +1,7 @@
-<fit-button [model]="model" />
+<fit-button [model]="model()" />
 <fit-popup-menu
   [model]="getWindow()"
-  [stopCloseMenu]="isColorPickerVisible || isBorderTypeVisible"
+  [stopCloseMenu]="isColorPickerVisible() || isBorderTypeVisible()"
 >
   <div class="pad-s">
     <div class="grid-2col">
@@ -9,12 +9,12 @@
         @if (getControlType(id) === "popup-button") {
           <fit-border-type
             [model]="getPopupControl(id)"
-            (isVisibleEvent)="showBorderType($event)"
+            (isVisibleEvent)="isBorderTypeVisible.set($event)"
           />
         } @else if (getControlType(id) === "color-picker") {
           <fit-color-picker
             [model]="getPopupControl(id)"
-            (isVisibleEvent)="showColorPicker($event)"
+            (isVisibleEvent)="isColorPickerVisible.set($event)"
           />
         }
       }

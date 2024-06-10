@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, input } from '@angular/core';
 import { NgStyle } from '@angular/common';
 
 import { CssStyle } from 'fittable-core/model';
@@ -22,12 +22,13 @@ import { createWindowStyle } from '../common/style-functions.model';
   styleUrl: 'popup-menu.component.scss',
 })
 export class PopupMenuComponent implements OnInit {
-  @Input({ required: true }) model!: Window;
-  @Input() stopCloseMenu = false;
+  model = input.required<Window>();
+  stopCloseMenu = input(false);
+
   private windowListener!: WindowListener;
 
   ngOnInit(): void {
-    this.windowListener = createWindowListener(this.model);
+    this.windowListener = createWindowListener(this.model());
   }
 
   @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
@@ -35,11 +36,11 @@ export class PopupMenuComponent implements OnInit {
   }
 
   @HostListener('window:mousedown') onGlobalMouseDown(): void {
-    if (this.stopCloseMenu) return;
+    if (this.stopCloseMenu()) return;
     this.windowListener.onGlobalMouseDown();
   }
 
   getWindowStyle(): CssStyle {
-    return createWindowStyle(this.model);
+    return createWindowStyle(this.model());
   }
 }

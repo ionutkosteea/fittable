@@ -1,12 +1,12 @@
 import { Subscription } from 'rxjs';
 import {
   Component,
-  Input,
   HostListener,
   ViewChild,
   ElementRef,
   OnDestroy,
   OnInit,
+  input,
 } from '@angular/core';
 import { NgStyle } from '@angular/common';
 
@@ -29,7 +29,7 @@ import { createToggleStyle } from '../common/style-functions.model';
       type="number"
       min="1"
       [ngStyle]="getStyle()"
-      [value]="this.model.getValue()"
+      [value]="this.model().getValue()"
       [disabled]="getDisabled()"
       [title]="getLabel()"
     />
@@ -37,13 +37,14 @@ import { createToggleStyle } from '../common/style-functions.model';
   styleUrl: './input.component.scss',
 })
 export class InputComponent implements OnInit, OnDestroy {
-  @Input() model!: InputControl;
+  model = input.required<InputControl>();
+
   @ViewChild('inputField') inputFieldRef!: ElementRef;
   private inputControlListener!: InputControlListener;
   private readonly subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
-    this.inputControlListener = createInputControlListener(this.model);
+    this.inputControlListener = createInputControlListener(this.model());
     this.subscriptions.push(this.onFocus$());
   }
 
@@ -64,19 +65,19 @@ export class InputComponent implements OnInit, OnDestroy {
   }
 
   getStyle(): CssStyle | null {
-    return createToggleStyle(this.model);
+    return createToggleStyle(this.model());
   }
 
   getDisabled(): string | null {
-    return this.model.isDisabled() ? 'disabled' : null;
+    return this.model().isDisabled() ? 'disabled' : null;
   }
 
   getLabel(): string | undefined {
-    return this.model.getLabel();
+    return this.model().getLabel();
   }
 
   private onFocus$(): Subscription {
-    return this.model.onSetFocus$().subscribe((focus: boolean): void => {
+    return this.model().onSetFocus$().subscribe((focus: boolean): void => {
       const htmlInput: HTMLElement = this.getHtmlInput();
       if (focus) htmlInput.focus();
       else htmlInput.blur();

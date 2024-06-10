@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { Statusbar } from 'fittable-core/view-model';
 
 @Component({
   selector: 'custom-statusbar',
-  template: '<div class="statusbar">{{model.getText()}}<div>',
+  template: '<div class="statusbar">{{model().getText()}}<div>',
   styles: [
     `
       .statusbar {
@@ -15,5 +15,5 @@ import { Statusbar } from 'fittable-core/view-model';
   ],
 })
 export class CustomStatusbarComponent {
-  @Input() model!: Statusbar;
+  model = input.required<Statusbar>();
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, input, signal } from '@angular/core';
 
 import { CssStyle } from 'fittable-core/model';
 import {
@@ -27,13 +27,14 @@ import { TableCenterComponent } from './table-center/table-center.component';
   styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnInit {
-  @Input({ required: true }) viewModel!: ViewModel;
+  viewModel = input.required<ViewModel>();
+
   @ViewChild('tableTopComponent') tableTopComponent?: TableTopComponent;
   @ViewChild('tableLeftComponent') tableLeftComponent?: TableLeftComponent;
-  cellSelectionListener?: CellSelectionListener;
+  protected readonly cellSelectionListener = signal<CellSelectionListener | undefined>(undefined);
 
   ngOnInit(): void {
-    this.cellSelectionListener = this.createCellSelectionListener();
+    this.cellSelectionListener.set(this.createCellSelectionListener());
   }
 
   onScroll(div: { scrollLeft: number; scrollTop: number }): void {
@@ -44,23 +45,23 @@ export class TableComponent implements OnInit {
   }
 
   getColHeaderHeight(): number {
-    return this.viewModel.tableViewer.getColHeaderHeight();
+    return this.viewModel().tableViewer.getColHeaderHeight();
   }
 
   getRowHeaderWidth(): number {
-    return this.viewModel.tableViewer.getRowHeaderWidth();
+    return this.viewModel().tableViewer.getRowHeaderWidth();
   }
 
   getTableScrollContainer(): ScrollContainer {
-    return this.viewModel.tableScrollContainer;
+    return this.viewModel().tableScrollContainer;
   }
 
   getTableBodyWidth(): number {
-    return this.viewModel.tableViewer.getBodyWidth();
+    return this.viewModel().tableViewer.getBodyWidth();
   }
 
   getTableBodyHeight(): number {
-    return this.viewModel.tableViewer.getBodyHeight();
+    return this.viewModel().tableViewer.getBodyHeight();
   }
 
   hasRowHeader(): boolean {
@@ -72,19 +73,19 @@ export class TableComponent implements OnInit {
   }
 
   getBodyOffset(): CssStyle {
-    return this.viewModel.mobileLayout.bodyOffset;
+    return this.viewModel().mobileLayout.bodyOffset;
   }
 
   getRowHeaderOffset(): CssStyle {
-    return this.viewModel.mobileLayout.rowHeaderOffset;
+    return this.viewModel().mobileLayout.rowHeaderOffset;
   }
 
   getColHeaderOffset(): CssStyle {
-    return this.viewModel.mobileLayout.colHeaderOffset;
+    return this.viewModel().mobileLayout.colHeaderOffset;
   }
 
   private createCellSelectionListener(): CellSelectionListener | undefined {
-    const wm: ViewModel = this.viewModel;
+    const wm: ViewModel = this.viewModel();
     return (
       wm.cellSelection &&
       createCellSelectionListener(wm.cellSelection, wm.cellSelectionScroller)

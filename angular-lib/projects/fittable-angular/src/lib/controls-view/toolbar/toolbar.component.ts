@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import {
   NgFor,
   NgSwitch,
@@ -49,10 +49,10 @@ import { ContextMenuButtonComponent } from '../context-menu/context-menu-button.
   styleUrl: './toolbar.component.scss',
 })
 export class ToolbarComponent {
-  @Input() model!: Container;
+  model = input.required<Container>();
 
   getControlIDs(): string[] {
-    return this.model.getControlIds();
+    return this.model().getControlIds();
   }
 
   getControlType(id: string): ControlType {
@@ -60,7 +60,7 @@ export class ToolbarComponent {
   }
 
   getControl(id: string): Control {
-    return this.model.getControl(id);
+    return this.model().getControl(id);
   }
 
   getInputControl(id: string): InputControl {

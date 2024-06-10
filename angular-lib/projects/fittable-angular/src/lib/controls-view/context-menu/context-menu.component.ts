@@ -1,12 +1,12 @@
 import {
   Component,
   ElementRef,
-  Input,
   AfterViewInit,
   ViewChild,
   OnInit,
   HostListener,
   inject,
+  input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -40,17 +40,18 @@ import { ControlType } from '../common/control-type.model';
   styleUrls: ['../common/scss/utils.scss', './context-menu.component.scss'],
 })
 export class ContextMenuComponent implements OnInit, AfterViewInit {
-  @Input({ required: true }) model!: Window;
-  @Input() position: 'absolute' | 'fixed' = 'absolute';
-  @Input() left: number | string = 0;
-  @Input() top: number | string = 0;
-  @Input() bottom?: number | string;
-  @Input() right?: number | string;
-  @Input() maxHeight?: number | string;
-  @Input() inputWidth?: number | string;
-  @Input() inputHeight?: number | string;
-  @Input() iconCol: 'left' | 'right' = 'left';
-  @Input() controlStyleFn?: (control: Control) => CssStyle | null;
+  model = input.required<Window>();
+  position = input<'absolute' | 'fixed'>('absolute');
+  left = input<number | string>(0);
+  top = input<number | string>(0);
+  bottom = input<number | undefined>();
+  right = input<number | undefined>();
+  maxHeight = input<string | number>();
+  inputWidth = input<string | number>();
+  inputHeight = input<string | number | undefined>();
+  iconCol = input<'left' | 'right'>('left');
+  controlStyleFn = input<(control: Control) => CssStyle | null>();
+
   @ViewChild('menuWindow') menuWindowRef!: ElementRef;
   private windowListener!: WindowListener;
   private readonly inputListeners: Map<string, InputControlListener> =
@@ -60,12 +61,12 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
   private isSubMenu = false;
 
   ngOnInit(): void {
-    this.windowListener = createWindowListener(this.model);
+    this.windowListener = createWindowListener(this.model());
   }
 
   ngAfterViewInit(): void {
     const htmlMenu: HTMLElement = this.menuWindowRef.nativeElement;
-    this.model //
+    this.model() //
       .setSize({
         getWidth: (): number => htmlMenu.clientWidth,
         getHeight: (): number => htmlMenu.clientHeight,
@@ -81,32 +82,32 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
   }
 
   onMouseEnter(): void {
-    if (this.model.isVisible()) return;
-    this.model.setVisible(true);
+    if (this.model().isVisible()) return;
+    this.model().setVisible(true);
     this.isSubMenu = true;
   }
 
   onMouseLeave(): void {
-    this.isSubMenu && this.model.setVisible(false);
+    this.isSubMenu && this.model().setVisible(false);
   }
 
   getWindowStyle(): CssStyle {
-    const style: CssStyle = createWindowStyle(this.model);
-    style['position'] = this.position;
-    style['left'] = this.left;
-    style['top'] = this.top;
-    if (this.right !== undefined) style['right'] = this.right;
-    if (this.bottom !== undefined) style['bottom'] = this.bottom;
-    if (this.maxHeight !== undefined) style['max-height'] = this.maxHeight;
+    const style: CssStyle = createWindowStyle(this.model());
+    style['position'] = this.position();
+    style['left'] = this.left();
+    style['top'] = this.top();
+    if (this.right !== undefined) style['right'] = this.right();
+    if (this.bottom !== undefined) style['bottom'] = this.bottom();
+    if (this.maxHeight !== undefined) style['max-height'] = this.maxHeight();
     return style;
   }
 
   getControlIds(): string[] {
-    return this.model.getControlIds();
+    return this.model().getControlIds();
   }
 
   getControl(id: string): Control {
-    return this.model.getControl(id);
+    return this.model().getControl(id);
   }
 
   getControlType(id: string): ControlType {
@@ -131,7 +132,8 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
     let style: CssStyle | null = createToggleStyle(control);
     if (this.controlStyleFn) {
       if (!style) style = {};
-      const controlStyle: CssStyle | null = this.controlStyleFn(control);
+      const controlStyleSignal = this.controlStyleFn();
+      const controlStyle: CssStyle | null = controlStyleSignal ? controlStyleSignal(control) : null;
       if (controlStyle) {
         style = createStyle4Dto(style)
           .append(createStyle4Dto(controlStyle))
@@ -185,7 +187,7 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
 
   onTextFieldKeyDown(id: string, event: KeyboardEvent): void {
     this.getInputListener(id)?.onKeyDown(event);
-    event.key === 'Enter' && this.model.setVisible(false);
+    event.key === 'Enter' && this.model().setVisible(false);
   }
 
   onTextFieldFocusOut(id: string): void {

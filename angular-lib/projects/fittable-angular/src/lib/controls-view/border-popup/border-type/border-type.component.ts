@@ -1,11 +1,10 @@
 import { Subscription } from 'rxjs';
 import {
   Component,
-  Input,
   OnDestroy,
-  EventEmitter,
-  Output,
   AfterViewInit,
+  input,
+  output,
 } from '@angular/core';
 import { NgFor, NgStyle } from '@angular/common';
 
@@ -28,8 +27,9 @@ import { PopupMenuComponent } from '../../popup-menu/popup-menu.component';
   styleUrls: ['../../common/scss/utils.scss', './border-type.component.scss'],
 })
 export class BorderTypeComponent implements AfterViewInit, OnDestroy {
-  @Input({ required: true }) model!: PopupControl;
-  @Output() isVisibleEvent: EventEmitter<boolean> = new EventEmitter();
+  model = input.required<PopupControl>();
+  isVisibleEvent = output<boolean>();
+
   private readonly subscriptions: Subscription[] = [];
 
   ngAfterViewInit(): void {
@@ -41,7 +41,7 @@ export class BorderTypeComponent implements AfterViewInit, OnDestroy {
   }
 
   getWindow(): Window {
-    return this.model.getWindow();
+    return this.model().getWindow();
   }
 
   getControlIds(): string[] {
@@ -53,7 +53,7 @@ export class BorderTypeComponent implements AfterViewInit, OnDestroy {
   }
 
   getBorderStyle(id: string): { borderBottom: string } {
-    const control: Control = this.model.getWindow().getControl(id);
+    const control: Control = this.model().getWindow().getControl(id);
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (!valueControl) throw new Error('Invalid value control for id ' + id);
     const parts: string[] = (valueControl.getValue() as string).split(' ');

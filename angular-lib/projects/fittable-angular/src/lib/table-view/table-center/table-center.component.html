@@ -24,9 +24,9 @@
         <tbody
           (contextmenu)="showContextMenu($event)"
           fitCellEditorOpen
-          [cellEditorListener]="cellEditorListener"
+          [cellEditorListener]="cellEditorListener()"
           fitCellSelection
-          [cellSelectionListener]="cellSelectionListener"
+          [cellSelectionListener]="cellSelectionListener()"
           [cellSelectionRanges]="getCellSelectionRanges()"
         >
           @for (rowId of getRowIds(); track $index) {
@@ -55,9 +55,9 @@
   @for (rect of getCellSelectionRectangles(); track $index) {
     <div class="cell-selection" [ngStyle]="rect"></div>
   }
-  @if (cellEditorListener) {
+  @if (cellEditorListener()) {
     <fit-cell-editor
-      [cellEditorListener]="cellEditorListener"
+      [cellEditorListener]="cellEditorListener()!"
       [getCellStyle]="getCellStyle"
     />
   }

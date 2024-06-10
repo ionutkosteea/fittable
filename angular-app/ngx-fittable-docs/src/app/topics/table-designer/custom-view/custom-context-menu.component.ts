@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, input } from '@angular/core';
 
 import { CssStyle } from 'fittable-core/model';
 import {
@@ -31,26 +31,27 @@ import { FitContextMenuControlId } from 'fittable-view-model';
   ],
 })
 export class CustomContextMenuComponent implements OnInit {
-  @Input() model!: Window;
+  model = input.required<Window>();
+
   private windowListener!: WindowListener;
 
   public ngOnInit() {
-    this.windowListener = createWindowListener(this.model);
+    this.windowListener = createWindowListener(this.model());
   }
   public getDynamicStyle(): CssStyle {
     // Handles menu visibility and position.
-    return createWindowStyle(this.model);
+    return createWindowStyle(this.model());
   }
   public getRemoveLabel(): string {
     return this.getRemoveControl().getLabel();
   }
   public removeCells(): void {
     this.getRemoveControl().run();
-    this.model.setVisible(false);
+    this.model().setVisible(false);
   }
   private getRemoveControl(): Control {
     const removeControlId: FitContextMenuControlId = 'remove';
-    return this.model.getControl(removeControlId);
+    return this.model().getControl(removeControlId);
   }
 
   /**  Wrap window event listeners. */

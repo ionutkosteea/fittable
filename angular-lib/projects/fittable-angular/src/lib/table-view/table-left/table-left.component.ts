@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, input } from '@angular/core';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 
 import { CssStyle } from 'fittable-core/model';
@@ -23,15 +23,16 @@ import { CellSelectionDirective } from '../common/cell-selection.directive';
   ],
 })
 export class TableLeftComponent extends TableCommon {
-  @Input({ required: true }) override viewModel!: ViewModel;
-  @Input() cellSelectionListener?: CellSelectionListener;
+  override viewModel = input.required<ViewModel>();
+  cellSelectionListener = input<CellSelectionListener>();
+
   @ViewChild('scroller') scrollerRef?: ElementRef;
 
   getCellSelectionRanges(): CellSelectionRanges | undefined {
-    return this.viewModel.cellSelection?.rowHeader;
+    return this.viewModel().cellSelection?.rowHeader;
   }
 
   getCellSelectionRectangles(): CssStyle[] {
-    return this.viewModel.mobileLayout.rowHeaderSelectionRectangles;
+    return this.viewModel().mobileLayout.rowHeaderSelectionRectangles;
   }
 }

@@ -20,7 +20,7 @@
           (mousedown)="runControl(id)"
         >
           @if (hasControlIcon(id)) {
-            @if (iconCol === "left") {
+            @if (iconCol() === "left") {
               <div>
                 <span
                   class="item-left-icon"

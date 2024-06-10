@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, input } from '@angular/core';
 import { NgIf } from '@angular/common';
 
 import {
@@ -31,49 +31,49 @@ import { ContextMenuComponent } from './controls-view/context-menu/context-menu.
   styleUrls: ['./fittable.component.scss'],
 })
 export class FittableComponent implements OnDestroy {
-  @Input({ required: true }) designer!: FittableDesigner;
+  designer = input.required<FittableDesigner>();
 
   ngOnDestroy(): void {
-    this.designer.viewModel.destroy();
+    this.designer().viewModel.destroy();
   }
 
   getViewModel(): ViewModel {
-    return this.designer.viewModel;
+    return this.designer().viewModel;
   }
 
   getTableScrollContainer(): ScrollContainer {
-    return this.designer.viewModel.tableScrollContainer;
+    return this.designer().viewModel.tableScrollContainer;
   }
 
   hasToolbar(): boolean {
-    return this.designer.viewModel.toolbar !== undefined;
+    return this.designer().viewModel.toolbar !== undefined;
   }
 
   getToolbar(): Container {
-    return this.designer.viewModel.toolbar as Container;
+    return this.designer().viewModel.toolbar as Container;
   }
 
   hasContextMenu(): boolean {
-    return this.designer.viewModel.contextMenu !== undefined;
+    return this.designer().viewModel.contextMenu !== undefined;
   }
 
   getContextMenu(): Window {
-    return this.designer.viewModel.contextMenu as Window;
+    return this.designer().viewModel.contextMenu as Window;
   }
 
   hasStatusbar(): boolean {
-    return this.designer.viewModel.statusbar !== undefined;
+    return this.designer().viewModel.statusbar !== undefined;
   }
 
   getStatusbar(): Statusbar {
-    return this.designer.viewModel.statusbar as Statusbar;
+    return this.designer().viewModel.statusbar as Statusbar;
   }
 
   hasSettingsBar(): boolean {
-    return this.designer.viewModel.settingsBar !== undefined;
+    return this.designer().viewModel.settingsBar !== undefined;
   }
 
   getSettingsBar(): Container {
-    return this.designer.viewModel.settingsBar as Container;
+    return this.designer().viewModel.settingsBar as Container;
   }
 }

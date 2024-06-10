@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { Container, Control } from 'fittable-core/view-model';
 import { FitToolbarControlId } from 'fittable-view-model';
@@ -17,7 +17,7 @@ import { FitToolbarControlId } from 'fittable-view-model';
   ],
 })
 export class CustomToolbarComponent {
-  @Input() model!: Container;
+  model = input.required<Container>();
 
   public getUndoLabel(): string {
     return this.getUndoControl().getLabel();
@@ -29,6 +29,6 @@ export class CustomToolbarComponent {
 
   private getUndoControl(): Control {
     const undoControlId: FitToolbarControlId = 'undo';
-    return this.model.getControl(undoControlId);
+    return this.model().getControl(undoControlId);
   }
 }

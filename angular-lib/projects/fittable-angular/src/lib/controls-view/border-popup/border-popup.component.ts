@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { Component, input, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import {
   PopupControl,
@@ -19,8 +19,7 @@ import { BorderTypeComponent } from './border-type/border-type.component';
   selector: 'fit-border-popup',
   standalone: true,
   imports: [
-    NgFor,
-    NgIf,
+    CommonModule,
     ButtonComponent,
     PopupMenuComponent,
     BorderTypeComponent,
@@ -30,20 +29,13 @@ import { BorderTypeComponent } from './border-type/border-type.component';
   styleUrls: ['../common/scss/utils.scss', './border-popup.component.scss'],
 })
 export class BorderPopupComponent {
-  @Input({ required: true }) model!: PopupControl;
-  isColorPickerVisible = false;
-  isBorderTypeVisible = false;
+  model = input.required<PopupControl>();
+
+  protected isColorPickerVisible = signal(false);
+  protected isBorderTypeVisible = signal(false);
 
   getWindow(): Window {
-    return this.model.getWindow();
-  }
-
-  showColorPicker(show: boolean): void {
-    this.isColorPickerVisible = show;
-  }
-
-  showBorderType(show: boolean): void {
-    this.isBorderTypeVisible = show;
+    return this.model().getWindow();
   }
 
   getLeftPanelIDs(): string[] {

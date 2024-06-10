@@ -15,7 +15,7 @@
           <tbody
             (contextmenu)="showContextMenu($event)"
             fitCellSelection
-            [cellSelectionListener]="cellSelectionListener"
+            [cellSelectionListener]="cellSelectionListener()"
             [cellSelectionRanges]="getCellSelectionRanges()"
           >
             @for (rowId of getRowIds(); track $index) {

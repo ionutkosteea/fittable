@@ -3,10 +3,11 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  Input,
   OnDestroy,
   OnInit,
   ViewChild,
+  input,
+  signal,
 } from '@angular/core';
 import { NgStyle } from '@angular/common';
 
@@ -28,12 +29,13 @@ import {
   styleUrl: 'cell-editor.component.scss',
 })
 export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() cellEditorListener!: CellEditorListener;
-  @Input() getCellStyle!: (rowId: number, colId: number) => CssStyle | null;
+  cellEditorListener = input.required<CellEditorListener>();
+  getCellStyle = input.required<(rowId: number, colId: number) => CssStyle | null>();
+
   @ViewChild('textArea') textAreaRef!: ElementRef;
-  cellEditorStyle: CssStyle = {};
-  textAreaStyle: CssStyle = {};
-  private subscriptions: Subscription[] = [];
+  protected readonly cellEditorStyle = signal<CssStyle>({});
+  protected readonly textAreaStyle = signal<CssStyle>({});
+  private readonly subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
     this.initCellEditor();
@@ -44,7 +46,7 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.updateTextAreaDimensions();
     this.updateTextAreaValue(
-      this.cellEditorListener.cellEditor.getCellControl().getValue()
+      this.cellEditorListener().cellEditor.getCellControl().getValue()
     );
   }
 
@@ -53,31 +55,31 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTextAreaMouseEnter(event: MouseEvent): void {
-    this.cellEditorListener.onMouseEnter(event);
+    this.cellEditorListener().onMouseEnter(event);
   }
 
   onTextAreaMouseDown(event: MouseEvent): void {
-    this.cellEditorListener.onMouseDown(event);
+    this.cellEditorListener().onMouseDown(event);
   }
 
   onGlobalMouseDown(): void {
-    this.cellEditorListener.onGlobalMouseDown();
+    this.cellEditorListener().onGlobalMouseDown();
   }
 
   onGlobalMouseUp(): void {
-    this.cellEditorListener.onGlobalMouseUp();
+    this.cellEditorListener().onGlobalMouseUp();
   }
 
   onTextAreaKeyDown(event: KeyboardEvent): void {
-    this.cellEditorListener.onKeyDown(event);
+    this.cellEditorListener().onKeyDown(event);
   }
 
   onTextAreaInput(event: Event): void {
-    this.cellEditorListener.onInput(event);
+    this.cellEditorListener().onInput(event);
   }
 
   onTextAreaContextMenu(event: MouseEvent): void {
-    this.cellEditorListener.onContextMenu(event);
+    this.cellEditorListener().onContextMenu(event);
   }
 
   private initCellEditor(): void {
@@ -87,7 +89,7 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private createCellEditorSubscriptions(): void {
-    const cellEditor: CellEditor = this.cellEditorListener.cellEditor;
+    const cellEditor: CellEditor = this.cellEditorListener().cellEditor;
     this.subscriptions.push(
       cellEditor.onAfterSetCell$().subscribe((): void => {
         this.updateCellEditorRectangle();
@@ -139,21 +141,34 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateCellEditorVisibility(visible: boolean): void {
-    this.cellEditorStyle['display'] = visible ? 'block' : 'none';
+    this.cellEditorStyle.update((style: CssStyle) => {
+      const newStyle = { ...style };
+      newStyle['display'] = visible ? 'block' : 'none';
+      return newStyle;
+    })
   }
 
   private updateCellEditorRectangle(): void {
-    const rect: Rectangle | undefined =
-      this.cellEditorListener.cellEditor.getCellRectangle();
-    if (!rect) return;
-    this.cellEditorStyle['left'] = rect.left + 'px';
-    this.cellEditorStyle['top'] = rect.top + 'px';
-    this.cellEditorStyle['width'] = rect.width + 'px';
-    this.cellEditorStyle['height'] = rect.height + 'px';
+    this.cellEditorStyle.update((style: CssStyle) => {
+      const newStyle = { ...style };
+      const rect: Rectangle | undefined =
+        this.cellEditorListener().cellEditor.getCellRectangle();
+      if (rect) {
+        newStyle['left'] = rect.left + 'px';
+        newStyle['top'] = rect.top + 'px';
+        newStyle['width'] = rect.width + 'px';
+        newStyle['height'] = rect.height + 'px';
+      }
+      return newStyle;
+    });
   }
 
   private updateCellEditorPointerEvents(events: boolean): void {
-    this.cellEditorStyle['pointer-events'] = events ? 'auto' : 'none';
+    this.cellEditorStyle.update((style: CssStyle) => {
+      const newStyle = { ...style };
+      newStyle['pointer-events'] = events ? 'auto' : 'none';
+      return newStyle;
+    })
   }
 
   private focusTextArea(enable: boolean): void {
@@ -163,29 +178,38 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateTextAreaCaretColor(caret: boolean): void {
-    this.textAreaStyle['caret-color'] = caret ? 'auto' : 'transparent';
+    this.textAreaStyle.update((style: CssStyle) => {
+      const newStyle = { ...style };
+      newStyle['caret-color'] = caret ? 'auto' : 'transparent';
+      return newStyle;
+    })
   }
 
   private updateTextAreaCellStyle(): void {
-    Object.keys(this.textAreaStyle).forEach((value: string): void => {
-      if (value === 'caret-color') return;
-      delete this.textAreaStyle[value];
-    });
-    const cellCoord: CellCoord = this.cellEditorListener.cellEditor.getCell();
-    const rowId: number = cellCoord.getRowId();
-    const colId: number = cellCoord.getColId();
-    const cellStyle: CssStyle | null = this.getCellStyle(rowId, colId);
-    if (cellStyle) {
-      for (const name of Object.keys(cellStyle)) {
-        this.textAreaStyle[name] = cellStyle[name];
+    this.textAreaStyle.update((style: CssStyle) => {
+      const newStyle = { ...style };
+      Object.keys(newStyle).forEach((value: string): void => {
+        if (value === 'caret-color') return;
+        delete newStyle[value];
+      });
+      const cellCoord: CellCoord = this.cellEditorListener().cellEditor.getCell();
+      const rowId: number = cellCoord.getRowId();
+      const colId: number = cellCoord.getColId();
+      const cellStyleFn = this.getCellStyle();
+      const cellStyle: CssStyle | null = cellStyleFn(rowId, colId);
+      if (cellStyle) {
+        for (const name of Object.keys(cellStyle)) {
+          newStyle[name] = cellStyle[name];
+        }
       }
-    }
-    if (!this.textAreaStyle['font-size.px']) {
-      this.textAreaStyle['font-size.px'] = this.getTextAreaFontSize();
-    }
-    if (!this.textAreaStyle['font-family']) {
-      this.textAreaStyle['font-family'] = this.getTextAreaFontFamily();
-    }
+      if (!newStyle['font-size.px']) {
+        newStyle['font-size.px'] = this.getTextAreaFontSize();
+      }
+      if (!newStyle['font-family']) {
+        newStyle['font-family'] = this.getTextAreaFontFamily();
+      }
+      return newStyle;
+    });
   }
 
   private getTextAreaFontSize(): number {
@@ -199,7 +223,7 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private updateTextAreaDimensions(): void {
     const rect: Rectangle | undefined =
-      this.cellEditorListener.cellEditor.getCellRectangle();
+      this.cellEditorListener().cellEditor.getCellRectangle();
     if (!rect) return;
     this.textAreaRef.nativeElement.style['min-height'] = rect.height + 'px';
     this.textAreaRef.nativeElement.style['min-width'] = rect.width + 'px';
@@ -231,6 +255,6 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getInputControl(): InputControl {
-    return this.cellEditorListener.cellEditor.getCellControl();
+    return this.cellEditorListener().cellEditor.getCellControl();
   }
 }

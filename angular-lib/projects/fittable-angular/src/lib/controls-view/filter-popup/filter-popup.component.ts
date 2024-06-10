@@ -2,9 +2,9 @@ import {
   AfterViewInit,
   Component,
   HostListener,
-  Input,
   OnInit,
   inject,
+  input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -46,8 +46,9 @@ import { ScrollContainerDirective } from '../common/scroll-container.directive';
   styleUrls: ['./filter-popup-window.component.scss'],
 })
 export class FilterPopupButtonComponent implements OnInit {
-  @Input() colFilters!: ColFilters;
-  @Input() colId!: number;
+  colFilters = input.required<ColFilters>();
+  colId = input.required<number>();
+
   private windowListener!: WindowListener;
   private readonly domSanitizer = inject(DomSanitizer);
 
@@ -57,11 +58,11 @@ export class FilterPopupButtonComponent implements OnInit {
   }
 
   @HostListener('click', ['$event']) onMouseDown(event: MouseEvent): void {
-    this.colFilters.loadCol(this.colId);
+    this.colFilters().loadCol(this.colId());
     this.windowListener.onShow(event);
     setTimeout((): void => {
       this.getPopupButton().getWindow().setFocus(true);
-      this.colFilters.getValueScrollContainer().renderModel();
+      this.colFilters().getValueScrollContainer().renderModel();
     });
   }
 
@@ -79,7 +80,7 @@ export class FilterPopupButtonComponent implements OnInit {
   }
 
   getPopupButton(): PopupControl {
-    return this.colFilters.getPopupButton(this.colId);
+    return this.colFilters().getPopupButton(this.colId());
   }
 }
 
@@ -99,7 +100,8 @@ type ControlId =
   styleUrls: ['./filter-popup-window.component.scss'],
 })
 export class FilterPopupWindowComponent implements AfterViewInit {
-  @Input() colFilters!: ColFilters;
+  colFilters = input.required<ColFilters>();
+
   private windowListener!: WindowListener;
   private readonly domSanitizer = inject(DomSanitizer);
 
@@ -139,7 +141,7 @@ export class FilterPopupWindowComponent implements AfterViewInit {
   }
 
   getScrollContainer(): ScrollContainer {
-    return this.colFilters.getValueScrollContainer();
+    return this.colFilters().getValueScrollContainer();
   }
 
   getScrollOffsetY(): number {
@@ -204,6 +206,6 @@ export class FilterPopupWindowComponent implements AfterViewInit {
   }
 
   private getPopupButton(): PopupControl {
-    return this.colFilters.getPopupButton(0);
+    return this.colFilters().getPopupButton(0);
   }
 }

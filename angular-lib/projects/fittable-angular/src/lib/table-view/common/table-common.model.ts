@@ -1,3 +1,4 @@
+import { InputSignal } from '@angular/core';
 import { RangeIterator } from 'fittable-core/common';
 import { CssStyle, Value } from 'fittable-core/model';
 import {
@@ -7,10 +8,10 @@ import {
 } from 'fittable-core/view-model';
 
 export abstract class TableCommon {
-  protected abstract viewModel: ViewModel;
+  protected abstract viewModel: InputSignal<ViewModel>;
 
   hasColHeader(): boolean {
-    return this.viewModel.tableViewer.hasColHeader();
+    return this.viewModel().tableViewer.hasColHeader();
   }
 
   getColLabel(colId: number): string | number | undefined {
@@ -26,99 +27,97 @@ export abstract class TableCommon {
   }
 
   hasRowHeader(): boolean {
-    return this.viewModel.tableViewer.hasRowHeader();
+    return this.viewModel().tableViewer.hasRowHeader();
   }
 
   getCellStyle = (rowId: number, colId: number): CssStyle | null => {
     return (
-      this.viewModel.tableViewer.getCellStyle(rowId, colId)?.toCss() ?? null
+      this.viewModel().tableViewer.getCellStyle(rowId, colId)?.toCss() ?? null
     );
   };
 
   getCellValue(rowId: number, colId: number): Value | undefined {
-    return this.viewModel.tableViewer.getCellValue(rowId, colId);
+    return this.viewModel().tableViewer.getCellValue(rowId, colId);
   }
 
   getFormatedCellValue(rowId: number, colId: number): Value | undefined {
-    return this.viewModel.tableViewer.getFormatedCellValue(rowId, colId);
+    return this.viewModel().tableViewer.getFormatedCellValue(rowId, colId);
   }
 
   isHiddenCell(rowId: number, colId: number): boolean {
-    return this.viewModel.tableViewer.isHiddenCell(rowId, colId);
+    return this.viewModel().tableViewer.isHiddenCell(rowId, colId);
   }
 
   getRowSpan(rowId: number, colId: number): number {
-    return this.viewModel.tableViewer.getRowSpan(rowId, colId);
+    return this.viewModel().tableViewer.getRowSpan(rowId, colId);
   }
 
   getColSpan(rowId: number, colId: number) {
-    return this.viewModel.tableViewer.getColSpan(rowId, colId);
+    return this.viewModel().tableViewer.getColSpan(rowId, colId);
   }
 
   getRowIds(): RangeIterator {
-    return this.viewModel.tableScrollContainer.getRenderableRows();
+    return this.viewModel().tableScrollContainer.getRenderableRows();
   }
 
   getColIds(): RangeIterator {
-    return this.viewModel.tableScrollContainer.getRenderableCols();
+    return this.viewModel().tableScrollContainer.getRenderableCols();
   }
 
   getColWidth(colId: number): number {
-    return this.viewModel.tableViewer.getColWidth(colId);
+    return this.viewModel().tableViewer.getColWidth(colId);
   }
 
   getRowHeight(rowId: number): number {
-    return this.viewModel.tableViewer.getRowHeight(rowId);
+    return this.viewModel().tableViewer.getRowHeight(rowId);
   }
 
   showContextMenu(event: MouseEvent): void {
-    return (
-      this.viewModel.contextMenu &&
-      createWindowListener(this.viewModel.contextMenu).onShow(event)
-    );
+    const contextMenu = this.viewModel().contextMenu;
+    return contextMenu && createWindowListener(contextMenu).onShow(event);
   }
 
   getScrollLeft(): number {
-    return this.viewModel.tableScrollContainer.getScroller().getLeft();
+    return this.viewModel().tableScrollContainer.getScroller().getLeft();
   }
 
   getScrollTop(): number {
-    return this.viewModel.tableScrollContainer.getScroller().getTop();
+    return this.viewModel().tableScrollContainer.getScroller().getTop();
   }
 
   getOffsetX(): number {
-    return this.viewModel.tableScrollContainer.getInnerOffsetX();
+    return this.viewModel().tableScrollContainer.getInnerOffsetX();
   }
 
   getOffsetY(): number {
-    return this.viewModel.tableScrollContainer.getInnerOffsetY();
+    return this.viewModel().tableScrollContainer.getInnerOffsetY();
   }
 
   getRowHeaderWidth(): number {
-    return this.viewModel.tableViewer.getRowHeaderWidth();
+    return this.viewModel().tableViewer.getRowHeaderWidth();
   }
 
   getColHeaderHeight(): number {
-    return this.viewModel.tableViewer.getColHeaderHeight();
+    return this.viewModel().tableViewer.getColHeaderHeight();
   }
 
   getBodyHeight(): number {
-    return this.viewModel.tableViewer.getBodyHeight();
+    return this.viewModel().tableViewer.getBodyHeight();
   }
 
   getBodyWidth(): number {
-    return this.viewModel.tableViewer.getBodyWidth();
+    return this.viewModel().tableViewer.getBodyWidth();
   }
 
   getBodyOffset(): CssStyle {
-    return this.viewModel.mobileLayout.bodyOffset;
+    return this.viewModel().mobileLayout.bodyOffset;
   }
 
   getRowHeaderOffset(): CssStyle {
-    return this.viewModel.mobileLayout.rowHeaderOffset;
+    return this.viewModel().mobileLayout.rowHeaderOffset;
   }
 
   getColHeaderOffset(): CssStyle {
-    return this.viewModel.mobileLayout.colHeaderOffset;
+    return this.viewModel().mobileLayout.colHeaderOffset;
   }
 }

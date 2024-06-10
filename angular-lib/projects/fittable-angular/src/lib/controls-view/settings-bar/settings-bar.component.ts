@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { NgFor } from '@angular/common';
 
 import {
@@ -25,14 +25,14 @@ import { SettingsButtonComponent } from './settings-button/settings-button.compo
   styleUrls: ['./settings-bar.component.scss'],
 })
 export class SettingsBarComponent {
-  @Input() model!: Container;
+  model = input.required<Container>();
 
   getControlIds(): string[] {
-    return this.model.getControlIds();
+    return this.model().getControlIds();
   }
 
   getPopupControl(id: string): PopupControl {
-    const control: Control = this.model.getControl(id);
+    const control: Control = this.model().getControl(id);
     const popup: PopupControl | undefined = asPopupControl(control);
     if (popup) return popup;
     else throw new Error(`Invalid popup control for id '${id}'`);
