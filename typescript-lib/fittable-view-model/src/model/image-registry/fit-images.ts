@@ -82,7 +82,7 @@ export const FIT_IMAGES: FitImages = {
   cut: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentcolor" viewBox="0 0 14 14">
           <path d="M5.348 3.948c.161-.35.252-.735.252-1.148a2.8 2.8 0 1 0-5.6 0 2.8 2.8 0 0 0 2.8 2.8c.413 0 .798-.091 1.148-.252L5.6 7 3.948 8.652A2.728 2.728 0 0 0 2.8 8.4a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 2.8-2.8c0-.413-.091-.798-.252-1.148L7 8.4l4.9 4.9H14v-.7L5.348 3.948ZM2.8 4.2a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Zm0 8.4a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8ZM7 7.35A.347.347 0 0 1 6.65 7c0-.196.154-.35.35-.35.196 0 .35.154.35.35 0 .196-.154.35-.35.35ZM11.9.7 7.7 4.9l1.4 1.4L14 1.4V.7h-2.1Z"/>
         </svg>`,
-  copy: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
+  copy: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 16 16">
             <path stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.625 5.375v-3.85A.525.525 0 0 0 10.1 1H1.525A.525.525 0 0 0 1 1.525V10.1a.525.525 0 0 0 .525.525h3.85m9.1 4.375H5.9a.525.525 0 0 1-.525-.525V5.9a.525.525 0 0 1 .525-.525h8.575A.525.525 0 0 1 15 5.9v8.575a.525.525 0 0 1-.525.525Z"/>
           </svg>`,
   width: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentcolor" viewBox="0 0 14 14">

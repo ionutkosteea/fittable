@@ -29,8 +29,8 @@ export class ButtonComponent {
   private readonly domSanitizer = inject(DomSanitizer);
 
   getIcon(): SafeHtml | undefined {
-    const htmlContent = this.model().getIcon() ?? '';
-    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
+    const htmlContent = this.model().getIcon();
+    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
   }
 
   getLabel(): string {

@@ -79,8 +79,8 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
 
   getColorNoneIcon(): SafeHtml | undefined {
     const htmlContent =
-      this.getWindow().getControl(this.getColorNoneId()).getIcon() ?? '';
-    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
+      this.getWindow().getControl(this.getColorNoneId()).getIcon();
+    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
   }
 
   getColorNoneLabel(): string | undefined {

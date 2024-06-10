@@ -119,8 +119,8 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
   }
 
   getControlIcon(id: string): SafeHtml | undefined {
-    const htmlContent = this.getControl(id).getIcon() ?? '';
-    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
+    const htmlContent = this.getControl(id).getIcon();
+    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
   }
 
   hasControlIcon(id: string): boolean {
@@ -153,8 +153,8 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
   }
 
   getArrowRightIcon(): SafeHtml | undefined {
-    const htmlContent = getImageRegistry().getUrl('arrowRight') ?? '';
-    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
+    const htmlContent = getImageRegistry().getUrl('arrowRight');
+    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
   }
 
   hasTextField(id: string): boolean {

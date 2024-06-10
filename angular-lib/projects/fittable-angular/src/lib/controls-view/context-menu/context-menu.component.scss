@@ -17,34 +17,25 @@
 }
 
 .item {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  gap: fit-map-get($size-map, small);
   align-items: center;
   padding-left: fit-map-get($padding-map, large);
   padding-right: fit-map-get($padding-map, large);
   cursor: pointer;
+  &-label {
+    flex: 1;
+  }
+  &-input {
+    @include field;
+    border: 1px solid var(--context-menu-border-color);
+    background-color: var(--context-menu-background-color);
+    width: 3rem;
+    height: fit-map-get($size-map, medium);
+    font-size: fit-map-get($font-size-map, medium);
+    padding-left: 2px;
+  }
   &:hover {
     background-color: var(--context-menu-background-hover-color);
   }
-  & > :nth-child(2):not(:placeholder-shown) {
-    margin-left: 12px;
-  }
-}
-
-.item-left-icon {
-  padding-right: fit-map-get($size-map, small);
-}
-
-.item-right-icon {
-  padding-left: fit-map-get($size-map, small);
-}
-
-.item-input {
-  @include field;
-  border: 1px solid var(--context-menu-border-color);
-  background-color: var(--context-menu-background-color);
-  width: 3rem;
-  height: fit-map-get($size-map, medium);
-  font-size: fit-map-get($font-size-map, medium);
-  padding-left: 2px;
 }

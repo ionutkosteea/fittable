@@ -21,27 +21,22 @@
         >
           @if (hasControlIcon(id)) {
             @if (iconCol() === "left") {
-              <div>
-                <span
-                  class="item-left-icon"
-                  [innerHTML]="getControlIcon(id)"
-                ></span>
-                <span>{{ getControlLabel(id) }}</span>
-              </div>
-            } @else {
-              <span>{{ getControlLabel(id) }}</span>
-              <span
-                class="item-right-icon"
-                [innerHTML]="getControlIcon(id)"
-              ></span>
+              <div [innerHTML]="getControlIcon(id)"></div>
             }
-          } @else {
-            {{ getControlLabel(id) }}
+            @if (getControlLabel(id)) {
+              <div class="item-label">{{ getControlLabel(id) }}</div>
+            }
+            @if (iconCol() === "right") {
+              <div [innerHTML]="getControlIcon(id)"></div>
+            }
+          } @else if (getControlLabel(id)) {
+            <div class="item-label">{{ getControlLabel(id) }}</div>
           }
           @if (hasTextField(id)) {
             <input
               class="item-input"
-              [ngStyle]="{ width: inputWidth, height: inputHeight }"
+              [ngStyle]="{ width: inputWidth(), height: inputHeight() }"
+              [type]="getTextFieldType(id)"
               [value]="getTextFieldValue(id)"
               [min]="getTextFieldMin(id)"
               [disabled]="isTextFieldDisabled(id) ? 'disabled' : null"
@@ -49,7 +44,6 @@
               (keydown)="onTextFieldKeyDown(id, $event)"
               (input)="onTextFieldInput(id, $event)"
               (focusout)="onTextFieldFocusOut(id)"
-              [type]="getTextFieldType(id)"
             />
           }
         </div>
@@ -62,17 +56,12 @@
           (mouseleave)="onMenuItemMouseLeave(id)"
         >
           @if (hasControlIcon(id)) {
-            <div>
-              <span
-                class="item-left-icon"
-                [innerHTML]="getControlIcon(id)"
-              ></span>
-              <span>{{ getControlLabel(id) }}</span>
-            </div>
+            <div [innerHTML]="getControlIcon(id)"></div>
+            <div class="item-label">{{ getControlLabel(id) }}</div>
           } @else {
-            {{ getControlLabel(id) }}
+            <div class="item-label">{{ getControlLabel(id) }}</div>
           }
-          <span [innerHTML]="getArrowRightIcon()"></span>
+          <div [innerHTML]="getArrowRightIcon()"></div>
         </div>
         <fit-context-menu
           [model]="getMenuItemWindow(id)"

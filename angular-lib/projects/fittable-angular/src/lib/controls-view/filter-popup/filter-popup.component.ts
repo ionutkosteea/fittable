@@ -71,8 +71,8 @@ export class FilterPopupButtonComponent implements OnInit {
   }
 
   getIcon(): SafeHtml | undefined {
-    const htmlContent = this.getPopupButton().getIcon() ?? '';
-    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
+    const htmlContent = this.getPopupButton().getIcon();
+    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
   }
 
   isOn(): boolean {
@@ -131,8 +131,8 @@ export class FilterPopupWindowComponent implements AfterViewInit {
   }
 
   getSearchInputIcon(): SafeHtml | undefined {
-    const htmlContent = this.getSearchInput().getIcon() ?? '';
-    return this.domSanitizer.bypassSecurityTrustHtml(htmlContent);
+    const htmlContent = this.getSearchInput().getIcon();
+    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
   }
 
   onSearchInput(event: Event): void {
