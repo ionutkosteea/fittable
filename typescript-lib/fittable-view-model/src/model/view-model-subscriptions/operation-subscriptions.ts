@@ -62,7 +62,7 @@ export class OperationSubscriptions {
   private filterSubscriptions?: ColFilterOperationSubscriptions;
   private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
-  constructor(private args: OperationSubscriptionArgs) {}
+  constructor(private args: OperationSubscriptionArgs) { }
 
   public init(): void {
     this.updateToolbar();
@@ -400,20 +400,18 @@ export class OperationSubscriptions {
   }
 
   private jumpToBottomCell(): void {
-    setTimeout((): void => {
-      if (this.selectedBodyCells.length !== 1) return;
-      const cellRange: CellRange = this.selectedBodyCells[0];
-      if (!cellRange.getFrom().equals(cellRange.getTo())) return;
-      const bottomCell: CellCoord | undefined = //
-        this.args.cellEditor?.getNeighborCells().getBottomCell();
-      if (!bottomCell) return;
-      this.args.cellEditor?.setCell(bottomCell);
-      this.args.cellSelection?.body
-        .removeRanges()
-        .createRange()
-        .addCell(bottomCell)
-        .end();
-    });
+    if (this.selectedBodyCells.length !== 1) return;
+    const cellRange: CellRange = this.selectedBodyCells[0];
+    if (!cellRange.getFrom().equals(cellRange.getTo())) return;
+    const bottomCell: CellCoord | undefined = //
+      this.args.cellEditor?.getNeighborCells().getBottomCell();
+    if (!bottomCell) return;
+    this.args.cellEditor?.setCell(bottomCell);
+    this.args.cellSelection?.body
+      .removeRanges()
+      .createRange()
+      .addCell(bottomCell)
+      .end();
   }
 
   private focus(tableChanges: TableChanges): void {
@@ -446,11 +444,12 @@ export class OperationSubscriptions {
   }
 
   private focusCellEditorControl(): void {
-    setTimeout((): void => {
+    setTimeout((): void => {// Toolbar combo selection -> arrow key
       const cellEditor: CellEditor | undefined = this.args.cellEditor;
-      cellEditor?.setCell(cellEditor.getCell());
-      cellEditor?.hasFocus() && cellEditor.setFocus(false);
-      cellEditor?.getCellControl().setFocus(true);
+      if (!cellEditor) return;
+      cellEditor.setCell(cellEditor.getCell());
+      cellEditor.hasFocus() && cellEditor.setFocus(false);
+      cellEditor.getCellControl().setFocus(true);
     });
   }
 

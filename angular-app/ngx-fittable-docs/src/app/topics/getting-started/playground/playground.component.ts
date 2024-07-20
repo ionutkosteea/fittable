@@ -5,6 +5,8 @@ import {
   OnInit,
   ViewChild,
   ViewContainerRef,
+  WritableSignal,
+  signal,
 } from '@angular/core';
 
 import { createTable4Dto, registerModelConfig } from 'fittable-core/model';
@@ -184,7 +186,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
 
   public readonly title: TopicTitle = 'Playground';
   public readonly navigation: NavigationItem[] = this.createNavigation();
-  public fit!: FittableDesigner;
+  public fit!: WritableSignal<FittableDesigner>;
 
   public ngOnInit(): void {
     // The register functions should be called, in most cases, from the Angular main module.
@@ -192,11 +194,11 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-    this.fit = createFittableDesigner(createTable4Dto(getFitTableDto()));
+    this.fit = signal(createFittableDesigner(createTable4Dto(getFitTableDto())));
   }
 
   public ngAfterViewInit(): void {
-    setTimeout((): void => this.updateFittableComponent());
+    this.updateFittableComponent();
   }
 
   private createNavigation(): NavigationItem[] {
@@ -342,7 +344,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   private run(configDef: FitViewModelConfigDef): void {
     const srcConfig: ViewModelConfig = getViewModelConfig();
     registerViewModelConfig(createFitViewModelConfig(configDef, srcConfig));
-    this.fit = createFittableDesigner(createTable4Dto(getFitTableDto()));
+    this.fit.set(createFittableDesigner(createTable4Dto(getFitTableDto())));
     this.updateFittableComponent();
   }
 
@@ -352,7 +354,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
       if (index != -1) this.vcr.remove(index);
     }
     this.ref = this.vcr.createComponent(FittableComponent);
-    this.ref.setInput('designer', this.fit);
+    this.ref.setInput('designer', this.fit());
   }
 }
 

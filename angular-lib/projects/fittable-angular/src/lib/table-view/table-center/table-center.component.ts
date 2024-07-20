@@ -7,7 +7,7 @@ import {
   output,
   signal
 } from '@angular/core';
-import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 import { CssStyle, CellRange, DataType } from 'fittable-core/model';
 import {
@@ -33,10 +33,7 @@ import { CellSelectionDirective } from '../common/cell-selection.directive';
   selector: 'fit-table-center',
   standalone: true,
   imports: [
-    NgStyle,
-    NgClass,
-    NgFor,
-    NgIf,
+    CommonModule,
     ScrollContainerDirective,
     CellSelectionDirective,
     CellEditorOpenDirective,

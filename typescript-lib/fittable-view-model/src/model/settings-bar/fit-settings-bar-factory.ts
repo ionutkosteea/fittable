@@ -19,17 +19,17 @@ export type FitSettingsBarControlId =
 export class FitSettingsBarBuilder {
   constructor(
     private readonly themeSwitcher: ThemeSwitcher,
-    private readonly reloadTableLocalsFn: (locale: string) => void
-  ) {}
+    private readonly reloadTableLocalesFn: (locale: string) => void
+  ) { }
 
   public build(): FitContainer<FitSettingsBarControlId> {
-    return new FitContainer<FitSettingsBarControlId>() //
+    return new FitContainer<FitSettingsBarControlId>()
       .addControl('settings-button', this.createButton());
   }
 
   private createButton(): FitPopupControl<string> {
     const window: FitWindow<string> = this.createWindow();
-    const button: FitPopupControl<string> = new FitPopupControl(window) //
+    const button: FitPopupControl<string> = new FitPopupControl(window)
       .setLabel((): string => getLanguageDictionary().getText('Settings'))
       .setIcon((): string | undefined => getImageRegistry().getUrl('settings'))
       .setRun((): void => {
@@ -56,7 +56,7 @@ export class FitSettingsBarBuilder {
         .setLabel((): string => getLanguageDictionary().getText(locale))
         .setValue(locale)
         .setRun((): void => {
-          this.reloadTableLocalsFn(locale);
+          this.reloadTableLocalesFn(locale);
           window.setVisible(false);
         });
       control.setIcon((): string | undefined => {

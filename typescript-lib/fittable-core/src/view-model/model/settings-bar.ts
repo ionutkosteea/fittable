@@ -6,18 +6,18 @@ import { ThemeSwitcher } from './theme-switcher.js';
 export interface SettingsBarFactory {
   createSettingsBar(
     themeSwitcher: ThemeSwitcher | undefined,
-    reloadTableLocalsFn: (locale: string) => void
+    reloadTableLocalesFn: (locale: string) => void
   ): Container;
 }
 
 export function createSettingsBar(
   themeSwitcher: ThemeSwitcher | undefined,
-  reloadTableLocalsFn: (locale: string) => void
+  reloadTableLocalesFn: (locale: string) => void
 ): Container {
   const factory: SettingsBarFactory | undefined =
     getViewModelConfig().settingsBarFactory;
   if (factory) {
-    return factory.createSettingsBar(themeSwitcher, reloadTableLocalsFn);
+    return factory.createSettingsBar(themeSwitcher, reloadTableLocalesFn);
   } else {
     throw new MissingFactoryError();
   }

@@ -80,7 +80,7 @@ export class FitViewModel implements ViewModel {
     public table: Table,
     public readonly operationExecutor?: OperationExecutor
   ) {
-    this.initLocals();
+    this.initLocales();
     operationExecutor?.setTable(table);
     this.tableViewer = this.createTableViewer();
     this.tableScrollContainer = this.createTableScrollContainer();
@@ -296,7 +296,7 @@ export class FitViewModel implements ViewModel {
 
   private readonly loadTableWithoutFilters = (table: Table): void => {
     this.table = table;
-    this.initLocals();
+    this.initLocales();
     this.operationExecutor?.setTable(table);
     this.tableViewer.loadTable(table);
     this.tableScrollContainer.getScroller().scroll(0, 0);
@@ -304,7 +304,7 @@ export class FitViewModel implements ViewModel {
     this.selectFirstCell();
   };
 
-  private initLocals(): void {
+  private initLocales(): void {
     const dictionary: LanguageDictionary<string, string> =
       getLanguageDictionary().register('en-US', enUS).register('de-DE', deDE);
     const dataTypeTable: TableCellDataType | undefined = //

@@ -42,7 +42,7 @@ export class FitCellEditorListener implements CellEditorListener {
   constructor(
     public readonly cellEditor: CellEditor,
     private readonly selectedCellsFn: () => CellRange[]
-  ) {}
+  ) { }
 
   public onShow(event: FitMouseEvent): void {
     event.preventDefault();
@@ -209,7 +209,7 @@ export class FitCellEditorListener implements CellEditorListener {
   }
 
   private setInputFocus(focus: boolean): void {
-    setTimeout((): void => {
+    setTimeout((): void => {// Select header cell -> select body cell -> arrow key
       this.cellEditor.getCellControl().setFocus(focus);
     });
   }
