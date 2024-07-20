@@ -7,6 +7,7 @@ import {
   createCellRange,
   DataType,
   createCellDateFormatter,
+  createDataType,
 } from 'fittable-core/model';
 import { OperationExecutor } from 'fittable-core/operations';
 import {
@@ -68,7 +69,7 @@ export class FitCellEditor implements CellEditor {
       if (value && typeof value === 'string') {
         const format = 'yyyy-MM-dd hh:mm:ss';
         createCellDateFormatter().formatValue(value, format);
-        return { name: 'date-time', format };
+        return createDataType('date-time', format);
       }
     } catch {
       return undefined;

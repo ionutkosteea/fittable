@@ -2,11 +2,13 @@ import {
   CellCoord,
   CellRange,
   DataType,
+  DataTypeName,
   Table,
   TableCellDataType,
   asTableCellDataType,
   createCellDateFormatter,
   createCellNumberFormatter,
+  createDataType,
   getLanguageDictionary,
 } from 'fittable-core/model';
 import {
@@ -25,11 +27,11 @@ import { getImageRegistry } from '../../image-registry/fit-image-registry.js';
 import { FitTextKey } from '../../language/language-def.js';
 import { ControlUpdater } from './common/control-updater.js';
 
-type DataTypeName = DataType['name'] | 'automatic';
-
 export function createDataTypePopup(args: ControlArgs): DataTypePopup {
   return new DataTypePopup(args);
 }
+
+type ControlId = DataTypeName | 'automatic';
 
 class DataTypePopup extends FitPopupControl<string> implements ControlUpdater {
   constructor(private readonly args: ControlArgs) {
@@ -52,9 +54,9 @@ class DataTypePopup extends FitPopupControl<string> implements ControlUpdater {
     const cellCoord: CellCoord = selectedCells[0].getFrom();
     const dataType: DataType | undefined = //
       dataTypeTable.getCellDataType(cellCoord.getRowId(), cellCoord.getColId());
-    const dataTypeName: DataTypeName = dataType?.name ?? 'automatic';
+    const controlId: ControlId = dataType?.getName() ?? 'automatic';
     for (const id of this.getWindow().getControlIds()) {
-      if (id === dataTypeName) {
+      if (id === controlId) {
         selectorWindow.setControlId(id);
         break;
       }
@@ -73,7 +75,7 @@ class DataTypePopup extends FitPopupControl<string> implements ControlUpdater {
   }
 
   private addAutomaticMenuItem(): void {
-    const id: DataTypeName = 'automatic';
+    const id: ControlId = 'automatic';
     const control: FitControl = new FitControl()
       .setType('menu-item')
       .setLabel((): string => getLanguageDictionary().getText('Automatic'))
@@ -92,7 +94,7 @@ class DataTypePopup extends FitPopupControl<string> implements ControlUpdater {
   }
 
   private addTextMenuItem(): void {
-    const id: DataTypeName = 'string';
+    const id: ControlId = 'string';
     const control: FitControl = new FitControl()
       .setType('menu-item')
       .setLabel((): string => getLanguageDictionary().getText('Text'))
@@ -101,7 +103,7 @@ class DataTypePopup extends FitPopupControl<string> implements ControlUpdater {
         const args: FitUIOperationArgs = {
           id: 'cell-data-type',
           selectedCells: this.args.getSelectedCells(),
-          dataType: { name: 'string' },
+          dataType: createDataType('string')
         };
         this.args.operationExecutor.run(args);
         this.getWindow().setControlId(id);
@@ -111,17 +113,15 @@ class DataTypePopup extends FitPopupControl<string> implements ControlUpdater {
   }
 
   private addNumberMenuItem(): void {
-    const id: DataTypeName = 'number';
+    const id: ControlId = 'number';
     const window: FitSelectorWindow<string> = this.getWindow();
-    window //
-      .addControl(id, new NumberDataTypePopup(window, id, this.args));
+    window.addControl(id, new NumberDataTypePopup(window, id, this.args));
   }
 
   private addDateMenuItem(): void {
-    const id: DataTypeName = 'date-time';
+    const id: ControlId = 'date-time';
     const window: FitSelectorWindow<string> = this.getWindow();
-    window //
-      .addControl(id, new DateDataTypePopup(window, id, this.args));
+    window.addControl(id, new DateDataTypePopup(window, id, this.args));
   }
 
   private initPopupButton(): void {
@@ -178,7 +178,7 @@ abstract class AbstractDataTypePopup extends FitPopupControl<string> {
   protected addMenuItem(
     label: string,
     value: string,
-    dataTypeName: DataType['name']
+    dataTypeName: DataTypeName
   ): void {
     const control: FitValueControl = new FitValueControl()
       .setType('menu-item')
@@ -189,12 +189,11 @@ abstract class AbstractDataTypePopup extends FitPopupControl<string> {
       )
       .setValue(value);
     control.setRun((): void => {
-      const controlValue: string = //
-        getLanguageDictionary().getText('' + control.getValue());
+      const format: string = getLanguageDictionary().getText('' + control.getValue());
       const args: FitUIOperationArgs = {
         id: 'cell-data-type',
         selectedCells: this.args.getSelectedCells(),
-        dataType: { name: dataTypeName, format: controlValue },
+        dataType: createDataType(dataTypeName, format)
       };
       this.args.operationExecutor.run(args);
       this.mainWindow.setControlId(this.controlId);
@@ -208,7 +207,7 @@ abstract class AbstractDataTypePopup extends FitPopupControl<string> {
   protected addCustomMenuItem(
     label: string,
     value: string,
-    dataTypeName: DataType['name']
+    dataTypeName: DataTypeName
   ): void {
     const control: FitInputControl = new FitInputControl()
       .setType('menu-item')
@@ -221,10 +220,11 @@ abstract class AbstractDataTypePopup extends FitPopupControl<string> {
       if (!control.isValid()) {
         throw new Error(`Invalid format '${control.getValue()}'.`);
       }
+      const format: string = getLanguageDictionary().getText('' + control.getValue());
       const args: FitUIOperationArgs = {
         id: 'cell-data-type',
         selectedCells: this.args.getSelectedCells(),
-        dataType: { name: dataTypeName, format: '' + control.getValue() },
+        dataType: createDataType(dataTypeName, format)
       };
       this.args.operationExecutor.run(args);
       this.mainWindow.setControlId(this.controlId);

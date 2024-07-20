@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CssStyle, CellRange, DataType } from 'fittable-core/model';
+import { CssStyle, CellRange, DataTypeName } from 'fittable-core/model';
 import {
   ViewModel,
   CellEditorListener,
@@ -100,8 +100,7 @@ export class TableCenterComponent
     rowId: number,
     colId: number
   ): ' cell-align-center' | ' cell-align-right' | '' {
-    const cellType: DataType['name'] = //
-      this.viewModel().tableViewer.getCellType(rowId, colId);
+    const cellType: DataTypeName = this.viewModel().tableViewer.getCellType(rowId, colId);
     if (cellType === 'number' || cellType === 'date-time') {
       return ' cell-align-right';
     } else if (cellType === 'boolean') {

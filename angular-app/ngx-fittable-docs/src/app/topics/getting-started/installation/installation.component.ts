@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 // TypeScript modules
 import {
   CellRange,
+  createDataType,
   createStyle,
   createTable,
   registerModelConfig,
@@ -50,11 +51,11 @@ export class InstallationComponent implements OnInit {
       .setColSpan(0, 0, 3)
       .setLocale('de-DE')
       .setCellValue(2, 1, 1000)
-      .setCellDataType(2, 1, { name: 'string' })
+      .setCellDataType(2, 1, createDataType('string'))
       .setCellValue(3, 1, 1000.123)
-      .setCellDataType(3, 1, { name: 'number', format: '#.#,00 €' })
+      .setCellDataType(3, 1, createDataType('number', '#.#,00 €'))
       .setCellValue(4, 1, '2023-12-31')
-      .setCellDataType(4, 1, { name: 'date-time', format: 'dd.MM.yyyy' })
+      .setCellDataType(4, 1, createDataType('date-time', 'dd.MM.yyyy'))
       .setCellValue(5, 1, true)
       .setCellValue(6, 1, false)
       .setCellValue(7, 1, 'Some text here...');

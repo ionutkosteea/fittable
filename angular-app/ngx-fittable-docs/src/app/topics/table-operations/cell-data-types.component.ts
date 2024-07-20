@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   createCellCoord,
   createCellRange,
+  createDataType,
   createTable,
   registerModelConfig,
 } from 'fittable-core/model';
@@ -64,7 +65,7 @@ export class CellDataTypesComponent extends ConsoleTopic implements OnInit {
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(1, 2)),
       ],
-      dataType: { name: 'number', format: '$ #,#.00' },
+      dataType: createDataType('number', '$ #,#.00')
     };
     this.fit.operationExecutor?.run(args);
   }

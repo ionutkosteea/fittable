@@ -9,6 +9,7 @@ import { StyleFactory } from './table/style.js';
 import { TableFactory } from './table/table.js';
 import { ColFilterExecutorFactory } from './filter/col-filter-executor.js';
 import { CellFormatterFactory } from './cell-formatter/cell-formatter.js';
+import { DataTypeFactory } from './table/data-type.js';
 
 export type ModelConfig = {
   languageDictionaryFactory: LanguageDictionaryFactory;
@@ -21,6 +22,7 @@ export type ModelConfig = {
   cellNumberFormatterFactory?: CellFormatterFactory;
   cellDateFormatterFactory?: CellFormatterFactory;
   cellBooleanFormatterFactory?: CellFormatterFactory;
+  dataTypeFactory?: DataTypeFactory;
 };
 
 let fitModelConfig: ModelConfig | undefined;

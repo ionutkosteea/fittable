@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
+  createDataType,
   createTable,
   getLanguageDictionary,
   registerModelConfig,
@@ -66,7 +67,7 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
     this.table = createTable<FitTable>()
       .setLocale(locale)
       .setCellValue(1, 1, 1000.123)
-      .setCellDataType(1, 1, { name: 'number', format: '# #,00' })
+      .setCellDataType(1, 1, createDataType('number', '# #,00'))
       .setCellValue(1, 2, true)
       .setCellValue(1, 3, false);
     this.fit = createFittableDesigner(this.table);

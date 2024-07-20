@@ -1,4 +1,4 @@
-import { Value, DataType } from 'fittable-core/model';
+import { Value, DataTypeName } from 'fittable-core/model';
 
 export type FitMapDto<Val> = { [key: string]: Val };
 
@@ -6,9 +6,11 @@ export type FitRowDto = { height?: number };
 
 export type FitColDto = { width?: number };
 
+export type FitDataTypeDto = { name: DataTypeName, format?: string };
+
 export type FitCellDto = {
   value?: Value;
-  dataType?: DataType;
+  dataType?: FitDataTypeDto;
   styleName?: string;
 };
 

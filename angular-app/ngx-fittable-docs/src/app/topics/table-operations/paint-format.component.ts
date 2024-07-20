@@ -4,6 +4,7 @@ import {
   DataType,
   createCellCoord,
   createCellRange,
+  createDataType4Dto,
   createStyle4Dto,
   createTable,
   registerModelConfig,
@@ -57,7 +58,7 @@ export class PaintFormatComponent extends ConsoleTopic implements OnInit {
       .addStyle('s0', createStyle4Dto({ 'background-color': 'lightblue' }))
       .setCellStyleName(0, 0, 's0')
       .setCellValue(0, 0, 1.23)
-      .setCellDataType(0, 0, { name: 'number', format: '0#.##0' })
+      .setCellDataType(0, 0, createDataType4Dto({ name: 'number', format: '0#.##0' }))
       .setCellValue(1, 1, 7);
     this.fit = createFittableDesigner(table);
 

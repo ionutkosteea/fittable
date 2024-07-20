@@ -14,6 +14,7 @@ import {
   asTableCellDataType,
   TableCellDataType,
   DataType,
+  DataTypeName,
 } from 'fittable-core/model';
 import {
   getViewModelConfig,
@@ -258,7 +259,7 @@ export class FitTableViewer implements TableViewer {
     return this.cellDataTypeTable?.getCellDataType(rowId, colId);
   }
 
-  public getCellType(rowId: number, colId: number): DataType['name'] {
+  public getCellType(rowId: number, colId: number): DataTypeName {
     return this.cellDataTypeTable?.getCellType(rowId, colId) ?? 'string';
   }
 

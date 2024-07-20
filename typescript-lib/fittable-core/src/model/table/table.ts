@@ -1,6 +1,7 @@
 import { implementsTKeys } from '../../common/core-functions.js';
 import { MissingFactoryMethodError } from '../../common/factory-error.js';
 import { getModelConfig } from '../model-config.js';
+import { DataType, DataTypeName } from './data-type.js';
 import { Style } from './style.js';
 
 export type Value = string | number | boolean;
@@ -83,31 +84,26 @@ export interface TableColFilter {
   ): TableBasics & TableColFilter;
 }
 
-export type DataType = {
-  name: 'string' | 'number' | 'date-time' | 'boolean';
-  format?: string;
-};
-
 export interface TableCellDataType {
   getLocale(): string;
   setLocale(locale: string): this;
   getCellDataType(rowId: number, colId: number): DataType | undefined;
   setCellDataType(rowId: number, colId: number, dataType?: DataType): this;
-  getCellType(rowId: number, colId: number): DataType['name'];
+  getCellType(rowId: number, colId: number): DataTypeName;
   getFormatedCellValue(rowId: number, colId: number): string | undefined;
 }
 
 export type Table =
   | TableBasics
   | (TableBasics &
-      (
-        | TableStyles
-        | TableRows
-        | TableCols
-        | TableMergedRegions
-        | TableColFilter
-        | TableCellDataType
-      ));
+    (
+      | TableStyles
+      | TableRows
+      | TableCols
+      | TableMergedRegions
+      | TableColFilter
+      | TableCellDataType
+    ));
 
 export interface TableFactory {
   createTable(): Table;

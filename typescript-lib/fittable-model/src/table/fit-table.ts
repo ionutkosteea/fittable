@@ -18,11 +18,15 @@ import {
   createCellBooleanFormatter,
   getLanguageDictionary,
   LanguageDictionary,
+  createDataType4Dto,
+  DataTypeName,
+  createDataType,
 } from 'fittable-core/model';
 
 import {
   FitCellDto,
   FitColDto,
+  FitDataTypeDto,
   FitMapDto,
   FitMatrixDto,
   FitMergedCellDto,
@@ -32,14 +36,13 @@ import {
 
 export class FitTable
   implements
-    TableBasics,
-    TableRows,
-    TableCols,
-    TableStyles,
-    TableMergedRegions,
-    TableColFilter,
-    TableCellDataType
-{
+  TableBasics,
+  TableRows,
+  TableCols,
+  TableStyles,
+  TableMergedRegions,
+  TableColFilter,
+  TableCellDataType {
   private formatedCellValues: TwoDimensionalMap<string> =
     new TwoDimensionalMap();
 
@@ -48,7 +51,7 @@ export class FitTable
       numberOfRows: 5,
       numberOfCols: 5,
     }
-  ) {}
+  ) { }
 
   public getDto(): FitTableDto {
     return this.dto;
@@ -405,11 +408,11 @@ export class FitTable
   ): void {
     this.forEachCell((rowId: number, colId: number): void => {
       const dataType: DataType | undefined = this.getCellDataType(rowId, colId);
-      if (!dataType || dataType.name !== 'number' || !dataType.format) return;
-      const [part1, part2] = dataType.format //
-        .split(prevDictionary.getText('thousandSeparator'));
+      if (!dataType || dataType.getName() !== 'number' || !dataType.getFormat()) return;
+      const [part1, part2] = dataType.getFormat()!.split(prevDictionary.getText('thousandSeparator'));
+      let format: string;
       if (part2) {
-        dataType.format =
+        format =
           part1 +
           dictionary.getText('thousandSeparator') +
           part2.replace(
@@ -417,17 +420,19 @@ export class FitTable
             dictionary.getText('decimalPoint')
           );
       } else {
-        dataType.format = part1.replace(
+        format = part1.replace(
           prevDictionary.getText('decimalPoint'),
           dictionary.getText('decimalPoint')
         );
       }
+      this.setCellDataType(rowId, colId, createDataType(dataType.getName(), format));
     });
     this.formatedCellValues.clearAll();
   }
 
   public getCellDataType(rowId: number, colId: number): DataType | undefined {
-    return this.getCellDto(rowId, colId)?.dataType;
+    const dataType: FitDataTypeDto | undefined = this.getCellDto(rowId, colId)?.dataType;
+    return dataType ? createDataType4Dto(dataType) : undefined;
   }
 
   public setCellDataType(
@@ -437,7 +442,7 @@ export class FitTable
   ): this {
     if (dataType) {
       this.createMatrixCell('cells', rowId, colId);
-      this.getCells()[rowId][colId]['dataType'] = dataType;
+      this.getCells()[rowId][colId]['dataType'] = dataType.getDto() as FitDataTypeDto;
     } else if (this.hasMatrixCell('cells', rowId, colId)) {
       delete this.getCells()[rowId][colId]['dataType'];
       !this.hasCell(rowId, colId) && delete this.getCells()[rowId][colId];
@@ -469,12 +474,12 @@ export class FitTable
     const value: Value | undefined = this.getCellValue(rowId, colId);
     if (value === undefined) return undefined;
     try {
-      const cellType: DataType['name'] = this.getCellType(rowId, colId);
+      const cellType: DataTypeName = this.getCellType(rowId, colId);
       const dataType: DataType | undefined = this.getCellDataType(rowId, colId);
       if (cellType === 'number') {
-        return createCellNumberFormatter().formatValue(value, dataType?.format);
+        return createCellNumberFormatter().formatValue(value, dataType?.getFormat());
       } else if (cellType === 'date-time') {
-        return createCellDateFormatter().formatValue(value, dataType?.format);
+        return createCellDateFormatter().formatValue(value, dataType?.getFormat());
       } else if (cellType === 'boolean') {
         return createCellBooleanFormatter().formatValue(value);
       }
@@ -485,10 +490,10 @@ export class FitTable
     return undefined;
   }
 
-  public getCellType(rowId: number, colId: number): DataType['name'] {
+  public getCellType(rowId: number, colId: number): DataTypeName {
     return (
-      this.getCellDataType(rowId, colId)?.name ??
-      ((typeof this.getCellValue(rowId, colId) ?? 'string') as DataType['name'])
+      this.getCellDataType(rowId, colId)?.getName() ??
+      ((typeof this.getCellValue(rowId, colId) ?? 'string') as DataTypeName)
     );
   }
 
