@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.2] - 2024-07-21
+
+### Changed
+
+- Optimize Fittable Operations Code
+- Update dependencies
+
+### Fixed
+
+- Undo Cell Data Type
+
 ## [v2.0.1] - 2024-01-05
 
 ### Changed

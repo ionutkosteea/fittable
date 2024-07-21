@@ -1,6 +1,6 @@
 {
   "name": "fittable-model",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Fittable model",
   "homepage": "https://fittable-499b2.web.app",
   "type": "module",
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "rxjs": "^7.8.1",
-    "fittable-core": "^4.0.1"
+    "fittable-core": "^5.0.0"
   },
   "files": [
     "dist",

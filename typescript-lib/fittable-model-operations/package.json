@@ -1,6 +1,6 @@
 {
   "name": "fittable-model-operations",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Fittable model operations",
   "homepage": "https://fittable-499b2.web.app",
   "type": "module",
@@ -43,11 +43,11 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.4.5",
-    "fittable-model": "^2.0.1"
+    "fittable-model": "^2.0.2"
   },
   "dependencies": {
     "rxjs": "^7.8.1",
-    "fittable-core": "^4.0.1"
+    "fittable-core": "^5.0.0"
   },
   "files": [
     "dist",

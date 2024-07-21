@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v6.0.0] - 2024-07-21
+
+### Changed
+
+- Optimize Fittable Operations Code
+- Upgrade Source Code to Angular 18
+- Manage Icons via Specific SVG Component
+- Rename createFittableDesigner to createTableDesigner
+- Update dependencies
+
+### Fixed
+
+- Undo Cell Data Type
+
 ## [v5.0.1] - 2024-01-06
 
 ### Changed

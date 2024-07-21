@@ -23,7 +23,7 @@
     "@angular/platform-browser": "^18.0.2",
     "@angular/platform-browser-dynamic": "^18.0.2",
     "@angular/router": "^18.0.2",
-    "fittable-core": "^4.0.1",
+    "fittable-core": "^5.0.0",
     "rxjs": "^7.8.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
@@ -47,8 +47,8 @@
     "typescript": "~5.4.5"
   },
   "peerDependencies": {
-    "fittable-model": "^2.0.1",
-    "fittable-model-operations": "^2.0.1",
-    "fittable-view-model": "^3.0.1"
+    "fittable-model": "^2.0.2",
+    "fittable-model-operations": "^2.0.2",
+    "fittable-view-model": "^3.0.2"
   }
 }

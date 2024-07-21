@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v5.0.0] - 2024-07-21
+
+### Changed
+
+- Optimize Fittable Operations Code
+- Rename createFittableDesigner to createTableDesigner
+- Update dependencies
+
 ## [v4.0.1] - 2024-01-05
 
 ### Changed
