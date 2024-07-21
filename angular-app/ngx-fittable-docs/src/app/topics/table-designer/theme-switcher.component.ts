@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { createTable, registerModelConfig, Table } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
   Theme,
   ThemeSwitcher,
@@ -41,10 +41,9 @@ export class ThemeSwitcherComponent implements ConsoleTopic, OnInit {
     { image: 'theme-switcher-ts-04.jpg' },
   ];
   public readonly buttons: Button[] = [];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
@@ -53,7 +52,7 @@ export class ThemeSwitcherComponent implements ConsoleTopic, OnInit {
     table.forEachCell((rowId: number, colId: number): void => {
       table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
-    this.fit = createFittableDesigner(table);
+    this.fit = createTableDesigner(table);
 
     this.createCustomTheme();
     this.createButtons();

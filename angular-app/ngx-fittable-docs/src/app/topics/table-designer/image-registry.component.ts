@@ -3,8 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   getImageRegistry,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
@@ -32,11 +32,10 @@ export class ImageRegistryComponent implements ConsoleTopic, OnInit, OnDestroy {
     { image: 'image-registry-ts-03.jpg' },
   ];
   public readonly buttons: Button[] = [];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
   private defaultUndoIcon?: string;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -48,7 +47,7 @@ export class ImageRegistryComponent implements ConsoleTopic, OnInit, OnDestroy {
     this.defaultUndoIcon = getImageRegistry<FitImageId>().getUrl('undo');
     getImageRegistry<FitImageId>().set('undo', this.getNewUndoIcon());
 
-    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
+    this.fit = createTableDesigner(createTable());
   }
 
   private getNewUndoIcon(): string {

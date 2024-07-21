@@ -6,7 +6,7 @@ import {
   Window,
   Statusbar,
   ViewModel,
-  FittableDesigner,
+  TableDesigner,
   ScrollContainer,
 } from 'fittable-core/view-model';
 
@@ -31,7 +31,7 @@ import { ContextMenuComponent } from './controls-view/context-menu/context-menu.
   styleUrls: ['./fittable.component.scss'],
 })
 export class FittableComponent implements OnDestroy {
-  designer = input.required<FittableDesigner>();
+  designer = input.required<TableDesigner>();
 
   ngOnDestroy(): void {
     this.designer().viewModel.destroy();

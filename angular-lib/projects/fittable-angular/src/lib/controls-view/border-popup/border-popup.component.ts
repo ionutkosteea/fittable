@@ -55,8 +55,7 @@ export class BorderPopupComponent {
   }
 
   getPopupControl(id: string): PopupControl {
-    const popupControl: PopupControl | undefined = //
-      asPopupControl(this.getControl(id));
+    const popupControl: PopupControl | undefined = asPopupControl(this.getControl(id));
     if (popupControl) return popupControl;
     else throw Error(`Invalid popup control for id: ${id}`);
   }

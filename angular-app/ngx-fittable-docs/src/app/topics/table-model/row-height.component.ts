@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FitTable, FIT_MODEL_CONFIG } from 'fittable-model';
@@ -28,15 +28,14 @@ export class RowHeightComponent implements SimpleTopic, OnInit {
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'row-height-ts.jpg' },
   ];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(THIN_VIEW_MODEL_CONFIG);
 
-    this.fit = createFittableDesigner(
+    this.fit = createTableDesigner(
       createTable<FitTable>().setRowHeight(1, 42)
     );
   }

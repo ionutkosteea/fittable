@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { createTable4Dto, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG, FitTableDto } from 'fittable-model';
@@ -79,10 +79,9 @@ export class CellDataTypeComponent implements SimpleTopic, OnInit {
       },
     },
   };
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -93,6 +92,6 @@ export class CellDataTypeComponent implements SimpleTopic, OnInit {
       })
     );
 
-    this.fit = createFittableDesigner(createTable4Dto(this.fitTableDto));
+    this.fit = createTableDesigner(createTable4Dto(this.fitTableDto));
   }
 }

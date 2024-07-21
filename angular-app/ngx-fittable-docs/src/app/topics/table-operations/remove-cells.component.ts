@@ -8,7 +8,7 @@ import {
 } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
+  createTableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FitTableDto, FIT_MODEL_CONFIG } from 'fittable-model';
@@ -41,7 +41,6 @@ export class RemoveCellsComponent extends ConsoleTopic implements OnInit {
   }
 
   public override ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -59,7 +58,8 @@ export class RemoveCellsComponent extends ConsoleTopic implements OnInit {
         },
       },
     };
-    this.fit = createFittableDesigner(createTable4Dto(tableDto));
+
+    this.fit = createTableDesigner(createTable4Dto(tableDto));
 
     this.subscriptions.add(this.writeToConsoleAfterRun$());
     this.subscriptions.add(this.writeToConsoleAfterUndo$());

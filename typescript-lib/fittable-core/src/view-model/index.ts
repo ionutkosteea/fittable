@@ -22,4 +22,4 @@ export * from './host-listeners/window-listener.js';
 export * from './host-listeners/scroll-container-listener.js';
 export * from './host-listeners/input-control-listener.js';
 export * from './view-model-config.js';
-export * from './fittable-designer.js';
+export * from './table-designer.js';

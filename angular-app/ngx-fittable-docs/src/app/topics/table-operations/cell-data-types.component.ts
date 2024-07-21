@@ -9,7 +9,7 @@ import {
 } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
+  createTableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG, FitTable } from 'fittable-model';
@@ -42,7 +42,6 @@ export class CellDataTypesComponent extends ConsoleTopic implements OnInit {
   }
 
   public override ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -52,7 +51,8 @@ export class CellDataTypesComponent extends ConsoleTopic implements OnInit {
     const table: FitTable = createTable<FitTable>()
       .setCellValue(1, 1, 1000)
       .setCellValue(1, 2, 1000.123);
-    this.fit = createFittableDesigner(table);
+
+    this.fit = createTableDesigner(table);
 
     this.subscriptions.add(this.writeToConsoleAfterRun$());
     this.subscriptions.add(this.writeToConsoleAfterUndo$());

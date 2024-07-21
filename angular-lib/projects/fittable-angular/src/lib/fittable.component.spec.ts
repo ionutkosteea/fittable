@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
+  createTableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -27,7 +27,7 @@ describe('FittableComponent', () => {
 
     fixture = TestBed.createComponent(FittableComponent);
     component = fixture.componentInstance;
-    component.designer = createFittableDesigner(createTable());
+    fixture.componentRef.setInput('designer', createTableDesigner(createTable()));
     fixture.detectChanges();
   });
 

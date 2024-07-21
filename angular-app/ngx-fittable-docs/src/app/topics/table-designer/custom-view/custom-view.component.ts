@@ -3,14 +3,14 @@ import { Component } from '@angular/core';
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  FittableDesigner,
+  TableDesigner,
   ViewModel,
   ScrollContainer,
   Container,
   Window,
   Statusbar,
   registerViewModelConfig,
-  createFittableDesigner,
+  createTableDesigner,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
 import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
@@ -25,14 +25,16 @@ import { TopicTitle } from '../../../common/topic-title.model';
 })
 export class CustomViewComponent {
   public title: TopicTitle = 'Custom view';
-  private fit: FittableDesigner;
+  private fit: TableDesigner;
 
   constructor() {
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
-    this.fit = createFittableDesigner(
-      createTable().setCellValue(1, 1, 'Removable cell')
+
+    this.fit = createTableDesigner(
+      createTable()
+        .setCellValue(1, 1, 'Removable cell')
     );
   }
 

@@ -6,8 +6,8 @@ import {
   asPopupControl,
   Container,
   Control,
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   PopupControl,
   registerViewModelConfig,
   Window,
@@ -38,17 +38,16 @@ export class SettingsBarComponent implements SimpleTopic, OnInit {
     { image: 'settings-bar-ts-01.jpg' },
     { image: 'settings-bar-ts-02.jpg' },
   ];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
       createFitViewModelConfig({ settingsBar: true, themeSwitcher: true })
     );
 
-    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
+    this.fit = createTableDesigner(createTable());
 
     this.insertNewLanguageControl();
   }
@@ -61,7 +60,6 @@ export class SettingsBarComponent implements SimpleTopic, OnInit {
       controlMap.set(id, window.getControl(id));
       if (id === languageLabelId) {
         const control = new FitControl()
-          // Usually labels should be accessed via the language dictionary.
           .setType('menu-item')
           .setLabel((): string => 'French')
           .setRun((): void => alert('No function added!'));

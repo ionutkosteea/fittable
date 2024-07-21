@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { createTable, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -31,17 +31,16 @@ export class ContextMenuComponent implements SimpleTopic, OnInit {
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'context-menu-ts.jpg' },
   ];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
       createFitViewModelConfig({ cellSelection: true, contextMenu: true })
     );
 
-    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
+    this.fit = createTableDesigner(createTable());
 
     this.removeClearMenuItem();
   }

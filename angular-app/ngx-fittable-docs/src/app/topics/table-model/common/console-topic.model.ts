@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 
 import { createTable4Dto } from 'fittable-core/model';
-import { FittableDesigner } from 'fittable-core/view-model';
+import { TableDesigner } from 'fittable-core/view-model';
 import { FitTableDto } from 'fittable-model';
 
 import { TopicTitle } from '../../../common/topic-title.model';
@@ -12,7 +12,7 @@ export abstract class ConsoleTopic {
   public abstract htmlCode: CodeSnippet[];
   public abstract typescriptCode: CodeSnippet[];
   public abstract fitTableDto: unknown;
-  public abstract fit: FittableDesigner;
+  public abstract fit: TableDesigner;
   public abstract console: ElementRef;
 
   public getDtoText(): string {

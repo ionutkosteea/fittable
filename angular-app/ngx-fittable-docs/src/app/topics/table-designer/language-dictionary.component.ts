@@ -8,8 +8,8 @@ import {
 } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import {
@@ -45,11 +45,10 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
     { image: 'language-dictionary-ts-04.jpg' },
   ];
   public readonly buttons: Button[] = [];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
   private table?: FitTable;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -70,7 +69,8 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
       .setCellDataType(1, 1, createDataType('number', '# #,00'))
       .setCellValue(1, 2, true)
       .setCellValue(1, 3, false);
-    this.fit = createFittableDesigner(this.table);
+
+    this.fit = createTableDesigner(this.table);
 
     this.createButtons();
   }

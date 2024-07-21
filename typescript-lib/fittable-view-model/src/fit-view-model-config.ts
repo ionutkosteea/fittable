@@ -23,6 +23,7 @@ import { FitThemeSwitcherFactory } from './model/theme-switcher/fit-theme-switch
 import { FitSettingsBarFactory } from './model/settings-bar/fit-settings-bar-factory.js';
 import { FitColFiltersFactory } from './model/col-filters/fit-col-filters.js';
 import { FitMobileLayoutFactory } from './model/mobile-layout/fit-mobile-layout.js';
+import { FitTableDesignerFactory } from './fit-table-designer.js';
 
 export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   rowHeights: 21,
@@ -46,6 +47,7 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   tableViewerFactory: new FitTableViewerFactory(),
   mobileLayoutFactory: new FitMobileLayoutFactory(),
   viewModelFactory: new FitViewModelFactory(),
+  tableDesignerFactory: new FitTableDesignerFactory(),
   themeSwitcherFactory: new FitThemeSwitcherFactory(),
   settingsBarFactory: new FitSettingsBarFactory(),
   cellEditorListenerFactory: new FitCellEditorListenerFactory(),
@@ -60,6 +62,7 @@ export const THIN_VIEW_MODEL_CONFIG: ViewModelConfig = {
   fontSize: FIT_VIEW_MODEL_CONFIG.fontSize,
   rowHeights: FIT_VIEW_MODEL_CONFIG.rowHeights,
   colWidths: FIT_VIEW_MODEL_CONFIG.colWidths,
+  tableDesignerFactory: FIT_VIEW_MODEL_CONFIG.tableDesignerFactory,
   viewModelFactory: FIT_VIEW_MODEL_CONFIG.viewModelFactory,
   imageRegistryFactory: FIT_VIEW_MODEL_CONFIG.imageRegistryFactory,
   scrollContainerFactory: FIT_VIEW_MODEL_CONFIG.scrollContainerFactory,

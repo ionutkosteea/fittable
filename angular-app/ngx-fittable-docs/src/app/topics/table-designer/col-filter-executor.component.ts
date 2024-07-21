@@ -10,8 +10,8 @@ import {
 } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FitTable, FIT_MODEL_CONFIG } from 'fittable-model';
@@ -38,12 +38,10 @@ export class ColFilterExecutorComponent implements ConsoleTopic, OnInit {
     { image: 'column-filter-executor-ts-03.jpg' },
   ];
   public readonly buttons: Button[] = [];
-  public fit!: FittableDesigner;
-
+  public fit!: TableDesigner;
   private filterExecutor!: ColFilterExecutor;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -60,7 +58,8 @@ export class ColFilterExecutorComponent implements ConsoleTopic, OnInit {
     table.forEachCell((rowId: number, colId: number): void => {
       table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
-    this.fit = createFittableDesigner(table);
+
+    this.fit = createTableDesigner(table);
 
     this.filterExecutor = createColFilterExecutor(table);
     this.buttons.push(this.createFilterButton());

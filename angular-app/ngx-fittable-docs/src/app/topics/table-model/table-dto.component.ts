@@ -3,8 +3,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { createTable4Dto, registerModelConfig } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FitTableDto, FIT_MODEL_CONFIG } from 'fittable-model';
@@ -28,7 +28,7 @@ export class TableDtoComponent extends ConsoleTopic implements OnInit {
     { image: 'fittable-component-html.jpg' },
   ];
   public readonly typescriptCode: CodeSnippet[] = [
-    { image: 'table-dto-ts-01.jpg' },
+    { image: 'table-dto-ts.jpg' },
   ];
   public fitTableDto: FitTableDto = {
     numberOfRows: 50,
@@ -51,14 +51,13 @@ export class TableDtoComponent extends ConsoleTopic implements OnInit {
       },
     },
   };
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-    this.fit = createFittableDesigner(createTable4Dto(this.fitTableDto));
+    this.fit = createTableDesigner(createTable4Dto(this.fitTableDto));
   }
 }

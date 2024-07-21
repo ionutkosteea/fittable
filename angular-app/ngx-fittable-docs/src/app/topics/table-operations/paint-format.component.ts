@@ -11,7 +11,7 @@ import {
 } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
+  createTableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FitTable, FIT_MODEL_CONFIG } from 'fittable-model';
@@ -47,7 +47,6 @@ export class PaintFormatComponent extends ConsoleTopic implements OnInit {
   private dataType?: DataType;
 
   public override ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -60,7 +59,8 @@ export class PaintFormatComponent extends ConsoleTopic implements OnInit {
       .setCellValue(0, 0, 1.23)
       .setCellDataType(0, 0, createDataType4Dto({ name: 'number', format: '0#.##0' }))
       .setCellValue(1, 1, 7);
-    this.fit = createFittableDesigner(table);
+
+    this.fit = createTableDesigner(table);
 
     this.styleName = table.getCellStyleName(0, 0);
     this.dataType = table.getCellDataType(0, 0);

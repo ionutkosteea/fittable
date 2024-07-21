@@ -9,8 +9,8 @@ import {
 } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -38,7 +38,7 @@ export class CustomTableComponent extends ConsoleTopic implements OnInit {
     { image: 'custom-table-ts-02.jpg' },
     { image: 'custom-table-ts-03.jpg' },
   ];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
   public fitTableDto: (Value | undefined)[][] = [
     ['A1', 'B1', 'C1', 'D1', 'E1'],
     ['A2', 'B2', 'C2', 'D2', 'E2'],
@@ -48,7 +48,6 @@ export class CustomTableComponent extends ConsoleTopic implements OnInit {
   ];
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig({
       tableFactory: new MatrixValueTableFactory(),
       cellCoordFactory: FIT_MODEL_CONFIG.cellCoordFactory,
@@ -59,12 +58,12 @@ export class CustomTableComponent extends ConsoleTopic implements OnInit {
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-    this.fit = createFittableDesigner(createTable4Dto(this.fitTableDto));
+    this.fit = createTableDesigner(createTable4Dto(this.fitTableDto));
   }
 }
 
 class MatrixValueTable implements TableBasics {
-  constructor(private readonly dto: (Value | undefined)[][] = []) {}
+  constructor(private readonly dto: (Value | undefined)[][] = []) { }
   getDto = (): (Value | undefined)[][] => this.dto;
   getNumberOfRows = (): number => this.dto.length;
   setNumberOfRows = (numberOfRows: number): this => {

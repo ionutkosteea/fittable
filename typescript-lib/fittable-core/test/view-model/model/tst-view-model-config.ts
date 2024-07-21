@@ -24,12 +24,15 @@ import {
   CellSelectionListener,
   CellSelectionScroller,
   FitHtmlDivElement,
+  TableDesignerFactory,
+  TableDesigner,
 } from '../../../dist/view-model/index.js';
 
 export class TstViewModelConfig implements ViewModelConfig {
   rowHeights = 0;
   colWidths = 0;
   fontSize = 0;
+  tableDesignerFactory = new TstTableDesignerFactory();
   viewModelFactory = new TstViewModelFactory();
   imageRegistryFactory = new TstImageRegistryFactory();
   scrollContainerFactory = new TstScrollContainerFactory();
@@ -38,6 +41,13 @@ export class TstViewModelConfig implements ViewModelConfig {
   scrollContainerListenerFactory = new TstScrollContainerListenerFactory();
   cellEditorListenerFactory = new TstCellEditorListenerFactory();
   cellSelectionListenerFactory = new TstCellSelectionListenerFactory();
+}
+
+export class TstTableDesignerFactory implements TableDesignerFactory {
+  createTableDesigner(table: Table, readOnly?: boolean): TableDesigner {
+    throw new Error('Method not implemented.');
+  }
+
 }
 
 export class TstViewModelFactory implements ViewModelFactory {
@@ -76,8 +86,7 @@ class TstMobileLayoutFactory implements MobileLayoutFactory {
 }
 
 class TstScrollContainerListenerFactory
-  implements ScrollContainerListenerFactory
-{
+  implements ScrollContainerListenerFactory {
   createScrollContainerListener(
     div: FitHtmlDivElement,
     scrollContainer: ScrollContainer

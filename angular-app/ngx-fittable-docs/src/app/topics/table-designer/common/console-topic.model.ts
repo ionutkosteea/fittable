@@ -1,4 +1,4 @@
-import { FittableDesigner } from 'fittable-core/view-model';
+import { TableDesigner } from 'fittable-core/view-model';
 
 import { TopicTitle } from '../../../common/topic-title.model';
 import { CodeSnippet } from '../../common/code-snippet.model';
@@ -14,6 +14,6 @@ export interface ConsoleTopic {
   htmlCode: CodeSnippet[];
   typescriptCode: CodeSnippet[];
   buttons: Button[];
-  fit: FittableDesigner;
+  fit: TableDesigner;
   getConsoleText(): string;
 }

@@ -6,8 +6,8 @@ import {
   registerOperationConfig,
 } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -28,7 +28,7 @@ export abstract class ConsoleTopic implements OnInit, OnDestroy {
 
   public htmlCode: CodeSnippet[];
   public typescriptCode: CodeSnippet[];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
   public consoleText = '';
   protected readonly subscriptions: Set<Subscription | undefined> = new Set();
 
@@ -42,14 +42,13 @@ export abstract class ConsoleTopic implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
       createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
+    this.fit = createTableDesigner(createTable());
 
     this.subscriptions.add(this.writeToConsoleAfterRun$());
     this.subscriptions.add(this.writeToConsoleAfterUndo$());

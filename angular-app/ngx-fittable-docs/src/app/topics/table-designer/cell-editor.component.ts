@@ -10,8 +10,8 @@ import {
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
   CellEditor,
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -38,10 +38,9 @@ export class CellEditorComponent implements ConsoleTopic, OnInit {
     { image: 'cell-editor-ts-03.jpg' },
   ];
   public readonly buttons: Button[] = [];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -56,7 +55,8 @@ export class CellEditorComponent implements ConsoleTopic, OnInit {
     table.forEachCell((rowId: number, colId: number): void => {
       table.setCellValue(rowId, colId, rowId * colId);
     });
-    this.fit = createFittableDesigner(table);
+
+    this.fit = createTableDesigner(table);
 
     this.createButtons();
   }

@@ -11,7 +11,7 @@ import {
   registerOperationConfig,
 } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
+  createTableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -43,14 +43,13 @@ export class TableChangesComponent extends ConsoleTopic implements OnInit {
   }
 
   public override ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
       createFitViewModelConfig({ rowHeader: true, colHeader: true })
     );
 
-    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
+    this.fit = createTableDesigner(createTable());
   }
 
   public runOperation(): void {

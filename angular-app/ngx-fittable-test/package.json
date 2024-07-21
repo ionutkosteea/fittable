@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "^18.0.2",
     "@angular/router": "^18.0.2",
     "fittable-angular": "^5.0.1",
-    "rxjs": "~7.8.0",
+    "rxjs": "^7.8.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },

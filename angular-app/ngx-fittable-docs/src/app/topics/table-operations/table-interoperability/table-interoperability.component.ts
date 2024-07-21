@@ -7,8 +7,8 @@ import {
   registerOperationConfig,
 } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -40,35 +40,34 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
     { image: 'table-interoperability-ts-02.jpg' },
   ];
 
-  public fit1!: FittableDesigner;
-  public fit2!: FittableDesigner;
+  public fit1!: TableDesigner;
+  public fit2!: TableDesigner;
   private readonly subscriptions: Set<Subscription | undefined> = new Set();
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-    const table: Table = createTable() //
+    const table: Table = createTable()
       .setNumberOfRows(50)
       .setNumberOfCols(10);
-    this.fit1 = createFittableDesigner(table);
-    this.fit2 = createFittableDesigner(table.clone());
+    this.fit1 = createTableDesigner(table);
+    this.fit2 = createTableDesigner(table.clone());
 
     this.linkTables(this.fit1, this.fit2);
     this.linkTables(this.fit2, this.fit1);
   }
 
-  private linkTables(fit1: FittableDesigner, fit2: FittableDesigner): void {
+  private linkTables(fit1: TableDesigner, fit2: TableDesigner): void {
     this.subscriptions.add(this.afterRun$(fit1, fit2));
     this.subscriptions.add(this.afterUndo$(fit1, fit2));
     this.subscriptions.add(this.afterRedo$(fit1, fit2));
   }
 
   private afterRun$(
-    fit1: FittableDesigner,
-    fit2: FittableDesigner
+    fit1: TableDesigner,
+    fit2: TableDesigner
   ): Subscription | undefined {
     return fit1.operationExecutor
       ?.onAfterRun$()
@@ -86,8 +85,8 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   }
 
   private afterUndo$(
-    fit1: FittableDesigner,
-    fit2: FittableDesigner
+    fit1: TableDesigner,
+    fit2: TableDesigner
   ): Subscription | undefined {
     return fit1.operationExecutor
       ?.onAfterUndo$()
@@ -107,8 +106,8 @@ export class TableInteroperabilityComponent implements OnInit, OnDestroy {
   }
 
   private afterRedo$(
-    fit1: FittableDesigner,
-    fit2: FittableDesigner
+    fit1: TableDesigner,
+    fit2: TableDesigner
   ): Subscription | undefined {
     return fit1.operationExecutor
       ?.onAfterRedo$()

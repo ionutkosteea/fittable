@@ -1,9 +1,11 @@
+
 import {
   ViewModelConfig,
   ImageRegistryFactory,
   ImageRegistry,
 } from 'fittable-core/view-model';
 
+import { FitTableDesignerFactory } from "../dist/fit-table-designer.js";
 import { FitViewModelFactory } from '../dist/model/fit-view-model.js';
 import { FitScrollContainerFactory } from '../dist/model/scroll-container/fit-scroll-container.js';
 import { FitTableViewerFactory } from '../dist/model/table-viewer/fit-table-viewer.js';
@@ -24,6 +26,7 @@ export const TST_VIEW_MODEL_CONFIG: ViewModelConfig = {
   fontSize: 12,
   colorPalette: [],
   fontFamily: [],
+  tableDesignerFactory: new FitTableDesignerFactory(),
   viewModelFactory: new FitViewModelFactory(),
   imageRegistryFactory: new TstImageRegistryFactory(),
   scrollContainerFactory: new FitScrollContainerFactory(),

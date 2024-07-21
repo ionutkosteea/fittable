@@ -124,9 +124,9 @@ export class CellCopyChangeWritter implements TableChangeWritter {
     const dataType: DataType | undefined =
       this.cellDataTypeTable?.getCellDataType(rowId, colId);
     if (dataType) {
-      result += ` data-data-type-name="${dataType.name}"`;
-      if (dataType.format) {
-        result += ` data-data-type-format="${dataType.format}"`;
+      result += ` data-data-type-name="${dataType.getName()}"`;
+      if (dataType.getFormat()) {
+        result += ` data-data-type-format="${dataType.getFormat()}"`;
       }
     }
     return result;

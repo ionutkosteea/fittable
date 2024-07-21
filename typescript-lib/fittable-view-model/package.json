@@ -33,21 +33,21 @@
   },
   "devDependencies": {
     "@types/jasmine": "~5.1.0",
-    "@types/node": "^20.10.6",
-    "@typescript-eslint/eslint-plugin": "^6.17.0",
-    "@typescript-eslint/parser": "^6.17.0",
-    "c8": "^9.0.0",
+    "@types/node": "^20.14.11",
+    "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "@typescript-eslint/parser": "^7.16.1",
+    "c8": "^10.1.2",
     "eslint": "^8.56.0",
-    "jasmine": "^5.1.0",
+    "jasmine": "^5.2.0",
     "source-map-support": "^0.5.21",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "~5.2.2",
+    "typescript": "~5.4.5",
     "fittable-model": "^2.0.1",
     "fittable-model-operations": "^2.0.1"
   },
   "dependencies": {
-    "rxjs": "~7.8.0",
+    "rxjs": "^7.8.1",
     "fittable-core": "^4.0.1"
   },
   "files": [

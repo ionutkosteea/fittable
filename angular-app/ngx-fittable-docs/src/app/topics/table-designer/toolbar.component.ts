@@ -5,8 +5,8 @@ import { registerOperationConfig } from 'fittable-core/operations';
 import {
   Container,
   Control,
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG } from 'fittable-model';
@@ -36,17 +36,16 @@ export class ToolbarComponent implements SimpleTopic, OnInit {
     { image: 'toolbar-ts-01.jpg' },
     { image: 'toolbar-ts-02.jpg' },
   ];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
       createFitViewModelConfig({ toolbar: true, cellEditor: true }),
     );
 
-    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
+    this.fit = createTableDesigner(createTable());
 
     this.replaceUndoButton();
   }
@@ -62,9 +61,7 @@ export class ToolbarComponent implements SimpleTopic, OnInit {
       if (id === undoControlId) {
         control = new FitControl()
           .setType(undoControlType)
-          // Usually labels should be accessed via the language dictionary.
           .setLabel((): string => 'Undo')
-          // Usually images should be accessed via the image registry.
           .setIcon(
             (): string => `
 <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">

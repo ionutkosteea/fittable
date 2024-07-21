@@ -10,6 +10,8 @@ import {
   DataType,
   TableCellDataType,
   asTableCellDataType,
+  createDataType,
+  DataTypeName,
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -240,10 +242,8 @@ export class CellPasteChangesBuilder {
     const dataTypeName: string | null = //
       htmlCell.getAttribute('data-data-type-name');
     if (!dataTypeName) return;
-    const dataType: DataType = { name: dataTypeName as DataType['name'] };
-    const dataTypeFormat: string | null = //
-      htmlCell.getAttribute('data-data-type-format');
-    if (dataTypeFormat) dataType.format = dataTypeFormat;
+    const dataTypeFormat: string | null = htmlCell.getAttribute('data-data-type-format');
+    const dataType: DataType = createDataType(dataTypeName as DataTypeName, dataTypeFormat ?? undefined);
     this.newDataTypes.set(dataType, rowId, colId);
   }
 

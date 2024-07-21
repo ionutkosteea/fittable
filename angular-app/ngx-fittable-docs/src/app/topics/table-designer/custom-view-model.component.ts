@@ -5,8 +5,8 @@ import { registerOperationConfig } from 'fittable-core/operations';
 import {
   Container,
   ContextMenuFactory,
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   registerViewModelConfig,
   ToolbarFactory,
   ViewModelConfig,
@@ -37,10 +37,9 @@ export class CustomViewModelComponent implements SimpleTopic, OnInit {
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'custom-view-model-ts.jpg' },
   ];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     const viewModelConfig: ViewModelConfig = { ...FIT_VIEW_MODEL_CONFIG };
@@ -48,7 +47,7 @@ export class CustomViewModelComponent implements SimpleTopic, OnInit {
     viewModelConfig.contextMenuFactory = this.createDummyContextMenuFactory();
     registerViewModelConfig(viewModelConfig);
 
-    this.fit = createFittableDesigner(createTable()); // FitTable default: 5 rows, 5 cols
+    this.fit = createTableDesigner(createTable());
   }
 
   private createDummyToolbarFactory(): ToolbarFactory {

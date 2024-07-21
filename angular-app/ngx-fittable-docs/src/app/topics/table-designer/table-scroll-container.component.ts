@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { createTable, registerModelConfig, Table } from 'fittable-core/model';
 import { registerOperationConfig } from 'fittable-core/operations';
 import {
-  createFittableDesigner,
-  FittableDesigner,
+  createTableDesigner,
+  TableDesigner,
   getViewModelConfig,
   registerViewModelConfig,
   Scrollbar,
@@ -42,14 +42,13 @@ export class TableScrollContainerComponent implements ConsoleTopic, OnInit {
     { image: 'table-scroll-container-ts-10.jpg' },
   ];
   public readonly buttons: Button[] = [];
-  public fit!: FittableDesigner;
+  public fit!: TableDesigner;
   private virtualRowsButton?: Button;
   private virtualColsButton?: Button;
   private verticalScrollbar?: Scrollbar;
   private horizontalScrollbar?: Scrollbar;
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(
@@ -67,7 +66,8 @@ export class TableScrollContainerComponent implements ConsoleTopic, OnInit {
     table.forEachCell((rowId: number, colId: number): void => {
       table.setCellValue(rowId, colId, '[' + rowId + ',' + colId + ']');
     });
-    this.fit = createFittableDesigner(table);
+
+    this.fit = createTableDesigner(table);
 
     const tableScrollContainer: ScrollContainer =
       this.fit.viewModel.tableScrollContainer;

@@ -1,9 +1,9 @@
 import {
-  CssStyle,
   Style,
   DataType,
   Table,
   Value,
+  DataTypeName,
 } from '../../../dist/model/index.js';
 import { TableViewer } from '../../../dist/view-model/index.js';
 
@@ -80,7 +80,7 @@ export class TstTableViewer implements TableViewer {
   getCellDataType(rowId: number, colId: number): DataType | undefined {
     throw new Error('Method not implemented.');
   }
-  getCellType(rowId: number, colId: number): DataType['name'] {
+  getCellType(rowId: number, colId: number): DataTypeName {
     throw new Error('Method not implemented.');
   }
   getFormatedCellValue(rowId: number, colId: number): string | undefined {
