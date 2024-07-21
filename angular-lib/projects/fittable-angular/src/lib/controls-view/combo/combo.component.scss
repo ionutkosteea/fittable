@@ -5,6 +5,8 @@
 }
 
 .combo {
+  display: flex;
+  align-items: center;
   border-radius: 4px;
   &:hover {
     background-color: var(--toolbar-background-hover-color);
@@ -24,7 +26,7 @@
       outline: none;
     }
   }
-  span {
+  fit-svg-img {
     margin-right: fit-map-get($size-map, small);
     cursor: pointer;
   }

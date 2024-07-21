@@ -1,11 +1,11 @@
 <div class="popup-window" [ngStyle]="getWindowStyle()">
   <div class="search-label">{{ getSearchInput().getLabel() }}</div>
   <div class="search-input">
-    <span [innerHTML]="getSearchInputIcon()"></span>
     <input
       [value]="getSearchInput().getValue() ?? ''"
       (input)="onSearchInput($event)"
     />
+    <fit-svg-img [content]="getSearchInputIcon()" />
   </div>
   <div class="right-aligned-bar">
     <button class="select-button" (click)="getClearButton().run()">

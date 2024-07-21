@@ -21,13 +21,13 @@
         >
           @if (hasControlIcon(id)) {
             @if (iconCol() === "left") {
-              <div [innerHTML]="getControlIcon(id)"></div>
+              <fit-svg-img [content]="getControlIcon(id)" />
             }
             @if (getControlLabel(id)) {
               <div class="item-label">{{ getControlLabel(id) }}</div>
             }
             @if (iconCol() === "right") {
-              <div [innerHTML]="getControlIcon(id)"></div>
+              <fit-svg-img [content]="getControlIcon(id)" />
             }
           } @else if (getControlLabel(id)) {
             <div class="item-label">{{ getControlLabel(id) }}</div>
@@ -56,12 +56,12 @@
           (mouseleave)="onMenuItemMouseLeave(id)"
         >
           @if (hasControlIcon(id)) {
-            <div [innerHTML]="getControlIcon(id)"></div>
+            <fit-svg-img [content]="getControlIcon(id)" />
             <div class="item-label">{{ getControlLabel(id) }}</div>
           } @else {
             <div class="item-label">{{ getControlLabel(id) }}</div>
           }
-          <div [innerHTML]="getArrowRightIcon()"></div>
+          <fit-svg-img [content]="getArrowRightIcon()" />
         </div>
         <fit-context-menu
           [model]="getMenuItemWindow(id)"

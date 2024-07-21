@@ -16,6 +16,7 @@
 
 .color-none-button {
   display: flex;
+  align-items: center;
   cursor: pointer;
   font-size: fit-map-get($font-size-map, medium);
   line-height: fit-map-get($line-height-map, medium);
@@ -24,9 +25,7 @@
     background-color: var(--context-menu-background-hover-color);
   }
 
-  span:first-child {
-    display: flex;
-    align-items: center;
+  fit-img-svg {
     margin-right: fit-map-get($size-map, small);
   }
 }

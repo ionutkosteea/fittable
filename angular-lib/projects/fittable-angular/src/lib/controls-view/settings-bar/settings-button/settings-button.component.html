@@ -1,5 +1,5 @@
 <button #button [title]="getLabel()" (click)="run()">
-  <div class="icon" [innerHTML]="getIcon()"></div>
+  <fit-svg-img [content]="getIcon()" />
 </button>
 <fit-context-menu
   [model]="getWindow()"

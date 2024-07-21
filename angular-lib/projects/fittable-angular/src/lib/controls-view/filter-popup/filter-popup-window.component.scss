@@ -16,12 +16,6 @@
   }
 }
 
-.icon {
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-}
-
 .popup-window {
   @include window;
   position: fixed;
@@ -39,13 +33,6 @@
   align-items: center;
   border: 1px solid var(--context-menu-border-color);
   border-radius: 4px;
-  span {
-    display: flex;
-    align-items: center;
-    margin: 0 2px;
-    color: var(--context-menu-border-color);
-    background-color: var(--context-menu-background-color);
-  }
   input {
     flex: 1;
     border: none;
@@ -59,6 +46,11 @@
     &:focus {
       outline: none;
     }
+  }
+  fit-svg-img {
+    margin: 0 2px;
+    color: var(--context-menu-border-color);
+    background-color: var(--context-menu-background-color);
   }
 }
 

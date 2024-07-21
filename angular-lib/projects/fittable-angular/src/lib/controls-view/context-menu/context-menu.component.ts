@@ -5,11 +5,9 @@ import {
   ViewChild,
   OnInit,
   HostListener,
-  inject,
   input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { CssStyle, Value, createStyle4Dto } from 'fittable-core/model';
 import {
@@ -31,11 +29,12 @@ import {
   createWindowStyle,
 } from '../common/style-functions.model';
 import { ControlType } from '../common/control-type.model';
+import { SvgImgComponent } from '../svg-img/svg-img.component';
 
 @Component({
   selector: 'fit-context-menu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SvgImgComponent],
   templateUrl: './context-menu.component.html',
   styleUrls: ['../common/scss/utils.scss', './context-menu.component.scss'],
 })
@@ -56,7 +55,6 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
   private windowListener!: WindowListener;
   private readonly inputListeners: Map<string, InputControlListener> =
     new Map();
-  private readonly domSanitizer = inject(DomSanitizer);
   private isTextFieldMouseDown = false;
   private isSubMenu = false;
 
@@ -118,9 +116,8 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
     return this.getControl(id).getLabel();
   }
 
-  getControlIcon(id: string): SafeHtml | undefined {
-    const htmlContent = this.getControl(id).getIcon();
-    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
+  getControlIcon(id: string): string | undefined {
+    return this.getControl(id).getIcon();
   }
 
   hasControlIcon(id: string): boolean {
@@ -152,9 +149,8 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getArrowRightIcon(): SafeHtml | undefined {
-    const htmlContent = getImageRegistry().getUrl('arrowRight');
-    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
+  getArrowRightIcon(): string | undefined {
+    return getImageRegistry().getUrl('arrowRight');
   }
 
   hasTextField(id: string): boolean {

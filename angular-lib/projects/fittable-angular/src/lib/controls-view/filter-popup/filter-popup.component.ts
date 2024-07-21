@@ -3,11 +3,9 @@ import {
   Component,
   HostListener,
   OnInit,
-  inject,
   input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { RangeIterator } from 'fittable-core/common';
 import { CssStyle } from 'fittable-core/model';
@@ -29,18 +27,19 @@ import {
 
 import { createWindowStyle } from '../common/style-functions.model';
 import { ScrollContainerDirective } from '../common/scroll-container.directive';
+import { SvgImgComponent } from '../svg-img/svg-img.component';
 
 @Component({
   selector: 'fit-filter-popup-button',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SvgImgComponent],
   template: `
     <button
       class="popup-button"
       [ngClass]="{ 'is-on': isOn() }"
       [title]="getLabel()"
     >
-      <div class="icon" [innerHTML]="getIcon()"></div>
+      <fit-svg-img [content]="getIcon()" />
     </button>
   `,
   styleUrls: ['./filter-popup-window.component.scss'],
@@ -50,7 +49,6 @@ export class FilterPopupButtonComponent implements OnInit {
   colId = input.required<number>();
 
   private windowListener!: WindowListener;
-  private readonly domSanitizer = inject(DomSanitizer);
 
   ngOnInit(): void {
     this.windowListener = //
@@ -70,9 +68,8 @@ export class FilterPopupButtonComponent implements OnInit {
     return this.getPopupButton().getLabel();
   }
 
-  getIcon(): SafeHtml | undefined {
-    const htmlContent = this.getPopupButton().getIcon();
-    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
+  getIcon(): string | undefined {
+    return this.getPopupButton().getIcon();
   }
 
   isOn(): boolean {
@@ -95,7 +92,7 @@ type ControlId =
 @Component({
   selector: 'fit-filter-popup-window',
   standalone: true,
-  imports: [CommonModule, ScrollContainerDirective],
+  imports: [CommonModule, ScrollContainerDirective, SvgImgComponent],
   templateUrl: './filter-popup-window.component.html',
   styleUrls: ['./filter-popup-window.component.scss'],
 })
@@ -103,7 +100,6 @@ export class FilterPopupWindowComponent implements AfterViewInit {
   colFilters = input.required<ColFilters>();
 
   private windowListener!: WindowListener;
-  private readonly domSanitizer = inject(DomSanitizer);
 
   ngAfterViewInit(): void {
     this.windowListener = //
@@ -130,9 +126,8 @@ export class FilterPopupWindowComponent implements AfterViewInit {
     else throw new Error('Search input control was not found!');
   }
 
-  getSearchInputIcon(): SafeHtml | undefined {
-    const htmlContent = this.getSearchInput().getIcon();
-    return htmlContent ? this.domSanitizer.bypassSecurityTrustHtml(htmlContent) : undefined;
+  getSearchInputIcon(): string | undefined {
+    return this.getSearchInput().getIcon();
   }
 
   onSearchInput(event: Event): void {

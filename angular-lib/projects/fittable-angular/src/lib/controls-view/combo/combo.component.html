@@ -7,7 +7,7 @@
     readonly
     type="text"
   />
-  <span [innerHTML]="getIcon()" (click)="run()"> </span>
+  <fit-svg-img [content]="getIcon()" (click)="run()" />
 </div>
 <fit-context-menu
   [model]="getWindow()"

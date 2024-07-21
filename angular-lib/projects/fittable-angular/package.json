@@ -40,6 +40,7 @@
     "excel",
     "json-interoperability",
     "custom-data",
-    "custom-operations"
+    "custom-operations",
+    "signals"
   ]
 }

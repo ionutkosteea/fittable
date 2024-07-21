@@ -6,8 +6,8 @@
 />
 <fit-popup-menu [model]="getWindow()">
   <div class="pad-s">
-    <div class="color-none-button">
-      <span [innerHTML]="getColorNoneIcon()"></span>
+    <div class="color-none-button" (click)="runControl(getColorNoneId())">
+      <fit-svg-img [content]="getColorNoneIcon()" />
       <span>{{ getColorNoneLabel() }}</span>
     </div>
   </div>
