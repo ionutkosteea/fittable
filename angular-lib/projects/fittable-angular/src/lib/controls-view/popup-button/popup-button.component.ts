@@ -16,15 +16,15 @@ import { PopupMenuComponent } from '../popup-menu/popup-menu.component';
 export class PopupButtonComponent {
   model = input.required<PopupControl>();
 
-  getWindow(): Window {
+  get window(): Window {
     return this.model().getWindow();
   }
 
-  getControlIds(): string[] {
-    return this.getWindow().getControlIds();
+  get controlIds(): string[] {
+    return this.window.getControlIds();
   }
 
   getControl(id: string): Control {
-    return this.getWindow().getControl(id);
+    return this.window.getControl(id);
   }
 }

@@ -1,16 +1,16 @@
 <div class="combo">
   <input
     [ngStyle]="getStyle()"
-    [value]="getLabel()"
-    [title]="getLabel()"
+    [value]="label"
+    [title]="label"
     (click)="run()"
     readonly
     type="text"
   />
-  <fit-svg-img [content]="getIcon()" (click)="run()" />
+  <fit-svg-img [content]="icon" (click)="run()" />
 </div>
 <fit-context-menu
-  [model]="getWindow()"
+  [model]="window"
   [top]="'2rem'"
   [maxHeight]="'18.75rem'"
   [controlStyleFn]="controlStyle()"

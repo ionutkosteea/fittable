@@ -18,19 +18,19 @@ export class SettingsButtonComponent {
 
   @ViewChild('button') buttonRef?: ElementRef;
 
-  getLabel(): string {
+  get label(): string {
     return this.model().getLabel();
   }
 
-  getIcon(): string | undefined {
+  get icon(): string | undefined {
     return this.model().getIcon();
+  }
+
+  get window(): Window {
+    return this.model().getWindow();
   }
 
   run(): void {
     this.model().run();
-  }
-
-  getWindow(): Window {
-    return this.model().getWindow();
   }
 }

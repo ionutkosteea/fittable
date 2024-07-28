@@ -1,13 +1,14 @@
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   Component,
   ElementRef,
   ViewChild,
-  OnDestroy,
   AfterViewInit,
   input,
   output,
   signal,
+  inject,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -24,6 +25,7 @@ import {
 import { ButtonComponent } from '../button/button.component';
 import { PopupMenuComponent } from '../popup-menu/popup-menu.component';
 import { SvgImgComponent } from '../svg-img/svg-img.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fit-color-picker',
@@ -32,30 +34,26 @@ import { SvgImgComponent } from '../svg-img/svg-img.component';
   templateUrl: './color-picker.component.html',
   styleUrls: ['../common/scss/utils.scss', './color-picker.component.scss'],
 })
-export class ColorPickerComponent implements AfterViewInit, OnDestroy {
+export class ColorPickerComponent implements AfterViewInit {
   model = input.required<PopupControl>();
   isVisibleEvent = output<boolean>();
 
   @ViewChild('colorPicker') colorPickerRef!: ElementRef;
   protected readonly isColorPickerVisible = signal(false);
   private numberDefaultOfColors = 0;
-  private readonly subscriptions: Subscription[] = [];
+  private readonly destroyRef = inject(DestroyRef);
 
-  ngAfterViewInit(): void {
-    this.numberDefaultOfColors = this.getWindow().getControlIds().length;
-    this.subscriptions.push(this.onWindowSetVisible$());
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
-  }
-
-  getWindow(): Window {
+  get window(): Window {
     return this.model().getWindow();
   }
 
+  ngAfterViewInit(): void {
+    this.numberDefaultOfColors = this.window.getControlIds().length;
+    this.onWindowSetVisible();
+  }
+
   getSelectedColor(): string | undefined {
-    const window: Window = this.getWindow();
+    const window: Window = this.window;
     const id: string | undefined = asSelectorWindow(window)?.getControlId();
     if (!id) return undefined;
     const value: Value | undefined = //
@@ -68,38 +66,37 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
   }
 
   runControl(id: string): void {
-    return this.getWindow().getControl(id).run();
+    return this.window.getControl(id).run();
   }
 
   getColorNoneId(): string {
-    return this.getWindow().getControlIds()[0];
+    return this.window.getControlIds()[0];
   }
 
   getColorNoneIcon(): string | undefined {
-    return this.getWindow().getControl(this.getColorNoneId()).getIcon()
+    return this.window.getControl(this.getColorNoneId()).getIcon()
   }
 
   getColorNoneLabel(): string | undefined {
-    return this.getWindow().getControl(this.getColorNoneId()).getLabel();
+    return this.window.getControl(this.getColorNoneId()).getLabel();
   }
 
   getColorIds(): string[] {
-    return this.getWindow().hasFocus()
-      ? this.model()
-        .getWindow()
+    return this.window.hasFocus()
+      ? this.window
         .getControlIds()
         .slice(1, this.numberDefaultOfColors)
       : [];
   }
 
   getCustomColorIds(): string[] {
-    return this.getWindow().hasFocus()
-      ? this.getWindow().getControlIds().slice(this.numberDefaultOfColors)
+    return this.window.hasFocus()
+      ? this.window.getControlIds().slice(this.numberDefaultOfColors)
       : [];
   }
 
   getColorValue(id: string): Value | undefined {
-    const control: Control = this.getWindow().getControl(id);
+    const control: Control = this.window.getControl(id);
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (!valueControl) throw new Error('Invalid value control for id ' + id);
     return valueControl.getValue();
@@ -111,7 +108,7 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
 
   addCustomColor(): void {
     const customColor: string = this.colorPickerRef.nativeElement.value;
-    this.getWindow().addControl(
+    this.window.addControl(
       customColor,
       new (class implements ValueControl {
         getLabel = () => customColor;
@@ -130,10 +127,10 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
     this.isColorPickerVisible.set(false);
   }
 
-  private onWindowSetVisible$(): Subscription {
-    return this.model()
-      .getWindow()
+  private onWindowSetVisible(): void {
+    this.window
       .onAfterSetFocus$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((focus: boolean): void => this.isVisibleEvent.emit(focus));
   }
 }

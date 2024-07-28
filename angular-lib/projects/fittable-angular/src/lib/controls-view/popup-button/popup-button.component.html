@@ -1,7 +1,7 @@
 <fit-button [model]="model()" />
-<fit-popup-menu [model]="getWindow()">
+<fit-popup-menu [model]="window">
   <div class="button-bar">
-    @for (id of getControlIds(); track $index) {
+    @for (id of controlIds; track $index) {
       <fit-button [model]="getControl(id)" />
     }
   </div>

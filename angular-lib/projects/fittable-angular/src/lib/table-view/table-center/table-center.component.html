@@ -2,22 +2,22 @@
   class="scroll-container"
   (scroll)="onScroll($event)"
   fitScrollContainer
-  [scrollContainer]="getScrollContainer()"
+  [scrollContainer]="scrollContainer"
 >
   <div
     class="full-size-container"
-    [ngStyle]="{ 'width.px': getBodyWidth(), 'height.px': getBodyHeight() }"
+    [ngStyle]="{ 'width.px': bodyWidth, 'height.px': bodyHeight }"
   >
-    <div class="offset-container" [ngStyle]="getBodyOffset()">
+    <div class="offset-container" [ngStyle]="bodyOffset">
       <table
         class="table"
         [ngStyle]="{
-          'font-size.px': getTableFontSize(),
+          'font-size.px': tableFontSize,
           'font-family': getTableFontFamily()
         }"
       >
         <colgroup>
-          @for (colId of getColIds(); track $index) {
+          @for (colId of colIds; track $index) {
             <col [ngStyle]="{ 'width.px': getColWidth(colId) }" />
           }
         </colgroup>
@@ -27,11 +27,11 @@
           [cellEditorListener]="cellEditorListener()"
           fitCellSelection
           [cellSelectionListener]="cellSelectionListener()"
-          [cellSelectionRanges]="getCellSelectionRanges()"
+          [cellSelectionRanges]="cellSelectionRanges"
         >
-          @for (rowId of getRowIds(); track $index) {
+          @for (rowId of rowIds; track $index) {
             <tr [ngStyle]="{ 'height.px': getRowHeight(rowId) }">
-              @for (colId of getColIds(); track $index) {
+              @for (colId of colIds; track $index) {
                 @if (!isHiddenCell(rowId, colId)) {
                   <td
                     [ngClass]="'cell' + getDataTypeClass(rowId, colId)"
@@ -52,7 +52,7 @@
       </table>
     </div>
   </div>
-  @for (rect of getCellSelectionRectangles(); track $index) {
+  @for (rect of cellSelectionRectangles; track $index) {
     <div class="cell-selection" [ngStyle]="rect"></div>
   }
   @if (cellEditorListener()) {

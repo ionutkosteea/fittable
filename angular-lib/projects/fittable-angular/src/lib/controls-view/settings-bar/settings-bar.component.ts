@@ -17,7 +17,7 @@ import { SettingsButtonComponent } from './settings-button/settings-button.compo
   template: `
     <div class="settings-bar">
       <fit-settings-button
-        *ngFor="let id of getControlIds()"
+        *ngFor="let id of controlIds"
         [model]="getPopupControl(id)"
       />
     </div>
@@ -27,7 +27,7 @@ import { SettingsButtonComponent } from './settings-button/settings-button.compo
 export class SettingsBarComponent {
   model = input.required<Container>();
 
-  getControlIds(): string[] {
+  get controlIds(): string[] {
     return this.model().getControlIds();
   }
 

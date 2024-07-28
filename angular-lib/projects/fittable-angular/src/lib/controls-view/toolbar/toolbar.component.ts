@@ -51,7 +51,7 @@ import { ContextMenuButtonComponent } from '../context-menu/context-menu-button.
 export class ToolbarComponent {
   model = input.required<Container>();
 
-  getControlIDs(): string[] {
+  get controlIds(): string[] {
     return this.model().getControlIds();
   }
 

@@ -1,10 +1,11 @@
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   Component,
-  OnDestroy,
   AfterViewInit,
   input,
   output,
+  inject,
+  DestroyRef,
 } from '@angular/core';
 import { NgFor, NgStyle } from '@angular/common';
 
@@ -26,34 +27,30 @@ import { PopupMenuComponent } from '../../popup-menu/popup-menu.component';
   templateUrl: './border-type.component.html',
   styleUrls: ['../../common/scss/utils.scss', './border-type.component.scss'],
 })
-export class BorderTypeComponent implements AfterViewInit, OnDestroy {
+export class BorderTypeComponent implements AfterViewInit {
   model = input.required<PopupControl>();
   isVisibleEvent = output<boolean>();
 
-  private readonly subscriptions: Subscription[] = [];
+  private readonly destroyRef = inject(DestroyRef);
 
-  ngAfterViewInit(): void {
-    this.subscriptions.push(this.onWindowSetVisible$());
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
-  }
-
-  getWindow(): Window {
+  get window(): Window {
     return this.model().getWindow();
   }
 
-  getControlIds(): string[] {
-    return this.getWindow().getControlIds();
+  get controlIds(): string[] {
+    return this.window.getControlIds();
+  }
+
+  ngAfterViewInit(): void {
+    this.onWindowSetVisible();
   }
 
   runControl(id: string): void {
-    this.getWindow().getControl(id).run();
+    this.window.getControl(id).run();
   }
 
   getBorderStyle(id: string): { borderBottom: string } {
-    const control: Control = this.model().getWindow().getControl(id);
+    const control: Control = this.window.getControl(id);
     const valueControl: ValueControl | undefined = asValueControl(control);
     if (!valueControl) throw new Error('Invalid value control for id ' + id);
     const parts: string[] = (valueControl.getValue() as string).split(' ');
@@ -62,9 +59,10 @@ export class BorderTypeComponent implements AfterViewInit, OnDestroy {
     };
   }
 
-  private onWindowSetVisible$(): Subscription {
-    return this.getWindow()
+  private onWindowSetVisible(): void {
+    this.window
       .onAfterSetFocus$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((focus: boolean) => {
         this.isVisibleEvent.emit(focus);
       });

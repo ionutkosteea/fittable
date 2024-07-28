@@ -4,7 +4,7 @@
   (click)="run()"
   [ngStyle]="{ backgroundColor: getSelectedColor() }"
 />
-<fit-popup-menu [model]="getWindow()">
+<fit-popup-menu [model]="window">
   <div class="pad-s">
     <div class="color-none-button" (click)="runControl(getColorNoneId())">
       <fit-svg-img [content]="getColorNoneIcon()" />

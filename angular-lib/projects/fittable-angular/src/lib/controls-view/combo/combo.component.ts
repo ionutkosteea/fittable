@@ -19,23 +19,23 @@ export class ComboComponent {
   model = input.required<PopupControl>();
   controlStyle = input<(control: Control) => CssStyle | null>();
 
+  get window(): Window {
+    return this.model().getWindow();
+  }
+
+  get icon(): string | undefined {
+    return this.model().getIcon();
+  }
+
+  get label(): string {
+    return this.model().getLabel();
+  }
+
   getStyle(): CssStyle | null {
     return createToggleStyle(this.model());
   }
 
-  getIcon(): string | undefined {
-    return this.model().getIcon();
-  }
-
-  getLabel(): string {
-    return this.model().getLabel();
-  }
-
   run(): void {
     !this.model().isDisabled() && this.model().isValid() && this.model().run();
-  }
-
-  getWindow(): Window {
-    return this.model().getWindow();
   }
 }

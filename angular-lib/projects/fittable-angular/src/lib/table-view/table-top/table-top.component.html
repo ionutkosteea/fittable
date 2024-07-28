@@ -1,16 +1,16 @@
-@if (hasColHeader()) {
+@if (hasColHeader) {
   <div class="scroll-container" #scroller>
     <div
       class="full-size-container"
       [ngStyle]="{
-        'width.px': getBodyWidth(),
-        'height.px': getColHeaderHeight() + 1
+        'width.px': bodyWidth,
+        'height.px': colHeaderHeight + 1
       }"
     >
-      <div class="offset-container" [ngStyle]="getColHeaderOffset()">
+      <div class="offset-container" [ngStyle]="colHeaderOffset">
         <table class="table">
           <colgroup>
-            @for (colId of getColIds(); track $index) {
+            @for (colId of colIds; track $index) {
               <col [ngStyle]="{ 'width.px': getColWidth(colId) }" />
             }
           </colgroup>
@@ -20,13 +20,10 @@
             [cellSelectionListener]="cellSelectionListener()"
             [cellSelectionRanges]="getCellSelectionRanges()"
           >
-            <tr
-              class="header-row"
-              [ngStyle]="{ 'height.px': getColHeaderHeight() }"
-            >
-              @for (colId of getColIds(); track $index) {
+            <tr class="header-row" [ngStyle]="{ 'height.px': colHeaderHeight }">
+              @for (colId of colIds; track $index) {
                 <th class="header-cell" [attr.rowId]="0" [attr.colId]="colId">
-                  {{ getColLabel(colId) }}
+                  {{ rowHeaderTextFn && rowHeaderTextFn(colId) }}
                   @if (hasColFilters()) {
                     <fit-filter-popup-button
                       [colFilters]="getColFilters()"

@@ -1,25 +1,22 @@
-@if (hasRowHeader() && hasColHeader()) {
+@if (hasRowHeader && hasColHeader) {
   <div
     class="full-size-container"
     [ngStyle]="{
-      'width.px': getRowHeaderWidth(),
-      'height.px': getColHeaderHeight() + 1
+      'width.px': rowHeaderWidth,
+      'height.px': colHeaderHeight + 1
     }"
   >
     <div class="offset-container">
       <table class="table">
         <colgroup>
-          <col [ngStyle]="{ 'width.px': getRowHeaderWidth() }" />
+          <col [ngStyle]="{ 'width.px': rowHeaderWidth }" />
         </colgroup>
         <thead
           fitCellSelection
           [cellSelectionListener]="cellSelectionListener()"
-          [cellSelectionRanges]="getCellSelectionRanges()"
+          [cellSelectionRanges]="cellSelectionRanges"
         >
-          <tr
-            class="header-row"
-            [ngStyle]="{ 'height.px': getColHeaderHeight() }"
-          >
+          <tr class="header-row" [ngStyle]="{ 'height.px': colHeaderHeight }">
             <th class="header-cell" [attr.rowId]="0" [attr.colId]="0">
               &nbsp;
             </th>
@@ -28,7 +25,7 @@
       </table>
     </div>
   </div>
-  @for (rect of getCellSelectionRectangles(); track $index) {
+  @for (rect of cellSelectionRectangles; track $index) {
     <div class="header-cell-selection" [ngStyle]="rect"></div>
   }
 }

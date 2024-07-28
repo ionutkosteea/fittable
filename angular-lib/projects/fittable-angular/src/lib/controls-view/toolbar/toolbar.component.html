@@ -1,5 +1,5 @@
 <div class="toolbar">
-  @for (id of getControlIDs(); track $index) {
+  @for (id of controlIds; track $index) {
     @switch (getControlType(id)) {
       @case ("button") {
         <fit-button [model]="getControl(id)" />

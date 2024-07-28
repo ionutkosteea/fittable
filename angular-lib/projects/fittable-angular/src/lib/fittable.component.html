@@ -1,15 +1,15 @@
-@if (hasToolbar()) {
-  <fit-toolbar [model]="getToolbar()" />
+@if (toolbar) {
+  <fit-toolbar [model]="toolbar" />
 }
 <div class="table-container">
-  <fit-table [viewModel]="getViewModel()" />
+  <fit-table [viewModel]="viewModel" />
 </div>
-@if (hasStatusbar()) {
-  <fit-statusbar [model]="getStatusbar()" />
+@if (statusbar) {
+  <fit-statusbar [model]="statusbar" />
 }
-@if (hasSettingsBar()) {
-  <fit-settingsbar [model]="getSettingsBar()" />
+@if (settingsBar) {
+  <fit-settingsbar [model]="settingsBar" />
 }
-@if (hasContextMenu()) {
-  <fit-context-menu [model]="getContextMenu()" [position]="'fixed'" />
+@if (contextMenu) {
+  <fit-context-menu [model]="contextMenu" [position]="'fixed'" />
 }

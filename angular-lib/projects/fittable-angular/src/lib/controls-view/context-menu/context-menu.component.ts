@@ -58,6 +58,14 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
   private isTextFieldMouseDown = false;
   private isSubMenu = false;
 
+  get controlIds(): string[] {
+    return this.model().getControlIds();
+  }
+
+  get arrowRightIcon(): string | undefined {
+    return getImageRegistry().getUrl('arrowRight');
+  }
+
   ngOnInit(): void {
     this.windowListener = createWindowListener(this.model());
   }
@@ -98,10 +106,6 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
     if (this.bottom !== undefined) style['bottom'] = this.bottom();
     if (this.maxHeight !== undefined) style['max-height'] = this.maxHeight();
     return style;
-  }
-
-  getControlIds(): string[] {
-    return this.model().getControlIds();
   }
 
   getControl(id: string): Control {
@@ -147,10 +151,6 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
     } else if (!createToggleStyle(control)) {
       control.run();
     }
-  }
-
-  getArrowRightIcon(): string | undefined {
-    return getImageRegistry().getUrl('arrowRight');
   }
 
   hasTextField(id: string): boolean {

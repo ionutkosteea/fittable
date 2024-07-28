@@ -1,8 +1,8 @@
-<button #button [title]="getLabel()" (click)="run()">
-  <fit-svg-img [content]="getIcon()" />
+<button #button [title]="label" (click)="run()">
+  <fit-svg-img [content]="icon" />
 </button>
 <fit-context-menu
-  [model]="getWindow()"
+  [model]="window"
   [left]="'auto'"
   [top]="'1.25rem'"
   [right]="0"

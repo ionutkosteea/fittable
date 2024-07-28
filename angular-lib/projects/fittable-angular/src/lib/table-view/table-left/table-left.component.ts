@@ -28,11 +28,11 @@ export class TableLeftComponent extends TableCommon {
 
   @ViewChild('scroller') scrollerRef?: ElementRef;
 
-  getCellSelectionRanges(): CellSelectionRanges | undefined {
+  get cellSelectionRanges(): CellSelectionRanges | undefined {
     return this.viewModel().cellSelection?.rowHeader;
   }
 
-  getCellSelectionRectangles(): CssStyle[] {
+  get cellSelectionRectangles(): CssStyle[] {
     return this.viewModel().mobileLayout.rowHeaderSelectionRectangles;
   }
 }

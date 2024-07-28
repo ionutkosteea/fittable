@@ -10,31 +10,77 @@ import {
 export abstract class TableCommon {
   protected abstract viewModel: InputSignal<ViewModel>;
 
-  hasColHeader(): boolean {
-    return this.viewModel().tableViewer.hasColHeader();
+  get rowIds(): RangeIterator {
+    return this.viewModel().tableScrollContainer.getRenderableRows();
   }
 
-  getColLabel(colId: number): string | number | undefined {
-    const labelFn: ((colId: number) => string | number) | undefined =
-      getViewModelConfig().colHeaderTextFn;
-    return labelFn && labelFn(colId);
+  get colIds(): RangeIterator {
+    return this.viewModel().tableScrollContainer.getRenderableCols();
   }
 
-  getRowLabel(rowId: number): string | number | undefined {
-    const labelFn: ((rowId: number) => string | number) | undefined =
-      getViewModelConfig().rowHeaderTextFn;
-    return labelFn && labelFn(rowId);
-  }
-
-  hasRowHeader(): boolean {
+  get hasRowHeader(): boolean {
     return this.viewModel().tableViewer.hasRowHeader();
   }
 
+  get hasColHeader(): boolean {
+    return this.viewModel().tableViewer.hasColHeader();
+  }
+
+  get rowHeaderTextFn(): ((rowId: number) => string | number) | undefined {
+    return getViewModelConfig().rowHeaderTextFn;
+  }
+
+  get colHeaderTextFn(): ((colId: number) => string | number) | undefined {
+    return getViewModelConfig().colHeaderTextFn;
+  }
+
+  get scrollLeft(): number {
+    return this.viewModel().tableScrollContainer.getScroller().getLeft();
+  }
+
+  get scrollTop(): number {
+    return this.viewModel().tableScrollContainer.getScroller().getTop();
+  }
+
+  get offsetX(): number {
+    return this.viewModel().tableScrollContainer.getInnerOffsetX();
+  }
+
+  get offsetY(): number {
+    return this.viewModel().tableScrollContainer.getInnerOffsetY();
+  }
+
+  get rowHeaderWidth(): number {
+    return this.viewModel().tableViewer.getRowHeaderWidth();
+  }
+
+  get colHeaderHeight(): number {
+    return this.viewModel().tableViewer.getColHeaderHeight();
+  }
+
+  get bodyHeight(): number {
+    return this.viewModel().tableViewer.getBodyHeight();
+  }
+
+  get bodyWidth(): number {
+    return this.viewModel().tableViewer.getBodyWidth();
+  }
+
+  get bodyOffset(): CssStyle {
+    return this.viewModel().mobileLayout.bodyOffset;
+  }
+
+  get rowHeaderOffset(): CssStyle {
+    return this.viewModel().mobileLayout.rowHeaderOffset;
+  }
+
+  get colHeaderOffset(): CssStyle {
+    return this.viewModel().mobileLayout.colHeaderOffset;
+  }
+
   getCellStyle = (rowId: number, colId: number): CssStyle | null => {
-    return (
-      this.viewModel().tableViewer.getCellStyle(rowId, colId)?.toCss() ?? null
-    );
-  };
+    return this.viewModel().tableViewer.getCellStyle(rowId, colId)?.toCss() ?? null;
+  }
 
   getCellValue(rowId: number, colId: number): Value | undefined {
     return this.viewModel().tableViewer.getCellValue(rowId, colId);
@@ -56,14 +102,6 @@ export abstract class TableCommon {
     return this.viewModel().tableViewer.getColSpan(rowId, colId);
   }
 
-  getRowIds(): RangeIterator {
-    return this.viewModel().tableScrollContainer.getRenderableRows();
-  }
-
-  getColIds(): RangeIterator {
-    return this.viewModel().tableScrollContainer.getRenderableCols();
-  }
-
   getColWidth(colId: number): number {
     return this.viewModel().tableViewer.getColWidth(colId);
   }
@@ -74,50 +112,6 @@ export abstract class TableCommon {
 
   showContextMenu(event: MouseEvent): void {
     const contextMenu = this.viewModel().contextMenu;
-    return contextMenu && createWindowListener(contextMenu).onShow(event);
-  }
-
-  getScrollLeft(): number {
-    return this.viewModel().tableScrollContainer.getScroller().getLeft();
-  }
-
-  getScrollTop(): number {
-    return this.viewModel().tableScrollContainer.getScroller().getTop();
-  }
-
-  getOffsetX(): number {
-    return this.viewModel().tableScrollContainer.getInnerOffsetX();
-  }
-
-  getOffsetY(): number {
-    return this.viewModel().tableScrollContainer.getInnerOffsetY();
-  }
-
-  getRowHeaderWidth(): number {
-    return this.viewModel().tableViewer.getRowHeaderWidth();
-  }
-
-  getColHeaderHeight(): number {
-    return this.viewModel().tableViewer.getColHeaderHeight();
-  }
-
-  getBodyHeight(): number {
-    return this.viewModel().tableViewer.getBodyHeight();
-  }
-
-  getBodyWidth(): number {
-    return this.viewModel().tableViewer.getBodyWidth();
-  }
-
-  getBodyOffset(): CssStyle {
-    return this.viewModel().mobileLayout.bodyOffset;
-  }
-
-  getRowHeaderOffset(): CssStyle {
-    return this.viewModel().mobileLayout.rowHeaderOffset;
-  }
-
-  getColHeaderOffset(): CssStyle {
-    return this.viewModel().mobileLayout.colHeaderOffset;
+    contextMenu && createWindowListener(contextMenu).onShow(event);
   }
 }

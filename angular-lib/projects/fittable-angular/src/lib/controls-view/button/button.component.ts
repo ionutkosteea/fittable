@@ -15,10 +15,10 @@ import { SvgImgComponent } from '../svg-img/svg-img.component';
     <button
       [ngStyle]="getStyle()"
       [ngClass]="{ 'is-on': isOn() }"
-      [title]="getLabel()"
+      [title]="label"
       (click)="run()"
     >
-       <fit-svg-img [content]="getIcon()"/>
+       <fit-svg-img [content]="icon"/>
     </button>
   `,
   styleUrl: './button.component.scss',
@@ -26,20 +26,20 @@ import { SvgImgComponent } from '../svg-img/svg-img.component';
 export class ButtonComponent {
   model = input.required<Control>();
 
-  getLabel(): string {
+  get label(): string {
     return this.model().getLabel();
   }
 
-  getIcon(): string | undefined {
+  get icon(): string | undefined {
     return this.model().getIcon();
-  }
-
-  getStyle(): CssStyle | null {
-    return createToggleStyle(this.model());
   }
 
   isOn(): boolean {
     return asToggleControl(this.model())?.isOn() ?? false;
+  }
+
+  getStyle(): CssStyle | null {
+    return createToggleStyle(this.model());
   }
 
   run(): void {

@@ -1,11 +1,11 @@
-import { Subscription } from 'rxjs';
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
+  inject,
   input,
   signal,
 } from '@angular/core';
@@ -20,6 +20,7 @@ import {
   getViewModelConfig,
   Option,
 } from 'fittable-core/view-model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fit-cell-editor',
@@ -28,14 +29,14 @@ import {
   templateUrl: './cell-editor.component.html',
   styleUrl: 'cell-editor.component.scss',
 })
-export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CellEditorComponent implements OnInit, AfterViewInit {
   cellEditorListener = input.required<CellEditorListener>();
   getCellStyle = input.required<(rowId: number, colId: number) => CssStyle | null>();
 
   @ViewChild('textArea') textAreaRef!: ElementRef;
   protected readonly cellEditorStyle = signal<CssStyle>({});
   protected readonly textAreaStyle = signal<CssStyle>({});
-  private readonly subscriptions: Subscription[] = [];
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.initCellEditor();
@@ -48,10 +49,6 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateTextAreaValue(
       this.cellEditorListener().cellEditor.getCellControl().getValue()
     );
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription): void => s.unsubscribe());
   }
 
   onTextAreaMouseEnter(event: MouseEvent): void {
@@ -90,54 +87,46 @@ export class CellEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private createCellEditorSubscriptions(): void {
     const cellEditor: CellEditor = this.cellEditorListener().cellEditor;
-    this.subscriptions.push(
-      cellEditor.onAfterSetCell$().subscribe((): void => {
+    cellEditor.onAfterSetCell$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((): void => {
         this.updateCellEditorRectangle();
         this.updateTextAreaCellStyle();
         this.updateTextAreaDimensions();
       })
-    );
-    this.subscriptions.push(
-      cellEditor.onAfterSetVisible$().subscribe((visible: boolean): void => {
+    cellEditor.onAfterSetVisible$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((visible: boolean): void => {
         this.updateCellEditorVisibility(visible);
       })
-    );
-    this.subscriptions.push(
-      cellEditor
-        .onAfterSetPointerEvents$()
-        .subscribe((events: boolean): void => {
-          this.updateCellEditorPointerEvents(events);
-        })
-    );
+    cellEditor.onAfterSetPointerEvents$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((events: boolean): void => {
+        this.updateCellEditorPointerEvents(events);
+      })
   }
 
   private createCellEditorInputSubscriptions(): void {
     const inputControl: InputControl = this.getInputControl();
-    this.subscriptions.push(
-      inputControl.onSetFocus$().subscribe((enable: boolean): void => {
+    inputControl.onSetFocus$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((enable: boolean): void => {
         this.focusTextArea(enable);
       })
-    );
-    this.subscriptions.push(
-      inputControl
-        .onScrollToEnd$()
-        .subscribe((): void => this.textAreaScrollToEnd())
-    );
-    this.subscriptions.push(
-      inputControl
-        .onCtrlEnter$()
-        .subscribe((): void => this.textAreaCtrlEnter())
-    );
-    this.subscriptions.push(
-      inputControl
-        .onSetValue$()
-        .subscribe((value?: Value): void => this.updateTextAreaValue(value))
-    );
-    this.subscriptions.push(
-      inputControl.onSetTextCursor$().subscribe((cursor: boolean): void => {
+    inputControl.onScrollToEnd$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((): void => this.textAreaScrollToEnd())
+    inputControl.onCtrlEnter$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((): void => this.textAreaCtrlEnter())
+    inputControl.onSetValue$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value?: Value): void => this.updateTextAreaValue(value))
+    inputControl.onSetTextCursor$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((cursor: boolean): void => {
         this.updateTextAreaCaretColor(cursor);
       })
-    );
   }
 
   private updateCellEditorVisibility(visible: boolean): void {

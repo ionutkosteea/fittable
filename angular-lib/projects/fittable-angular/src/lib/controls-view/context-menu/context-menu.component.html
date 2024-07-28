@@ -5,7 +5,7 @@
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
 >
-  @for (id of getControlIds(); track $index) {
+  @for (id of controlIds; track $index) {
     @switch (getControlType(id)) {
       @case ("separator") {
         <hr class="sep-v" />
@@ -61,7 +61,7 @@
           } @else {
             <div class="item-label">{{ getControlLabel(id) }}</div>
           }
-          <fit-svg-img [content]="getArrowRightIcon()" />
+          <fit-svg-img [content]="arrowRightIcon" />
         </div>
         <fit-context-menu
           [model]="getMenuItemWindow(id)"

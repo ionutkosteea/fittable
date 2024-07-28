@@ -1,8 +1,8 @@
-import { Subscription } from 'rxjs';
 import {
   Component,
+  DestroyRef,
   OnInit,
-  OnDestroy,
+  inject,
   input,
   output,
   signal
@@ -28,6 +28,7 @@ import { ScrollContainerDirective } from '../../controls-view/common/scroll-cont
 import { CellEditorComponent } from '../../controls-view/cell-editor/cell-editor.component';
 import { CellEditorOpenDirective } from '../../controls-view/cell-editor/cell-editor.directive';
 import { CellSelectionDirective } from '../common/cell-selection.directive';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fit-table-center',
@@ -42,25 +43,37 @@ import { CellSelectionDirective } from '../common/cell-selection.directive';
   templateUrl: './table-center.component.html',
   styleUrls: ['../common/scss/table.scss', './table-center.component.scss'],
 })
-export class TableCenterComponent
-  extends TableCommon
-  implements OnInit, OnDestroy {
+export class TableCenterComponent extends TableCommon implements OnInit {
   override viewModel = input.required<ViewModel>();
   cellSelectionListener = input<CellSelectionListener>();
   onScroll$ = output<{ scrollLeft: number; scrollTop: number }>();
 
   protected readonly cellEditorListener = signal<CellEditorListener | undefined>(undefined);
-  private readonly subscriptions: Set<Subscription | undefined> = new Set();
+  private readonly destroyRef = inject(DestroyRef);
+
+  get scrollContainer(): ScrollContainer {
+    return this.viewModel().tableScrollContainer;
+  }
+
+  get cellSelectionRanges(): CellSelectionRanges | undefined {
+    return this.viewModel().cellSelection?.body;
+  }
+
+  get selectedCells(): CellRange[] | undefined {
+    return this.viewModel().cellSelection?.body.getRanges();
+  }
+
+  get cellSelectionRectangles(): CssStyle[] {
+    return this.viewModel().mobileLayout.bodySelectionRectangles;
+  }
+
+  get tableFontSize(): number {
+    return getViewModelConfig().fontSize;
+  }
 
   ngOnInit(): void {
     this.cellEditorListener.set(this.createCellEditorListener());
-    this.subscriptions.add(this.openCellEditorContextMenu$());
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((s: Subscription | undefined): void =>
-      s?.unsubscribe()
-    );
+    this.openCellEditorContextMenu();
   }
 
   onScroll(event: Event): void {
@@ -69,26 +82,6 @@ export class TableCenterComponent
       scrollLeft: scrollContainer.scrollLeft,
       scrollTop: scrollContainer.scrollTop,
     });
-  }
-
-  getScrollContainer(): ScrollContainer {
-    return this.viewModel().tableScrollContainer;
-  }
-
-  getCellSelectionRanges(): CellSelectionRanges | undefined {
-    return this.viewModel().cellSelection?.body;
-  }
-
-  getSelectedCells(): CellRange[] {
-    return this.viewModel().cellSelection?.body.getRanges() ?? [];
-  }
-
-  getCellSelectionRectangles(): CssStyle[] {
-    return this.viewModel().mobileLayout.bodySelectionRectangles;
-  }
-
-  getTableFontSize(): number {
-    return getViewModelConfig().fontSize;
   }
 
   getTableFontFamily(): string | undefined {
@@ -114,10 +107,14 @@ export class TableCenterComponent
     return cellEditor && createCellEditorListener(cellEditor, (): CellRange[] => this.viewModel().cellSelection?.body.getRanges() ?? []);
   }
 
-  private openCellEditorContextMenu$(): Subscription | undefined {
+  private openCellEditorContextMenu(): void {
     const contextMenu = this.viewModel().contextMenu;
-    return contextMenu && this.cellEditorListener()?.onContextMenu$().subscribe((event: FitMouseEvent): void => {
-      this.viewModel().contextMenu && createWindowListener(contextMenu).onShow(event);
-    })
+    contextMenu &&
+      this.cellEditorListener()
+        ?.onContextMenu$()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((event: FitMouseEvent): void => {
+          createWindowListener(contextMenu).onShow(event);
+        })
   }
 }

@@ -7,7 +7,6 @@ import {
   Statusbar,
   ViewModel,
   TableDesigner,
-  ScrollContainer,
 } from 'fittable-core/view-model';
 
 import { ToolbarComponent } from './controls-view/toolbar/toolbar.component';
@@ -33,47 +32,30 @@ import { ContextMenuComponent } from './controls-view/context-menu/context-menu.
 export class FittableComponent implements OnDestroy {
   designer = input.required<TableDesigner>();
 
-  ngOnDestroy(): void {
-    this.designer().viewModel.destroy();
-  }
-
-  getViewModel(): ViewModel {
+  get viewModel(): ViewModel {
     return this.designer().viewModel;
   }
 
-  getTableScrollContainer(): ScrollContainer {
-    return this.designer().viewModel.tableScrollContainer;
+  get toolbar(): Container | undefined {
+    return this.viewModel.toolbar;
   }
 
-  hasToolbar(): boolean {
-    return this.designer().viewModel.toolbar !== undefined;
+
+  get contextMenu(): Window | undefined {
+    return this.viewModel.contextMenu;
   }
 
-  getToolbar(): Container {
-    return this.designer().viewModel.toolbar as Container;
+
+  get statusbar(): Statusbar | undefined {
+    return this.viewModel.statusbar;
   }
 
-  hasContextMenu(): boolean {
-    return this.designer().viewModel.contextMenu !== undefined;
+
+  get settingsBar(): Container | undefined {
+    return this.viewModel.settingsBar;
   }
 
-  getContextMenu(): Window {
-    return this.designer().viewModel.contextMenu as Window;
-  }
-
-  hasStatusbar(): boolean {
-    return this.designer().viewModel.statusbar !== undefined;
-  }
-
-  getStatusbar(): Statusbar {
-    return this.designer().viewModel.statusbar as Statusbar;
-  }
-
-  hasSettingsBar(): boolean {
-    return this.designer().viewModel.settingsBar !== undefined;
-  }
-
-  getSettingsBar(): Container {
-    return this.designer().viewModel.settingsBar as Container;
+  ngOnDestroy(): void {
+    this.viewModel.destroy();
   }
 }

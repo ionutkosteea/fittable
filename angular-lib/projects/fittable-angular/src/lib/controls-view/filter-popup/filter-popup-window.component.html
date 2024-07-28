@@ -8,17 +8,17 @@
     <fit-svg-img [content]="getSearchInputIcon()" />
   </div>
   <div class="right-aligned-bar">
-    <button class="select-button" (click)="getClearButton().run()">
-      {{ getClearButton().getLabel() }}
+    <button class="select-button" (click)="clearButton.run()">
+      {{ clearButton.getLabel() }}
     </button>
-    <button class="select-button" (click)="getSelectAllButton().run()">
-      {{ getSelectAllButton().getLabel() }}
+    <button class="select-button" (click)="selectAllButton.run()">
+      {{ selectAllButton.getLabel() }}
     </button>
   </div>
   <div
     class="scroll-container"
     fitScrollContainer
-    [scrollContainer]="getScrollContainer()"
+    [scrollContainer]="scrollContainer"
   >
     @if (hasCheckList()) {
       <div
@@ -28,10 +28,10 @@
         <div
           class="mobile-container"
           [ngStyle]="{
-            transform: 'translate3d(0px,' + getScrollOffsetY() + 'px,0px)'
+            transform: 'translate3d(0px,' + scrollOffsetY + 'px,0px)'
           }"
         >
-          @for (id of getCheckBoxIds(); track $index) {
+          @for (id of checkBoxIds; track $index) {
             <div class="check-item" (click)="onCheckBoxClick(id)">
               <input
                 type="checkbox"
@@ -48,11 +48,11 @@
     }
   </div>
   <div class="center-aligned-bar">
-    <button class="action-button" (click)="getOkButton().run()">
-      {{ getOkButton().getLabel() }}
+    <button class="action-button" (click)="okButton.run()">
+      {{ okButton.getLabel() }}
     </button>
-    <button class="action-button" (click)="getCancelButton().run()">
-      {{ getCancelButton().getLabel() }}
+    <button class="action-button" (click)="cancelButton.run()">
+      {{ cancelButton.getLabel() }}
     </button>
   </div>
 </div>

@@ -34,24 +34,24 @@ export class BorderPopupComponent {
   protected isColorPickerVisible = signal(false);
   protected isBorderTypeVisible = signal(false);
 
-  getWindow(): Window {
+  get window(): Window {
     return this.model().getWindow();
   }
 
   getLeftPanelIDs(): string[] {
-    return this.getWindow()
+    return this.window
       .getControlIds()
       .slice(0, this.getFirstSepartorIndex());
   }
 
   getRightPanelIDs(): string[] {
-    return this.getWindow()
+    return this.window
       .getControlIds()
       .slice(this.getFirstSepartorIndex() + 1);
   }
 
   getControl(id: string): Control {
-    return this.getWindow().getControl(id);
+    return this.window.getControl(id);
   }
 
   getPopupControl(id: string): PopupControl {
@@ -65,7 +65,7 @@ export class BorderPopupComponent {
   }
 
   getFirstSepartorIndex(): number {
-    const ids: (string | number)[] = this.getWindow().getControlIds();
+    const ids: (string | number)[] = this.window.getControlIds();
     for (let i = 0; i < ids.length; i++) {
       if (this.getControlType('' + ids[i]) === 'separator') return i;
     }

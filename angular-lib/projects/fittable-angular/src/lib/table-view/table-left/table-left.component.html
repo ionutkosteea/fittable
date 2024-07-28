@@ -1,27 +1,29 @@
-@if (hasRowHeader()) {
+@if (hasRowHeader) {
   <div class="scroll-container" #scroller>
     <div
       class="full-size-container"
       [ngStyle]="{
-        'width.px': getRowHeaderWidth(),
-        'height.px': getBodyHeight()
+        'width.px': rowHeaderWidth,
+        'height.px': bodyHeight
       }"
     >
-      <div class="offset-container" [ngStyle]="getRowHeaderOffset()">
+      <div class="offset-container" [ngStyle]="rowHeaderOffset">
         <table class="table">
           <colgroup>
-            <col [ngStyle]="{ 'width.px': getRowHeaderWidth() }" />
+            <col [ngStyle]="{ 'width.px': rowHeaderWidth }" />
           </colgroup>
           <tbody
             (contextmenu)="showContextMenu($event)"
             fitCellSelection
             [cellSelectionListener]="cellSelectionListener()"
-            [cellSelectionRanges]="getCellSelectionRanges()"
+            [cellSelectionRanges]="cellSelectionRanges"
           >
-            @for (rowId of getRowIds(); track $index) {
+            @for (rowId of rowIds; track $index) {
               <tr [ngStyle]="{ 'height.px': getRowHeight(rowId) }">
                 <th class="header-cell" [attr.rowId]="rowId" [attr.colId]="0">
-                  <p class="cell-text">{{ getRowLabel(rowId) }}</p>
+                  <p class="cell-text">
+                    {{ rowHeaderTextFn && rowHeaderTextFn(rowId) }}
+                  </p>
                 </th>
               </tr>
             }
@@ -29,7 +31,7 @@
         </table>
       </div>
     </div>
-    @for (rect of getCellSelectionRectangles(); track $index) {
+    @for (rect of cellSelectionRectangles; track $index) {
       <div class="header-cell-selection" [ngStyle]="rect"></div>
     }
   </div>
