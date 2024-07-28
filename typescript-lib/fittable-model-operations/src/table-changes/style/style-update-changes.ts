@@ -56,8 +56,7 @@ export class StyleUpdateChangesBuilder {
       changes: [this.styleChange],
       undoChanges: { changes: [this.styleUndoChange] },
     };
-    this.updatableCellStyles = //
-      findUpdatableCellStyles(table, args.selectedCells, args.styleSnippet);
+    this.updatableCellStyles = findUpdatableCellStyles(table, args.selectedCells, args.styleSnippet);
     this.maxStyleNameUid = maxStyleNameUid ?? getMaxStyleNameUid(this.table);
   }
 
@@ -68,8 +67,7 @@ export class StyleUpdateChangesBuilder {
 
   private updateStyles(): void {
     const allCellsCnt: Map<string, number> = countAllCellStyleNames(this.table);
-    const selectedCellsCnt: Map<string, number> = //
-      countSelectedCellStyleNames(this.table, this.args.selectedCells);
+    const selectedCellsCnt: Map<string, number> = countSelectedCellStyleNames(this.table, this.args.selectedCells);
     for (const oldStyleName of this.updatableCellStyles.keys()) {
       if (oldStyleName) {
         const numOfAllCells: number = allCellsCnt.get(oldStyleName) ?? 0;
@@ -80,7 +78,7 @@ export class StyleUpdateChangesBuilder {
         } else {
           this.updateStyleOrAttachExistingOne(
             oldStyleName,
-            numOfAllCells === 1
+            numOfAllCells === numOfSelectedCells
           );
         }
       } else {
@@ -166,7 +164,7 @@ export class StyleUpdateChangesBuilder {
 
   private updateStyleOrAttachExistingOne(
     oldStyleName: string,
-    isOldStyleOnSingleCell: boolean
+    hasAllStyledCellsSelected: boolean
   ): void {
     const oldStyle: Style | undefined = this.table.getStyle(oldStyleName);
     if (!oldStyle) return;
@@ -179,7 +177,7 @@ export class StyleUpdateChangesBuilder {
         this.findName4Style(newStyle);
       if (existingStyleName) {
         this.attachExistingStyle(existingStyleName, oldStyleName);
-        isOldStyleOnSingleCell &&
+        hasAllStyledCellsSelected &&
           this.removeStyleWithoutStyleNames(oldStyleName, oldStyle);
       } else {
         this.updateStyle(oldStyleName, oldStyle, newStyle);
