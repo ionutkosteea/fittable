@@ -40,12 +40,12 @@ export class FitSettingsBarBuilder {
 
   private createWindow(): FitWindow<string> {
     const window: FitWindow<FitSettingsBarControlId> = new FitWindow();
-    this.addLocals(window);
+    this.addLocales(window);
     this.addThemes(window);
     return window;
   }
 
-  private addLocals(window: FitWindow<FitSettingsBarControlId>): void {
+  private addLocales(window: FitWindow<FitSettingsBarControlId>): void {
     const controls: FitControl = new FitControl()
       .setType('label')
       .setLabel((): string => getLanguageDictionary().getText('Languages'));

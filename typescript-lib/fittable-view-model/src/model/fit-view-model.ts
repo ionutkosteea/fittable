@@ -220,13 +220,7 @@ export class FitViewModel implements ViewModel {
 
   private createSettingsBar(): Container | undefined {
     try {
-      return createSettingsBar(this.themeSwitcher, (locale: string): void => {
-        const dataTypeTable: TableCellDataType | undefined =
-          asTableCellDataType(this.table);
-        if (!dataTypeTable) return;
-        dataTypeTable.setLocale(locale);
-        this.loadTable(this.table);
-      });
+      return createSettingsBar(this.themeSwitcher, (locale: string) => asTableCellDataType(this.table)?.setLocale(locale));
     } catch (error) {
       if (error instanceof MissingFactoryError) return undefined;
       else console.error(error);
