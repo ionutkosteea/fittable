@@ -43,8 +43,7 @@ export class FitTable
   TableMergedRegions,
   TableColFilter,
   TableCellDataType {
-  private formatedCellValues: TwoDimensionalMap<string> =
-    new TwoDimensionalMap();
+  private readonly formatedCellValues: TwoDimensionalMap<string> = new TwoDimensionalMap();
 
   constructor(
     private readonly dto: FitTableDto = {
@@ -363,7 +362,7 @@ export class FitTable
     let numberOfRows = 0;
     const filterDto: FitTableDto = {
       locale: this.dto.locale,
-      numberOfRows: numberOfRows,
+      numberOfRows,
       numberOfCols: this.dto.numberOfCols,
       styles: this.dto.styles,
       cols: this.dto.cols,
@@ -392,10 +391,8 @@ export class FitTable
 
   public setLocale(locale: string): this {
     if (locale !== this.dto.locale) {
-      const dictionary: LanguageDictionary<string, string> = //
-        getLanguageDictionary().setLocale(locale);
-      const prevDictionary: LanguageDictionary<string, string> = //
-        dictionary.clone().setLocale(this.getLocale());
+      const dictionary: LanguageDictionary<string, string> = getLanguageDictionary().setLocale(locale);
+      const prevDictionary: LanguageDictionary<string, string> = dictionary.clone().setLocale(this.getLocale());
       this.adaptNumberFormatsToNewLocale(dictionary, prevDictionary);
       this.dto.locale = locale;
     }
@@ -415,15 +412,9 @@ export class FitTable
         format =
           part1 +
           dictionary.getText('thousandSeparator') +
-          part2.replace(
-            prevDictionary.getText('decimalPoint'),
-            dictionary.getText('decimalPoint')
-          );
+          part2.replace(prevDictionary.getText('decimalPoint'), dictionary.getText('decimalPoint'));
       } else {
-        format = part1.replace(
-          prevDictionary.getText('decimalPoint'),
-          dictionary.getText('decimalPoint')
-        );
+        format = part1.replace(prevDictionary.getText('decimalPoint'), dictionary.getText('decimalPoint'));
       }
       this.setCellDataType(rowId, colId, createDataType(dataType.getName(), format));
     });
@@ -458,11 +449,8 @@ export class FitTable
     if (this.formatedCellValues.hasValue(rowId, colId)) {
       return this.formatedCellValues.getValue(rowId, colId);
     } else {
-      const formatedValue: string | undefined = //
-        this.calcFormatedCellValue(rowId, colId);
-      if (formatedValue !== undefined) {
-        this.formatedCellValues.setValue(rowId, colId, formatedValue);
-      }
+      const formatedValue: string | undefined = this.calcFormatedCellValue(rowId, colId);
+      formatedValue !== undefined && this.formatedCellValues.setValue(rowId, colId, formatedValue);
       return formatedValue;
     }
   }
@@ -488,6 +476,11 @@ export class FitTable
       return '#InvalidFormat';
     }
     return undefined;
+  }
+
+  public removeFormatedCellValues(): this {
+    this.formatedCellValues.clearAll();
+    return this;
   }
 
   public getCellType(rowId: number, colId: number): DataTypeName {

@@ -91,6 +91,7 @@ export interface TableCellDataType {
   setCellDataType(rowId: number, colId: number, dataType?: DataType): this;
   getCellType(rowId: number, colId: number): DataTypeName;
   getFormatedCellValue(rowId: number, colId: number): string | undefined;
+  removeFormatedCellValues(): this;
 }
 
 export type Table =

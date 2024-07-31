@@ -104,14 +104,11 @@ export class FitViewModel implements ViewModel {
   }
 
   private createTableScrollContainer(): ScrollContainer {
-    const tableScrollContainer: ScrollContainer = //
-      createScrollContainer(this.tableViewer);
+    const tableScrollContainer: ScrollContainer = createScrollContainer(this.tableViewer);
     !this.config.disableVirtualRows &&
-      tableScrollContainer //
-        .setVerticalScrollbar(new VerticalScrollbar(this.tableViewer));
+      tableScrollContainer.setVerticalScrollbar(new VerticalScrollbar(this.tableViewer));
     !this.config.disableVirtualCols &&
-      tableScrollContainer //
-        .setHorizontalScrollbar(new HorizontalScrollbar(this.tableViewer));
+      tableScrollContainer.setHorizontalScrollbar(new HorizontalScrollbar(this.tableViewer));
     return tableScrollContainer;
   }
 
@@ -220,7 +217,16 @@ export class FitViewModel implements ViewModel {
 
   private createSettingsBar(): Container | undefined {
     try {
-      return createSettingsBar(this.themeSwitcher, (locale: string) => asTableCellDataType(this.table)?.setLocale(locale));
+      return createSettingsBar(this.themeSwitcher, (locale: string): void => {
+        const filterScrTable = this.colFilters?.filterExecutor.table;
+        const filterDestTable = this.colFilters?.filterExecutor.getFilteredTable();
+        if (filterScrTable && filterDestTable) {
+          asTableCellDataType(filterScrTable)?.setLocale(locale);
+          asTableCellDataType(filterDestTable)?.removeFormatedCellValues();
+        } else {
+          asTableCellDataType(this.table)?.setLocale(locale);
+        }
+      });
     } catch (error) {
       if (error instanceof MissingFactoryError) return undefined;
       else console.error(error);
