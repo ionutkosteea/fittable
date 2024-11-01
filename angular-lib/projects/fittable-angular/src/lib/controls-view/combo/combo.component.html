@@ -7,7 +7,7 @@
     readonly
     type="text"
   />
-  <fit-svg-img [content]="icon" (click)="run()" />
+  <fit-svg-img [content]="icon" [ngStyle]="getStyle()" (click)="run()" />
 </div>
 <fit-context-menu
   [model]="window"
