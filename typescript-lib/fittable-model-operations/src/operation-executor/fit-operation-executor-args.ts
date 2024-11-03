@@ -39,7 +39,7 @@ import { CellCutArgs } from '../table-changes/cell/cell-cut-changes.js';
 import { MergedRegionsChange } from '../table-change-writter/merged-regions/merged-regions-change-writter.js';
 import { CellMergeArgs } from '../table-changes/merged-regions/cell-merge-changes.js';
 import { CellUnmergeArgs } from '../table-changes/merged-regions/cell-unmerge-changes.js';
-import { CellDataTypeArgs } from '../table-changes/cell/cell-data-type-change.js';
+import { CellDataTypeArgs } from '../table-changes/cell/cell-data-type-changes.js';
 import { DataTypeChange } from '../table-change-writter/cell/cell-data-type-change-writter.js';
 
 export type FitOperationArgs =

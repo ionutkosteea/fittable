@@ -43,7 +43,7 @@ import { MergedRegionsChangeWritterFactory } from '../table-change-writter/merge
 import { CellMergeChangesFactory } from '../table-changes/merged-regions/cell-merge-changes.js';
 import { CellUnmergeChangesFactory } from '../table-changes/merged-regions/cell-unmerge-changes.js';
 import { CellDataTypeChangeWritterFactory } from '../table-change-writter/cell/cell-data-type-change-writter.js';
-import { CellDataTypeChangesFactory } from '../table-changes/cell/cell-data-type-change.js';
+import { CellDataTypeChangesFactory } from '../table-changes/cell/cell-data-type-changes.js';
 
 export class FitOperationExecutorFactory implements OperationExecutorFactory {
   public createOperationExecutor(): FitOperationExecutor {

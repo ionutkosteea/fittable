@@ -5,7 +5,7 @@ import {
   createCellRange4Dto,
   createDto4CellRangeList,
   CellRangeList,
-  TableCellDataType,
+  TableCellDataType
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -59,7 +59,7 @@ export class CellDataTypeChangesBuilder {
         const oldDataType: DataType | undefined = //
           this.table.getCellDataType(rowId, colId);
         const equalDataTypes: boolean =
-          JSON.stringify(oldDataType) === JSON.stringify(this.args.dataType);
+          JSON.stringify(oldDataType?.getDto()) === JSON.stringify(this.args.dataType?.getDto());
         !equalDataTypes && this.updatableCells.addCell(rowId, colId);
       });
     }
@@ -68,7 +68,7 @@ export class CellDataTypeChangesBuilder {
   private updateCellDataTypes(): void {
     this.dataTypeChange.dataTypes.push({
       cellRanges: createDto4CellRangeList(this.updatableCells.getRanges()),
-      dataType: this.args.dataType,
+      dataType: this.args.dataType?.getDto(),
     });
   }
 
@@ -91,7 +91,7 @@ export class CellDataTypeChangesBuilder {
       (dataType: DataType | undefined, address: CellRange[]): void => {
         this.dataTypeUndoChange.dataTypes.push({
           cellRanges: createDto4CellRangeList(address),
-          dataType,
+          dataType: dataType?.getDto(),
         });
       }
     );

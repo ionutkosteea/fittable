@@ -22,7 +22,7 @@ import { DataTypeChange } from '../../table-change-writter/cell/cell-data-type-c
 import {
   CellDataTypeArgs,
   CellDataTypeChangesBuilder,
-} from '../cell/cell-data-type-change.js';
+} from '../cell/cell-data-type-changes.js';
 
 export type PaintFormatArgs = Args<'paint-format'> & {
   selectedCells: CellRange[];

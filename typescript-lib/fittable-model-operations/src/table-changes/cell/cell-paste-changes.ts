@@ -34,7 +34,7 @@ import { StyleRemoveChangesBuilder } from '../style/style-remove-changes.js';
 import {
   CellDataTypeArgs,
   CellDataTypeChangesBuilder,
-} from './cell-data-type-change.js';
+} from './cell-data-type-changes.js';
 
 export type CellPasteArgs = Args<'cell-paste'> & {
   selectedCells: CellRange[];

@@ -4,6 +4,7 @@ import {
   createCellRange4Dto,
   DataType,
   TableCellDataType,
+  createDataType4Dto,
 } from 'fittable-core/model';
 import {
   TableChangeWritter,
@@ -13,7 +14,7 @@ import {
 
 export type DataTypeDto = {
   cellRanges: unknown[];
-  dataType?: DataType;
+  dataType?: unknown;
 };
 
 export type DataTypeChange = Args<'cell-data-type'> & {
@@ -24,7 +25,7 @@ export class CellDataTypeChangeWritter implements TableChangeWritter {
   constructor(
     private readonly table: Table & TableCellDataType,
     private readonly change: DataTypeChange
-  ) {}
+  ) { }
 
   public run(): void {
     this.updateCells();
@@ -40,7 +41,9 @@ export class CellDataTypeChangeWritter implements TableChangeWritter {
         const toColId: number = cellRange.getTo().getColId();
         for (let rowId: number = fromRowId; rowId <= toRowId; rowId++) {
           for (let colId: number = fromColId; colId <= toColId; colId++) {
-            this.table.setCellDataType(rowId, colId, dataTypeDto.dataType);
+            let dataType: DataType | undefined;
+            if (dataTypeDto.dataType) dataType = createDataType4Dto(dataTypeDto.dataType);
+            this.table.setCellDataType(rowId, colId, dataType);
           }
           this.removeRowIfEmpty(rowId);
         }
@@ -61,8 +64,7 @@ export class CellDataTypeChangeWritter implements TableChangeWritter {
 }
 
 export class CellDataTypeChangeWritterFactory
-  implements TableChangeWritterFactory
-{
+  implements TableChangeWritterFactory {
   public createTableChangeWritter(
     table: Table & TableCellDataType,
     change: DataTypeChange
