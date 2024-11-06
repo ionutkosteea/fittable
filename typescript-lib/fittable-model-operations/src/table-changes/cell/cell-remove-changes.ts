@@ -147,7 +147,7 @@ export class CellRemoveChangesBuilder {
     oldDataTypes.forEach(
       (dataType: DataType | undefined, address: CellRange[]): void => {
         this.cellDataTypesUndoChange.dataTypes.push({
-          dataType,
+          dataType: dataType?.getDto(),
           cellRanges: createDto4CellRangeList(address),
         });
       }

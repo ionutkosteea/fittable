@@ -330,8 +330,10 @@ abstract class LineRemoveChangesBuilder {
     );
     oldDataTypes.forEach(
       (dataType: DataType | undefined, address: CellRange[]): void => {
-        const cellRanges: unknown[] = createDto4CellRangeList(address);
-        this.dataTypeUndoChange.dataTypes.push({ cellRanges, dataType });
+        this.dataTypeUndoChange.dataTypes.push({
+          cellRanges: createDto4CellRangeList(address),
+          dataType: dataType?.getDto()
+        });
       }
     );
   }

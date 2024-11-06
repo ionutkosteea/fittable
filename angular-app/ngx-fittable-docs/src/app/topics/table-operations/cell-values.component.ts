@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { createCellCoord, createCellRange, createDataType } from 'fittable-core/model';
+import { createCellCoord, createCellRange } from 'fittable-core/model';
 import { FitOperationArgs } from 'fittable-model-operations';
 
 import { TopicTitle } from '../../common/topic-title.model';
@@ -26,8 +26,7 @@ export class CellValuesComponent extends ConsoleTopic {
       selectedCells: [
         createCellRange(createCellCoord(1, 1), createCellCoord(1, 2)),
       ],
-      value: '2023-12-31 07:30',
-      dataType: createDataType('date-time', 'yyyy-MM-dd'),
+      value: 'Operation Text'
     };
     this.fit.operationExecutor?.run(args);
   }
