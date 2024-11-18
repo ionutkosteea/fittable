@@ -30,7 +30,7 @@ export class TableDtoComponent extends ConsoleTopic implements OnInit {
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'table-dto-ts.jpg' },
   ];
-  public fitTableDto: FitTableDto = {
+  public override fitTableDto: FitTableDto = {
     numberOfRows: 50,
     numberOfCols: 10,
     cells: {

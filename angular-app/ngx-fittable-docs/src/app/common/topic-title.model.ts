@@ -9,6 +9,7 @@ export type TopicTitle =
   | 'Cell data-type'
   | 'Cell style'
   | 'Cell merge'
+  | 'Cell data reference'
   | 'Table DTO'
   | 'Custom table'
   | 'Update style'

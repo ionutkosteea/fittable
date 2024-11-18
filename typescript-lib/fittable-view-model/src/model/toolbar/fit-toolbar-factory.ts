@@ -1,4 +1,11 @@
-import { asTableCellDataType, asTableStyles } from 'fittable-core/model';
+import {
+  asTableDataTypes,
+  asTableStyles,
+  TableStyles,
+  TableDataTypes,
+  TableDataRefs,
+  asTableDataRefs
+} from 'fittable-core/model';
 import {
   Container,
   ControlArgs,
@@ -28,6 +35,7 @@ import { createVerticalAlignPopup } from './controls/vertical-align-popup.js';
 import { createHorizontalAlignPopup } from './controls/horizontal-align-popup.js';
 import { createBorderPopup } from './controls/border-popup.js';
 import { createDataTypePopup } from './controls/data-type-popup.js';
+import { createDataRefPopup } from './controls/data-ref-popup.js';
 
 export type FitToolbarControlId =
   | 'undo'
@@ -44,7 +52,8 @@ export type FitToolbarControlId =
   | 'vertical-align'
   | 'horizontal-align'
   | 'border'
-  | 'format'
+  | 'data-type'
+  | 'data-ref'
   | `${'separator'}${string}`;
 
 export class FitToolbarFactory implements ToolbarFactory {
@@ -57,14 +66,14 @@ export class FitToolbarFactory implements ToolbarFactory {
       .addControl('redo', createRedoButton(args))
       .addControl(this.getSeparatorId(), new FitSeparator());
     const hasCellSelection: boolean = args.getSelectedCells().length > 0;
-    const isStyledTable: boolean =
-      asTableStyles(args.operationExecutor.getTable()) !== undefined;
-    const isDataTypeTable: boolean =
-      asTableCellDataType(args.operationExecutor.getTable()) !== undefined;
     if (hasCellSelection) {
-      isStyledTable && this.addStyleUpdateControls(toolbar, args);
-      isDataTypeTable && this.addDataTypeUpdateControls(toolbar, args);
+      const tableStyles: TableStyles | undefined = asTableStyles(args.operationExecutor.getTable());
+      const tableDataTypes: TableDataTypes | undefined = asTableDataTypes(args.operationExecutor.getTable());
+      tableStyles && this.addStyleUpdateControls(toolbar, args);
+      tableDataTypes && this.addDataTypeUpdateControls(toolbar, args);
     }
+    const tableDataRefs: TableDataRefs | undefined = asTableDataRefs(args.operationExecutor.getTable());
+    tableDataRefs && this.addDataRefUpdateControls(toolbar, args);
     return toolbar;
   }
 
@@ -97,7 +106,14 @@ export class FitToolbarFactory implements ToolbarFactory {
     toolbar: FitContainer<FitToolbarControlId>,
     args: ControlArgs
   ): void {
-    toolbar.addControl('format', createDataTypePopup(args));
+    toolbar.addControl('data-type', createDataTypePopup(args));
+  }
+
+  private addDataRefUpdateControls(
+    toolbar: FitContainer<FitToolbarControlId>,
+    args: ControlArgs
+  ): void {
+    toolbar.addControl('data-ref', createDataRefPopup(args));
   }
 
   private getSeparatorId(): FitToolbarControlId {

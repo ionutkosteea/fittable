@@ -21,6 +21,7 @@ import { CellCopyChangesFactory } from '../table-changes/cell/cell-copy-changes.
 import { CellPasteChangesFactory } from '../table-changes/cell/cell-paste-changes.js';
 import { CellRemoveChangesFactory } from '../table-changes/cell/cell-remove-changes.js';
 import { CellValueChangesFactory } from '../table-changes/cell/cell-value-changes.js';
+import { CellDataRefsChangesFactory } from "../table-changes/cell/cell-data-ref-changes.js";
 import {
   ColWidthChangesFactory,
   RowHeightChangesFactory,
@@ -44,51 +45,23 @@ import { CellMergeChangesFactory } from '../table-changes/merged-regions/cell-me
 import { CellUnmergeChangesFactory } from '../table-changes/merged-regions/cell-unmerge-changes.js';
 import { CellDataTypeChangeWritterFactory } from '../table-change-writter/cell/cell-data-type-change-writter.js';
 import { CellDataTypeChangesFactory } from '../table-changes/cell/cell-data-type-changes.js';
+import { CellDataRefChangeWritterFactory } from '../table-change-writter/cell/cell-data-ref-change-writter.js';
 
 export class FitOperationExecutorFactory implements OperationExecutorFactory {
   public createOperationExecutor(): FitOperationExecutor {
     return new FitOperationExecutor()
-      .bindTableChangeWritterFactory(
-        'column-width',
-        ColWidthChangeWritterFactory
-      )
-      .bindTableChangeWritterFactory(
-        'column-insert',
-        ColInsertChangeWritterFactory
-      )
-      .bindTableChangeWritterFactory(
-        'column-remove',
-        ColRemoveChangeWritterFactory
-      )
-      .bindTableChangeWritterFactory(
-        'row-height',
-        RowHeightChangeWritterFactory
-      )
-      .bindTableChangeWritterFactory(
-        'row-remove',
-        RowRemoveChangeWritterFactory
-      )
-      .bindTableChangeWritterFactory(
-        'row-insert',
-        RowInsertChangeWritterFactory
-      )
-      .bindTableChangeWritterFactory(
-        'cell-value',
-        CellValueChangeWritterFactory
-      )
-      .bindTableChangeWritterFactory(
-        'cell-data-type',
-        CellDataTypeChangeWritterFactory
-      )
+      .bindTableChangeWritterFactory('column-width', ColWidthChangeWritterFactory)
+      .bindTableChangeWritterFactory('column-insert', ColInsertChangeWritterFactory)
+      .bindTableChangeWritterFactory('column-remove', ColRemoveChangeWritterFactory)
+      .bindTableChangeWritterFactory('row-height', RowHeightChangeWritterFactory)
+      .bindTableChangeWritterFactory('row-remove', RowRemoveChangeWritterFactory)
+      .bindTableChangeWritterFactory('row-insert', RowInsertChangeWritterFactory)
+      .bindTableChangeWritterFactory('cell-value', CellValueChangeWritterFactory)
+      .bindTableChangeWritterFactory('cell-data-ref', CellDataRefChangeWritterFactory)
+      .bindTableChangeWritterFactory('cell-data-type', CellDataTypeChangeWritterFactory)
       .bindTableChangeWritterFactory('cell-copy', CellCopyChangeWritterFactory)
-      .bindTableChangeWritterFactory(
-        'cell-remove',
-        CellRemoveChangeWritterFactory
-      )
-      .bindTableChangeWritterFactory(
-        'merged-regions',
-        MergedRegionsChangeWritterFactory
-      )
+      .bindTableChangeWritterFactory('cell-remove', CellRemoveChangeWritterFactory)
+      .bindTableChangeWritterFactory('merged-regions', MergedRegionsChangeWritterFactory)
       .bindTableChangeWritterFactory('style-update', StyleChangeWritterFactory)
       .bindTableChangesFactory('row-height', RowHeightChangesFactory)
       .bindTableChangesFactory('row-insert', RowInsertChangesFactory)
@@ -98,6 +71,7 @@ export class FitOperationExecutorFactory implements OperationExecutorFactory {
       .bindTableChangesFactory('column-remove', ColRemoveChangesFactory)
       .bindTableChangesFactory('cell-value', CellValueChangesFactory)
       .bindTableChangesFactory('cell-data-type', CellDataTypeChangesFactory)
+      .bindTableChangesFactory('cell-data-ref', CellDataRefsChangesFactory)
       .bindTableChangesFactory('cell-cut', CellCutChangesFactory)
       .bindTableChangesFactory('cell-copy', CellCopyChangesFactory)
       .bindTableChangesFactory('cell-paste', CellPasteChangesFactory)

@@ -25,7 +25,7 @@ import {
   createWindowListener,
 } from 'fittable-core/view-model';
 
-import { createWindowStyle } from '../common/style-functions.model';
+import { createToggleStyle, createWindowStyle } from '../common/style-functions.model';
 import { ScrollContainerDirective } from '../common/scroll-container.directive';
 import { SvgImgComponent } from '../svg-img/svg-img.component';
 
@@ -37,6 +37,7 @@ import { SvgImgComponent } from '../svg-img/svg-img.component';
     <button
       class="popup-button"
       [ngClass]="{ 'is-on': isOn() }"
+      [ngStyle]="getStyle()"
       [title]="label"
     >
       <fit-svg-img [content]="icon" />
@@ -67,6 +68,7 @@ export class FilterPopupButtonComponent implements OnInit {
   }
 
   @HostListener('click', ['$event']) onMouseDown(event: MouseEvent): void {
+    if (this.popupButton.isDisabled()) return;
     this.colFilters().loadCol(this.colId());
     this.windowListener.onShow(event);
     setTimeout((): void => {
@@ -77,6 +79,10 @@ export class FilterPopupButtonComponent implements OnInit {
 
   isOn(): boolean {
     return asToggleControl(this.popupButton)?.isOn() ?? false;
+  }
+
+  getStyle(): CssStyle | null {
+    return createToggleStyle(this.popupButton);
   }
 }
 

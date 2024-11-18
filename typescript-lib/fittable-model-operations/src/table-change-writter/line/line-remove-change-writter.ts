@@ -11,11 +11,11 @@ import {
   Args,
 } from 'fittable-core/operations';
 
-export type MoveLinesDto = { lineRange: unknown; move: number };
+export type MoveLinesItem = { lineRange: unknown; move: number };
 
 export type LineRemoveChange = {
   lineRanges: unknown[];
-  moveLines: MoveLinesDto[];
+  moveLines: MoveLinesItem[];
 };
 
 abstract class LineRemoveChangeWritter implements TableChangeWritter {
@@ -24,7 +24,7 @@ abstract class LineRemoveChangeWritter implements TableChangeWritter {
   constructor(
     protected readonly table: Table,
     protected readonly change: LineRemoveChange
-  ) {}
+  ) { }
 
   protected abstract updateNumberOfLines(): void;
   protected abstract removeLine(lineIndex: number): void;
@@ -93,8 +93,7 @@ export class RowRemoveChangeWritter extends LineRemoveChangeWritter {
 }
 
 export class RowRemoveChangeWritterFactory
-  implements TableChangeWritterFactory
-{
+  implements TableChangeWritterFactory {
   public createTableChangeWritter(
     table: Table,
     change: RowRemoveChange
@@ -131,8 +130,7 @@ export class ColRemoveChangeWritter extends LineRemoveChangeWritter {
 }
 
 export class ColRemoveChangeWritterFactory
-  implements TableChangeWritterFactory
-{
+  implements TableChangeWritterFactory {
   public createTableChangeWritter(
     table: Table,
     change: ColRemoveChange

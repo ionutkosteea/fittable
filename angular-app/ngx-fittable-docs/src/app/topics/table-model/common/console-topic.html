@@ -4,8 +4,15 @@
   <div class="fittable">
     <fittable [designer]="fit"></fittable>
   </div>
-  <textarea class="console" #console [value]="getDtoText()"></textarea>
+  <textarea
+    class="console"
+    #console
+    [value]="getConsoleText()"
+    [disabled]="isConsoleDisabled ? 'disabled' : undefined"
+  ></textarea>
+  @if (!isConsoleDisabled) {
   <button class="button" (click)="onLoadDto()">Load DTO</button>
+  }
   <h2 class="subtitle">HTML code</h2>
   <ng-container *ngFor="let codeSnippet of htmlCode">
     <div class="code-snippet">

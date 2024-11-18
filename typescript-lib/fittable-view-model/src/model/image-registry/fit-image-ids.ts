@@ -49,6 +49,8 @@ export type FitImageId =
   | 'automatic'
   | 'text'
   | 'number'
-  | 'date';
+  | 'date'
+  | 'cellValue'
+  | 'cellDataRef';
 
 export type FitImages = { [id in FitImageId]?: string };

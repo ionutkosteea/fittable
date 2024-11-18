@@ -3,10 +3,10 @@ import {
   ColConditionFn,
   ColFilterExecutorFactory,
   TableBasics,
-  TableColFilter,
+  TableColFilters,
 } from 'fittable-core/model';
 
-type FitTable = TableBasics & TableColFilter;
+type FitTable = TableBasics & TableColFilters;
 
 type ColCondition = {
   table: FitTable;
@@ -17,7 +17,7 @@ export class FitColFilterExecutor implements ColFilterExecutor {
   private readonly conditions: Map<number, ColCondition> = new Map();
   private filteredTable?: FitTable;
 
-  constructor(public readonly table: FitTable) {}
+  constructor(public readonly table: FitTable) { }
 
   public addCondition(colId: number, conditionFn: ColConditionFn): this {
     this.conditions.set(colId, {

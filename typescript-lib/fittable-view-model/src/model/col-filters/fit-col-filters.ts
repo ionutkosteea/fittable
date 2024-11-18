@@ -3,10 +3,10 @@ import { Subscription } from 'rxjs';
 import {
   Table,
   Value,
-  TableColFilter,
+  TableColFilters,
   ColFilterExecutor,
   createColFilterExecutor,
-  asTableColFilter,
+  asTableColFilters,
   getLanguageDictionary,
 } from 'fittable-core/model';
 import { OperationExecutor } from 'fittable-core/operations';
@@ -41,7 +41,7 @@ export type FitColFiltersControlId =
   | 'ok-button'
   | 'cancel-button';
 
-type FitTable = Table & TableColFilter;
+type FitTable = Table & TableColFilters;
 
 export class FitColFilters implements ColFilters {
   public readonly filterExecutor: ColFilterExecutor;
@@ -56,13 +56,13 @@ export class FitColFilters implements ColFilters {
   private valueCheckListSubscriptions: Subscription[] = [];
 
   constructor(private readonly operationExecutor: OperationExecutor) {
-    const table: FitTable | undefined = //
-      asTableColFilter(operationExecutor.getTable());
+    const table: FitTable | undefined =
+      asTableColFilters(operationExecutor.getTable());
     if (!table) throw new Error('Filter table was not found!');
     this.filterExecutor = createColFilterExecutor(table);
     this.valueConditions = new ColValueConditions();
     this.popupButton = this.createPopupButton();
-    this.valueScrollContainer = createScrollContainer() //
+    this.valueScrollContainer = createScrollContainer()
       .setVerticalScrollbar(new ColValueScrollbar(this.popupButton));
     this.subscriptions.push(this.initValueScrollContainer$());
     this.subscriptions.push(this.clearValueCheckListControls$());
@@ -83,10 +83,8 @@ export class FitColFilters implements ColFilters {
   }
 
   private createSearchInput(): FitInputControl {
-    const input: FitInputControl = new FitInputControl() //
-      .setLabel((): string =>
-        getLanguageDictionary().getText('Filter by value')
-      )
+    const input: FitInputControl = new FitInputControl()
+      .setLabel((): string => getLanguageDictionary().getText('Filter by value'))
       .setIcon((): string | undefined => getImageRegistry().getUrl('search'));
     let origList: FitPopupControl<string> | undefined;
     input.setRun((): void => {
@@ -96,8 +94,7 @@ export class FitColFilters implements ColFilters {
           this.getValueAsString(input.getValue()) ?? '';
         if (inputValue) {
           this.isSearchMode = true;
-          const searchList: FitPopupControl<string> =
-            this.createValueCheckList();
+          const searchList: FitPopupControl<string> = this.createValueCheckList();
           const origWindow: FitWindow<string> = origList.getWindow();
           let counter = 0;
           for (const id of origWindow.getControlIds()) {

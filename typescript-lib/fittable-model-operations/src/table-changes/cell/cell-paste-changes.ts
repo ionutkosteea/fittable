@@ -8,10 +8,12 @@ import {
   asTableStyles,
   createStyleWithUndefinedProperties,
   DataType,
-  TableCellDataType,
-  asTableCellDataType,
+  TableDataTypes,
+  asTableDataTypes,
   createDataType,
   DataTypeName,
+  TableDataRefs,
+  asTableDataRefs,
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -35,6 +37,8 @@ import {
   CellDataTypeArgs,
   CellDataTypeChangesBuilder,
 } from './cell-data-type-changes.js';
+import { CellDataRefChange } from '../../table-change-writter/cell/cell-data-ref-change-writter.js';
+import { CellDataRefArgs, CellDataRefChangesBuilder } from './cell-data-ref-changes.js';
 
 export type CellPasteArgs = Args<'cell-paste'> & {
   selectedCells: CellRange[];
@@ -43,11 +47,15 @@ export type CellPasteArgs = Args<'cell-paste'> & {
 export class CellPasteChangesBuilder {
   public readonly cellValueChange: CellValueChange = {
     id: 'cell-value',
-    values: [],
+    items: [],
   };
   public readonly cellDataTypeChange: DataTypeChange = {
     id: 'cell-data-type',
-    dataTypes: [],
+    items: [],
+  };
+  public readonly cellDataRefChange: CellDataRefChange = {
+    id: 'cell-data-ref',
+    items: [],
   };
   public readonly styleChange: StyleChange = {
     id: 'style-update',
@@ -58,11 +66,15 @@ export class CellPasteChangesBuilder {
   };
   public readonly cellValueUndoChange: CellValueChange = {
     id: 'cell-value',
-    values: [],
+    items: [],
   };
   public readonly cellDataTypeUndoChange: DataTypeChange = {
     id: 'cell-data-type',
-    dataTypes: [],
+    items: [],
+  };
+  public readonly celldataRefUndoChange: CellDataRefChange = {
+    id: 'cell-data-ref',
+    items: [],
   };
   public readonly styleUndoChange: StyleChange = {
     id: 'style-update',
@@ -72,11 +84,13 @@ export class CellPasteChangesBuilder {
     cellStyleNames: [],
   };
   private readonly changes: TableChanges;
-  private readonly dataTypeTable?: Table & TableCellDataType;
-  private readonly styledTable?: Table & TableStyles;
+  private readonly tableDataTypes?: Table & TableDataTypes;
+  private readonly tableDataRefs?: Table & TableDataRefs;
+  private readonly tableStyles?: Table & TableStyles;
 
   private newValues: CellRangeAddressObjects<Value | undefined>;
   private newDataTypes: CellRangeAddressObjects<DataType | undefined>;
+  private newCellDataRefs: CellRangeAddressObjects<string | undefined>;
   private newStyles: CellRangeAddressObjects<string | undefined>;
   private htmlTableNumberOfRows = 0;
   private htmlTableNumberOfCols = 0;
@@ -86,28 +100,32 @@ export class CellPasteChangesBuilder {
     private readonly table: Table,
     private readonly args: CellPasteArgs
   ) {
-    this.dataTypeTable = asTableCellDataType(this.table);
-    this.styledTable = asTableStyles(table);
+    this.tableDataTypes = asTableDataTypes(table);
+    this.tableDataRefs = asTableDataRefs(table);
+    this.tableStyles = asTableStyles(table);
     this.changes = {
       id: args.id,
       changes: [
         this.cellValueChange,
         this.cellDataTypeChange,
+        this.cellDataRefChange,
         this.styleChange,
       ],
       undoChanges: {
         changes: [
           this.cellValueUndoChange,
           this.cellDataTypeUndoChange,
+          this.celldataRefUndoChange,
           this.styleUndoChange,
         ],
       },
     };
     this.newValues = new CellRangeAddressObjects();
     this.newDataTypes = new CellRangeAddressObjects();
+    this.newCellDataRefs = new CellRangeAddressObjects();
     this.newStyles = new CellRangeAddressObjects();
-    if (this.styledTable) {
-      this.maxStyleNameUid = getMaxStyleNameUid(this.styledTable);
+    if (this.tableStyles) {
+      this.maxStyleNameUid = getMaxStyleNameUid(this.tableStyles);
     }
   }
 
@@ -120,9 +138,7 @@ export class CellPasteChangesBuilder {
       ): void => this.prepareUpdate(htmlRowId, htmlColId, htmlCell)
     );
     this.spreadCellsOverSelection();
-    this.updateCellValues();
-    this.updateCellDataTypes();
-    this.updateCellStyles();
+    this.update();
     return this.changes;
   }
 
@@ -176,6 +192,7 @@ export class CellPasteChangesBuilder {
     const colId: number = cellRange.getFrom().getColId() + htmlColId;
     this.prepareNewValue(rowId, colId, htmlCell);
     this.prepareNewDataType(rowId, colId, htmlCell);
+    this.prepareNewCellDataRef(rowId, colId, htmlCell);
     this.prepareNewStyle(rowId, colId, htmlCell);
     this.htmlTableNumberOfRows = Math.max(
       this.htmlTableNumberOfRows,
@@ -238,13 +255,22 @@ export class CellPasteChangesBuilder {
     colId: number,
     htmlCell: HTMLTableCellElement
   ): void {
-    if (!this.dataTypeTable) return;
-    const dataTypeName: string | null = //
-      htmlCell.getAttribute('data-data-type-name');
+    if (!this.tableDataTypes) return;
+    const dataTypeName: string | null = htmlCell.getAttribute('data-data-type-name');
     if (!dataTypeName) return;
     const dataTypeFormat: string | null = htmlCell.getAttribute('data-data-type-format');
     const dataType: DataType = createDataType(dataTypeName as DataTypeName, dataTypeFormat ?? undefined);
     this.newDataTypes.set(dataType, rowId, colId);
+  }
+
+  private prepareNewCellDataRef(
+    rowId: number,
+    colId: number,
+    htmlCell: HTMLTableCellElement
+  ): void {
+    if (!this.tableDataRefs) return;
+    const dataRef: string | null = htmlCell.getAttribute('data-cell-data-ref');
+    if (dataRef) this.newCellDataRefs.set(dataRef, rowId, colId);
   }
 
   private prepareNewStyle(
@@ -252,7 +278,7 @@ export class CellPasteChangesBuilder {
     colId: number,
     htmlCell: HTMLTableCellElement
   ): void {
-    if (!this.styledTable) return;
+    if (!this.tableStyles) return;
     const cssStyle: string | null = htmlCell.getAttribute('style');
     this.newStyles.set(cssStyle ?? undefined, rowId, colId);
   }
@@ -271,6 +297,7 @@ export class CellPasteChangesBuilder {
     );
     this.multiplyCellValues(multiplyNumberOfRows, multiplyNumberOfCols);
     this.multiplyCellDataTypes(multiplyNumberOfRows, multiplyNumberOfCols);
+    this.multiplyCellDataRefs(multiplyNumberOfRows, multiplyNumberOfCols);
     this.multiplyCellStyles(multiplyNumberOfRows, multiplyNumberOfCols);
   }
 
@@ -327,6 +354,32 @@ export class CellPasteChangesBuilder {
     this.newDataTypes.append(multipliedCellDataTypes);
   }
 
+  private multiplyCellDataRefs(
+    multiplyNumberOfRows: number,
+    multiplyNumberOfCols: number
+  ): void {
+    const multipliedCellDataRefs: CellRangeAddressObjects<string | undefined> =
+      new CellRangeAddressObjects();
+    this.newCellDataRefs.forEach(
+      (dataRef: string | undefined, cellRanges: CellRange[]): void => {
+        for (const cellRange of cellRanges) {
+          for (let i = 0; i < multiplyNumberOfRows; i++) {
+            for (let j = 0; j < multiplyNumberOfCols; j++) {
+              cellRange.forEachCell((rowId: number, colId: number): void => {
+                multipliedCellDataRefs.set(
+                  dataRef,
+                  rowId + i * this.htmlTableNumberOfRows,
+                  colId + j * this.htmlTableNumberOfCols
+                );
+              });
+            }
+          }
+        }
+      }
+    );
+    this.newCellDataRefs.append(multipliedCellDataRefs);
+  }
+
   private multiplyCellStyles(
     multiplyNumberOfRows: number,
     multiplyNumberOfCols: number
@@ -353,24 +406,31 @@ export class CellPasteChangesBuilder {
     this.newStyles.append(multipliedCellStyles);
   }
 
+  private update(): void {
+    this.updateCellValues();
+    this.updateCellDataTypes();
+    this.updateCellDataRefs();
+    this.updateCellStyles();
+  }
+
   private updateCellValues(): void {
     CellValueChangesVisitor.of(this.table, this.newValues).visit(
       (
         cellValueChange: CellValueChange,
         cellValueUndoChange: CellValueChange
       ): void => {
-        for (const valuesDto of cellValueChange.values) {
-          this.cellValueChange.values.push(valuesDto);
+        for (const valuesDto of cellValueChange.items) {
+          this.cellValueChange.items.push(valuesDto);
         }
-        for (const valuesDto of cellValueUndoChange.values) {
-          this.cellValueUndoChange.values.push(valuesDto);
+        for (const valuesDto of cellValueUndoChange.items) {
+          this.cellValueUndoChange.items.push(valuesDto);
         }
       }
     );
   }
 
   private updateCellDataTypes(): void {
-    if (!this.dataTypeTable) return;
+    if (!this.tableDataTypes) return;
     for (const dataType of this.newDataTypes.getAllObjects()) {
       const selectedCells: CellRange[] =
         this.newDataTypes.getAddress(dataType) ?? [];
@@ -380,13 +440,31 @@ export class CellPasteChangesBuilder {
         dataType,
       };
       const builder: CellDataTypeChangesBuilder =
-        new CellDataTypeChangesBuilder(this.dataTypeTable, args);
+        new CellDataTypeChangesBuilder(this.tableDataTypes, args);
       builder.build();
-      this.cellDataTypeChange.dataTypes = this.cellDataTypeChange.dataTypes //
-        .concat(builder.dataTypeChange.dataTypes);
-      this.cellDataTypeUndoChange.dataTypes =
-        this.cellDataTypeUndoChange.dataTypes //
-          .concat(builder.dataTypeUndoChange.dataTypes);
+      this.cellDataTypeChange.items = this.cellDataTypeChange.items
+        .concat(builder.dataTypeChange.items);
+      this.cellDataTypeUndoChange.items =
+        this.cellDataTypeUndoChange.items
+          .concat(builder.dataTypeUndoChange.items);
+    }
+  }
+
+  private updateCellDataRefs(): void {
+    if (!this.tableDataRefs) return;
+    for (const dataRef of this.newCellDataRefs.getAllObjects()) {
+      const selectedCells: CellRange[] = this.newCellDataRefs.getAddress(dataRef) ?? [];
+      const args: CellDataRefArgs = {
+        id: 'cell-data-ref',
+        selectedCells,
+        dataRef,
+      };
+      const builder: CellDataRefChangesBuilder = new CellDataRefChangesBuilder(this.tableDataRefs, args);
+      builder.build();
+      this.cellDataRefChange.items = this.cellDataRefChange.items
+        .concat(builder.cellDataRefChange.items);
+      this.celldataRefUndoChange.items = this.celldataRefUndoChange.items
+        .concat(builder.celldataRefUndoChange.items);
     }
   }
 
@@ -420,12 +498,12 @@ export class CellPasteChangesBuilder {
     cssStyle: string,
     selectedCells: CellRange[]
   ): StyleUpdateChangesBuilder {
-    if (!this.styledTable) throw new Error('Table styles are not defined!');
+    if (!this.tableStyles) throw new Error('Table styles are not defined!');
     const style: Style | undefined = styleByCss(cssStyle);
     const undefinedProperties: Style = createStyleWithUndefinedProperties();
     const styleSnippet: Style = undefinedProperties.append(style);
     const builder: StyleUpdateChangesBuilder = new StyleUpdateChangesBuilder(
-      this.styledTable,
+      this.tableStyles,
       { id: 'style-update', selectedCells, styleSnippet },
       this.maxStyleNameUid
     );

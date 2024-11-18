@@ -1,8 +1,8 @@
 import { MissingFactoryError } from '../../common/factory-error.js';
-import { ColConditionFn, TableBasics, TableColFilter } from '../table/table.js';
+import { ColConditionFn, TableBasics, TableColFilters } from '../table/table.js';
 import { getModelConfig } from '../model-config.js';
 
-type FitTable = TableBasics & TableColFilter;
+type FitTable = TableBasics & TableColFilters;
 
 export interface ColFilterExecutor {
   table: FitTable;

@@ -10,11 +10,11 @@ import {
   Args,
 } from 'fittable-core/operations';
 
-export type CellValueDto = {
+export type CellValueItem = {
   cellRanges: unknown[];
   value?: Value;
 };
-export type CellValueChange = Args<'cell-value'> & { values: CellValueDto[] };
+export type CellValueChange = Args<'cell-value'> & { items: CellValueItem[] };
 
 export class CellValueChangeWritter implements TableChangeWritter {
 
@@ -25,8 +25,8 @@ export class CellValueChangeWritter implements TableChangeWritter {
   }
 
   private updateCellValues(): void {
-    for (const cellValueDto of this.change.values) {
-      for (const cellRangeDto of cellValueDto.cellRanges) {
+    for (const item of this.change.items) {
+      for (const cellRangeDto of item.cellRanges) {
         const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
         const fromRowId: number = cellRange.getFrom().getRowId();
         const toRowId: number = cellRange.getTo().getRowId();
@@ -34,7 +34,7 @@ export class CellValueChangeWritter implements TableChangeWritter {
         const toColId: number = cellRange.getTo().getColId();
         for (let rowId: number = fromRowId; rowId <= toRowId; rowId++) {
           for (let colId: number = fromColId; colId <= toColId; colId++) {
-            this.table.setCellValue(rowId, colId, cellValueDto.value);
+            this.table.setCellValue(rowId, colId, item.value);
           }
           this.removeRowIfEmpty(rowId);
         }

@@ -11,12 +11,12 @@ import {
   Args,
 } from 'fittable-core/operations';
 
-export type MoveLinesDto = { lineRange: unknown; move: number };
+export type MoveLinesItem = { lineRange: unknown; move: number };
 
 export type LineInsertChange = {
   lineRanges: unknown[];
   numberOfNewLines: number;
-  moveLines: MoveLinesDto[];
+  moveLines: MoveLinesItem[];
 };
 
 abstract class LineInsertChangeWritter implements TableChangeWritter {
@@ -25,7 +25,7 @@ abstract class LineInsertChangeWritter implements TableChangeWritter {
   constructor(
     protected readonly table: Table,
     protected readonly change: LineInsertChange
-  ) {}
+  ) { }
 
   protected abstract updateNumberOfLines(): void;
   protected abstract moveLine(lineIndex: number, move: number): void;
@@ -47,9 +47,9 @@ abstract class LineInsertChangeWritter implements TableChangeWritter {
   }
 
   private moveLines(): void {
-    const mlDtos: MoveLinesDto[] = this.change.moveLines;
+    const mlDtos: MoveLinesItem[] = this.change.moveLines;
     for (let i = mlDtos.length - 1; i >= 0; i--) {
-      const mlDto: MoveLinesDto = mlDtos[i];
+      const mlDto: MoveLinesItem = mlDtos[i];
       const lineRange: LineRange = createLineRange4Dto(mlDto.lineRange);
       for (let i = lineRange.getTo(); i >= lineRange.getFrom(); i--) {
         this.moveLine(i, mlDto.move);
@@ -81,8 +81,7 @@ export class RowInsertChangeWritter extends LineInsertChangeWritter {
 }
 
 export class RowInsertChangeWritterFactory
-  implements TableChangeWritterFactory
-{
+  implements TableChangeWritterFactory {
   public createTableChangeWritter(
     table: Table,
     change: RowInsertChange
@@ -114,8 +113,7 @@ export class ColInsertChangeWritter extends LineInsertChangeWritter {
 }
 
 export class ColInsertChangeWritterFactory
-  implements TableChangeWritterFactory
-{
+  implements TableChangeWritterFactory {
   public createTableChangeWritter(
     table: Table,
     change: ColInsertChange

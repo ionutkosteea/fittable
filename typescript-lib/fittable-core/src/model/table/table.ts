@@ -77,14 +77,14 @@ export type ColConditionFn = (
   value?: Value
 ) => boolean;
 
-export interface TableColFilter {
+export interface TableColFilters {
   filterByCol(
     colId: number,
     conditionFn: ColConditionFn
-  ): TableBasics & TableColFilter;
+  ): TableBasics & TableColFilters;
 }
 
-export interface TableCellDataType {
+export interface TableDataTypes {
   getLocale(): string;
   setLocale(locale: string): this;
   getCellDataType(rowId: number, colId: number): DataType | undefined;
@@ -92,6 +92,13 @@ export interface TableCellDataType {
   getCellType(rowId: number, colId: number): DataTypeName;
   getFormatedCellValue(rowId: number, colId: number): string | undefined;
   removeFormatedCellValues(): this;
+}
+
+export interface TableDataRefs {
+  setShowDataRefs(show: boolean): this;
+  canShowDataRefs(): boolean;
+  setCellDataRef(rowId: number, colId: number, dataRef?: string): this;
+  getCellDataRef(rowId: number, colId: number): string | undefined;
 }
 
 export type Table =
@@ -102,8 +109,9 @@ export type Table =
       | TableRows
       | TableCols
       | TableMergedRegions
-      | TableColFilter
-      | TableCellDataType
+      | TableColFilters
+      | TableDataTypes
+      | TableDataRefs
     ));
 
 export interface TableFactory {
@@ -154,18 +162,26 @@ export function asTableMergedRegions(
     : undefined;
 }
 
-export function asTableColFilter(
+export function asTableColFilters(
   table?: Table
-): (TableBasics & TableColFilter) | undefined {
-  return implementsTKeys<TableColFilter>(table, ['filterByCol'])
-    ? (table as TableBasics & TableColFilter)
+): (TableBasics & TableColFilters) | undefined {
+  return implementsTKeys<TableColFilters>(table, ['filterByCol'])
+    ? (table as TableBasics & TableColFilters)
     : undefined;
 }
 
-export function asTableCellDataType(
+export function asTableDataTypes(
   table?: Table
-): (TableBasics & TableCellDataType) | undefined {
-  return implementsTKeys<TableCellDataType>(table, ['getCellDataType'])
-    ? (table as TableBasics & TableCellDataType)
+): (TableBasics & TableDataTypes) | undefined {
+  return implementsTKeys<TableDataTypes>(table, ['getCellDataType'])
+    ? (table as TableBasics & TableDataTypes)
+    : undefined;
+}
+
+export function asTableDataRefs(
+  table?: Table
+): (TableBasics & TableDataRefs) | undefined {
+  return implementsTKeys<TableDataRefs>(table, ['getCellDataRef'])
+    ? (table as TableBasics & TableDataRefs)
     : undefined;
 }

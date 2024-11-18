@@ -21,9 +21,8 @@
             @for (rowId of rowIds; track $index) {
               <tr [ngStyle]="{ 'height.px': getRowHeight(rowId) }">
                 <th class="header-cell" [attr.rowId]="rowId" [attr.colId]="0">
-                  <p class="cell-text">
-                    {{ rowHeaderTextFn && rowHeaderTextFn(rowId) }}
-                  </p>
+                  <!-- prettier-ignore -->
+                  <p class="cell-text">{{ rowHeaderTextFn && rowHeaderTextFn(rowId) }}</p>
                 </th>
               </tr>
             }

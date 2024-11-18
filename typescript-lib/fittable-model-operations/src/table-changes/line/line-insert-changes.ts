@@ -18,7 +18,7 @@ import {
   LineInsertChange,
   RowInsertChange,
   ColInsertChange,
-  MoveLinesDto,
+  MoveLinesItem,
 } from '../../table-change-writter/line/line-insert-change-writter.js';
 import {
   LineRemoveChange,
@@ -54,14 +54,14 @@ abstract class LineInsertChangesBuilder {
     increaseRegions: [],
   };
 
-  protected mergedRegionsTable?: Table & TableMergedRegions;
+  protected tableMergedRegions?: Table & TableMergedRegions;
   private selectedLines: LineRange[];
 
   constructor(
     protected readonly table: Table,
     protected readonly args: LineInsertArgs
   ) {
-    this.mergedRegionsTable = asTableMergedRegions(table);
+    this.tableMergedRegions = asTableMergedRegions(table);
     this.selectedLines = args.selectedLines;
   }
 
@@ -95,8 +95,8 @@ abstract class LineInsertChangesBuilder {
     return newLineRanges;
   }
 
-  private createMovableLinesDto(): MoveLinesDto[] {
-    const movableLinesDto: MoveLinesDto[] = [];
+  private createMovableLinesDto(): MoveLinesItem[] {
+    const movableLinesDto: MoveLinesItem[] = [];
     let move: number = this.args.numberOfNewLines;
     const numberOfLines: number = this.getNumberOfLines();
     for (let i = 0; i < this.selectedLines.length; i++) {
@@ -111,7 +111,7 @@ abstract class LineInsertChangesBuilder {
       }
     }
     if (movableLinesDto.length > 0) {
-      const lastMovableLines: MoveLinesDto =
+      const lastMovableLines: MoveLinesItem =
         movableLinesDto[movableLinesDto.length - 1];
       const lastLineRange: LineRange = createLineRange4Dto(
         lastMovableLines.lineRange
@@ -141,7 +141,7 @@ abstract class LineInsertChangesBuilder {
 
   public revertMovedLines(): void {
     this.lineInsertChange.moveLines.forEach(
-      (movableLines: MoveLinesDto): void => {
+      (movableLines: MoveLinesItem): void => {
         const lineRangeDto: unknown = movableLines.lineRange;
         const lineRange: LineRange = createLineRange4Dto(lineRangeDto);
         const from: number = lineRange.getFrom() + movableLines.move;
@@ -155,7 +155,7 @@ abstract class LineInsertChangesBuilder {
   }
 
   protected updateMergedRegions(): void {
-    this.mergedRegionsTable?.forEachMergedCell(
+    this.tableMergedRegions?.forEachMergedCell(
       (rowId: number, colId: number): void => {
         for (const lineRange of this.selectedLines) {
           const selectedFrom: number = lineRange.getFrom() - 1;
@@ -218,7 +218,7 @@ export class RowInsertTableChangesBuilder extends LineInsertChangesBuilder {
   }
 
   protected getLineSpan(rowId: number, colId: number): number {
-    return this.mergedRegionsTable?.getRowSpan(rowId, colId) ?? 0;
+    return this.tableMergedRegions?.getRowSpan(rowId, colId) ?? 0;
   }
 
   protected moveRegion(rowId: number, colId: number): void {
@@ -304,7 +304,7 @@ export class ColInsertTableChangesBuilder extends LineInsertChangesBuilder {
   }
 
   protected getLineSpan(rowId: number, colId: number): number {
-    return this.mergedRegionsTable?.getColSpan(rowId, colId) ?? 0;
+    return this.tableMergedRegions?.getColSpan(rowId, colId) ?? 0;
   }
 
   protected moveRegion(rowId: number, colId: number): void {

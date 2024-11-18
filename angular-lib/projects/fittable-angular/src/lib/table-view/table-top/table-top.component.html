@@ -23,7 +23,7 @@
             <tr class="header-row" [ngStyle]="{ 'height.px': colHeaderHeight }">
               @for (colId of colIds; track $index) {
                 <th class="header-cell" [attr.rowId]="0" [attr.colId]="colId">
-                  {{ rowHeaderTextFn && rowHeaderTextFn(colId) }}
+                  {{ colHeaderTextFn && colHeaderTextFn(colId) }}
                   @if (hasColFilters()) {
                     <fit-filter-popup-button
                       [colFilters]="getColFilters()"

@@ -1,11 +1,11 @@
-import {} from 'jasmine';
+import { } from 'jasmine';
 
 import {
   createTable,
   registerModelConfig,
   Table,
   TableBasics,
-  TableColFilter,
+  TableColFilters,
   unregisterModelConfig,
 } from 'fittable-core/model';
 import {
@@ -64,7 +64,7 @@ describe('Column filters', (): void => {
     operationSubscriptions = new ColFilterOperationSubscriptions({
       operationExecutor,
       colFilters,
-      loadTableFn: (): void => {},
+      loadTableFn: (): void => { },
     });
 
     colFilters.loadCol(1);
@@ -84,7 +84,7 @@ describe('Column filters', (): void => {
     const okButton: Control = popupWindow.getControl(okButtonId);
     okButton.run();
     const getFilteredTable: () =>
-      | (TableColFilter & TableBasics)
+      | (TableColFilters & TableBasics)
       | undefined = () => colFilters.filterExecutor.getFilteredTable();
     expect(getFilteredTable()?.getNumberOfRows() === 1).toBeTruthy();
     expect(getFilteredTable()?.getCellValue(0, 1) === 200).toBeTruthy();

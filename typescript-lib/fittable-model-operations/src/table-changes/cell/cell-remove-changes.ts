@@ -10,8 +10,10 @@ import {
   CellRangeList,
   asTableStyles,
   DataType,
-  TableCellDataType,
-  asTableCellDataType,
+  TableDataTypes,
+  asTableDataTypes,
+  TableDataRefs,
+  asTableDataRefs,
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -28,14 +30,13 @@ import { CellValueChange } from '../../table-change-writter/cell/cell-value-chan
 import { StyleChange } from '../../table-change-writter/style/style-change-writter.js';
 import { CellRemoveChange } from '../../table-change-writter/cell/cell-remove-change-writter.js';
 import { DataTypeChange } from '../../table-change-writter/cell/cell-data-type-change-writter.js';
+import { CellDataRefChange } from '../../table-change-writter/cell/cell-data-ref-change-writter.js';
 
 export type CellRemoveArgs = Args<'cell-remove'> & {
   selectedCells: CellRange[];
 };
 
 export class CellRemoveChangesBuilder {
-  private readonly styledTable?: Table & TableStyles;
-
   public readonly cellRemoveChange: CellRemoveChange = {
     id: 'cell-remove',
     cellRanges: [],
@@ -49,11 +50,15 @@ export class CellRemoveChangesBuilder {
   };
   public readonly cellValueUndoChange: CellValueChange = {
     id: 'cell-value',
-    values: [],
+    items: [],
   };
   public readonly cellDataTypesUndoChange: DataTypeChange = {
     id: 'cell-data-type',
-    dataTypes: [],
+    items: [],
+  };
+  public readonly cellDataRefsUndoChange: CellDataRefChange = {
+    id: 'cell-data-ref',
+    items: [],
   };
   public readonly styleUndoChange: StyleChange = {
     id: 'style-update',
@@ -63,12 +68,13 @@ export class CellRemoveChangesBuilder {
     cellStyleNames: [],
   };
   private readonly changes: TableChanges;
+  private readonly tableStyles?: Table & TableStyles;
 
   constructor(
     private readonly table: Table,
     private readonly args: CellRemoveArgs
   ) {
-    this.styledTable = asTableStyles(table);
+    this.tableStyles = asTableStyles(table);
     this.changes = {
       id: args.id,
       changes: [this.cellRemoveChange, this.styleChange],
@@ -76,6 +82,7 @@ export class CellRemoveChangesBuilder {
         changes: [
           this.cellValueUndoChange,
           this.cellDataTypesUndoChange,
+          this.cellDataRefsUndoChange,
           this.styleUndoChange,
         ],
       },
@@ -86,7 +93,8 @@ export class CellRemoveChangesBuilder {
     this.removeCells();
     this.undoCellValues();
     this.undoCellDataTypes();
-    if (this.styledTable) {
+    this.undoCellDataRefs();
+    if (this.tableStyles) {
       this.undoStyleNames();
       this.removeStyles();
       this.undoRemoveStyles();
@@ -121,7 +129,7 @@ export class CellRemoveChangesBuilder {
     }
     oldValues.forEach(
       (value: Value | undefined, address: CellRange[]): void => {
-        this.cellValueUndoChange.values.push({
+        this.cellValueUndoChange.items.push({
           value,
           cellRanges: createDto4CellRangeList(address),
         });
@@ -130,25 +138,46 @@ export class CellRemoveChangesBuilder {
   }
 
   private undoCellDataTypes(): void {
-    const dataTypeTable: TableCellDataType | undefined = //
-      asTableCellDataType(this.table);
-    if (!dataTypeTable) return;
+    const tableDataTypes: TableDataTypes | undefined = asTableDataTypes(this.table);
+    if (!tableDataTypes) return;
     const oldDataTypes: CellRangeAddressObjects<DataType | undefined> =
       new CellRangeAddressObjects();
     for (const cellRangeDto of this.cellRemoveChange.cellRanges) {
       createCellRange4Dto(cellRangeDto).forEachCell(
         (rowId: number, colId: number): void => {
           const dataType: DataType | undefined = //
-            dataTypeTable.getCellDataType(rowId, colId);
+            tableDataTypes.getCellDataType(rowId, colId);
           dataType && oldDataTypes.set(dataType, rowId, colId);
         }
       );
     }
     oldDataTypes.forEach(
       (dataType: DataType | undefined, address: CellRange[]): void => {
-        this.cellDataTypesUndoChange.dataTypes.push({
+        this.cellDataTypesUndoChange.items.push({
           dataType: dataType?.getDto(),
           cellRanges: createDto4CellRangeList(address),
+        });
+      }
+    );
+  }
+
+  private undoCellDataRefs(): void {
+    const tableDataRefs: TableDataRefs | undefined = asTableDataRefs(this.table);
+    if (!tableDataRefs) return;
+    const oldCellDataRefs: CellRangeAddressObjects<string | undefined> = new CellRangeAddressObjects();
+    for (const cellRangeDto of this.cellRemoveChange.cellRanges) {
+      createCellRange4Dto(cellRangeDto).forEachCell(
+        (rowId: number, colId: number): void => {
+          const dataRef: string | undefined = tableDataRefs.getCellDataRef(rowId, colId);
+          dataRef && oldCellDataRefs.set(dataRef, rowId, colId);
+        }
+      );
+    }
+    oldCellDataRefs.forEach(
+      (dataRef: string | undefined, address: CellRange[]): void => {
+        this.cellDataRefsUndoChange.items.push({
+          cellRanges: createDto4CellRangeList(address),
+          dataRef,
         });
       }
     );
@@ -161,7 +190,7 @@ export class CellRemoveChangesBuilder {
       createCellRange4Dto(cellRangeDto).forEachCell(
         (rowId: number, colId: number) => {
           const styleName: string | undefined = //
-            this.styledTable?.getCellStyleName(rowId, colId);
+            this.tableStyles?.getCellStyleName(rowId, colId);
           if (styleName) {
             oldStyleNames.set(styleName, rowId, colId);
           }
@@ -177,7 +206,7 @@ export class CellRemoveChangesBuilder {
   }
 
   private removeStyles(): void {
-    const styleTable: Table & TableStyles = this.getStyledTable();
+    const styleTable = this.tableStyles as Table & TableStyles;
     const allCellsCnt: Map<string, number> = countAllCellStyleNames(styleTable);
     const selectedCellsCnt: Map<string, number> = countSelectedCellStyleNames(
       styleTable,
@@ -195,13 +224,9 @@ export class CellRemoveChangesBuilder {
     );
   }
 
-  private getStyledTable(): Table & TableStyles {
-    return this.table as Table & TableStyles;
-  }
-
   private undoRemoveStyles(): void {
     this.styleChange.removeStyles.forEach((styleName: string) => {
-      const styleTable: Table & TableStyles = this.getStyledTable();
+      const styleTable = this.tableStyles as Table & TableStyles;
       const style: Style | undefined = styleTable.getStyle(styleName);
       style &&
         this.styleUndoChange.createStyles.push({

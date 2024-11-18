@@ -7,7 +7,7 @@ import {
   createCellRangeList4Dto,
   Table,
   TableBasics,
-  TableColFilter,
+  TableColFilters,
   Value,
 } from 'fittable-core/model';
 import {
@@ -33,7 +33,7 @@ import {
   ColFilterChange,
 } from './col-filter-operation.js';
 
-type FitTable = TableBasics & TableColFilter;
+type FitTable = TableBasics & TableColFilters;
 
 export type ColFilterOperationSubscriptionsArgs = {
   operationExecutor: OperationExecutor;
@@ -180,13 +180,12 @@ export class ColFilterOperationSubscriptions {
   }
 
   private toggleContextMenuItems(isTableFiltered: boolean): void {
-    const enabledControlIds: Set<string> = //
-      new Set<FitContextMenuControlId>(['copy', 'paste']);
+    const enabledControlIds: Set<string> = new Set<FitContextMenuControlId>(['copy', 'paste']);
     for (const id of this.args.contextMenu?.getControlIds() ?? []) {
       if (enabledControlIds.has(id)) continue;
-      const item: Control | undefined = this.args.contextMenu?.getControl(id);
-      if (!implementsTKeys<FitControl>(item, ['setDisabled'])) continue;
-      item.setDisabled(isTableFiltered);
+      const control: Control | undefined = this.args.contextMenu?.getControl(id);
+      if (!implementsTKeys<FitControl>(control, ['setDisabled'])) continue;
+      control.setDisabled(isTableFiltered);
     }
   }
 

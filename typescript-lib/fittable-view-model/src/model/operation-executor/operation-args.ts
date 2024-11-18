@@ -45,6 +45,11 @@ type CellValueArgs = Args<'cell-value'> & {
   dataType?: DataType;
 };
 
+type CellDataRefArgs = Args<'cell-data-ref'> & {
+  selectedCells: CellRange[];
+  dataRef?: string;
+};
+
 type CellDataTypeArgs = Args<'cell-data-type'> & {
   selectedCells: CellRange[];
   dataType?: DataType;
@@ -120,6 +125,7 @@ export type FitUIOperationArgs =
   | ColRemoveArgs
   | CellValueArgs
   | CellDataTypeArgs
+  | CellDataRefArgs
   | CellRemoveArgs
   | CellCutArgs
   | CellCopyArgs

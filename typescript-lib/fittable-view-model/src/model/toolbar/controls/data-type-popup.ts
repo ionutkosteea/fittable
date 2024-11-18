@@ -4,8 +4,8 @@ import {
   DataType,
   DataTypeName,
   Table,
-  TableCellDataType,
-  asTableCellDataType,
+  TableDataTypes,
+  asTableDataTypes,
   createCellDateFormatter,
   createCellNumberFormatter,
   createDataType,
@@ -43,17 +43,15 @@ class DataTypePopup extends FitPopupControl<string> implements ControlUpdater {
   public updateByCellSelection(): void {
     const table: Table | undefined = this.args.operationExecutor.getTable();
     if (!table) throw new Error('Invalid operation executor!');
-    const selectorWindow: SelectorWindow | undefined = //
-      asSelectorWindow(this.getWindow());
+    const selectorWindow: SelectorWindow | undefined = asSelectorWindow(this.getWindow());
     if (!selectorWindow) throw new Error('Invalid selector window!');
-    const dataTypeTable: TableCellDataType | undefined =
-      asTableCellDataType(table);
-    if (!dataTypeTable) return;
+    const tableDataTypes: TableDataTypes | undefined = asTableDataTypes(table);
+    if (!tableDataTypes) return;
     const selectedCells: CellRange[] = this.args.getSelectedCells();
     if (selectedCells.length === 0) return;
     const cellCoord: CellCoord = selectedCells[0].getFrom();
-    const dataType: DataType | undefined = //
-      dataTypeTable.getCellDataType(cellCoord.getRowId(), cellCoord.getColId());
+    const dataType: DataType | undefined =
+      tableDataTypes.getCellDataType(cellCoord.getRowId(), cellCoord.getColId());
     const controlId: ControlId = dataType?.getName() ?? 'automatic';
     for (const id of this.getWindow().getControlIds()) {
       if (id === controlId) {

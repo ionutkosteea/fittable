@@ -4,8 +4,7 @@ import { FitPopupControl } from '../common/controls/fit-popup-control.js';
 
 export class ColFilterPopupButton<ControlId extends string>
   extends FitPopupControl<ControlId>
-  implements ToggleControl
-{
+  implements ToggleControl {
   private on?: boolean;
   private onFn?: () => boolean;
 

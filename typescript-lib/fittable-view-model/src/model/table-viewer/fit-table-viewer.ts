@@ -11,10 +11,12 @@ import {
   asTableCols,
   asTableMergedRegions,
   TableStyles,
-  asTableCellDataType,
-  TableCellDataType,
+  asTableDataTypes,
+  TableDataTypes,
   DataType,
   DataTypeName,
+  TableDataRefs,
+  asTableDataRefs,
 } from 'fittable-core/model';
 import {
   getViewModelConfig,
@@ -30,11 +32,12 @@ export class FitTableViewer implements TableViewer {
   private colPositions?: number[];
   private hiddenCells?: TwoDimensionalMap<boolean>;
   private config: ViewModelConfig;
-  private rowTable?: TableRows;
-  private colTable?: TableCols;
-  private mergedRegionsTable?: TableMergedRegions;
-  private styledTable?: TableStyles;
-  private cellDataTypeTable?: TableCellDataType;
+  private tableRows?: TableRows;
+  private tableCols?: TableCols;
+  private tableMergedRegions?: TableMergedRegions;
+  private tableStyles?: TableStyles;
+  private tableDataTypes?: TableDataTypes;
+  private tableDataRefs?: TableDataRefs;
 
   constructor(private table: Table) {
     this.config = getViewModelConfig();
@@ -43,11 +46,12 @@ export class FitTableViewer implements TableViewer {
 
   public loadTable(table: Table): this {
     this.table = table;
-    this.rowTable = asTableRows(table);
-    this.colTable = asTableCols(table);
-    this.mergedRegionsTable = asTableMergedRegions(table);
-    this.styledTable = asTableStyles(table);
-    this.cellDataTypeTable = asTableCellDataType(table);
+    this.tableRows = asTableRows(table);
+    this.tableCols = asTableCols(table);
+    this.tableMergedRegions = asTableMergedRegions(table);
+    this.tableStyles = asTableStyles(table);
+    this.tableDataTypes = asTableDataTypes(table);
+    this.tableDataRefs = asTableDataRefs(table);
     this.resetRowProperties();
     this.resetColProperties();
     this.resetMergedRegions();
@@ -63,7 +67,7 @@ export class FitTableViewer implements TableViewer {
   }
 
   public getColWidth(colId: number): number {
-    return this.colTable?.getColWidth(colId) ?? this.config.colWidths;
+    return this.tableCols?.getColWidth(colId) ?? this.config.colWidths;
   }
 
   public getRowHeaderWidth(): number {
@@ -84,7 +88,7 @@ export class FitTableViewer implements TableViewer {
   }
 
   public getRowHeight(rowId: number): number {
-    return this.rowTable?.getRowHeight(rowId) ?? this.config.rowHeights;
+    return this.tableRows?.getRowHeight(rowId) ?? this.config.rowHeights;
   }
 
   public getColHeaderHeight(): number {
@@ -145,28 +149,28 @@ export class FitTableViewer implements TableViewer {
   }
 
   public getRowSpan(rowId: number, colId: number): number {
-    return this.mergedRegionsTable?.getRowSpan(rowId, colId) ?? 1;
+    return this.tableMergedRegions?.getRowSpan(rowId, colId) ?? 1;
   }
 
   public getMaxRowSpan(rowId: number): number {
     let maxRowSpan = 1;
     for (let i = 0; i < this.table.getNumberOfCols(); i++) {
       const rowSpan: number =
-        this.mergedRegionsTable?.getRowSpan(rowId, i) ?? 1;
+        this.tableMergedRegions?.getRowSpan(rowId, i) ?? 1;
       if (maxRowSpan < rowSpan) maxRowSpan = rowSpan;
     }
     return maxRowSpan;
   }
 
   public getColSpan(rowId: number, colId: number): number {
-    return this.mergedRegionsTable?.getColSpan(rowId, colId) ?? 1;
+    return this.tableMergedRegions?.getColSpan(rowId, colId) ?? 1;
   }
 
   public getMaxColSpan(colId: number): number {
     let maxColSpan = 1;
     for (let i = 0; i < this.table.getNumberOfRows(); i++) {
       const colSpan: number =
-        this.mergedRegionsTable?.getColSpan(i, colId) ?? 1;
+        this.tableMergedRegions?.getColSpan(i, colId) ?? 1;
       if (maxColSpan < colSpan) maxColSpan = colSpan;
     }
     return maxColSpan;
@@ -197,13 +201,13 @@ export class FitTableViewer implements TableViewer {
 
   private calculateHiddenCells(): void {
     this.hiddenCells = new TwoDimensionalMap();
-    this.mergedRegionsTable?.forEachMergedCell(
+    this.tableMergedRegions?.forEachMergedCell(
       (rowId: number, colId: number): void => {
         const rowSpan: number | undefined = //
-          this.mergedRegionsTable?.getRowSpan(rowId, colId);
+          this.tableMergedRegions?.getRowSpan(rowId, colId);
         const toRowId: number = rowSpan ? rowId + rowSpan - 1 : rowId;
         const colSpan: number | undefined = //
-          this.mergedRegionsTable?.getColSpan(rowId, colId);
+          this.tableMergedRegions?.getColSpan(rowId, colId);
         const toColId: number = colSpan ? colId + colSpan - 1 : colId;
         for (let i = rowId; i <= toRowId; i++) {
           for (let j = colId; j <= toColId; j++) {
@@ -216,7 +220,7 @@ export class FitTableViewer implements TableViewer {
   }
 
   public forEachMergedCell(cell: (rowId: number, colId: number) => void): void {
-    this.mergedRegionsTable?.forEachMergedCell(cell);
+    this.tableMergedRegions?.forEachMergedCell(cell);
   }
 
   public resetRowProperties(): this {
@@ -246,29 +250,35 @@ export class FitTableViewer implements TableViewer {
 
   public getCellStyle(rowId: number, colId: number): Style | undefined {
     const styleName: string | undefined = //
-      this.styledTable?.getCellStyleName(rowId, colId);
+      this.tableStyles?.getCellStyleName(rowId, colId);
     if (styleName) return asTableStyles(this.table)?.getStyle(styleName);
     else return undefined;
   }
 
   public getCellValue(rowId: number, colId: number): Value | undefined {
+    if (this.tableDataRefs?.canShowDataRefs()) {
+      return this.tableDataRefs.getCellDataRef(rowId, colId);
+    }
     return this.table.getCellValue(rowId, colId);
   }
 
   public getCellDataType(rowId: number, colId: number): DataType | undefined {
-    return this.cellDataTypeTable?.getCellDataType(rowId, colId);
+    return this.tableDataTypes?.getCellDataType(rowId, colId);
   }
 
   public getCellType(rowId: number, colId: number): DataTypeName {
-    return this.cellDataTypeTable?.getCellType(rowId, colId) ?? 'string';
+    return this.tableDataTypes?.getCellType(rowId, colId) ?? 'string';
   }
 
   public getFormatedCellValue(
     rowId: number,
     colId: number
   ): string | undefined {
+    if (this.tableDataRefs?.canShowDataRefs()) {
+      return this.tableDataRefs.getCellDataRef(rowId, colId);
+    }
     const formattedValue: string | undefined =
-      this.cellDataTypeTable?.getFormatedCellValue(rowId, colId);
+      this.tableDataTypes?.getFormatedCellValue(rowId, colId);
     return formattedValue === undefined
       ? this.toStringValue(rowId, colId)
       : formattedValue;
