@@ -15,8 +15,8 @@ import {
   TableDataTypes,
   DataType,
   DataTypeName,
-  TableDataRefs,
-  asTableDataRefs,
+  TableData,
+  asTableData,
 } from 'fittable-core/model';
 import {
   getViewModelConfig,
@@ -37,7 +37,7 @@ export class FitTableViewer implements TableViewer {
   private tableMergedRegions?: TableMergedRegions;
   private tableStyles?: TableStyles;
   private tableDataTypes?: TableDataTypes;
-  private tableDataRefs?: TableDataRefs;
+  private tableData?: TableData;
 
   constructor(private table: Table) {
     this.config = getViewModelConfig();
@@ -51,7 +51,7 @@ export class FitTableViewer implements TableViewer {
     this.tableMergedRegions = asTableMergedRegions(table);
     this.tableStyles = asTableStyles(table);
     this.tableDataTypes = asTableDataTypes(table);
-    this.tableDataRefs = asTableDataRefs(table);
+    this.tableData = asTableData(table);
     this.resetRowProperties();
     this.resetColProperties();
     this.resetMergedRegions();
@@ -249,17 +249,30 @@ export class FitTableViewer implements TableViewer {
   }
 
   public getCellStyle(rowId: number, colId: number): Style | undefined {
-    const styleName: string | undefined = //
+    const styleName: string | undefined =
       this.tableStyles?.getCellStyleName(rowId, colId);
     if (styleName) return asTableStyles(this.table)?.getStyle(styleName);
     else return undefined;
   }
 
-  public getCellValue(rowId: number, colId: number): Value | undefined {
-    if (this.tableDataRefs?.canShowDataRefs()) {
-      return this.tableDataRefs.getCellDataRef(rowId, colId);
+  public getCellValue(rowId: number, colId: number): Value {
+    if (this.tableData?.isDataRefPerspective()) {
+      return this.tableData.getCellDataRef(rowId, colId) ?? '';
     }
-    return this.table.getCellValue(rowId, colId);
+    const value = this.table.getCellValue(rowId, colId);
+    if (value !== undefined) return value;
+    return '';
+  }
+
+  public getCellFormattedValue(rowId: number, colId: number): Value {
+    if (this.tableData?.isDataRefPerspective()) {
+      return this.tableData.getCellDataRef(rowId, colId) ?? '';
+    }
+    const formattedValue = this.tableDataTypes?.getCellFormattedValue(rowId, colId);
+    if (formattedValue !== undefined) return formattedValue;
+    const value = this.table.getCellValue(rowId, colId);
+    if (value !== undefined) return value;
+    return '';
   }
 
   public getCellDataType(rowId: number, colId: number): DataType | undefined {
@@ -268,25 +281,6 @@ export class FitTableViewer implements TableViewer {
 
   public getCellType(rowId: number, colId: number): DataTypeName {
     return this.tableDataTypes?.getCellType(rowId, colId) ?? 'string';
-  }
-
-  public getFormatedCellValue(
-    rowId: number,
-    colId: number
-  ): string | undefined {
-    if (this.tableDataRefs?.canShowDataRefs()) {
-      return this.tableDataRefs.getCellDataRef(rowId, colId);
-    }
-    const formattedValue: string | undefined =
-      this.tableDataTypes?.getFormatedCellValue(rowId, colId);
-    return formattedValue === undefined
-      ? this.toStringValue(rowId, colId)
-      : formattedValue;
-  }
-
-  private toStringValue(rowId: number, colId: number): string | undefined {
-    const value: Value | undefined = this.getCellValue(rowId, colId);
-    return value === undefined ? undefined : '' + value;
   }
 }
 

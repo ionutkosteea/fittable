@@ -1,4 +1,4 @@
-import {} from 'jasmine';
+import { } from 'jasmine';
 
 import {
   Dictionary,
@@ -15,7 +15,7 @@ describe('tst-language-dictionary.spec.ts', () => {
   afterAll(() => unregisterModelConfig());
 
   it('getLanguageDictionary', () => {
-    const ld: LanguageDictionary<string, string> = getLanguageDictionary();
+    const ld: LanguageDictionary<string> = getLanguageDictionary();
     expect(ld).toBeDefined();
     expect(ld.getLocale() === 'en-US').toBeTruthy();
   });
@@ -23,7 +23,7 @@ describe('tst-language-dictionary.spec.ts', () => {
   it('registerLanguage, setCurrentLanguage, getCurrentLanguage, getText', () => {
     const textKey = 'Key1';
     const dictionary: Dictionary<typeof textKey> = { Key1: 'Value1' };
-    const ld: LanguageDictionary<string, string> = getLanguageDictionary();
+    const ld: LanguageDictionary<string> = getLanguageDictionary();
     ld.register('de-DE', dictionary).setLocale('de-DE');
     expect(ld.getLocale() === 'de-DE').toBeTruthy();
     expect(ld.getText('Key1') === 'Value1').toBeTruthy();

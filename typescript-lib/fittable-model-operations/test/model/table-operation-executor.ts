@@ -68,7 +68,7 @@ export class TableOperationExecutor {
     return this.table;
   }
 
-  public addStyle(
+  public setStyle(
     name: string,
     properties: { [name in string]?: string | number }
   ): this {
@@ -76,7 +76,7 @@ export class TableOperationExecutor {
     for (const name of Reflect.ownKeys(properties)) {
       style.set(name as string, Reflect.get(properties, name));
     }
-    this.table.addStyle(name, style);
+    this.table.setStyle(name, style);
     return this;
   }
 

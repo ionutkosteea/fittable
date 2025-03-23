@@ -11,8 +11,8 @@ import {
   TableDataTypes,
   asTableDataTypes,
   DataType,
-  TableDataRefs,
-  asTableDataRefs,
+  TableData,
+  asTableData,
 } from 'fittable-core/model';
 import {
   TableChangeWritter,
@@ -26,7 +26,7 @@ export class CellCopyChangeWritter implements TableChangeWritter {
   private readonly tableStyles?: Table & TableStyles;
   private readonly tableMergedRegions?: Table & TableMergedRegions;
   private readonly tableDataTypes?: Table & TableDataTypes;
-  private readonly tableDataRefs?: Table & TableDataRefs;
+  private readonly tableData?: Table & TableData;
 
   constructor(
     private readonly table: Table,
@@ -35,7 +35,7 @@ export class CellCopyChangeWritter implements TableChangeWritter {
     this.tableStyles = asTableStyles(table);
     this.tableMergedRegions = asTableMergedRegions(this.table);
     this.tableDataTypes = asTableDataTypes(this.table);
-    this.tableDataRefs = asTableDataRefs(this.table);
+    this.tableData = asTableData(this.table);
   }
 
   public run(): void {
@@ -138,7 +138,7 @@ export class CellCopyChangeWritter implements TableChangeWritter {
   }
 
   private getCellDataRefAtt(rowId: number, colId: number): string {
-    const dataRef: string | undefined = this.tableDataRefs?.getCellDataRef(rowId, colId);
+    const dataRef: string | undefined = this.tableData?.getCellDataRef(rowId, colId);
     if (dataRef) return ` data-cell-data-ref="${dataRef.replaceAll("\"", "&quot;")}"`;
     return '';
   }

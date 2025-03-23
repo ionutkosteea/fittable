@@ -6,20 +6,16 @@ import {
   getLanguageDictionary as getCoreLanguageDictionary,
 } from 'fittable-core/model';
 
-import { FitLocale, FitTextKey, FitDictionary } from './language-def.js';
+import { FitTextKey, FitDictionary } from './language-def.js';
 import { enUS } from './en-US.js';
 import { deDE } from './de-DE.js';
 
-export class FitLanguageDictionary
-  implements LanguageDictionary<FitLocale, FitTextKey>
-{
-  private dictionaries: {
-    [code in FitLocale]?: FitDictionary;
-  } = {};
-  private locale: FitLocale = 'en-US';
-  private afterSetLocale$: Subject<FitLocale> = new Subject();
+export class FitLanguageDictionary implements LanguageDictionary<FitTextKey> {
+  private dictionaries: { [locale: string]: FitDictionary; } = {};
+  private locale = 'en-US';
+  private afterSetLocale$: Subject<string> = new Subject();
 
-  public register(locale: FitLocale, dictionary: FitDictionary): this {
+  public register(locale: string, dictionary: FitDictionary): this {
     if (this.dictionaries[locale] === undefined) {
       this.dictionaries[locale] = dictionary;
     } else {
@@ -32,26 +28,26 @@ export class FitLanguageDictionary
     return this;
   }
 
-  public getAllLocales(): FitLocale[] {
-    return Reflect.ownKeys(this.dictionaries) as FitLocale[];
+  public getAllLocales(): string[] {
+    return Reflect.ownKeys(this.dictionaries) as string[];
   }
 
-  public unregister(code: FitLocale): this {
+  public unregister(code: string): this {
     Reflect.deleteProperty(this.dictionaries, code);
     return this;
   }
 
-  public setLocale(locale: FitLocale): this {
+  public setLocale(locale: string): this {
     this.locale = locale;
     this.afterSetLocale$.next(locale);
     return this;
   }
 
-  public onAfterSetLocale$(): Observable<FitLocale> {
+  public onAfterSetLocale$(): Observable<string> {
     return this.afterSetLocale$.asObservable();
   }
 
-  public getLocale(): FitLocale {
+  public getLocale(): string {
     return this.locale;
   }
 

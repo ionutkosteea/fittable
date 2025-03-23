@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
       .setNumberOfCols(10)
       .setRowHeight(0, 42)
       .setColWidth(0, 50)
-      .addStyle('s0', createStyle<FitStyle>().set('font-weight', 'bold'))
+      .setStyle('s0', createStyle<FitStyle>().set('font-weight', 'bold'))
       .setCellStyleName(0, 0, 's0')
       .setRowSpan(0, 0, 2)
       .setColSpan(0, 0, 3)

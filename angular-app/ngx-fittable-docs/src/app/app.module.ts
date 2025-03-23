@@ -66,6 +66,8 @@ import { CustomContextMenuComponent } from './topics/table-designer/custom-view/
 import { CustomToolbarComponent } from './topics/table-designer/custom-view/custom-toolbar.component';
 import { CustomStatusbarComponent } from './topics/table-designer/custom-view/custom-statusbar.component';
 import { CellDataRefComponent } from './topics/table-model/cell-data-ref.component';
+import { TableDataComponent } from './topics/table-model/table-data.component';
+import { TableDataExpandedRowsComponent } from './topics/table-model/table-data-expanded-rows.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +84,8 @@ import { CellDataRefComponent } from './topics/table-model/cell-data-ref.compone
     CellStyleComponent,
     CellMergeComponent,
     CellDataRefComponent,
+    TableDataComponent,
+    TableDataExpandedRowsComponent,
     TableDtoComponent,
     CustomTableComponent,
     UpdateStyleComponent,

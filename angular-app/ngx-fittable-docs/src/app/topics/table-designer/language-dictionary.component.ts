@@ -14,7 +14,7 @@ import {
 } from 'fittable-core/view-model';
 import {
   FIT_MODEL_CONFIG,
-  FitLocale,
+  FitDataType,
   FitTextKey as FitModelTextKey,
   FitTable,
 } from 'fittable-model';
@@ -43,10 +43,12 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
     { image: 'language-dictionary-ts-02.jpg' },
     { image: 'language-dictionary-ts-03.jpg' },
     { image: 'language-dictionary-ts-04.jpg' },
+    { image: 'language-dictionary-ts-05.jpg' },
+    { image: 'language-dictionary-ts-06.jpg' },
   ];
   public readonly buttons: Button[] = [];
   public fit!: TableDesigner;
-  private table?: FitTable;
+  private table!: FitTable;
 
   public ngOnInit(): void {
     registerModelConfig(FIT_MODEL_CONFIG);
@@ -60,19 +62,27 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
       })
     );
 
-    const locale: CustomLocale = 'fr-FR';
-    getLanguageDictionary().register(locale, frFr);
+    this.initFrDictionary();
+    this.fit = this.createTableDesigner();
+    this.createButtons();
+  }
 
+  private initFrDictionary(): void {
+    const dictionary = getLanguageDictionary();
+    dictionary.register(frFR, frDictionary);
+    dictionary.setLocale(enUS).setText(frFR, 'French');
+    dictionary.setLocale(deDE).setText(frFR, 'Französisch');
+    dictionary.setLocale(frFR).setText(frFR, 'Français');
+  }
+
+  private createTableDesigner(): TableDesigner {
     this.table = createTable<FitTable>()
-      .setLocale(locale)
+      .setLocale(frFR)
       .setCellValue(1, 1, 1000.123)
-      .setCellDataType(1, 1, createDataType('number', '# #,00'))
+      .setCellDataType(1, 1, createDataType<FitDataType>('number', '# #,00'))
       .setCellValue(1, 2, true)
       .setCellValue(1, 3, false);
-
-    this.fit = createTableDesigner(this.table);
-
-    this.createButtons();
+    return createTableDesigner(this.table);
   }
 
   private createButtons(): void {
@@ -84,30 +94,21 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
   private createEnglishButton(): Button {
     return {
       getLabel: (): string => 'English',
-      run: (): void => {
-        const locale: CustomLocale = 'en-US';
-        this.table?.setLocale(locale);
-      },
+      run: () => this.table.setLocale(enUS)
     };
   }
 
   private createGermanButton(): Button {
     return {
       getLabel: (): string => 'German',
-      run: (): void => {
-        const locale: CustomLocale = 'de-DE';
-        this.table?.setLocale(locale);
-      },
+      run: () => this.table.setLocale(deDE)
     };
   }
 
   private createFrenchButton(): Button {
     return {
       getLabel: (): string => 'French',
-      run: (): void => {
-        const locale: CustomLocale = 'fr-FR';
-        this.table?.setLocale(locale);
-      },
+      run: () => this.table.setLocale(frFR)
     };
   }
 
@@ -116,11 +117,14 @@ export class LanguageDictionaryComponent implements ConsoleTopic, OnInit {
   }
 }
 
-type CustomLocale = FitLocale | 'fr-FR';
-type CustomTextKey = FitModelTextKey | FitViewModelTextKey | 'fr-FR';
-type CustomDictionary = { [key in CustomTextKey]?: string };
+const enUS = 'en-US';
+const deDE = 'de-DE';
+const frFR = 'fr-FR';
 
-const frFr: CustomDictionary = {
+type FitTextKey = FitModelTextKey | FitViewModelTextKey;
+type FitDictionary = { [key in FitTextKey]?: string };
+
+const frDictionary: FitDictionary = {
   thousandSeparator: ' ',
   decimalPoint: ',',
   TRUE: 'VRAI',
@@ -162,7 +166,6 @@ const frFr: CustomDictionary = {
   'Horizontal align': 'Alignement horizontal',
   'en-US': 'Anglais',
   'de-DE': 'Allemand',
-  'fr-FR': 'Français',
   'Light mode': 'Mode lumière',
   'Dark mode': 'Mode sombre',
   Settings: 'Paramètres',

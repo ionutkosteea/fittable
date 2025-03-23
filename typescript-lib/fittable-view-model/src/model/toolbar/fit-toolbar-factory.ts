@@ -3,8 +3,8 @@ import {
   asTableStyles,
   TableStyles,
   TableDataTypes,
-  TableDataRefs,
-  asTableDataRefs
+  TableData,
+  asTableData
 } from 'fittable-core/model';
 import {
   Container,
@@ -72,8 +72,8 @@ export class FitToolbarFactory implements ToolbarFactory {
       tableStyles && this.addStyleUpdateControls(toolbar, args);
       tableDataTypes && this.addDataTypeUpdateControls(toolbar, args);
     }
-    const tableDataRefs: TableDataRefs | undefined = asTableDataRefs(args.operationExecutor.getTable());
-    tableDataRefs && this.addDataRefUpdateControls(toolbar, args);
+    const tableData: TableData | undefined = asTableData(args.operationExecutor.getTable());
+    tableData && this.addDataRefUpdateControls(toolbar, args);
     return toolbar;
   }
 

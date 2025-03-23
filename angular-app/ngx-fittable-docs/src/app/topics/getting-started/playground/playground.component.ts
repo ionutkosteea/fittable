@@ -2,15 +2,26 @@ import {
   AfterViewInit,
   Component,
   ComponentRef,
+  DestroyRef,
   OnInit,
   ViewChild,
   ViewContainerRef,
   WritableSignal,
+  inject,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { createTable4Dto, registerModelConfig } from 'fittable-core/model';
-import { registerOperationConfig } from 'fittable-core/operations';
+import {
+  createData,
+  createDataDef,
+  createDataType,
+  createStyle, createTable,
+  createTable4Dto,
+  registerModelConfig,
+  Value
+} from 'fittable-core/model';
+import { registerOperationConfig, TableChanges } from 'fittable-core/operations';
 import {
   createTableDesigner,
   TableDesigner,
@@ -18,162 +29,24 @@ import {
   registerViewModelConfig,
   ViewModelConfig,
 } from 'fittable-core/view-model';
-import { FitTableDto, FIT_MODEL_CONFIG } from 'fittable-model';
-import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
+import {
+  FitTableDto,
+  FIT_MODEL_CONFIG,
+  FitDataDef,
+  FitData,
+  FitTable,
+  FitStyle,
+  FitDataType
+} from 'fittable-model';
+import { FIT_OPERATION_CONFIG, createTableChangeDataRefs, TableChangeDataRef } from 'fittable-model-operations';
 import {
   createFitViewModelConfig,
   FitViewModelConfigDef,
-  FIT_VIEW_MODEL_CONFIG,
+  FIT_VIEW_MODEL_CONFIG
 } from 'fittable-view-model';
 import { FittableComponent } from 'fittable-angular';
 
 import { TopicTitle } from '../../../common/topic-title.model';
-
-const getFitTableDto = (): FitTableDto => ({
-  numberOfRows: 100,
-  numberOfCols: 20,
-  styles: {
-    s0: { 'font-weight': 'bold' },
-    s1: { 'font-style': 'italic' },
-    s2: { 'text-decoration': 'line-through' },
-    s3: { 'text-decoration': 'underline' },
-    s4: { 'font-family': 'fantasy' },
-    s5: { 'font-size.px': 16 },
-    s6: { color: '#5498ff' },
-    s7: { 'background-color': '#5498ff' },
-    s8: { 'place-items': 'end normal' },
-    s9: { 'text-align': 'right' },
-    s10: {
-      'border-left': '2px solid #ff2020',
-      'border-top': '2px solid #ffdc4b',
-      'border-right': '2px solid #69c06d',
-      'border-bottom': '2px solid #5488ff',
-    },
-  },
-  mergedCells: { 14: { 1: { rowSpan: 2, colSpan: 2 } } },
-  cols: { 2: { width: 50 }, 4: { width: 140 } },
-  rows: { 13: { height: 42 } },
-  cells: {
-    1: {
-      1: { value: 'line1\nline2\nline3' },
-      3: { value: 1000, dataType: { name: 'string' } },
-      4: {
-        value: '2023-12-31 12:30:59',
-        dataType: { name: 'date-time', format: 'yyyy-MM-dd' },
-      },
-      5: { value: true },
-    },
-    2: {
-      1: { styleName: 's0', value: 'Bold' },
-      3: { value: 1000 },
-      4: {
-        value: '2023-12-31 12:30:59',
-        dataType: { name: 'date-time', format: 'dd.MM.yyyy' },
-      },
-      5: { value: false },
-    },
-    3: {
-      1: { styleName: 's1', value: 'Italic' },
-      3: {
-        value: 1000,
-        dataType: { name: 'number', format: '#.00' },
-      },
-      4: {
-        value: '2023-12-31 12:30:59',
-        dataType: { name: 'date-time', format: 'MM/dd/yyyy' },
-      },
-    },
-    4: {
-      1: { styleName: 's2', value: 'Line-through' },
-      3: {
-        value: 1000,
-        dataType: { name: 'number', format: '#,#' },
-      },
-      4: {
-        value: '2023-12-31 12:30:59',
-        dataType: { name: 'date-time', format: 'hh:mm' },
-      },
-    },
-    5: {
-      1: { styleName: 's3', value: 'Underline' },
-      3: {
-        value: 1000,
-        dataType: { name: 'number', format: '#,#.00' },
-      },
-      4: {
-        value: '2023-12-31 12:30:59',
-        dataType: { name: 'date-time', format: 'hh:mm:ss' },
-      },
-    },
-    6: {
-      1: { styleName: 's4', value: 'Font fantasy' },
-      3: {
-        value: 1000,
-        dataType: { name: 'number', format: '$#' },
-      },
-      4: {
-        value: '2023-12-31 12:30:59',
-        dataType: { name: 'date-time', format: 'dd-MM-yyy hh:mm' },
-      },
-    },
-    7: {
-      1: { styleName: 's5', value: 'Font size 16' },
-      3: {
-        value: 1000,
-        dataType: { name: 'number', format: '#.00 €' },
-      },
-      4: {
-        value: '2023-12-31 12:30:59',
-        dataType: { name: 'date-time', format: 'MM/dd/yy hh:mm:ss' },
-      },
-    },
-    8: {
-      1: { styleName: 's6', value: 'Color' },
-      3: {
-        value: 1000,
-        dataType: { name: 'number', format: 'CAD#,#' },
-      },
-    },
-    9: {
-      1: { styleName: 's7', value: 'Backgroundcolor' },
-      3: {
-        value: 1000,
-        dataType: { name: 'number', format: 'GBP #,#.00' },
-      },
-    },
-    10: {
-      1: { styleName: 's8', value: 'Align bottom' },
-      3: {
-        value: 0.1,
-        dataType: { name: 'number', format: '#%' },
-      },
-    },
-    11: {
-      1: { styleName: 's9', value: 'Align right' },
-      3: {
-        value: 0.1,
-        dataType: { name: 'number', format: '#.00%' },
-      },
-    },
-    12: {
-      1: { styleName: 's10', value: 'Border' },
-      3: {
-        value: 10,
-        dataType: { name: 'number', format: '#,# %' },
-      },
-    },
-    13: {
-      1: { value: 'Row height' },
-      2: { value: 'Column width' },
-      3: {
-        value: 10,
-        dataType: { name: 'number', format: '#,#.00 %' },
-      },
-    },
-    14: { 1: { value: 'Merged cells' } },
-  },
-});
-
 @Component({
   selector: 'playground',
   templateUrl: './playground.component.html',
@@ -187,14 +60,69 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   public readonly title: TopicTitle = 'Playground';
   public readonly navigation: NavigationItem[] = this.createNavigation();
   public fit!: WritableSignal<TableDesigner>;
+  private readonly destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
-    // The register functions should be called, in most cases, from the Angular main module.
     registerModelConfig(FIT_MODEL_CONFIG);
     registerOperationConfig(FIT_OPERATION_CONFIG);
     registerViewModelConfig(FIT_VIEW_MODEL_CONFIG);
 
-    this.fit = signal(createTableDesigner(createTable4Dto(getFitTableDto())));
+    const tableName = 'employees';
+    const valueFields = ['NAME', 'AGE', 'SALARY', 'BONUS_PERCENTAGE', 'HIRE_DATE', 'IS_ACTIVE'];
+    const dataDef = createDataDef<FitDataDef>(tableName, valueFields)
+      .setKeyFields('EMPLOYEE_ID')
+      .setExpandRows(true);
+
+    const values: Value[][] = [
+      [1, 'John Doe', 30, 50000, 0.1, '2021-01-01', true],
+      [2, 'Jane Smith', 25, 45000, 0.15, '2020-06-15', true],
+      [3, 'Alice Johnson', 28, 48000, 0.12, '2019-11-20', false],
+      [4, 'Bob Brown', 35, 52000, 0.08, '2018-03-10', true],
+      [5, 'Charlie Davis', 40, 55000, 0.2, '2017-07-25', true],
+    ];
+    const data = createData<FitData>(tableName, values);
+
+    const table = createTable<FitTable>()
+      .setNumberOfRows(2)
+      .setNumberOfCols(6)
+      .setRowHeight(0, 40)
+      .setStyle('s0', createStyle<FitStyle>()
+        .set('font-weight', 'bold')
+        .set('text-align', 'center')
+      )
+      .setCellValue(0, 0, 'Name')
+      .setCellStyleName(0, 0, 's0')
+      .setCellValue(0, 1, 'Age')
+      .setCellStyleName(0, 1, 's0')
+      .setCellValue(0, 2, 'Salary')
+      .setCellStyleName(0, 2, 's0')
+      .setCellValue(0, 3, 'Bonus Percentage')
+      .setCellStyleName(0, 3, 's0')
+      .setCellValue(0, 4, 'Hire Date')
+      .setCellStyleName(0, 4, 's0')
+      .setCellValue(0, 5, 'Is Active')
+      .setCellStyleName(0, 5, 's0')
+      .setCellDataType(1, 2, createDataType<FitDataType>('number', '$#,#.00'))
+      .setCellDataType(1, 3, createDataType<FitDataType>('number', '#%'))
+      .setCellDataType(1, 4, createDataType<FitDataType>('date-time', 'dd.MM.yyyy'))
+      .setDataDef(1, 0, dataDef)
+      .loadData(data);
+
+    const tableDesigner = createTableDesigner(table);
+    tableDesigner.operationExecutor?.onBeforeRun$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((changes: TableChanges) => {
+        const dataRefs: TableChangeDataRef[] = createTableChangeDataRefs(table, changes);
+        for (const dataRef of dataRefs) {
+          console.log(`Reference: ${dataRef.ref}`);
+          console.log(`Value: ${dataRef.value}`);
+          // Output:
+          // Reference: {"dataDef":"employees","valueField":"NAME","keyFields":{"EMPLOYEE_ID":1}}
+          // Value: John Doe
+        }
+      });
+
+    this.fit = signal(tableDesigner);
   }
 
   public ngAfterViewInit(): void {
@@ -344,7 +272,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   private run(configDef: FitViewModelConfigDef): void {
     const srcConfig: ViewModelConfig = getViewModelConfig();
     registerViewModelConfig(createFitViewModelConfig(configDef, srcConfig));
-    this.fit.set(createTableDesigner(createTable4Dto(getFitTableDto())));
+    this.fit.set(createTableDesigner(createTable4Dto(this.fit().table as unknown as FitTableDto)));
     this.updateFittableComponent();
   }
 

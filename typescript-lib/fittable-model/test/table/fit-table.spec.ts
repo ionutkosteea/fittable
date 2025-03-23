@@ -1,9 +1,12 @@
-import {} from 'jasmine';
+import { } from 'jasmine';
 
 import {
   createCellCoord,
   createCellRange,
   createCellRange4Dto,
+  createData,
+  createDataDef,
+  createDataRefDto,
   createLineRange,
   createStyle,
   createTable,
@@ -20,11 +23,10 @@ import {
   FitStyle,
   FIT_MODEL_CONFIG,
   FitTableDto,
-  FitMapDto,
-  FitStyleDto,
-  FitCellDto,
-  FitMergedCellDto,
   FitCellRangeDto,
+  FitDataRefDto,
+  FitDataDef,
+  FitData
 } from '../../dist/index.js';
 
 describe('Test FitTable', () => {
@@ -62,7 +64,7 @@ describe('Test FitTable', () => {
     const table: FitTable = createTable<FitTable>()
       .setNumberOfRows(10)
       .setNumberOfCols(5)
-      .addStyle('s0', createStyle<FitStyle>().set('color', 'blue'))
+      .setStyle('s0', createStyle<FitStyle>().set('color', 'blue'))
       .setRowHeight(0, 42)
       .setColWidth(0, 50)
       .setCellValue(0, 0, 1000)
@@ -74,19 +76,18 @@ describe('Test FitTable', () => {
     const dto: FitTableDto = table.getDto();
     expect(dto.numberOfRows === 10).toBeTruthy();
     expect(dto.numberOfCols === 5).toBeTruthy();
-    const styles: FitMapDto<FitStyleDto> | undefined = dto.styles;
+    const styles = dto.styles;
     expect(styles && styles['s0']?.color === 'blue').toBeTruthy();
     expect(dto.rows && dto.rows[0].height === 42).toBeTruthy();
     expect(dto.cols && dto.cols[0].width === 50).toBeTruthy();
-    const cells: FitMapDto<FitCellDto> | undefined = dto.cells && dto.cells[0];
+    const cells = dto.cells && dto.cells[0];
     expect(cells && cells[0]?.value === 1000).toBeTruthy();
     expect(cells && cells[0]?.styleName === 's0').toBeTruthy();
     expect(cells && cells[1]?.value === 'text').toBeTruthy();
     expect(cells && cells[1]?.styleName).toBeFalsy();
-    const mergedCells: FitMapDto<FitMergedCellDto> | undefined =
-      dto.mergedCells && dto.mergedCells[0];
-    expect(mergedCells && mergedCells[0].rowSpan).toBeFalsy();
-    expect(mergedCells && mergedCells[0].colSpan === 2).toBeTruthy();
+    const mergedCells = dto.mergedCells && dto.mergedCells[0];
+    expect(mergedCells && mergedCells[0]?.rowSpan).toBeFalsy();
+    expect(mergedCells && mergedCells[0]?.colSpan === 2).toBeTruthy();
   });
 
   it('Test remove methods', () => {
@@ -155,8 +156,8 @@ describe('Test FitTable', () => {
 
   it('getStyleNames', () => {
     const table: FitTable = new FitTable()
-      .addStyle('s0', new FitStyle())
-      .addStyle('s1', new FitStyle());
+      .setStyle('s0', new FitStyle())
+      .setStyle('s1', new FitStyle());
     expect(table.getStyleNames().length == 2).toBeTruthy();
     expect(table.getStyleNames()[0] === 's0').toBeTruthy();
     expect(table.getStyleNames()[1] === 's1').toBeTruthy();
@@ -164,7 +165,7 @@ describe('Test FitTable', () => {
 
   it('removeStyle', () => {
     const table: FitTable = new FitTable()
-      .addStyle('s0', new FitStyle())
+      .setStyle('s0', new FitStyle())
       .removeStyle('s0');
     expect(table.getStyleNames().length === 0);
   });
@@ -186,8 +187,7 @@ describe('Test FitTable', () => {
   it('FitCellRange', () => {
     const start: FitCellCoord = createCellCoord(1, 1);
     const end: FitCellCoord = createCellCoord(0, 0);
-    const cellRange: FitCellRange = //
-      createCellRange<FitCellRange>(start, end).clone();
+    const cellRange: FitCellRange = createCellRange<FitCellRange>(start, end).clone();
     expect(cellRange.getFrom().getRowId() === 0).toBeTruthy();
     expect(cellRange.getFrom().getColId() === 0).toBeTruthy();
     expect(cellRange.getTo().getRowId() === 1).toBeTruthy();
@@ -218,5 +218,95 @@ describe('Test FitTable', () => {
     expect(lineRange.getNumberOfLines() === 3).toBeTruthy();
     expect(lineRange.getDto().from === 0).toBeTruthy();
     expect(lineRange.getDto().to === 2).toBeTruthy();
+  });
+
+  it('Data values with no keys', () => {
+    const table = createTable<FitTable>()
+      .setDataDef(0, 0, createDataDef<FitDataDef>("my_table", ["name", "age"]))
+      .loadData(createData<FitData>("my_table", [["John", 22], ["Anna", 26]]));
+
+    expect(table.getCellValue(0, 0)).toBe("John");
+    expect(table.getCellDataRef(0, 0)).toBeUndefined();
+    expect(table.getCellValue(0, 1)).toBe(22);
+    expect(table.getCellDataRef(0, 1)).toBeUndefined();
+    expect(table.getCellValue(1, 0)).toBe("Anna");
+    expect(table.getCellDataRef(1, 0)).toBeUndefined();
+    expect(table.getCellValue(1, 1)).toBe(26);
+    expect(table.getCellDataRef(1, 1)).toBeUndefined();
+  });
+
+  it('Data values with one key', () => {
+    const table = createTable<FitTable>()
+      .setDataDef(0, 0, createDataDef<FitDataDef>("my_table", ["name", "age"]).setKeyFields("id"))
+      .loadData(createData<FitData>("my_table", [[1, "John", 22], [2, "Anna", 26]]));
+
+    expect(table.getCellValue(0, 0)).toBe("John");
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 0)!).keyFields['id']).toBe(1);
+    expect(table.getCellValue(0, 1)).toBe(22);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 1)!).keyFields['id']).toBe(1);
+    expect(table.getCellValue(1, 0)).toBe("Anna");
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 0)!).keyFields['id']).toBe(2);
+    expect(table.getCellValue(1, 1)).toBe(26);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 1)!).keyFields['id']).toBe(2);
+  });
+
+  it('Data values with two keys', () => {
+    const table = createTable<FitTable>()
+      .setDataDef(0, 0, createDataDef<FitDataDef>("my_table", ["name", "age"]).setKeyFields("id1", "id2"))
+      .loadData(createData<FitData>("my_table", [[1, 11, "John", 22], [2, 22, "Anna", 26]]));
+
+    expect(table.getCellValue(0, 0)).toBe("John");
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 0)!).keyFields['id1']).toBe(1);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 0)!).keyFields['id2']).toBe(11);
+    expect(table.getCellValue(0, 1)).toBe(22);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 1)!).keyFields['id1']).toBe(1);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 1)!).keyFields['id2']).toBe(11);
+    expect(table.getCellValue(1, 0)).toBe("Anna");
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 0)!).keyFields['id1']).toBe(2);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 0)!).keyFields['id2']).toBe(22);
+    expect(table.getCellValue(1, 1)).toBe(26);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 1)!).keyFields['id1']).toBe(2);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 1)!).keyFields['id2']).toBe(22);
+  });
+
+  it('Data values with one key & incl. diplayed key', () => {
+    const table = createTable<FitTable>()
+      .setDataDef(0, 0, createDataDef<FitDataDef>("my_table", ["id", "name", "age"]).setKeyFields("id"))
+      .loadData(createData<FitData>("my_table", [[1, 1, "John", 22], [2, 2, "Anna", 26]]));
+
+    expect(table.getCellValue(0, 0)).toBe(1);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 0)!).keyFields['id']).toBe(1);
+    expect(table.getCellValue(0, 1)).toBe("John");
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 1)!).keyFields['id']).toBe(1);
+    expect(table.getCellValue(0, 2)).toBe(22);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(0, 2)!).keyFields['id']).toBe(1);
+    expect(table.getCellValue(1, 0)).toBe(2);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 0)!).keyFields['id']).toBe(2);
+    expect(table.getCellValue(1, 1)).toBe("Anna");
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 1)!).keyFields['id']).toBe(2);
+    expect(table.getCellValue(1, 2)).toBe(26);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 2)!).keyFields['id']).toBe(2);
+  });
+
+  it('Data values with one key & expand rows', () => {
+    const table = new FitTable()
+      .setNumberOfRows(3)
+      .setNumberOfCols(2)
+      .setCellValue(0, 0, "[0,0]")
+      .setCellValue(2, 0, "[2,0]")
+      .setDataDef(1, 0, createDataDef<FitDataDef>("my_table", ["name", "age"]).setKeyFields("id").setExpandRows(true))
+      .loadData(createData<FitData>("my_table", [[1, "John", 22], [2, "Anna", 26]]));
+
+    expect(table.getCellValue(0, 0)).toBe("[0,0]")
+    expect(table.getCellValue(1, 0)).toBe("John");
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 0)!).keyFields['id']).toBe(1);
+    expect(table.getCellValue(1, 1)).toBe(22);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(1, 1)!).keyFields['id']).toBe(1);
+    expect(table.getCellValue(2, 0)).toBe("Anna");
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(2, 0)!).keyFields['id']).toBe(2);
+    expect(table.getCellValue(2, 1)).toBe(26);
+    expect(createDataRefDto<FitDataRefDto>(table.getCellDataRef(2, 1)!).keyFields['id']).toBe(2);
+    expect(table.getCellValue(3, 0)).toBe("[2,0]")
+    expect(table.getNumberOfRows()).toBe(4);
   });
 });

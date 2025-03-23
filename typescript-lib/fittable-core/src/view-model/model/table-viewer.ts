@@ -1,4 +1,4 @@
-import { Value } from '../../model/table/table.js';
+import { Value } from '../../model/table/table-data.js';
 import { Style } from '../../model/table/style.js';
 import { Table } from '../../model/table/table.js';
 import { DataType, DataTypeName } from '../../model/table/data-type.js';
@@ -27,10 +27,10 @@ export interface TableViewer {
   hasHiddenCells4Col(colId: number): boolean;
   forEachMergedCell(cell: (rowId: number, colId: number) => void): void;
   getCellStyle(rowId: number, colId: number): Style | undefined;
-  getCellValue(rowId: number, colId: number): Value | undefined;
+  getCellValue(rowId: number, colId: number): Value;
+  getCellFormattedValue(rowId: number, colId: number): Value;
   getCellDataType(rowId: number, colId: number): DataType | undefined;
   getCellType(rowId: number, colId: number): DataTypeName;
-  getFormatedCellValue(rowId: number, colId: number): string | undefined;
   resetRowProperties(): this;
   resetColProperties(): this;
   resetMergedRegions(): this;

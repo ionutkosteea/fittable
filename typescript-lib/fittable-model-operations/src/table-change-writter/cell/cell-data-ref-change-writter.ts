@@ -2,7 +2,7 @@ import {
     CellRange,
     createCellRange4Dto,
     Table,
-    TableDataRefs,
+    TableData,
 } from 'fittable-core/model';
 import {
     TableChangeWritter,
@@ -18,7 +18,7 @@ export type CellDataRefChange = Args<'cell-data-ref'> & { items: CellDataRefItem
 
 export class CellDataRefChangeWritter implements TableChangeWritter {
 
-    constructor(private readonly table: Table & TableDataRefs, private readonly change: CellDataRefChange) { }
+    constructor(private readonly table: Table & TableData, private readonly change: CellDataRefChange) { }
 
     public run(): void {
         this.updateCellDataRefs();
@@ -57,7 +57,7 @@ export class CellDataRefChangeWritter implements TableChangeWritter {
 export class CellDataRefChangeWritterFactory
     implements TableChangeWritterFactory {
     public createTableChangeWritter(
-        table: Table & TableDataRefs,
+        table: Table & TableData,
         change: CellDataRefChange
     ): TableChangeWritter {
         return new CellDataRefChangeWritter(table, change);

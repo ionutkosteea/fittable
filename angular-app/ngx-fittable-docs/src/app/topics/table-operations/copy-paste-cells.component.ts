@@ -51,7 +51,7 @@ export class CopyPasteCellsComponent extends ConsoleTopic implements OnInit {
     );
 
     const table: FitTable = createTable<FitTable>()
-      .addStyle('s0', createStyle<FitStyle>().set('background-color', 'yellow'))
+      .setStyle('s0', createStyle<FitStyle>().set('background-color', 'yellow'))
       .setCellValue(1, 1, '[1,1]')
       .setCellStyleName(1, 1, 's0')
       .setCellValue(2, 1, '[2,1]')

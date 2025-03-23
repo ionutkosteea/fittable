@@ -1,22 +1,16 @@
 import { Component, DestroyRef, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import { createStyle, createTable, registerModelConfig } from 'fittable-core/model';
-import { registerOperationConfig, TableChanges } from "fittable-core/operations";
+import { createStyle, createTable, registerModelConfig, createDataRef } from 'fittable-core/model';
+import { BaseTableChanges, registerOperationConfig, TableChanges } from "fittable-core/operations";
 import { createTableDesigner, registerViewModelConfig, TableDesigner } from 'fittable-core/view-model';
 import { FIT_MODEL_CONFIG, FitStyle, FitTable } from "fittable-model";
-import { FIT_OPERATION_CONFIG, getTableChangeDataRefs, TableChangeDataRef } from "fittable-model-operations";
+import { FIT_OPERATION_CONFIG, createTableChangeDataRefs, TableChangeDataRef } from "fittable-model-operations";
 import { FIT_VIEW_MODEL_CONFIG, FitToolbarControlId } from "fittable-view-model";
 
 import { TopicTitle } from './../../common/topic-title.model';
 import { CodeSnippet } from "../common/code-snippet.model";
 import { ConsoleTopic } from "./common/console-topic.model";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-
-type MyDataRef = {
-  field: string,
-  condition: string
-}
-
 @Component({
   selector: 'cell-data-refs',
   templateUrl: './common/console-topic.html',
@@ -33,8 +27,8 @@ export class CellDataRefComponent extends ConsoleTopic implements OnInit {
   public readonly typescriptCode: CodeSnippet[] = [
     { image: 'cell-data-ref-ts-01.jpg' },
     { image: 'cell-data-ref-ts-02.jpg' },
-    { image: 'cell-data-ref-ts-03.jpg' },
-    { image: 'cell-data-ref-ts-04.jpg' },
+    { image: 'cell-data-ts-01.jpg' },
+    { image: 'cell-data-ts-02.jpg' },
   ];
   private readonly destroyRef = inject(DestroyRef);
   private consoleText = '';
@@ -56,8 +50,8 @@ export class CellDataRefComponent extends ConsoleTopic implements OnInit {
 
   private createTableDesigner(): TableDesigner {
     const table: FitTable = createTable<FitTable>()
-      .addStyle("s0", createStyle<FitStyle>().set("font-weight", "bold"))
-      .addStyle("s1", createStyle<FitStyle>().set("background-color", "yellow"))
+      .setStyle("s0", createStyle<FitStyle>().set("font-weight", "bold"))
+      .setStyle("s1", createStyle<FitStyle>().set("background-color", "yellow"))
       .setColSpan(0, 0, 5)
       .setCellValue(0, 0,
         'Edit yellow cells & Switch to cell data references via toolbar button [x].')
@@ -67,21 +61,17 @@ export class CellDataRefComponent extends ConsoleTopic implements OnInit {
       .setCellValue(1, 2, "Age")
       .setCellValue(2, 0, 1)
       .setCellValue(2, 1, "John Doe")
-      .setCellDataRef(2, 1,
-        JSON.stringify({ field: "NAME", condition: "EMPLOYEE_ID=1" } as MyDataRef))
+      .setCellDataRef(2, 1, createDataRef("my_table", "NAME", { "EMPLOYEE_ID": 1 }))
       .setCellStyleName(2, 1, "s1")
       .setCellValue(2, 2, 29)
-      .setCellDataRef(2, 2,
-        JSON.stringify({ field: "AGE", condition: "EMPLOYEE_ID=1" } as MyDataRef))
+      .setCellDataRef(2, 2, createDataRef("my_table", "AGE", { "EMPLOYEE_ID": 1 }))
       .setCellStyleName(2, 2, "s1")
       .setCellValue(3, 0, 2)
       .setCellValue(3, 1, "Kim Doe")
-      .setCellDataRef(3, 1,
-        JSON.stringify({ field: "NAME", condition: "EMPLOYEE_ID=2" } as MyDataRef))
+      .setCellDataRef(3, 1, createDataRef("my_table", "NAME", { "EMPLOYEE_ID": 2 }))
       .setCellStyleName(3, 1, "s1")
       .setCellValue(3, 2, 25)
-      .setCellDataRef(3, 2,
-        JSON.stringify({ field: "AGE", condition: "EMPLOYEE_ID=2" } as MyDataRef))
+      .setCellDataRef(3, 2, createDataRef("my_table", "AGE", { "EMPLOYEE_ID": 2 }))
       .setCellStyleName(3, 2, "s1");
 
     return createTableDesigner(table);
@@ -96,26 +86,25 @@ export class CellDataRefComponent extends ConsoleTopic implements OnInit {
   }
 
   private updateConsoleOnTableChanges(): void {
-    this.fit.operationExecutor?.onAfterRun$()
+    this.fit.operationExecutor?.onBeforeRun$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((changes: TableChanges) => this.updateConsole(changes));
-    this.fit.operationExecutor?.onAfterUndo$()
+    this.fit.operationExecutor?.onBeforeUndo$()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((changes: TableChanges) => this.updateConsole(changes));
-    this.fit.operationExecutor?.onAfterRedo$()
+      .subscribe((changes: TableChanges) => this.updateConsole(changes.undoChanges));
+    this.fit.operationExecutor?.onBeforeRedo$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((changes: TableChanges) => this.updateConsole(changes));
   }
 
-  private updateConsole(changes: TableChanges): void {
+  private updateConsole(changes?: BaseTableChanges): void {
+    if (!changes) return;
     const table = this.fit.operationExecutor?.getTable() as FitTable;
-    const dataRefs: TableChangeDataRef<MyDataRef>[] =
-      getTableChangeDataRefs<MyDataRef>(table, changes);
+    const dataRefs: TableChangeDataRef[] = createTableChangeDataRefs(table, changes);
     for (const dataRef of dataRefs) {
-      let sqlComand = `update employees` +
-        ` set ${dataRef.item.field}='${table.getCellValue(dataRef.rowId, dataRef.colId) ?? ""}'` +
-        ` where ${dataRef.item.condition}`;
-      this.consoleText += sqlComand + ';\r\n';
+      this.consoleText += `Reference: ${dataRef.ref}\r\n`;
+      this.consoleText += `Value: ${dataRef.value}\r\n`;
     }
+    this.console.nativeElement.scrollTop = this.console.nativeElement.scrollHeight;
   }
 }

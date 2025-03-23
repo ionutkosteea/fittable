@@ -1,4 +1,4 @@
-import {} from 'jasmine';
+import { } from 'jasmine';
 
 import { implementsTKeys } from 'fittable-core/common';
 import {
@@ -84,7 +84,7 @@ describe('Toolbar', (): void => {
   it('paint format', (): void => {
     const table: Table = createTable();
     const tbl: (Table & TableStyles) | undefined = asTableStyles(table)
-      ?.addStyle('s0', createStyle().set('font-weight', 'bold'))
+      ?.setStyle('s0', createStyle().set('font-weight', 'bold'))
       .setCellStyleName(0, 0, 's0');
     const operationExecutor: OperationExecutor = createOperationExecutor();
     operationExecutor.setTable(table);

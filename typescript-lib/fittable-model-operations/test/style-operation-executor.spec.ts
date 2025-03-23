@@ -1,4 +1,4 @@
-import {} from 'jasmine';
+import { } from 'jasmine';
 
 import { Style } from 'fittable-core/model';
 
@@ -12,7 +12,7 @@ describe('Style Operation Executor', () => {
   });
 
   it('make undefined cell bold', () => {
-    executor //
+    executor
       .createTable(1, 1)
       .selectCell(0, 0)
       .runFontBold(true);
@@ -23,7 +23,7 @@ describe('Style Operation Executor', () => {
   });
 
   it('make existent cell bold', () => {
-    executor //
+    executor
       .createTable(1, 1)
       .setCellValue(0, 0, 1000)
       .selectCell(0, 0)
@@ -35,9 +35,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('make colored cell bold', () => {
-    executor //
+    executor
       .createTable(1, 1)
-      .addStyle('s0', { color: 'blue' })
+      .setStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .runFontBold(true);
@@ -49,9 +49,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('make bold cell normal', () => {
-    executor //
+    executor
       .createTable(1, 1)
-      .addStyle('s0', { 'font-weight': 'bold' })
+      .setStyle('s0', { 'font-weight': 'bold' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .runFontBold(false);
@@ -61,7 +61,7 @@ describe('Style Operation Executor', () => {
   });
 
   it('make undefined cell normal', () => {
-    executor //
+    executor
       .createTable(1, 1)
       .selectCell(0, 0)
       .runFontBold(false);
@@ -71,7 +71,7 @@ describe('Style Operation Executor', () => {
   });
 
   it('make existent cell normal', () => {
-    executor //
+    executor
       .createTable(1, 1)
       .setCellValue(0, 0, 1000)
       .selectCell(0, 0)
@@ -82,7 +82,7 @@ describe('Style Operation Executor', () => {
   });
 
   it('make two inexitent cells bold', () => {
-    executor //
+    executor
       .createTable(2, 1)
       .selectCell(0, 0)
       .selectCell(1, 0)
@@ -94,9 +94,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('make two bold cells normal', () => {
-    executor //
+    executor
       .createTable(2, 1)
-      .addStyle('s0', { 'font-weight': 'bold' })
+      .setStyle('s0', { 'font-weight': 'bold' })
       .setCellStyleName(0, 0, 's0')
       .setCellStyleName(1, 0, 's0')
       .selectCell(0, 0)
@@ -109,9 +109,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('make two cells, one normal and one bold, bold', () => {
-    executor //
+    executor
       .createTable(2, 1)
-      .addStyle('s0', { 'font-weight': 'bold' })
+      .setStyle('s0', { 'font-weight': 'bold' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .selectCell(1, 0)
@@ -124,9 +124,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('make two cells, one undefined and one bold, normal', () => {
-    executor //
+    executor
       .createTable(2, 1)
-      .addStyle('s0', { 'font-weight': 'bold' })
+      .setStyle('s0', { 'font-weight': 'bold' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .selectCell(1, 0)
@@ -138,9 +138,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('make two cells, one undefined and one bold and colored, normal', () => {
-    executor //
+    executor
       .createTable(2, 1)
-      .addStyle('s0', { 'font-weight': 'bold', color: 'blue' })
+      .setStyle('s0', { 'font-weight': 'bold', color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .selectCell(1, 0)
@@ -155,9 +155,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('add cell with new style, beside cell with existing style', () => {
-    executor //
+    executor
       .createTable(2, 1)
-      .addStyle('s0', { color: 'blue' })
+      .setStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(1, 0)
       .runFontBold(true);
@@ -174,9 +174,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('make bold and colored cell normal', () => {
-    executor //
+    executor
       .createTable(2, 1)
-      .addStyle('s0', { color: 'blue', 'font-weight': 'bold' })
+      .setStyle('s0', { color: 'blue', 'font-weight': 'bold' })
       .setCellStyleName(0, 0, 's0')
       .setCellStyleName(1, 0, 's0')
       .selectCell(1, 0)
@@ -194,9 +194,9 @@ describe('Style Operation Executor', () => {
   });
 
   it('remove style', () => {
-    executor //
+    executor
       .createTable(1, 1)
-      .addStyle('s0', { color: 'blue' })
+      .setStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .runRemoveCellStyles();
@@ -208,8 +208,8 @@ describe('Style Operation Executor', () => {
   it('paint format', () => {
     executor
       .createTable(1, 2)
-      .addStyle('s0', { color: 'blue' })
-      .addStyle('s1', { 'font-weight': 'bold' })
+      .setStyle('s0', { color: 'blue' })
+      .setStyle('s1', { 'font-weight': 'bold' })
       .setCellStyleName(0, 0, 's0')
       .setCellStyleName(0, 1, 's1')
       .selectCell(0, 1)

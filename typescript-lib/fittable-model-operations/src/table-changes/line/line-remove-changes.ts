@@ -18,8 +18,8 @@ import {
   DataType,
   asTableDataTypes,
   TableDataTypes,
-  TableDataRefs,
-  asTableDataRefs,
+  TableData,
+  asTableData,
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -122,7 +122,7 @@ abstract class LineRemoveChangesBuilder {
   };
 
   protected readonly tableCellDataType?: TableBasics & TableDataTypes;
-  protected readonly tableDataRefs?: TableBasics & TableDataRefs;
+  protected readonly tableData?: TableBasics & TableData;
   protected readonly tableStyles?: TableBasics & TableStyles;
   protected readonly tableMergedRegions?: TableBasics & TableMergedRegions;
 
@@ -131,7 +131,7 @@ abstract class LineRemoveChangesBuilder {
     protected readonly args: LineRemoveArgs
   ) {
     this.tableCellDataType = asTableDataTypes(table);
-    this.tableDataRefs = asTableDataRefs(table);
+    this.tableData = asTableData(table);
     this.tableStyles = asTableStyles(table);
     this.tableMergedRegions = asTableMergedRegions(table);
   }
@@ -286,7 +286,7 @@ abstract class LineRemoveChangesBuilder {
     this.lineInsertUndoChange.lineRanges = this.lineRemoveChange.lineRanges;
     this.lineRemoveChange.moveLines.forEach(
       (movableLines: MoveLinesItem): void => {
-        const lineRange: LineRange = //
+        const lineRange: LineRange =
           createLineRange4Dto(movableLines.lineRange);
         const move: number = -1 * movableLines.move;
         const from: number = lineRange.getFrom() - move;
@@ -307,7 +307,7 @@ abstract class LineRemoveChangesBuilder {
         this.getTableLinesHelper().forEachLineCell(
           createLineRange4Dto(removableLineRange),
           (rowId: number, colId: number): void => {
-            const value: Value | undefined = //
+            const value: Value | undefined =
               this.table.getCellValue(rowId, colId);
             value !== undefined && oldValues.set(value, rowId, colId);
           }
@@ -331,7 +331,7 @@ abstract class LineRemoveChangesBuilder {
         this.getTableLinesHelper().forEachLineCell(
           createLineRange4Dto(removableLineRange),
           (rowId: number, colId: number): void => {
-            const dataType: DataType | undefined = //
+            const dataType: DataType | undefined =
               this.tableCellDataType?.getCellDataType(rowId, colId);
             dataType !== undefined && oldDataTypes.set(dataType, rowId, colId);
           }
@@ -349,7 +349,7 @@ abstract class LineRemoveChangesBuilder {
   }
 
   private undoCellDataRefs(): void {
-    if (!this.tableDataRefs) return;
+    if (!this.tableData) return;
     const oldCellDataRefs: CellRangeAddressObjects<string | undefined> =
       new CellRangeAddressObjects();
     this.lineRemoveChange.lineRanges.forEach(
@@ -357,7 +357,7 @@ abstract class LineRemoveChangesBuilder {
         this.getTableLinesHelper().forEachLineCell(
           createLineRange4Dto(removableLineRange),
           (rowId: number, colId: number): void => {
-            const dataRef: string | undefined = this.tableDataRefs?.getCellDataRef(rowId, colId);
+            const dataRef: string | undefined = this.tableData?.getCellDataRef(rowId, colId);
             dataRef !== undefined && oldCellDataRefs.set(dataRef, rowId, colId);
           }
         );
@@ -387,7 +387,7 @@ abstract class LineRemoveChangesBuilder {
         this.getTableLinesHelper().forEachLineCell(
           createLineRange4Dto(removableLineRange),
           (rowId: number, colId: number): void => {
-            const styleName: string | undefined = //
+            const styleName: string | undefined =
               this.tableStyles?.getCellStyleName(rowId, colId);
             styleName && oldStyleNames.set(styleName, rowId, colId);
           }

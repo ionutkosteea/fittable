@@ -3,7 +3,6 @@ import { ColConditionFn, TableBasics, TableColFilters } from '../table/table.js'
 import { getModelConfig } from '../model-config.js';
 
 type FitTable = TableBasics & TableColFilters;
-
 export interface ColFilterExecutor {
   table: FitTable;
   addCondition(colId: number, conditionFn: ColConditionFn): this;
@@ -19,9 +18,9 @@ export interface ColFilterExecutorFactory {
   createColFilterExecutor(table: FitTable): ColFilterExecutor;
 }
 
-export function createColFilterExecutor(table: FitTable): ColFilterExecutor {
+export function createColFilterExecutor<T extends ColFilterExecutor>(table: FitTable): T {
   const factory: ColFilterExecutorFactory | undefined =
     getModelConfig().colFilterExecutorFactory;
-  if (factory) return factory.createColFilterExecutor(table);
+  if (factory) return factory.createColFilterExecutor(table) as T;
   else throw new MissingFactoryError();
 }

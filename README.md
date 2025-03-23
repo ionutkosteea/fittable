@@ -117,58 +117,80 @@ export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
-    // Build table
-    const table: Table = createTable<FitTable>()
-      .setNumberOfRows(100)
-      .setNumberOfCols(10)
-      .setRowHeight(0, 42)
-      .setColWidth(0, 50)
-      .addStyle('s0', createStyle<FitStyle>().set('font-weight', 'bold'))
+    const dataDef = createDataDef<FitDataDef>('employees', [
+      'NAME',
+      'AGE',
+      'SALARY',
+      'BONUS_PERCENTAGE',
+      'HIRE_DATE',
+      'IS_ACTIVE',
+    ])
+      .setKeyFields('EMPLOYEE_ID')
+      .setExpandRows(true);
+
+    const data = createData<FitData>('employees', [
+      [1, 'John Doe', 30, 50000, 0.1, '2021-01-01', true],
+      [2, 'Jane Smith', 25, 45000, 0.15, '2020-06-15', true],
+      [3, 'Alice Johnson', 28, 48000, 0.12, '2019-11-20', false],
+      [4, 'Bob Brown', 35, 52000, 0.08, '2018-03-10', true],
+      [5, 'Charlie Davis', 40, 55000, 0.2, '2017-07-25', true],
+    ]);
+
+    const table = createTable<FitTable>()
+      .setNumberOfRows(2)
+      .setNumberOfCols(6)
+      .setRowHeight(0, 40)
+      .setStyle(
+        's0',
+        createStyle<FitStyle>()
+          .set('font-weight', 'bold')
+          .set('text-align', 'center')
+      )
+      .setCellValue(0, 0, 'Name')
       .setCellStyleName(0, 0, 's0')
-      .setRowSpan(0, 0, 2)
-      .setColSpan(0, 0, 3)
-      .setLocale('de-DE')
-      .setCellValue(2, 1, 1000)
-      .setCellDataType(2, 1, createDataType('string'))
-      .setCellValue(3, 1, 1000.123)
-      .setCellDataType(3, 1, createDataType('number', '#.#,00 €'))
-      .setCellValue(4, 1, '2023-12-31')
-      .setCellDataType(4, 1, createDataType('date-time', 'dd.MM.yyyy'))
-      .setCellValue(5, 1, true)
-      .setCellValue(6, 1, false)
-      .setCellValue(7, 1, 'Some text here...');
+      .setCellValue(0, 1, 'Age')
+      .setCellStyleName(0, 1, 's0')
+      .setCellValue(0, 2, 'Salary')
+      .setCellStyleName(0, 2, 's0')
+      .setCellValue(0, 3, 'Bonus Percentage')
+      .setCellStyleName(0, 3, 's0')
+      .setCellValue(0, 4, 'Hire Date')
+      .setCellStyleName(0, 4, 's0')
+      .setCellValue(0, 5, 'Is Active')
+      .setCellStyleName(0, 5, 's0')
+      .setCellDataType(1, 2, createDataType<FitDataType>('number', '$#,#.00'))
+      .setCellDataType(1, 3, createDataType<FitDataType>('number', '#%'))
+      .setCellDataType(
+        1,
+        4,
+        createDataType<FitDataType>('date-time', 'dd.MM.yyyy')
+      )
+      .setDataDef(1, 0, dataDef)
+      .loadData(data);
 
-    // Load table
-    // const tableDto: FitTableDto = {
-    //   numberOfRows: 5,
-    //   numberOfCols: 5,
-    //   cells: { 0: { 0: { value: 1000 } } }
-    // }
-    // const table: FitTable = createTable4Dto(tableDto);
-
-    // Create table designer
-    this.fit = createTableDesigner(table);
-
-    // Run operations
-    if (this.fit.operationExecutor) {
-      this.fit.operationExecutor
-        .onAfterRun$()
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((dto: TableChanges) => {
-          //  Do something...
-        });
-
-      const args: FitOperationArgs = {
-        id: 'cell-value',
-        selectedCells: [createCellRange(createCellCoord(0, 0))],
-        value: 'operation text',
-      };
-      this.fit.operationExecutor.run(args);
-    }
-
-    // Access view model
+    const tableDesigner = createTableDesigner(table);
+    tableDesigner.operationExecutor
+      ?.onAfterRun$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((changes: TableChanges) => {
+        const dataRefs: TableChangeDataRef[] = createTableChangeDataRefs(
+          table,
+          changes
+        );
+        for (const dataRef of dataRefs) {
+          console.log(`Reference: ${dataRef.item}`);
+          console.log(
+            `Value: ${table.getCellValue(dataRef.rowId, dataRef.colId)}`
+          );
+          // Output:
+          // Reference: {"dataDef":"employees","valueField":"NAME","keyFields":{"EMPLOYEE_ID":1}}
+          // Value: John Doe
+        }
+      });
     const darkTheme: FitThemeName = 'Dark mode';
-    this.fit.viewModel.themeSwitcher?.switch(darkTheme);
+    tableDesigner.viewModel.themeSwitcher?.switch(darkTheme);
+
+    this.fit = signal(tableDesigner);
   }
 }
 ```

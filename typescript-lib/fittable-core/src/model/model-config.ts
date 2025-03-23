@@ -10,6 +10,7 @@ import { TableFactory } from './table/table.js';
 import { ColFilterExecutorFactory } from './filter/col-filter-executor.js';
 import { CellFormatterFactory } from './cell-formatter/cell-formatter.js';
 import { DataTypeFactory } from './table/data-type.js';
+import { DataDefFactory, DataFactory, DataRefFactory } from './table/table-data.js';
 
 export type ModelConfig = {
   languageDictionaryFactory: LanguageDictionaryFactory;
@@ -23,10 +24,13 @@ export type ModelConfig = {
   cellDateFormatterFactory?: CellFormatterFactory;
   cellBooleanFormatterFactory?: CellFormatterFactory;
   dataTypeFactory?: DataTypeFactory;
+  dataRefFactory?: DataRefFactory;
+  dataDefFactory?: DataDefFactory;
+  dataFactory?: DataFactory;
 };
 
 let fitModelConfig: ModelConfig | undefined;
-let languageDictionary: LanguageDictionary<string, string> | undefined;
+let languageDictionary: LanguageDictionary<string> | undefined;
 
 export function registerModelConfig(config: ModelConfig): void {
   fitModelConfig = { ...config };
@@ -48,13 +52,11 @@ export function getModelConfig(): ModelConfig {
   }
 }
 
-export function getLanguageDictionary<
-  LanguageCode extends string,
-  TextKey extends string
->(): LanguageDictionary<LanguageCode, TextKey> {
+export function getLanguageDictionary<TextKey extends string>():
+  LanguageDictionary<TextKey> {
   if (!languageDictionary) {
     languageDictionary =
       getModelConfig().languageDictionaryFactory.createLanguageDictionary();
   }
-  return languageDictionary as LanguageDictionary<LanguageCode, TextKey>;
+  return languageDictionary as LanguageDictionary<TextKey>;
 }

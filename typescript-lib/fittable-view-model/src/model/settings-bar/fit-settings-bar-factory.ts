@@ -6,14 +6,15 @@ import { FitPopupControl } from '../common/controls/fit-popup-control.js';
 import { FitValueControl } from '../common/controls/fit-value-control.js';
 import { FitWindow } from '../common/controls/fit-window.js';
 import { FitThemeName } from '../theme-switcher/fit-theme-switcher.js';
-import { FitLocale, getLanguageDictionary } from '../language/language-def.js';
+import { FitTextKey, getLanguageDictionary } from '../language/language-def.js';
 import { getImageRegistry } from '../image-registry/fit-image-registry.js';
 
 export type FitSettingsBarControlId =
   | 'settings-button'
   | 'language-label'
   | 'theme-label'
-  | FitLocale
+  | 'en-US'
+  | 'de-DE'
   | FitThemeName;
 
 export class FitSettingsBarBuilder {
@@ -51,9 +52,9 @@ export class FitSettingsBarBuilder {
       .setLabel((): string => getLanguageDictionary().getText('Languages'));
     window.addControl('language-label', controls);
     for (const locale of getLanguageDictionary().getAllLocales()) {
-      const control: FitValueControl = new FitValueControl()
+      const control = new FitValueControl()
         .setType('menu-item')
-        .setLabel((): string => getLanguageDictionary().getText(locale))
+        .setLabel((): string => getLanguageDictionary().getText(locale as FitTextKey))
         .setValue(locale)
         .setRun((): void => {
           this.reloadTableLocalesFn(locale);
@@ -64,7 +65,7 @@ export class FitSettingsBarBuilder {
           ? getImageRegistry().getUrl('check')
           : undefined;
       });
-      window.addControl(locale, control);
+      window.addControl(locale as FitSettingsBarControlId, control);
     }
   }
 
@@ -76,7 +77,7 @@ export class FitSettingsBarBuilder {
     window.addControl('theme-label', themeSwitcher);
     for (const name of this.themeSwitcher.getThemeNames()) {
       const themeName: FitThemeName = name as FitThemeName;
-      const theme: FitValueControl = new FitValueControl()
+      const theme = new FitValueControl()
         .setType('menu-item')
         .setLabel((): string => getLanguageDictionary().getText(themeName))
         .setValue(themeName)

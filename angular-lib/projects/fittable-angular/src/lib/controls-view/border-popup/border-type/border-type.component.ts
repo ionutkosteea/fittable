@@ -7,7 +7,7 @@ import {
   inject,
   DestroyRef,
 } from '@angular/core';
-import { NgFor, NgStyle } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 import {
   PopupControl,
@@ -23,7 +23,7 @@ import { PopupMenuComponent } from '../../popup-menu/popup-menu.component';
 @Component({
   selector: 'fit-border-type',
   standalone: true,
-  imports: [NgFor, NgStyle, ButtonComponent, PopupMenuComponent],
+  imports: [CommonModule, ButtonComponent, PopupMenuComponent],
   templateUrl: './border-type.component.html',
   styleUrls: ['../../common/scss/utils.scss', './border-type.component.scss'],
 })

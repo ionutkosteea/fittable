@@ -1,17 +1,22 @@
-import {} from 'jasmine';
+import { } from 'jasmine';
 
-import { Value } from 'fittable-core/model';
+import { createColFilterExecutor, createTable, registerModelConfig, Value, } from 'fittable-core/model';
 
-import { FitTable, FitColFilterExecutor } from '../../dist/index.js';
+import { FitTable, FitColFilterExecutor, FIT_MODEL_CONFIG } from '../../dist/index.js';
 
 describe('fit-col-filter-executor.ts', () => {
+
+  beforeAll(() => {
+    registerModelConfig(FIT_MODEL_CONFIG);
+  })
+
   it('run filter', () => {
-    const table = new FitTable()
+    const table = createTable<FitTable>()
       .setCellValue(0, 0, 100)
       .setCellValue(1, 0, 200)
       .setCellValue(2, 0, 250);
 
-    const filterExecutor = new FitColFilterExecutor(table)
+    const filterExecutor = createColFilterExecutor<FitColFilterExecutor>(table)
       .addCondition(0, getFilterCondition)
       .run();
     expect(table === filterExecutor.getTable(0)).toBeTruthy();

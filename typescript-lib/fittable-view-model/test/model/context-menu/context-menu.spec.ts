@@ -1,4 +1,4 @@
-import {} from 'jasmine';
+import { } from 'jasmine';
 
 import {
   CellRange,
@@ -45,7 +45,7 @@ describe('Context menu', (): void => {
 
   it('resize rows', (): void => {
     const table: FitTable = createTable<FitTable>();
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -62,11 +62,11 @@ describe('Context menu', (): void => {
   });
 
   it('insert rows above', (): void => {
-    const table: FitTable = createTable<FitTable>() //
+    const table: FitTable = createTable<FitTable>()
       .setNumberOfRows(10)
       .setNumberOfCols(10)
       .setCellValue(0, 0, 'bookmark');
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -82,11 +82,11 @@ describe('Context menu', (): void => {
   });
 
   it('insert rows below', (): void => {
-    const table: FitTable = createTable<FitTable>() //
+    const table: FitTable = createTable<FitTable>()
       .setNumberOfRows(10)
       .setNumberOfCols(10)
       .setCellValue(0, 0, 'bookmark');
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -102,11 +102,11 @@ describe('Context menu', (): void => {
   });
 
   it('remove rows', (): void => {
-    const table: FitTable = createTable<FitTable>() //
+    const table: FitTable = createTable<FitTable>()
       .setNumberOfRows(10)
       .setNumberOfCols(10)
       .setCellValue(2, 0, 'bookmark');
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -123,7 +123,7 @@ describe('Context menu', (): void => {
 
   it('resize columns', (): void => {
     const table: FitTable = createTable<FitTable>();
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -140,11 +140,11 @@ describe('Context menu', (): void => {
   });
 
   it('insert columns left', (): void => {
-    const table: FitTable = createTable<FitTable>() //
+    const table: FitTable = createTable<FitTable>()
       .setNumberOfRows(10)
       .setNumberOfCols(10)
       .setCellValue(0, 0, 'bookmark');
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -160,11 +160,11 @@ describe('Context menu', (): void => {
   });
 
   it('insert columns right', (): void => {
-    const table: FitTable = createTable<FitTable>() //
+    const table: FitTable = createTable<FitTable>()
       .setNumberOfRows(10)
       .setNumberOfCols(10)
       .setCellValue(0, 0, 'bookmark');
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -180,11 +180,11 @@ describe('Context menu', (): void => {
   });
 
   it('remove columns', (): void => {
-    const table: FitTable = createTable<FitTable>() //
+    const table: FitTable = createTable<FitTable>()
       .setNumberOfRows(10)
       .setNumberOfCols(10)
       .setCellValue(0, 2, 'bookmark');
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -201,10 +201,10 @@ describe('Context menu', (): void => {
 
   it('clear cells', (): void => {
     const table: FitTable = createTable<FitTable>()
-      .addStyle('s0', createStyle<FitStyle>().set('color', 'red'))
+      .setStyle('s0', createStyle<FitStyle>().set('color', 'red'))
       .setCellStyleName(0, 0, 's0')
       .setCellValue(0, 0, 'text');
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -222,10 +222,10 @@ describe('Context menu', (): void => {
 
   it('remove cells', (): void => {
     const table: FitTable = createTable<FitTable>()
-      .addStyle('s0', createStyle<FitStyle>().set('color', 'red'))
+      .setStyle('s0', createStyle<FitStyle>().set('color', 'red'))
       .setCellStyleName(0, 0, 's0')
       .setCellValue(0, 0, 'text');
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -242,7 +242,7 @@ describe('Context menu', (): void => {
 
   it('merge cells', (): void => {
     const table: FitTable = createTable<FitTable>();
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,
@@ -261,7 +261,7 @@ describe('Context menu', (): void => {
     const table: FitTable = createTable<FitTable>()
       .setRowSpan(0, 0, 2)
       .setColSpan(0, 0, 3);
-    const operationExecutor: OperationExecutor = createOperationExecutor() //
+    const operationExecutor: OperationExecutor = createOperationExecutor()
       .setTable(table);
     const contextMenu: Window = createContextMenu({
       operationExecutor,

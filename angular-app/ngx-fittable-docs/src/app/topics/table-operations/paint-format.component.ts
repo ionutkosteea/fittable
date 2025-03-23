@@ -14,7 +14,7 @@ import {
   createTableDesigner,
   registerViewModelConfig,
 } from 'fittable-core/view-model';
-import { FitTable, FIT_MODEL_CONFIG } from 'fittable-model';
+import { FitTable, FIT_MODEL_CONFIG, FitDataType, FitStyle } from 'fittable-model';
 import {
   FitOperationArgs,
   FIT_OPERATION_CONFIG,
@@ -54,10 +54,10 @@ export class PaintFormatComponent extends ConsoleTopic implements OnInit {
     );
 
     const table: FitTable = createTable<FitTable>()
-      .addStyle('s0', createStyle4Dto({ 'background-color': 'lightblue' }))
+      .setStyle('s0', createStyle4Dto<FitStyle>({ 'background-color': 'lightblue' }))
       .setCellStyleName(0, 0, 's0')
       .setCellValue(0, 0, 1.23)
-      .setCellDataType(0, 0, createDataType4Dto({ name: 'number', format: '0#.##0' }))
+      .setCellDataType(0, 0, createDataType4Dto<FitDataType>({ name: 'number', format: '0#.##0' }))
       .setCellValue(1, 1, 7);
 
     this.fit = createTableDesigner(table);

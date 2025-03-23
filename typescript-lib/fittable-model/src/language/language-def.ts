@@ -1,5 +1,3 @@
-export type FitLocale = 'en-US' | 'de-DE';
-
 export type FitTextKey =
   | 'thousandSeparator'
   | 'decimalPoint'

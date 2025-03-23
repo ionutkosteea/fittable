@@ -74,7 +74,7 @@ export class TstTableViewer implements TableViewer {
   getCellStyle(rowId: number, colId: number): Style | undefined {
     throw new Error('Method not implemented.');
   }
-  getCellValue(rowId: number, colId: number): Value | undefined {
+  getCellValue(rowId: number, colId: number): Value {
     throw new Error('Method not implemented.');
   }
   getCellDataType(rowId: number, colId: number): DataType | undefined {
@@ -83,7 +83,7 @@ export class TstTableViewer implements TableViewer {
   getCellType(rowId: number, colId: number): DataTypeName {
     throw new Error('Method not implemented.');
   }
-  getFormatedCellValue(rowId: number, colId: number): string | undefined {
+  getCellFormattedValue(rowId: number, colId: number): Value {
     throw new Error('Method not implemented.');
   }
   resetRowProperties(): this {

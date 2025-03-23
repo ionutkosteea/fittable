@@ -1,5 +1,4 @@
 export {
-  FitLocale,
   FitTextKey,
   FitDictionary,
 } from './model/language/language-def.js';

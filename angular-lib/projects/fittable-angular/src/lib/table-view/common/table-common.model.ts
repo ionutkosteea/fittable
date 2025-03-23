@@ -82,12 +82,8 @@ export abstract class TableCommon {
     return this.viewModel().tableViewer.getCellStyle(rowId, colId)?.toCss() ?? null;
   }
 
-  getCellValue(rowId: number, colId: number): Value | undefined {
-    return this.viewModel().tableViewer.getCellValue(rowId, colId);
-  }
-
-  getFormatedCellValue(rowId: number, colId: number): Value | undefined {
-    return this.viewModel().tableViewer.getFormatedCellValue(rowId, colId);
+  getCellValue(rowId: number, colId: number): Value {
+    return this.viewModel().tableViewer.getCellFormattedValue(rowId, colId)
   }
 
   isHiddenCell(rowId: number, colId: number): boolean {
