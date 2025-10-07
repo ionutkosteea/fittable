@@ -8,14 +8,6 @@
   white-space: nowrap;
 }
 
-.title {
-  color: var(--highlight-color);
-  font-size: fit-map-get($font-size-map, large);
-  line-height: fit-map-get($line-height-map, large);
-  padding-left: fit-map-get($padding-map, large);
-  padding-right: fit-map-get($padding-map, large);
-}
-
 .item {
   display: flex;
   gap: fit-map-get($size-map, small);

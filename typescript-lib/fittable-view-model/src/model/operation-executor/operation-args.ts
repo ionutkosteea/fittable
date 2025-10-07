@@ -11,7 +11,8 @@ import { ColFilterArgs } from '../col-filters/col-filter-operation.js';
 
 type RowHeightArgs = Args<'row-height'> & {
   selectedLines: LineRange[];
-  dimension?: number;
+  height?: number;
+  isAuto?: boolean;
 };
 
 type RowInsertArgs = Args<'row-insert'> & {
@@ -26,7 +27,7 @@ type RowRemoveArgs = Args<'row-remove'> & {
 
 type ColWidthArgs = Args<'column-width'> & {
   selectedLines: LineRange[];
-  dimension?: number;
+  width?: number;
 };
 
 type ColInsertArgs = Args<'column-insert'> & {

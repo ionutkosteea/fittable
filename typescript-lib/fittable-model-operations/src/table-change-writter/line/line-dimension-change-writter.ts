@@ -10,22 +10,17 @@ import {
   Args,
 } from 'fittable-core/operations';
 
-export type DimensionItem = {
+export type RowHeightItem = {
   lineRanges: unknown[];
-  dimension?: number;
+  height?: number;
+  isAuto?: boolean;
 };
-export type LineDimensionChange = { items: DimensionItem[] };
-
-abstract class LineDimensionChangeWritter implements TableChangeWritter {
+export type RowHeightChange = Args<'row-height'> & { items: RowHeightItem[] };
+export class RowHeightChangeWritter implements TableChangeWritter {
   constructor(
-    protected readonly table: Table,
-    protected readonly change: LineDimensionChange
+    protected readonly table: Table & TableRows,
+    protected readonly change: RowHeightChange
   ) { }
-
-  protected abstract updateDimension(
-    lineId: number,
-    lineDimension?: number
-  ): void;
 
   public run(): void {
     this.updateLines();
@@ -36,26 +31,16 @@ abstract class LineDimensionChangeWritter implements TableChangeWritter {
       for (const lineRangeDto of item.lineRanges) {
         createLineRange4Dto(lineRangeDto).forEachLine(
           (lineId: number): void => {
-            this.updateDimension(lineId, item.dimension);
+            this.updateDimension(lineId, item.height, item.isAuto);
           }
         );
       }
     }
   }
-}
 
-export type RowHeighChange = Args<'row-height'> & LineDimensionChange;
-
-export class RowHeightChangeWritter extends LineDimensionChangeWritter {
-  constructor(
-    protected readonly table: Table & TableRows,
-    protected readonly change: RowHeighChange
-  ) {
-    super(table, change);
-  }
-
-  protected updateDimension(rowId: number, height?: number): void {
+  private updateDimension(rowId: number, height?: number, isAuto?: boolean): void {
     this.table.setRowHeight(rowId, height);
+    this.table.setRowAutoHeight(rowId, isAuto);
   }
 }
 
@@ -63,28 +48,47 @@ export class RowHeightChangeWritterFactory
   implements TableChangeWritterFactory {
   public createTableChangeWritter(
     table: Table & TableRows,
-    change: RowHeighChange
+    change: RowHeightChange
   ): TableChangeWritter {
     return new RowHeightChangeWritter(table, change);
   }
 }
 
-export type ColWidthChange = Args<'column-width'> & LineDimensionChange;
+export type ColWidthItem = {
+  lineRanges: unknown[];
+  width?: number;
+};
+export type ColWidthChange = Args<'column-width'> & { items: ColWidthItem[] };
 
-export class ColWidthChangeWritter extends LineDimensionChangeWritter {
+export class ColWidthChangeWritter implements TableChangeWritter {
   constructor(
     protected readonly table: Table & TableCols,
     protected readonly change: ColWidthChange
-  ) {
-    super(table, change);
+  ) { }
+
+  public run(): void {
+    this.updateLines();
   }
 
-  protected updateDimension(colId: number, width?: number): void {
-    this.table.setColWidth(colId, width);
+  private updateLines(): void {
+    for (const item of this.change.items) {
+      for (const lineRangeDto of item.lineRanges) {
+        createLineRange4Dto(lineRangeDto).forEachLine(
+          (lineId: number): void => {
+            this.updateDimension(lineId, item.width);
+          }
+        );
+      }
+    }
+  }
+
+  private updateDimension(rowId: number, height?: number): void {
+    this.table.setColWidth(rowId, height);
   }
 }
 
-export class ColWidthChangeWritterFactory implements TableChangeWritterFactory {
+export class ColWidthChangeWritterFactory
+  implements TableChangeWritterFactory {
   public createTableChangeWritter(
     table: Table & TableCols,
     change: ColWidthChange

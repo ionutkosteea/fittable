@@ -112,18 +112,3 @@
     cursor: inherit;
   }
 }
-
-.center-aligned-bar {
-  @include bar(center);
-  padding: fit-map-get($padding-map, medium) 0;
-}
-
-.action-button {
-  @include border;
-  padding: fit-map-get($padding-map, small);
-  color: var(--context-menu-background-color);
-  background-color: var(--highlight-color);
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-}

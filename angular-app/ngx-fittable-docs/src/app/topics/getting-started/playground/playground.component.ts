@@ -17,7 +17,6 @@ import {
   createDataDef,
   createDataType,
   createStyle, createTable,
-  createTable4Dto,
   registerModelConfig,
   Value
 } from 'fittable-core/model';
@@ -30,7 +29,6 @@ import {
   ViewModelConfig,
 } from 'fittable-core/view-model';
 import {
-  FitTableDto,
   FIT_MODEL_CONFIG,
   FitDataDef,
   FitData,
@@ -76,7 +74,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
     const values: Value[][] = [
       [1, 'John Doe', 30, 50000, 0.1, '2021-01-01', true],
       [2, 'Jane Smith', 25, 45000, 0.15, '2020-06-15', true],
-      [3, 'Alice Johnson', 28, 48000, 0.12, '2019-11-20', false],
+      [3, 'Alice Maria Johnson', 28, 48000, 0.12, '2019-11-20', false],
       [4, 'Bob Brown', 35, 52000, 0.08, '2018-03-10', true],
       [5, 'Charlie Davis', 40, 55000, 0.2, '2017-07-25', true],
     ];
@@ -85,11 +83,15 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
     const table = createTable<FitTable>()
       .setNumberOfRows(2)
       .setNumberOfCols(6)
-      .setRowHeight(0, 40)
       .setStyle('s0', createStyle<FitStyle>()
         .set('font-weight', 'bold')
         .set('text-align', 'center')
       )
+      .setStyle('s1', createStyle<FitStyle>()
+        .set('color', 'darkblue')
+      )
+      .setCellStyleName(0, 5, 's0')
+      .setRowHeight(0, 42)
       .setCellValue(0, 0, 'Name')
       .setCellStyleName(0, 0, 's0')
       .setCellValue(0, 1, 'Age')
@@ -101,7 +103,13 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
       .setCellValue(0, 4, 'Hire Date')
       .setCellStyleName(0, 4, 's0')
       .setCellValue(0, 5, 'Is Active')
-      .setCellStyleName(0, 5, 's0')
+      .setRowAutoHeight(1, true)
+      .setCellStyleName(1, 0, 's1')
+      .setCellStyleName(1, 1, 's1')
+      .setCellStyleName(1, 2, 's1')
+      .setCellStyleName(1, 3, 's1')
+      .setCellStyleName(1, 4, 's1')
+      .setCellStyleName(1, 5, 's1')
       .setCellDataType(1, 2, createDataType<FitDataType>('number', '$#,#.00'))
       .setCellDataType(1, 3, createDataType<FitDataType>('number', '#%'))
       .setCellDataType(1, 4, createDataType<FitDataType>('date-time', 'dd.MM.yyyy'))
@@ -272,7 +280,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   private run(configDef: FitViewModelConfigDef): void {
     const srcConfig: ViewModelConfig = getViewModelConfig();
     registerViewModelConfig(createFitViewModelConfig(configDef, srcConfig));
-    this.fit.set(createTableDesigner(createTable4Dto(this.fit().table as unknown as FitTableDto)));
+    this.fit.set(createTableDesigner(this.fit().table));
     this.updateFittableComponent();
   }
 

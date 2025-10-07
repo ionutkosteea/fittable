@@ -20,14 +20,21 @@
   cursor: default;
   border-collapse: collapse;
   box-sizing: border-box;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-body,
+.table-row {
+  position: relative;
 }
 
 .cell-text {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // bottom: 0;
   margin: 0;
   padding: 2px 4px;
   display: grid;

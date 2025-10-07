@@ -19,7 +19,7 @@
             [cellSelectionRanges]="cellSelectionRanges"
           >
             @for (rowId of rowIds; track $index) {
-              <tr [ngStyle]="{ 'height.px': getRowHeight(rowId) }">
+              <tr [ngStyle]="{ height: getRowHeight(rowId) + 'px' }">
                 <th class="header-cell" [attr.rowId]="rowId" [attr.colId]="0">
                   <!-- prettier-ignore -->
                   <p class="cell-text">{{ rowHeaderTextFn && rowHeaderTextFn(rowId) }}</p>

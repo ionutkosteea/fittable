@@ -6,6 +6,7 @@ import { CellRange } from '../../model/table/cell-range.js';
 import { OperationExecutor } from '../../operations/operation-core.js';
 import { CellEditor } from './cell-editor.js';
 import { ColFilters } from './col-filters.js';
+import { OperationDialog } from './operation-dialog.js';
 
 export interface Control {
   getLabel(): string;
@@ -118,5 +119,11 @@ export interface ControlArgs {
   operationExecutor: OperationExecutor;
   cellEditor?: CellEditor;
   colFilters?: ColFilters;
+  rowResizeDialog?: OperationDialog;
+  rowInsertAboveDialog?: OperationDialog;
+  rowInsertBelowDialog?: OperationDialog;
+  colResizeDialog?: OperationDialog;
+  colInsertLeftDialog?: OperationDialog;
+  colInsertRightDialog?: OperationDialog;
   getSelectedCells(): CellRange[];
 }

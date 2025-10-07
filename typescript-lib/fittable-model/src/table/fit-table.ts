@@ -187,6 +187,22 @@ export class FitTable implements
         return this;
     }
 
+    isRowAutoHeight(rowId: number): boolean {
+        return this.rows.get(rowId)?.isAutoHeight ?? false;
+    }
+
+    setRowAutoHeight(rowId: number, isAutoHeight?: boolean): this {
+        const row = this.rows.get(rowId);
+        if (isAutoHeight) {
+            if (row) row.isAutoHeight = isAutoHeight;
+            else this.rows.set(rowId, { isAutoHeight });
+        } else if (row) {
+            delete row['isAutoHeight'];
+            !Object.keys(row).length && this.rows.remove(rowId);
+        }
+        return this;
+    }
+
     hasRow(rowId: number): boolean {
         return this.rows.get(rowId) !== undefined;
     }
@@ -573,7 +589,12 @@ export class FitTable implements
             this.removeRowCells(i);
         }
         this.dto.numberOfRows += move;
-        this.copyCellStyleAndDataType(dataDef.rowId + move, dataDef.rowId, dataDef.rowId + move - 1);
+        const sourceRowId = dataDef.rowId + move;
+        const fromRowId = dataDef.rowId;
+        const toRowId = dataDef.rowId + move - 1;
+        this.copyCellStyleAndDataType(sourceRowId, fromRowId, toRowId);
+        this.copyRowHeight(sourceRowId, fromRowId, toRowId);
+        this.copyRowAutoHeight(sourceRowId, fromRowId, toRowId);
     }
 
     private copyCellStyleAndDataType(sourceRowId: number, fromRowId: number, toRowId: number): void {
@@ -584,6 +605,22 @@ export class FitTable implements
                 this.setCellStyleName(rowId, colId, sourceStyleName);
                 this.setCellDataType(rowId, colId, sourceDataType);
             }
+        }
+    }
+
+    private copyRowHeight(sourceRowId: number, fromRowId: number, toRowId: number): void {
+        const rowHeight = this.getRowHeight(sourceRowId);
+        if (!rowHeight) return;
+        for (let rowId = fromRowId; rowId <= toRowId; rowId++) {
+            this.setRowHeight(rowId, rowHeight);
+        }
+    }
+
+    private copyRowAutoHeight(sourceRowId: number, fromRowId: number, toRowId: number): void {
+        const isRowAutoHeight = this.isRowAutoHeight(sourceRowId);
+        if (!isRowAutoHeight) return;
+        for (let rowId = fromRowId; rowId <= toRowId; rowId++) {
+            this.setRowAutoHeight(rowId, isRowAutoHeight);
         }
     }
 

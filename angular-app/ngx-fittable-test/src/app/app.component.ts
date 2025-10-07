@@ -9,12 +9,11 @@ import {
   createTable,
   Table,
 } from 'fittable-core/model';
-import { TableChanges } from 'fittable-core/operations';
 import {
   createTableDesigner,
   TableDesigner,
 } from 'fittable-core/view-model';
-import { FitStyle, FitTable } from 'fittable-model';
+import { FitDataType, FitStyle, FitTable } from 'fittable-model';
 import { FitOperationArgs } from 'fittable-model-operations';
 import { FitThemeName } from 'fittable-view-model';
 
@@ -40,11 +39,11 @@ export class AppComponent implements OnInit {
       .setColSpan(0, 0, 3)
       .setLocale('de-DE')
       .setCellValue(2, 1, 1000)
-      .setCellDataType(2, 1, createDataType('string'))
+      .setCellDataType(2, 1, createDataType<FitDataType>('string'))
       .setCellValue(3, 1, 1000.123)
-      .setCellDataType(3, 1, createDataType('number', '#.#,00 €'))
+      .setCellDataType(3, 1, createDataType<FitDataType>('number', '#.#,00 €'))
       .setCellValue(4, 1, '2023-12-31')
-      .setCellDataType(4, 1, createDataType('date-time', 'dd.MM.yyyy'))
+      .setCellDataType(4, 1, createDataType<FitDataType>('date-time', 'dd.MM.yyyy'))
       .setCellValue(5, 1, true)
       .setCellValue(6, 1, false)
       .setCellValue(7, 1, 'Some text here...');
@@ -64,7 +63,7 @@ export class AppComponent implements OnInit {
     if (this.fit.operationExecutor) {
       this.fit.operationExecutor.onAfterRun$()
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((dto: TableChanges) => {
+        .subscribe(() => {
           //  Do something...
         });
 

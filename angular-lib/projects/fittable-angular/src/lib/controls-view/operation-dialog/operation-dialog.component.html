@@ -1,0 +1,46 @@
+<div class="overlay" [ngClass]="{ show }">
+  <div class="operation-dialog" #dialog>
+    <div class="title">{{ title }}</div>
+    <div class="operation-dialog-content">
+      <div class="operation-dialog-grid">
+        @for (id of fieldIds; track $index) {
+          @if (getFieldType(id) === "number") {
+            <div class="operation-dialog-grid-item">
+              <label for="input-{{ id }}">{{ getFieldLabel(id) }}:</label>
+              <input
+                id="input-{{ id }}"
+                type="number"
+                min="1"
+                [value]="getFieldValue(id)"
+                (input)="setNumberValue(id, $event)"
+              />
+            </div>
+          } @else if (getFieldType(id) === "boolean") {
+            <div class="operation-dialog-grid-item">
+              <label for="checkbox-{{ id }}">{{ getFieldLabel(id) }}:</label>
+              <input
+                id="checkbox-{{ id }}"
+                type="checkbox"
+                [checked]="getFieldValue(id)"
+                (input)="setBooleanValue(id, $event)"
+              />
+            </div>
+          }
+        }
+      </div>
+    </div>
+    <div class="center-aligned-bar">
+      <button
+        class="action-button"
+        [ngClass]="{ 'action-button-disabled': !canRun }"
+        [disabled]="canRun ? undefined : 'disabled'"
+        (click)="ok()"
+      >
+        {{ okLabel }}
+      </button>
+      <button class="action-button" (click)="cancel()">
+        {{ cancelLabel }}
+      </button>
+    </div>
+  </div>
+</div>

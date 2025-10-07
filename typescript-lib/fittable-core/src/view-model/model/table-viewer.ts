@@ -15,6 +15,7 @@ export interface TableViewer {
   getBodyWidth(): number;
   getBodyHeight(): number;
   getRowHeight(rowId: number): number;
+  isRowAutoHeight(rowId: number): boolean;
   getColWidth(colId: number): number;
   getRowPosition(rowId: number): number;
   getColPosition(colId: number): number;

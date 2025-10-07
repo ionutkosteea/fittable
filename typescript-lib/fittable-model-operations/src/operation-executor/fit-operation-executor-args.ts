@@ -3,7 +3,7 @@ import { CellRemoveChange } from '../table-change-writter/cell/cell-remove-chang
 import { CellValueChange } from '../table-change-writter/cell/cell-value-change-writter.js';
 import { CellDataRefArgs } from '../table-changes/cell/cell-data-ref-changes.js';
 import {
-  RowHeighChange,
+  RowHeightChange,
   ColWidthChange,
 } from '../table-change-writter/line/line-dimension-change-writter.js';
 import {
@@ -21,12 +21,12 @@ import { CellPasteArgs } from '../table-changes/cell/cell-paste-changes.js';
 import { CellRemoveArgs } from '../table-changes/cell/cell-remove-changes.js';
 import { CellValueArgs } from '../table-changes/cell/cell-value-changes.js';
 import {
-  ColWidthTableChangesArgs,
-  RowHeightTableChangesArgs,
+  ColWidthArgs,
+  RowHeightArgs,
 } from '../table-changes/line/line-dimension-changes.js';
 import {
-  RowInsertTableChangesArgs,
-  ColInsertTableChangesArgs,
+  RowInsertArgs,
+  ColInsertArgs,
 } from '../table-changes/line/line-insert-changes.js';
 import {
   RowRemoveArgs,
@@ -54,10 +54,10 @@ export type FitOperationArgs =
   | CellDataTypeArgs
   | CellMergeArgs
   | CellUnmergeArgs
-  | RowHeightTableChangesArgs
-  | ColWidthTableChangesArgs
-  | RowInsertTableChangesArgs
-  | ColInsertTableChangesArgs
+  | RowHeightArgs
+  | ColWidthArgs
+  | RowInsertArgs
+  | ColInsertArgs
   | RowRemoveArgs
   | ColRemoveArgs
   | StyleBorderArgs
@@ -73,7 +73,7 @@ export type FitTableChange =
   | CellValueChange
   | CellDataRefChange
   | DataTypeChange
-  | RowHeighChange
+  | RowHeightChange
   | ColWidthChange
   | RowInsertChange
   | ColInsertChange

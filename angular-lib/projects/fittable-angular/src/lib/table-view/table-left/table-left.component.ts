@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, input } from '@angular/core';
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 
 import { CssStyle } from 'fittable-core/model';
 import {
@@ -14,7 +14,7 @@ import { CellSelectionDirective } from '../common/cell-selection.directive';
 @Component({
   selector: 'fit-table-left',
   standalone: true,
-  imports: [NgStyle, NgFor, NgIf, CellSelectionDirective],
+  imports: [NgStyle, CellSelectionDirective],
   templateUrl: './table-left.component.html',
   styleUrls: [
     '../common/scss/table.scss',

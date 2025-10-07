@@ -20,6 +20,8 @@ import {
   TableDataTypes,
   TableData,
   asTableData,
+  TableRows,
+  TableCols,
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -45,10 +47,10 @@ import {
   ColRemoveChange,
 } from '../../table-change-writter/line/line-remove-change-writter.js';
 import {
-  LineDimensionChange,
-  RowHeighChange,
+  RowHeightChange,
   ColWidthChange,
-  DimensionItem,
+  RowHeightItem,
+  ColWidthItem,
 } from '../../table-change-writter/line/line-dimension-change-writter.js';
 import {
   LineInsertChange,
@@ -91,9 +93,6 @@ abstract class LineRemoveChangesBuilder {
     numberOfNewLines: 0,
     lineRanges: [],
     moveLines: [],
-  };
-  protected lineDimensionUndoChange: LineDimensionChange = {
-    items: [],
   };
   protected cellValueUndoChange: CellValueChange = {
     id: 'cell-value',
@@ -256,30 +255,7 @@ abstract class LineRemoveChangesBuilder {
     this.undoStyles();
   }
 
-  private undoLineDimensions(): void {
-    const oldDimensions: LineRangeAddressObjects<number> =
-      new LineRangeAddressObjects();
-    for (const lineRangesDto of this.lineRemoveChange.lineRanges) {
-      createLineRange4Dto(lineRangesDto).forEachLine((lineId: number): void => {
-        const helper: TableLinesHelper = this.getTableLinesHelper();
-        const dimension: number | undefined = helper.getDimension(lineId);
-        dimension && oldDimensions.set(dimension, createLineRange(lineId));
-      });
-    }
-    oldDimensions.forEach(
-      (dimension: number, lineRanges?: LineRange[]): void => {
-        if (lineRanges) {
-          const updatableLineRanges: unknown[] =
-            createDto4LineRangeList(lineRanges);
-          const dimensionDto: DimensionItem = {
-            lineRanges: updatableLineRanges,
-            dimension,
-          };
-          this.lineDimensionUndoChange.items.push(dimensionDto);
-        }
-      }
-    );
-  }
+  protected abstract undoLineDimensions(): void;
 
   private undoRemovedLines(): void {
     this.lineInsertUndoChange.numberOfNewLines = 1;
@@ -472,8 +448,10 @@ abstract class LineRemoveChangesBuilder {
 export type RowRemoveArgs = Args<'row-remove'> & LineRemoveArgs;
 
 export class RowRemoveChangesBuilder extends LineRemoveChangesBuilder {
+  private readonly rowHeightUndoItems: RowHeightItem[] = [];
+
   constructor(
-    protected readonly table: Table,
+    protected readonly table: Table & TableRows,
     protected readonly args: RowRemoveArgs
   ) {
     super(table, args);
@@ -491,9 +469,9 @@ export class RowRemoveChangesBuilder extends LineRemoveChangesBuilder {
       id: 'row-insert',
       ...this.lineInsertUndoChange,
     };
-    const rowHeightUndoChange: RowHeighChange = {
+    const rowHeightUndoChange: RowHeightChange = {
       id: 'row-height',
-      ...this.lineDimensionUndoChange,
+      items: this.rowHeightUndoItems,
     };
     return {
       id: this.args.id,
@@ -510,6 +488,29 @@ export class RowRemoveChangesBuilder extends LineRemoveChangesBuilder {
         ],
       },
     };
+  }
+
+  protected undoLineDimensions(): void {
+    const oldHeights: LineRangeAddressObjects<{ height?: number, isAuto?: boolean }> =
+      new LineRangeAddressObjects();
+    for (const lineRangesDto of this.lineRemoveChange.lineRanges) {
+      createLineRange4Dto(lineRangesDto).forEachLine((rowId: number): void => {
+        const height: number | undefined = this.table.getRowHeight(rowId);
+        const isAuto: boolean | undefined = this.table.isRowAutoHeight(rowId);
+        height || isAuto && oldHeights.set({ height, isAuto }, createLineRange(rowId));
+      });
+    }
+    oldHeights.forEach(
+      (row, lineRanges?: LineRange[]): void => {
+        if (lineRanges) {
+          this.rowHeightUndoItems.push({
+            lineRanges: createDto4LineRangeList(lineRanges),
+            height: row.height,
+            isAuto: row.isAuto,
+          });
+        }
+      }
+    );
   }
 
   protected getTableLinesHelper() {
@@ -561,7 +562,7 @@ export class RowRemoveChangesBuilder extends LineRemoveChangesBuilder {
 
 export class RowRemoveChangesFactory implements TableChangesFactory {
   public createTableChanges(
-    table: Table,
+    table: Table & TableRows,
     args: RowRemoveArgs
   ): TableChanges | Promise<TableChanges> {
     return new RowRemoveChangesBuilder(table, args).build();
@@ -571,8 +572,10 @@ export class RowRemoveChangesFactory implements TableChangesFactory {
 export type ColRemoveArgs = Args<'column-remove'> & LineRemoveArgs;
 
 export class ColRemoveChangesBuilder extends LineRemoveChangesBuilder {
+  private readonly colWidthUndoItems: ColWidthItem[] = [];
+
   constructor(
-    protected readonly table: Table,
+    protected readonly table: Table & TableCols,
     protected readonly args: ColRemoveArgs
   ) {
     super(table, args);
@@ -592,7 +595,7 @@ export class ColRemoveChangesBuilder extends LineRemoveChangesBuilder {
     };
     const colWidthUndoChange: ColWidthChange = {
       id: 'column-width',
-      ...this.lineDimensionUndoChange,
+      items: this.colWidthUndoItems,
     };
     return {
       id: this.args.id,
@@ -609,6 +612,26 @@ export class ColRemoveChangesBuilder extends LineRemoveChangesBuilder {
         ],
       },
     };
+  }
+
+  protected undoLineDimensions(): void {
+    const oldWidths: LineRangeAddressObjects<number> = new LineRangeAddressObjects();
+    for (const lineRangesDto of this.lineRemoveChange.lineRanges) {
+      createLineRange4Dto(lineRangesDto).forEachLine((colId: number): void => {
+        const width: number | undefined = this.table.getColWidth(colId);
+        width && oldWidths.set(width, createLineRange(colId));
+      });
+    }
+    oldWidths.forEach(
+      (width?: number, lineRanges?: LineRange[]): void => {
+        if (lineRanges) {
+          this.colWidthUndoItems.push({
+            lineRanges: createDto4LineRangeList(lineRanges),
+            width
+          });
+        }
+      }
+    );
   }
 
   protected getTableLinesHelper() {
@@ -660,7 +683,7 @@ export class ColRemoveChangesBuilder extends LineRemoveChangesBuilder {
 
 export class ColRemoveChangesFactory implements TableChangesFactory {
   public createTableChanges(
-    table: Table,
+    table: Table & TableCols,
     args: ColRemoveArgs
   ): TableChanges | Promise<TableChanges> {
     return new ColRemoveChangesBuilder(table, args).build();

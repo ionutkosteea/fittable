@@ -24,6 +24,12 @@ import { FitSettingsBarFactory } from './model/settings-bar/fit-settings-bar-fac
 import { FitColFiltersFactory } from './model/col-filters/fit-col-filters.js';
 import { FitMobileLayoutFactory } from './model/mobile-layout/fit-mobile-layout.js';
 import { FitTableDesignerFactory } from './fit-table-designer.js';
+import { FitRowResizeDialogFactory } from './model/operation-dialog/fit-row-resize-dialog.js';
+import { FitRowInsertAboveDialogFactory } from './model/operation-dialog/fit-row-insert-above-dialog.js';
+import { FitRowInsertBelowDialogFactory } from './model/operation-dialog/fit-row-insert-below-dialog.js';
+import { FitColResizeDialogFactory } from './model/operation-dialog/fit-col-resize-dialog.js';
+import { FitColInsertLeftDialogFactory } from './model/operation-dialog/fit-col-insert-left-dialog.js';
+import { FitColInsertRightDialogFactory } from './model/operation-dialog/fit-col-insert-right-dialog.js';
 
 export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   rowHeights: 21,
@@ -52,6 +58,12 @@ export const FIT_VIEW_MODEL_CONFIG: ViewModelConfig = {
   settingsBarFactory: new FitSettingsBarFactory(),
   cellEditorListenerFactory: new FitCellEditorListenerFactory(),
   colFiltersFactory: new FitColFiltersFactory(),
+  rowResizeDialogFactory: new FitRowResizeDialogFactory(),
+  rowInsertAboveDialogFactory: new FitRowInsertAboveDialogFactory(),
+  rowInsertBelowDialogFactory: new FitRowInsertBelowDialogFactory(),
+  colResizeDialogFactory: new FitColResizeDialogFactory(),
+  colInsertLeftDialogFactory: new FitColInsertLeftDialogFactory(),
+  colInsertRightDialogFactory: new FitColInsertRightDialogFactory(),
   cellSelectionListenerFactory: new FitCellSelectionListenerFactory(),
   windowListenerFactory: new FitWindowListenerFactory(),
   scrollContainerListenerFactory: new FitScrollContainerListenerFactory(),

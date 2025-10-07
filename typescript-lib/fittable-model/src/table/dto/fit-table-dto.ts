@@ -7,7 +7,7 @@ export type FitCellRangeDto = { from: FitCellCoordDto; to?: FitCellCoordDto };
 
 export type FitLineRangeDto = { from: number; to?: number };
 
-export type FitRowDto = { height?: number };
+export type FitRowDto = { height?: number, isAutoHeight?: boolean };
 
 export type FitColDto = { width?: number };
 

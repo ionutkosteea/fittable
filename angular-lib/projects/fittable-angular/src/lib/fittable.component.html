@@ -13,3 +13,21 @@
 @if (contextMenu) {
   <fit-context-menu [model]="contextMenu" [position]="'fixed'" />
 }
+@if (rowResizeDialog) {
+  <fit-operation-dialog [model]="rowResizeDialog" />
+}
+@if (rowInsertAboveDialog) {
+  <fit-operation-dialog [model]="rowInsertAboveDialog" />
+}
+@if (rowInsertBelowDialog) {
+  <fit-operation-dialog [model]="rowInsertBelowDialog" />
+}
+@if (colResizeDialog) {
+  <fit-operation-dialog [model]="colResizeDialog" />
+}
+@if (colInsertLeftDialog) {
+  <fit-operation-dialog [model]="colInsertLeftDialog" />
+}
+@if (colInsertRightDialog) {
+  <fit-operation-dialog [model]="colInsertRightDialog" />
+}

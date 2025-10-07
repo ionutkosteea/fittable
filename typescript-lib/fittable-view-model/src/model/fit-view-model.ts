@@ -41,6 +41,13 @@ import {
   createColFilters,
   MobileLayout,
   createMobileLayout,
+  OperationDialog,
+  createRowResizeDialog,
+  createRowInsertAboveDialog,
+  createRowInsertBelowDialog,
+  createColResizeDialog,
+  createColInsertLeftDialog,
+  createColInsertRightDialog
 } from 'fittable-core/view-model';
 
 import {
@@ -71,6 +78,12 @@ export class FitViewModel implements ViewModel {
   public readonly themeSwitcher?: ThemeSwitcher;
   public readonly settingsBar?: Container;
   public readonly colFilters?: ColFilters;
+  public readonly rowResizeDialog?: OperationDialog;
+  public readonly rowInsertAboveDialog?: OperationDialog;
+  public readonly rowInsertBelowDialog?: OperationDialog;
+  public readonly colResizeDialog?: OperationDialog;
+  public readonly colInsertLeftDialog?: OperationDialog;
+  public readonly colInsertRightDialog?: OperationDialog;
 
   private config: ViewModelConfig = getViewModelConfig();
   private viewModelSubscriptions!: ViewModelSubscriptions;
@@ -88,13 +101,19 @@ export class FitViewModel implements ViewModel {
     this.cellSelectionScroller = this.createCellSelectionScroller();
     this.cellSelectionPainter = this.createCellSelectionPainter();
     this.cellEditor = this.createCellEditor();
+    this.selectFirstCell();
+    this.rowResizeDialog = this.createRowResizeDialog();
+    this.rowInsertAboveDialog = this.createRowInsertAboveDialog();
+    this.rowInsertBelowDialog = this.createRowInsertBelowDialog();
+    this.colResizeDialog = this.createColResizeDialog();
+    this.colInsertLeftDialog = this.createColInsertLeftDialog();
+    this.colInsertRightDialog = this.createColInsertRightDialog();
     this.contextMenu = this.createContextMenu();
     this.statusbar = this.createStatusbar();
     this.themeSwitcher = this.createThemeSwitcher();
     this.settingsBar = this.createSettingsBar();
     this.colFilters = this.createColFilters();
     this.mobileLayout = this.createMobileLayout();
-    this.selectFirstCell();
     this.toolbar = this.createToolbar();
     this.addSubscriptions();
   }
@@ -161,6 +180,90 @@ export class FitViewModel implements ViewModel {
     }
   }
 
+  private createRowResizeDialog(): OperationDialog | undefined {
+    try {
+      return this.operationExecutor &&
+        this.cellSelection &&
+        createRowResizeDialog({
+          operationExecutor: this.operationExecutor,
+          getSelectedCells: this.getSelectedCells
+        });
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
+    }
+  }
+
+  private createRowInsertAboveDialog(): OperationDialog | undefined {
+    try {
+      return this.operationExecutor &&
+        this.cellSelection &&
+        createRowInsertAboveDialog({
+          operationExecutor: this.operationExecutor,
+          getSelectedCells: this.getSelectedCells
+        });
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
+    }
+  }
+
+  private createRowInsertBelowDialog(): OperationDialog | undefined {
+    try {
+      return this.operationExecutor &&
+        this.cellSelection &&
+        createRowInsertBelowDialog({
+          operationExecutor: this.operationExecutor,
+          getSelectedCells: this.getSelectedCells
+        });
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
+    }
+  }
+
+  private createColResizeDialog(): OperationDialog | undefined {
+    try {
+      return this.operationExecutor &&
+        this.cellSelection &&
+        createColResizeDialog({
+          operationExecutor: this.operationExecutor,
+          getSelectedCells: this.getSelectedCells
+        });
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
+    }
+  }
+
+  private createColInsertLeftDialog(): OperationDialog | undefined {
+    try {
+      return this.operationExecutor &&
+        this.cellSelection &&
+        createColInsertLeftDialog({
+          operationExecutor: this.operationExecutor,
+          getSelectedCells: this.getSelectedCells
+        });
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
+    }
+  }
+
+  private createColInsertRightDialog(): OperationDialog | undefined {
+    try {
+      return this.operationExecutor &&
+        this.cellSelection &&
+        createColInsertRightDialog({
+          operationExecutor: this.operationExecutor,
+          getSelectedCells: this.getSelectedCells
+        });
+    } catch (error) {
+      if (error instanceof MissingFactoryError) return undefined;
+      else console.error(error);
+    }
+  }
+
   private createContextMenu(): Window | undefined {
     try {
       return (
@@ -170,6 +273,12 @@ export class FitViewModel implements ViewModel {
           operationExecutor: this.operationExecutor,
           cellEditor: this.cellEditor,
           colFilters: this.colFilters,
+          rowResizeDialog: this.rowResizeDialog,
+          rowInsertAboveDialog: this.rowInsertAboveDialog,
+          rowInsertBelowDialog: this.rowInsertBelowDialog,
+          colResizeDialog: this.colResizeDialog,
+          colInsertLeftDialog: this.colInsertLeftDialog,
+          colInsertRightDialog: this.colInsertRightDialog,
           getSelectedCells: this.getSelectedCells,
         })
       );

@@ -1,8 +1,8 @@
 <div
   class="scroll-container"
-  (scroll)="onScroll($event)"
   fitScrollContainer
   [scrollContainer]="scrollContainer"
+  (scroll)="scroll($event)"
 >
   <div
     class="full-size-container"
@@ -22,15 +22,20 @@
           }
         </colgroup>
         <tbody
-          (contextmenu)="showContextMenu($event)"
+          class="table-body"
+          #tableBody
           fitCellEditorOpen
           [cellEditorListener]="cellEditorListener()"
           fitCellSelection
           [cellSelectionListener]="cellSelectionListener()"
           [cellSelectionRanges]="cellSelectionRanges"
+          (contextmenu)="showContextMenu($event)"
         >
           @for (rowId of rowIds; track $index) {
-            <tr [ngStyle]="{ 'height.px': getRowHeight(rowId) }">
+            @let isAutoHeight = isRowAutoHeight(rowId);
+            @let rowClass = isAutoHeight ? 'row-auto-height' : 'row-fixed-height';
+            @let rowheight = isAutoHeight ? null : getRowHeight(rowId) + 'px';
+            <tr class="table-row" #tableRow [ngClass]="rowClass" [ngStyle]="{height: rowheight}" [attr.rowId]="rowId">
               @for (colId of colIds; track $index) {
                 @if (!isHiddenCell(rowId, colId)) {
                   <td
