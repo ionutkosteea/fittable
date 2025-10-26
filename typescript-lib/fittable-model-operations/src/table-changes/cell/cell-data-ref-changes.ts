@@ -1,4 +1,4 @@
-import { CellRange, CellRangeList, createCellRange4Dto, createDto4CellRangeList, Table, TableData } from "fittable-core/model";
+import { CellRange, CellRangeList, createCellRange4Dto, createDto4CellRangeList, Table, TableDataRefs } from "fittable-core/model";
 import { Args, TableChanges, TableChangesFactory } from "fittable-core/operations";
 
 import { CellRangeAddressObjects } from "../../utils/cell/cell-range-address-objects.js";
@@ -22,7 +22,7 @@ export class CellDataRefChangesBuilder {
     private readonly updatableCells: CellRangeList = new CellRangeList();
 
     constructor(
-        private readonly table: Table & TableData,
+        private readonly table: Table & TableDataRefs,
         private readonly args: CellDataRefArgs
     ) {
         this.changes = {
@@ -44,8 +44,8 @@ export class CellDataRefChangesBuilder {
     private prepareUpdatableCells(): void {
         for (const cellRange of this.args.selectedCells) {
             cellRange.forEachCell((rowId: number, colId: number): void => {
-                const oldDataRef: string | undefined = this.table.getCellDataRef(rowId, colId);
-                oldDataRef !== this.args.dataRef && this.updatableCells.addCell(rowId, colId);
+                const oldJsonKey: string | undefined = this.table.getCellDataRef(rowId, colId);
+                oldJsonKey !== this.args.dataRef && this.updatableCells.addCell(rowId, colId);
             });
         }
     }
@@ -58,12 +58,12 @@ export class CellDataRefChangesBuilder {
     }
 
     private undoCellDataRefs(): void {
-        const dataRefs: CellRangeAddressObjects<string | undefined> = new CellRangeAddressObjects();
-        for (const dataRef of this.cellDataRefChange.items) {
-            for (const cellRangeDto of dataRef.cellRanges)
+        const undoJsonKeys: CellRangeAddressObjects<string | undefined> = new CellRangeAddressObjects();
+        for (const jsonKeys of this.cellDataRefChange.items) {
+            for (const cellRangeDto of jsonKeys.cellRanges)
                 createCellRange4Dto(cellRangeDto).forEachCell(
                     (rowId: number, colId: number): void => {
-                        dataRefs.set(
+                        undoJsonKeys.set(
                             this.table.getCellDataRef(rowId, colId),
                             rowId,
                             colId
@@ -71,7 +71,7 @@ export class CellDataRefChangesBuilder {
                     }
                 );
         }
-        dataRefs.forEach(
+        undoJsonKeys.forEach(
             (dataRef: string | undefined, address: CellRange[]): void => {
                 this.celldataRefUndoChange.items.push({
                     cellRanges: createDto4CellRangeList(address),
@@ -83,7 +83,7 @@ export class CellDataRefChangesBuilder {
 }
 export class CellDataRefsChangesFactory implements TableChangesFactory {
     public createTableChanges(
-        table: Table & TableData,
+        table: Table & TableDataRefs,
         args: CellDataRefArgs
     ): TableChanges | Promise<TableChanges> {
         return new CellDataRefChangesBuilder(table, args).build();

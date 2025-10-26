@@ -3,6 +3,8 @@ import {
   getLanguageDictionary as getCoreLanguageDictionary,
 } from 'fittable-core/model';
 
+export type FitLocale = 'en-US' | 'de-DE';
+
 export type FitTextKey =
   | 'en-US'
   | 'de-DE'
@@ -102,6 +104,7 @@ export type FitTextKey =
 
 export type FitDictionary = { [key in FitTextKey]?: string };
 
-export function getLanguageDictionary(): LanguageDictionary<FitTextKey> {
-  return getCoreLanguageDictionary<FitTextKey>();
+export function getLanguageDictionary(): //
+  LanguageDictionary<FitLocale, FitTextKey> {
+  return getCoreLanguageDictionary<FitLocale, FitTextKey>();
 }

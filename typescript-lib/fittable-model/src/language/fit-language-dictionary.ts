@@ -6,16 +6,20 @@ import {
   getLanguageDictionary as getCoreLanguageDictionary,
 } from 'fittable-core/model';
 
-import { FitTextKey, FitDictionary } from './language-def.js';
+import { FitLocale, FitTextKey, FitDictionary } from './language-def.js';
 import { enUS } from './en-US.js';
 import { deDE } from './de-DE.js';
 
-export class FitLanguageDictionary implements LanguageDictionary<FitTextKey> {
-  private dictionaries: { [locale: string]: FitDictionary; } = {};
-  private locale = 'en-US';
-  private afterSetLocale$: Subject<string> = new Subject();
+export class FitLanguageDictionary
+  implements LanguageDictionary<FitLocale, FitTextKey>
+{
+  private dictionaries: {
+    [code in FitLocale]?: FitDictionary;
+  } = {};
+  private locale: FitLocale = 'en-US';
+  private afterSetLocale$: Subject<FitLocale> = new Subject();
 
-  public register(locale: string, dictionary: FitDictionary): this {
+  public register(locale: FitLocale, dictionary: FitDictionary): this {
     if (this.dictionaries[locale] === undefined) {
       this.dictionaries[locale] = dictionary;
     } else {
@@ -28,26 +32,26 @@ export class FitLanguageDictionary implements LanguageDictionary<FitTextKey> {
     return this;
   }
 
-  public getAllLocales(): string[] {
-    return Reflect.ownKeys(this.dictionaries) as string[];
+  public getAllLocales(): FitLocale[] {
+    return Reflect.ownKeys(this.dictionaries) as FitLocale[];
   }
 
-  public unregister(code: string): this {
+  public unregister(code: FitLocale): this {
     Reflect.deleteProperty(this.dictionaries, code);
     return this;
   }
 
-  public setLocale(locale: string): this {
+  public setLocale(locale: FitLocale): this {
     this.locale = locale;
     this.afterSetLocale$.next(locale);
     return this;
   }
 
-  public onAfterSetLocale$(): Observable<string> {
+  public onAfterSetLocale$(): Observable<FitLocale> {
     return this.afterSetLocale$.asObservable();
   }
 
-  public getLocale(): string {
+  public getLocale(): FitLocale {
     return this.locale;
   }
 

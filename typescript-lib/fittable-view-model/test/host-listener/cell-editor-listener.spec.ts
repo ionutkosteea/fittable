@@ -1,4 +1,4 @@
-import { } from 'jasmine';
+import {} from 'jasmine';
 import { Subscription } from 'rxjs';
 
 import {
@@ -54,12 +54,12 @@ describe('fit-cell-editor-listener.ts', (): void => {
   });
 
   it('show cell editor', (): void => {
-    const table: Table = createTable()
+    const table: Table = createTable() //
       .setCellValue(1, 1, 1000);
-    const operationExecutor: OperationExecutor = createOperationExecutor()
+    const operationExecutor: OperationExecutor = createOperationExecutor() //
       .setTable(table);
     const tableViewer: TableViewer = createTableViewer(table);
-    const cellEditor: CellEditor =
+    const cellEditor: CellEditor = //
       createCellEditor(operationExecutor, tableViewer);
     const cellEditorListener: CellEditorListener = createCellEditorListener(
       cellEditor,
@@ -73,19 +73,19 @@ describe('fit-cell-editor-listener.ts', (): void => {
 
     expect(cellEditor.isVisible()).toBeTrue();
     expect(cellEditor.getCell().equals(createCellCoord(1, 1))).toBeTrue();
-    expect(cellEditor.getCellControl().getValue()).toBe(1000);
+    expect(cellEditor.getCellControl().getValue() === 1000).toBeTruthy();
     setTimeout((): void => {
       expect(cellEditor.getCellControl().hasFocus()).toBeTrue();
     });
   });
 
   it('define cell value', (): void => {
-    const table: Table = createTable()
+    const table: Table = createTable() //
       .setCellValue(1, 1, 1000);
-    const operationExecutor: OperationExecutor = createOperationExecutor()
+    const operationExecutor: OperationExecutor = createOperationExecutor() //
       .setTable(table);
     const tableViewer: TableViewer = createTableViewer(table);
-    const cellEditor: CellEditor =
+    const cellEditor: CellEditor = //
       createCellEditor(operationExecutor, tableViewer);
     const cellEditorListener: CellEditorListener = createCellEditorListener(
       cellEditor,
@@ -112,12 +112,12 @@ describe('fit-cell-editor-listener.ts', (): void => {
   });
 
   it('revert cell value', (): void => {
-    const table: Table = createTable()
+    const table: Table = createTable() //
       .setCellValue(1, 1, 1000);
-    const operationExecutor: OperationExecutor = createOperationExecutor()
+    const operationExecutor: OperationExecutor = createOperationExecutor() //
       .setTable(table);
     const tableViewer: TableViewer = createTableViewer(table);
-    const cellEditor: CellEditor =
+    const cellEditor: CellEditor = //
       createCellEditor(operationExecutor, tableViewer);
     const cellEditorListener: CellEditorListener = createCellEditorListener(
       cellEditor,
@@ -144,12 +144,12 @@ describe('fit-cell-editor-listener.ts', (): void => {
   });
 
   it('key navigation', (): void => {
-    const table: Table = createTable()
+    const table: Table = createTable() //
       .setCellValue(1, 1, 1000);
-    const operationExecutor: OperationExecutor = createOperationExecutor()
+    const operationExecutor: OperationExecutor = createOperationExecutor() //
       .setTable(table);
     const tableViewer: TableViewer = createTableViewer(table);
-    const cellEditor: CellEditor =
+    const cellEditor: CellEditor = //
       createCellEditor(operationExecutor, tableViewer);
     const cellEditorListener: CellEditorListener = createCellEditorListener(
       cellEditor,
@@ -176,12 +176,12 @@ describe('fit-cell-editor-listener.ts', (): void => {
   });
 
   it('focus cell editor', (): void => {
-    const table: Table = createTable()
+    const table: Table = createTable() //
       .setCellValue(1, 1, 1000);
-    const operationExecutor: OperationExecutor = createOperationExecutor()
+    const operationExecutor: OperationExecutor = createOperationExecutor() //
       .setTable(table);
     const tableViewer: TableViewer = createTableViewer(table);
-    const cellEditor: CellEditor =
+    const cellEditor: CellEditor = //
       createCellEditor(operationExecutor, tableViewer);
     const cellEditorListener: CellEditorListener = createCellEditorListener(
       cellEditor,
@@ -201,12 +201,12 @@ describe('fit-cell-editor-listener.ts', (): void => {
   });
 
   it('context menu', (): void => {
-    const table: Table = createTable()
+    const table: Table = createTable() //
       .setCellValue(1, 1, 1000);
-    const operationExecutor: OperationExecutor = createOperationExecutor()
+    const operationExecutor: OperationExecutor = createOperationExecutor() //
       .setTable(table);
     const tableViewer: TableViewer = createTableViewer(table);
-    const cellEditor: CellEditor =
+    const cellEditor: CellEditor = //
       createCellEditor(operationExecutor, tableViewer);
     const cellEditorListener: CellEditorListener = createCellEditorListener(
       cellEditor,

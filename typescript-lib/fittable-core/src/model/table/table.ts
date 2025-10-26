@@ -3,7 +3,8 @@ import { MissingFactoryMethodError } from '../../common/factory-error.js';
 import { getModelConfig } from '../model-config.js';
 import { DataType, DataTypeName } from './data-type.js';
 import { Style } from './style.js';
-import { DataDef, Data, Value } from './table-data.js';
+
+export type Value = string | number | boolean;
 
 export interface TableBasics {
   getDto(): unknown;
@@ -25,7 +26,7 @@ export interface TableBasics {
 
 export interface TableStyles {
   getStyle(name: string): Style | undefined;
-  setStyle(name: string, style: Style): this;
+  addStyle(name: string, style: Style): this;
   removeStyle(name: string): this;
   getStyleNames(): string[];
   getCellStyleName(rowId: number, colId: number): string | undefined;
@@ -89,18 +90,15 @@ export interface TableDataTypes {
   getCellDataType(rowId: number, colId: number): DataType | undefined;
   setCellDataType(rowId: number, colId: number, dataType?: DataType): this;
   getCellType(rowId: number, colId: number): DataTypeName;
-  getCellFormattedValue(rowId: number, colId: number): string | undefined;
+  getFormatedCellValue(rowId: number, colId: number): string | undefined;
+  removeFormatedCellValues(): this;
 }
 
-export interface TableData {
-  setDataDef(rowId: number, colId: number, dataDef?: DataDef): this;
-  getDataDef(rowId: number, colId: number): DataDef | undefined;
-  forEachDataDef(dataDefFn: (rowId: number, colId: number) => void): void;
-  setDataRefPerspective(perspective: boolean): this;
-  isDataRefPerspective(): boolean;
+export interface TableDataRefs {
+  setShowDataRefs(show: boolean): this;
+  canShowDataRefs(): boolean;
   setCellDataRef(rowId: number, colId: number, dataRef?: string): this;
   getCellDataRef(rowId: number, colId: number): string | undefined;
-  loadData(...data: Data[]): this;
 }
 
 export type Table =
@@ -113,7 +111,7 @@ export type Table =
       | TableMergedRegions
       | TableColFilters
       | TableDataTypes
-      | TableData
+      | TableDataRefs
     ));
 
 export interface TableFactory {
@@ -180,10 +178,10 @@ export function asTableDataTypes(
     : undefined;
 }
 
-export function asTableData(
+export function asTableDataRefs(
   table?: Table
-): (TableBasics & TableData) | undefined {
-  return implementsTKeys<TableData>(table, ['loadData'])
-    ? (table as TableBasics & TableData)
+): (TableBasics & TableDataRefs) | undefined {
+  return implementsTKeys<TableDataRefs>(table, ['getCellDataRef'])
+    ? (table as TableBasics & TableDataRefs)
     : undefined;
 }

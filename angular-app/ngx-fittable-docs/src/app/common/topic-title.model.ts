@@ -10,8 +10,6 @@ export type TopicTitle =
   | 'Cell style'
   | 'Cell merge'
   | 'Cell data reference'
-  | 'Table data'
-  | 'Table data-expanded rows'
   | 'Table DTO'
   | 'Custom table'
   | 'Update style'

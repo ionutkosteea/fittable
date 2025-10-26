@@ -1,5 +1,5 @@
 import { MissingFactoryError } from '../../common/factory-error.js';
-import { Value } from '../table/table-data.js';
+import { Value } from '../table/table.js';
 import { getModelConfig } from '../model-config.js';
 
 export interface CellFormatter {

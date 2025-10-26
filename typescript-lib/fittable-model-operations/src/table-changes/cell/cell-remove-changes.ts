@@ -12,8 +12,8 @@ import {
   DataType,
   TableDataTypes,
   asTableDataTypes,
-  TableData,
-  asTableData,
+  TableDataRefs,
+  asTableDataRefs,
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -162,13 +162,13 @@ export class CellRemoveChangesBuilder {
   }
 
   private undoCellDataRefs(): void {
-    const tableData: TableData | undefined = asTableData(this.table);
-    if (!tableData) return;
+    const tableDataRefs: TableDataRefs | undefined = asTableDataRefs(this.table);
+    if (!tableDataRefs) return;
     const oldCellDataRefs: CellRangeAddressObjects<string | undefined> = new CellRangeAddressObjects();
     for (const cellRangeDto of this.cellRemoveChange.cellRanges) {
       createCellRange4Dto(cellRangeDto).forEachCell(
         (rowId: number, colId: number): void => {
-          const dataRef: string | undefined = tableData.getCellDataRef(rowId, colId);
+          const dataRef: string | undefined = tableDataRefs.getCellDataRef(rowId, colId);
           dataRef && oldCellDataRefs.set(dataRef, rowId, colId);
         }
       );

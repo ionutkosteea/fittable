@@ -98,7 +98,7 @@ export class StyleChangeWritter implements TableChangeWritter {
         return true;
       });
       style.hasProperties() &&
-        this.table.setStyle(createStyleDto.styleName, style);
+        this.table.addStyle(createStyleDto.styleName, style);
     }
   }
 

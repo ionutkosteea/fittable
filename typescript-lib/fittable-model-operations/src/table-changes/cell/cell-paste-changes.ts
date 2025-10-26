@@ -12,8 +12,8 @@ import {
   asTableDataTypes,
   createDataType,
   DataTypeName,
-  TableData,
-  asTableData,
+  TableDataRefs,
+  asTableDataRefs,
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -85,7 +85,7 @@ export class CellPasteChangesBuilder {
   };
   private readonly changes: TableChanges;
   private readonly tableDataTypes?: Table & TableDataTypes;
-  private readonly tableData?: Table & TableData;
+  private readonly tableDataRefs?: Table & TableDataRefs;
   private readonly tableStyles?: Table & TableStyles;
 
   private newValues: CellRangeAddressObjects<Value | undefined>;
@@ -101,7 +101,7 @@ export class CellPasteChangesBuilder {
     private readonly args: CellPasteArgs
   ) {
     this.tableDataTypes = asTableDataTypes(table);
-    this.tableData = asTableData(table);
+    this.tableDataRefs = asTableDataRefs(table);
     this.tableStyles = asTableStyles(table);
     this.changes = {
       id: args.id,
@@ -268,7 +268,7 @@ export class CellPasteChangesBuilder {
     colId: number,
     htmlCell: HTMLTableCellElement
   ): void {
-    if (!this.tableData) return;
+    if (!this.tableDataRefs) return;
     const dataRef: string | null = htmlCell.getAttribute('data-cell-data-ref');
     if (dataRef) this.newCellDataRefs.set(dataRef, rowId, colId);
   }
@@ -451,7 +451,7 @@ export class CellPasteChangesBuilder {
   }
 
   private updateCellDataRefs(): void {
-    if (!this.tableData) return;
+    if (!this.tableDataRefs) return;
     for (const dataRef of this.newCellDataRefs.getAllObjects()) {
       const selectedCells: CellRange[] = this.newCellDataRefs.getAddress(dataRef) ?? [];
       const args: CellDataRefArgs = {
@@ -459,7 +459,7 @@ export class CellPasteChangesBuilder {
         selectedCells,
         dataRef,
       };
-      const builder: CellDataRefChangesBuilder = new CellDataRefChangesBuilder(this.tableData, args);
+      const builder: CellDataRefChangesBuilder = new CellDataRefChangesBuilder(this.tableDataRefs, args);
       builder.build();
       this.cellDataRefChange.items = this.cellDataRefChange.items
         .concat(builder.cellDataRefChange.items);

@@ -6,17 +6,20 @@ import {
   getLanguageDictionary as getCoreLanguageDictionary,
 } from 'fittable-core/model';
 
-import { TstTextKey, TstDictionary } from './language-def.js';
+import { TstLocale, TstTextKey, TstDictionary } from './language-def.js';
 import { enUS } from './en-US.js';
 import { deDE } from './de-DE.js';
 
 export class TstLanguageDictionary
-  implements LanguageDictionary<TstTextKey> {
-  private locale = 'en-US';
-  private dictionaries: { [locale: string]: TstDictionary } = {};
-  private afterSetLocale$: Subject<string> = new Subject();
+  implements LanguageDictionary<TstLocale, TstTextKey>
+{
+  private dictionaries: {
+    [locale in TstLocale]?: TstDictionary;
+  } = {};
+  private locale: TstLocale = 'en-US';
+  private afterSetLocale$: Subject<TstLocale> = new Subject();
 
-  public register(locale: string, dictionary: TstDictionary): this {
+  public register(locale: TstLocale, dictionary: TstDictionary): this {
     if (this.dictionaries[locale] === undefined) {
       this.dictionaries[locale] = dictionary;
     } else {
@@ -28,26 +31,26 @@ export class TstLanguageDictionary
     return this;
   }
 
-  public getAllLocales(): string[] {
-    return Reflect.ownKeys(this.dictionaries) as string[];
+  public getAllLocales(): TstLocale[] {
+    return Reflect.ownKeys(this.dictionaries) as TstLocale[];
   }
 
-  public unregister(locale: string): this {
+  public unregister(locale: TstLocale): this {
     Reflect.deleteProperty(this.dictionaries, locale);
     return this;
   }
 
-  public setLocale(locale: string): this {
+  public setLocale(locale: TstLocale): this {
     this.locale = locale;
     this.afterSetLocale$.next(locale);
     return this;
   }
 
-  public onAfterSetLocale$(): Observable<string> {
+  public onAfterSetLocale$(): Observable<TstLocale> {
     return this.afterSetLocale$.asObservable();
   }
 
-  public getLocale(): string {
+  public getLocale(): TstLocale {
     return this.locale;
   }
 

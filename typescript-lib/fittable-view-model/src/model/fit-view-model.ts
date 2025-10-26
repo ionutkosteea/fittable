@@ -226,6 +226,7 @@ export class FitViewModel implements ViewModel {
         const filterDestTable = this.colFilters?.filterExecutor.getFilteredTable();
         if (filterScrTable && filterDestTable) {
           asTableDataTypes(filterScrTable)?.setLocale(locale);
+          asTableDataTypes(filterDestTable)?.removeFormatedCellValues();
         } else {
           asTableDataTypes(this.table)?.setLocale(locale);
         }
@@ -308,7 +309,7 @@ export class FitViewModel implements ViewModel {
   };
 
   private initLocales(): void {
-    const dictionary: LanguageDictionary<string> =
+    const dictionary: LanguageDictionary<string, string> =
       getLanguageDictionary().register('en-US', enUS).register('de-DE', deDE);
     const tableDataTypes: TableDataTypes | undefined = asTableDataTypes(this.table);
     if (tableDataTypes) dictionary.setLocale(tableDataTypes.getLocale());

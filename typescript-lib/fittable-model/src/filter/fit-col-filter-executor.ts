@@ -2,16 +2,19 @@ import {
   ColFilterExecutor,
   ColConditionFn,
   ColFilterExecutorFactory,
+  TableBasics,
+  TableColFilters,
 } from 'fittable-core/model';
-import { FitTable } from '../table/fit-table.js';
 
-export type FitColCondition = {
+type FitTable = TableBasics & TableColFilters;
+
+type ColCondition = {
   table: FitTable;
   conditionFn: ColConditionFn;
 };
 
 export class FitColFilterExecutor implements ColFilterExecutor {
-  private readonly conditions: Map<number, FitColCondition> = new Map();
+  private readonly conditions: Map<number, ColCondition> = new Map();
   private filteredTable?: FitTable;
 
   constructor(public readonly table: FitTable) { }
@@ -47,7 +50,7 @@ export class FitColFilterExecutor implements ColFilterExecutor {
       let table: FitTable = this.table;
       for (const entry of this.conditions.entries()) {
         const colId: number = entry[0];
-        const filter: FitColCondition = entry[1];
+        const filter: ColCondition = entry[1];
         filter.table = table;
         table = table.filterByCol(colId, filter.conditionFn);
       }

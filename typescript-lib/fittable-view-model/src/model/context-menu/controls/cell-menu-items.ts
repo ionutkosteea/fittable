@@ -1,4 +1,4 @@
-import { asTableData, getLanguageDictionary } from 'fittable-core/model';
+import { asTableDataRefs, getLanguageDictionary } from 'fittable-core/model';
 import { ControlArgs } from 'fittable-core/view-model';
 
 import { FitControl } from '../../common/controls/fit-control.js';
@@ -15,7 +15,7 @@ export function createCellClearMenuItem(
     .setIcon((): string | undefined => getImageRegistry().getUrl('clear'))
     .setRun((): void => {
       let operationArgs: FitUIOperationArgs;
-      if (asTableData(args.operationExecutor.getTable())?.isDataRefPerspective()) {
+      if (asTableDataRefs(args.operationExecutor.getTable())?.canShowDataRefs()) {
         operationArgs = { id: 'cell-data-ref', selectedCells: args.getSelectedCells() };
       } else {
         operationArgs = { id: 'cell-value', selectedCells: args.getSelectedCells() };

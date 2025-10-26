@@ -1,4 +1,4 @@
-import { } from 'jasmine';
+import {} from 'jasmine';
 
 import { TableOperationExecutor } from './model/table-operation-executor.js';
 
@@ -58,7 +58,7 @@ describe('Cell Operation Executor', () => {
   it('remove cell with defined style', () => {
     executor //
       .createTable(1, 1)
-      .setStyle('s0', { color: 'blue' })
+      .addStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .runRemoveCells();
@@ -70,7 +70,7 @@ describe('Cell Operation Executor', () => {
   it('remove cell with defined value and style', () => {
     executor //
       .createTable(1, 1)
-      .setStyle('s0', { color: 'blue' })
+      .addStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .setCellValue(0, 0, 1000)
       .selectCell(0, 0)
@@ -83,7 +83,7 @@ describe('Cell Operation Executor', () => {
   it('remove cell with defined style (style shall not be removed)', () => {
     executor //
       .createTable(2, 1)
-      .setStyle('s0', { color: 'blue' })
+      .addStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .setCellStyleName(1, 0, 's0')
       .selectCell(0, 0)
@@ -133,7 +133,7 @@ describe('Cell Operation Executor', () => {
   it('undo - remove cell with defined style', () => {
     executor //
       .createTable(1, 1)
-      .setStyle('s0', { color: 'blue' })
+      .addStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .runRemoveCells()
@@ -146,7 +146,7 @@ describe('Cell Operation Executor', () => {
   it('undo - remove cell with defined style', () => {
     executor //
       .createTable(1, 1)
-      .setStyle('s0', { color: 'blue' })
+      .addStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .runRemoveCells()

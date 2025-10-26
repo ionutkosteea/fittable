@@ -14,10 +14,10 @@ export class FitOperation implements Operation {
     public readonly id: string,
     private readonly changeWritters: TableChangeWritter[],
     private readonly undoChanges?: FitOperation
-  ) { }
+  ) {}
 
   public run(): this {
-    this.changeWritters
+    this.changeWritters //
       .forEach((writter: TableChangeWritter): void => writter.run());
     return this;
   }
@@ -27,7 +27,7 @@ export class FitOperation implements Operation {
   }
 
   public undo(): this {
-    this.undoChanges?.changeWritters
+    this.undoChanges?.changeWritters //
       .forEach((writter: TableChangeWritter): void => writter.run());
     return this;
   }
@@ -38,12 +38,12 @@ export class FitOperationFactory implements OperationFactory {
     public readonly createChangeWritter: (
       change: Args<string>
     ) => TableChangeWritter
-  ) { }
+  ) {}
 
   public createOperation(changes: TableChanges): FitOperation {
     const writters: TableChangeWritter[] = this.createChangeWritters(changes);
     if (changes.undoChanges) {
-      const undoWritters: TableChangeWritter[] =
+      const undoWritters: TableChangeWritter[] = //
         this.createChangeWritters(changes.undoChanges);
       return new FitOperation(
         changes.id,

@@ -6,7 +6,6 @@ export * from './table/table.js';
 export * from './table/style.js';
 export * from './table/line-range.js';
 export * from './table/data-type.js';
-export * from './table/table-data.js';
 export * from './filter/col-filter-executor.js';
 export * from './model-config.js';
 export * from './utils/cell-range-list.js';

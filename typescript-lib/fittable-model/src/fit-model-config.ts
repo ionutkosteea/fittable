@@ -11,9 +11,6 @@ import { FitCellDateFormatterFactory } from './cell-formatter/fit-cell-date-form
 import { FitCellBooleanFormatterFactory } from './cell-formatter/fit-cell-boolean-formatter.js';
 import { FitLanguageDictionaryFactory } from './language/fit-language-dictionary.js';
 import { FitDataTypeFactory } from './table/fit-data-type.js';
-import { FitDataRefFactory } from './table/fit-data-ref.js';
-import { FitDataDefFactory } from './table/fit-data-def.js';
-import { FitDataFactory } from './table/fit-data.js';
 
 export const FIT_MODEL_CONFIG: ModelConfig = {
   languageDictionaryFactory: new FitLanguageDictionaryFactory(),
@@ -26,8 +23,5 @@ export const FIT_MODEL_CONFIG: ModelConfig = {
   cellNumberFormatterFactory: new FitCellNumberFormatterFactory(),
   cellDateFormatterFactory: new FitCellDateFormatterFactory(),
   cellBooleanFormatterFactory: new FitCellBooleanFormatterFactory(),
-  dataTypeFactory: new FitDataTypeFactory(),
-  dataRefFactory: new FitDataRefFactory(),
-  dataDefFactory: new FitDataDefFactory(),
-  dataFactory: new FitDataFactory(),
+  dataTypeFactory: new FitDataTypeFactory()
 };

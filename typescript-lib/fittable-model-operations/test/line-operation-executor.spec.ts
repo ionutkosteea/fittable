@@ -1,4 +1,4 @@
-import { } from 'jasmine';
+import {} from 'jasmine';
 
 import { TableOperationExecutor } from './model/table-operation-executor.js';
 
@@ -288,7 +288,7 @@ describe('Line Operation Executor', () => {
   it('undo -> remove styled row', () => {
     executor //
       .createTable(2, 1)
-      .setStyle('s0', { color: 'blue' })
+      .addStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .setCellStyleName(1, 0, 's0')
       .selectCell(0, 0)
@@ -402,7 +402,7 @@ describe('Line Operation Executor', () => {
   it('remove styled column', () => {
     executor //
       .createTable(1, 1)
-      .setStyle('s0', { color: 'blue' })
+      .addStyle('s0', { color: 'blue' })
       .setCellStyleName(0, 0, 's0')
       .selectCell(0, 0)
       .runRemoveCols();
@@ -542,7 +542,7 @@ describe('Line Operation Executor', () => {
   it('undo -> remove columns, incl. cell styles and values', () => {
     executor //
       .createTable(2, 2)
-      .setStyle('s0', { color: 'blue' })
+      .addStyle('s0', { color: 'blue' })
       .setCellValue(0, 0, 1000)
       .setCellValue(0, 1, 2000)
       .setCellValue(1, 0, 3000)

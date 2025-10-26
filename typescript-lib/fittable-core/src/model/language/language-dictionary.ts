@@ -1,19 +1,22 @@
 import { Observable } from 'rxjs';
 
-export type Dictionary<TextKey extends string> = { [key in TextKey]?: string };
+export type Dictionary<Key extends string> = { [key in Key]?: string };
 
-export interface LanguageDictionary<TextKey extends string> {
-  register(locale: string, dictionary: Dictionary<TextKey>): this;
-  getAllLocales(): string[];
-  unregister(locale: string): this;
-  setLocale(locale: string): this;
-  onAfterSetLocale$(): Observable<string>;
-  getLocale(): string;
+export interface LanguageDictionary<
+  Locale extends string,
+  TextKey extends string
+> {
+  register(locale: Locale, dictionary: Dictionary<TextKey>): this;
+  getAllLocales(): Locale[];
+  unregister(locale: Locale): this;
+  setLocale(locale: Locale): this;
+  onAfterSetLocale$(): Observable<Locale>;
+  getLocale(): Locale;
   setText(key: TextKey, value?: string): this;
   getText(key: TextKey): string;
-  clone(): LanguageDictionary<TextKey>;
+  clone(): LanguageDictionary<Locale, TextKey>;
 }
 
 export interface LanguageDictionaryFactory {
-  createLanguageDictionary(): LanguageDictionary<string>;
+  createLanguageDictionary(): LanguageDictionary<string, string>;
 }

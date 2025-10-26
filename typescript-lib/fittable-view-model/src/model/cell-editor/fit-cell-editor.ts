@@ -8,8 +8,8 @@ import {
   DataType,
   createCellDateFormatter,
   createDataType,
-  TableData,
-  asTableData,
+  TableDataRefs,
+  asTableDataRefs,
 } from 'fittable-core/model';
 import { OperationExecutor } from 'fittable-core/operations';
 import {
@@ -28,7 +28,7 @@ import { FitNeighborCells } from '../common/fit-neighbor-cells.js';
 export class FitCellEditor implements CellEditor {
   private cellCoord: CellCoord = createCellCoord(0, 0);
   private readonly afterSetCell$: Subject<CellCoord> = new Subject();
-  private inputControl: InputControl;
+  private cellControl: InputControl;
   private cellRectangle?: Rectangle;
   private visible = false;
   private readonly afterSetVisible$: Subject<boolean> = new Subject();
@@ -41,51 +41,50 @@ export class FitCellEditor implements CellEditor {
     private readonly operationExecutor: OperationExecutor,
     private readonly tableViewer: TableViewer
   ) {
-    this.inputControl = this.createInputControl();
+    this.cellControl = this.createCellControl();
   }
 
-  private createInputControl(): InputControl {
+  private createCellControl(): InputControl {
     const input: FitInputControl = new FitInputControl();
-    const tableData: TableData | undefined = asTableData(this.operationExecutor.getTable());
+    const tableDataRefs: TableDataRefs | undefined = asTableDataRefs(this.operationExecutor.getTable());
     input
       .setLabel(() => 'Cell Editor')
       .setRun((): void => {
-        const value: Value | undefined = this.stringifyIfObject(input.getValue());
-        if (tableData?.isDataRefPerspective()) {
-          this.runCellDataRefOperation(value);
-        } else {
-          this.runCellValueOperation(value);
-        }
+        const inputValue: Value | undefined = input.getValue();
+        if (tableDataRefs?.canShowDataRefs()) this.runCellDataRefOperation(inputValue);
+        else this.runCellValueOperation(inputValue);
       });
     return input;
   }
 
-  private stringifyIfObject(inputValue?: Value): Value | undefined {
-    let cellValue: Value | undefined;
-    if (typeof inputValue === 'object') {
-      try { cellValue = JSON.stringify(inputValue); }
-      catch { console.warn("Invalid object: " + inputValue); }
-    } else {
-      cellValue = inputValue;
-    }
-    return cellValue;
-  }
-
   private runCellValueOperation(value?: Value): void {
+    let cellValue: Value | undefined;
+    if (typeof value === 'object') {
+      try { cellValue = JSON.stringify(value); }
+      catch { console.warn("Invalid object: " + value); }
+    } else {
+      cellValue = value;
+    }
     const args: FitUIOperationArgs = {
       id: 'cell-value',
       selectedCells: [createCellRange(this.cellCoord)],
-      value,
-      dataType: this.getDataType(value),
+      value: cellValue,
+      dataType: this.getDataType(cellValue),
     };
     this.operationExecutor.run(args);
   }
 
   private runCellDataRefOperation(value?: Value): void {
+    let dataRef: string | undefined = undefined;
+    if (typeof value === 'object') {
+      try { dataRef = JSON.stringify(value); }
+      catch { console.error("Invalid object: " + value); }
+    }
+    if (!dataRef && value) return;
     const args: FitUIOperationArgs = {
       id: 'cell-data-ref',
       selectedCells: [createCellRange(this.cellCoord)],
-      dataRef: value ? value as string : undefined,
+      dataRef,
     };
     this.operationExecutor.run(args);
   }
@@ -108,7 +107,7 @@ export class FitCellEditor implements CellEditor {
   }
 
   public getCellControl(): InputControl {
-    return this.inputControl;
+    return this.cellControl;
   }
 
   public isVisible(): boolean {
@@ -143,7 +142,7 @@ export class FitCellEditor implements CellEditor {
   private update(): void {
     if (!this.tableHasRowsAndCols()) return;
     this.cellRectangle = this.createCellRectangle(this.cellCoord);
-    this.inputControl.setValue(this.getTableCellValue(this.cellCoord));
+    this.cellControl.setValue(this.getTableCellValue(this.cellCoord));
   }
 
   private tableHasRowsAndCols(): boolean {

@@ -43,7 +43,7 @@ export class CellStyleComponent implements SimpleTopic, OnInit {
 
     this.fit = createTableDesigner(
       createTable<FitTable>()
-        .setStyle(
+        .addStyle(
           's0',
           createStyle<FitStyle>()
             .set('font-weight', 'bold')

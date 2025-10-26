@@ -60,18 +60,18 @@ npm install fittable-angular
 ### app.module.ts
 
 ```typescript
-import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
-import { registerModelConfig } from "fittable-core/model";
-import { registerOperationConfig } from "fittable-core/operations";
-import { registerViewModelConfig } from "fittable-core/view-model";
-import { FIT_MODEL_CONFIG } from "fittable-model";
-import { FIT_OPERATION_CONFIG } from "fittable-model-operations";
-import { FIT_VIEW_MODEL_CONFIG } from "fittable-view-model";
-import { FittableModule } from "fittable-angular";
+import { registerModelConfig } from 'fittable-core/model';
+import { registerOperationConfig } from 'fittable-core/operations';
+import { registerViewModelConfig } from 'fittable-core/view-model';
+import { FIT_MODEL_CONFIG } from 'fittable-model';
+import { FIT_OPERATION_CONFIG } from 'fittable-model-operations';
+import { FIT_VIEW_MODEL_CONFIG } from 'fittable-view-model';
+import { FittableModule } from 'fittable-angular';
 
-import { AppComponent } from "./app.component";
+import { AppComponent } from './app.component';
 
 // Register functionalities
 registerModelConfig(FIT_MODEL_CONFIG);
@@ -90,20 +90,27 @@ export class AppModule {}
 ### app.component.ts
 
 ```typescript
-import { Component, DestroyRef, inject, OnInit } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { createCellCoord, createCellRange, createDataType, createStyle, createTable, Table } from "fittable-core/model";
-import { TableChanges } from "fittable-core/operations";
-import { createTableDesigner, TableDesigner } from "fittable-core/view-model";
-import { FitStyle, FitTable, FitTableDto } from "fittable-model";
-import { FitOperationArgs } from "fittable-model-operations";
-import { FitThemeName } from "fittable-view-model";
+import {
+  createCellCoord,
+  createCellRange,
+  createDataType,
+  createStyle,
+  createTable,
+  Table,
+} from 'fittable-core/model';
+import { TableChanges } from 'fittable-core/operations';
+import { createTableDesigner, TableDesigner } from 'fittable-core/view-model';
+import { FitStyle, FitTable, FitTableDto } from 'fittable-model';
+import { FitOperationArgs } from 'fittable-model-operations';
+import { FitThemeName } from 'fittable-view-model';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   public fit!: TableDesigner;
@@ -111,7 +118,25 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     // Build table
-    const table: Table = createTable<FitTable>().setNumberOfRows(100).setNumberOfCols(10).setRowHeight(0, 42).setColWidth(0, 50).setStyle("s0", createStyle<FitStyle>().set("font-weight", "bold")).setCellStyleName(0, 0, "s0").setRowSpan(0, 0, 2).setColSpan(0, 0, 3).setLocale("de-DE").setCellValue(2, 1, 1000).setCellDataType(2, 1, createDataType("string")).setCellValue(3, 1, 1000.123).setCellDataType(3, 1, createDataType("number", "#.#,00 €")).setCellValue(4, 1, "2023-12-31").setCellDataType(4, 1, createDataType("date-time", "dd.MM.yyyy")).setCellValue(5, 1, true).setCellValue(6, 1, false).setCellValue(7, 1, "Some text here...");
+    const table: Table = createTable<FitTable>()
+      .setNumberOfRows(100)
+      .setNumberOfCols(10)
+      .setRowHeight(0, 42)
+      .setColWidth(0, 50)
+      .addStyle('s0', createStyle<FitStyle>().set('font-weight', 'bold'))
+      .setCellStyleName(0, 0, 's0')
+      .setRowSpan(0, 0, 2)
+      .setColSpan(0, 0, 3)
+      .setLocale('de-DE')
+      .setCellValue(2, 1, 1000)
+      .setCellDataType(2, 1, createDataType('string'))
+      .setCellValue(3, 1, 1000.123)
+      .setCellDataType(3, 1, createDataType('number', '#.#,00 €'))
+      .setCellValue(4, 1, '2023-12-31')
+      .setCellDataType(4, 1, createDataType('date-time', 'dd.MM.yyyy'))
+      .setCellValue(5, 1, true)
+      .setCellValue(6, 1, false)
+      .setCellValue(7, 1, 'Some text here...');
 
     // Load table
     // const tableDto: FitTableDto = {
@@ -134,15 +159,15 @@ export class AppComponent implements OnInit {
         });
 
       const args: FitOperationArgs = {
-        id: "cell-value",
+        id: 'cell-value',
         selectedCells: [createCellRange(createCellCoord(0, 0))],
-        value: "operation text",
+        value: 'operation text',
       };
       this.fit.operationExecutor.run(args);
     }
 
     // Access view model
-    const darkTheme: FitThemeName = "Dark mode";
+    const darkTheme: FitThemeName = 'Dark mode';
     this.fit.viewModel.themeSwitcher?.switch(darkTheme);
   }
 }

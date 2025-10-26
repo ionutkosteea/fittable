@@ -72,8 +72,6 @@ export class NavigationTreeComponent implements OnInit, OnDestroy {
           { label: 'Cell style' },
           { label: 'Cell merge' },
           { label: 'Cell data reference' },
-          { label: 'Table data' },
-          { label: 'Table data-expanded rows' },
           { label: 'Table DTO' },
           { label: 'Custom table' },
         ],

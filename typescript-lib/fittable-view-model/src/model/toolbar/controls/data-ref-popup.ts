@@ -1,4 +1,4 @@
-import { asTableData, getLanguageDictionary, TableData } from "fittable-core/model";
+import { asTableDataRefs, getLanguageDictionary, TableDataRefs } from "fittable-core/model";
 import { ControlArgs, getImageRegistry } from "fittable-core/view-model";
 
 import { FitPopupControl } from "../../common/controls/fit-popup-control.js";
@@ -17,11 +17,11 @@ type ControlId = 'cell-value' | 'cell-data-ref';
 
 class DataRefPopup extends FitPopupControl<string> {
 
-    private readonly tableData?: TableData;
+    private readonly tableDataRefs?: TableDataRefs;
 
     constructor(private readonly args: ControlArgs) {
         super(new FitSelectorWindow());
-        this.tableData = asTableData(args.operationExecutor.getTable());
+        this.tableDataRefs = asTableDataRefs(args.operationExecutor.getTable());
         this.initPopupWindow();
         this.initPopupButton();
     }
@@ -44,7 +44,7 @@ class DataRefPopup extends FitPopupControl<string> {
             .setLabel((): string => getLanguageDictionary().getText(text))
             .setIcon((): string | undefined => getImageRegistry().getUrl(imageId))
             .setRun((): void => {
-                this.tableData?.setDataRefPerspective(false);
+                this.tableDataRefs?.setShowDataRefs(false);
                 this.args.cellEditor && this.args.cellEditor.setCell(this.args.cellEditor.getCell())
                 this.disableColFilterButtons(false);
                 this.getWindow().setControlId(id);
@@ -63,7 +63,7 @@ class DataRefPopup extends FitPopupControl<string> {
             .setLabel((): string => getLanguageDictionary().getText(text))
             .setIcon((): string | undefined => getImageRegistry().getUrl(imageId))
             .setRun((): void => {
-                this.tableData?.setDataRefPerspective(true);
+                this.tableDataRefs?.setShowDataRefs(true);
                 this.args.cellEditor && this.args.cellEditor.setCell(this.args.cellEditor.getCell())
                 this.disableColFilterButtons(true);
                 this.getWindow().setControlId(id);
