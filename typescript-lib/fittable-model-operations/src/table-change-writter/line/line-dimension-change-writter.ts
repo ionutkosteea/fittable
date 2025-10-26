@@ -10,17 +10,17 @@ import {
   Args,
 } from 'fittable-core/operations';
 
-export type DimensionItem = {
+export type DimensionDto = {
   lineRanges: unknown[];
   dimension?: number;
 };
-export type LineDimensionChange = { items: DimensionItem[] };
+export type LineDimensionChange = { dimensions: DimensionDto[] };
 
 abstract class LineDimensionChangeWritter implements TableChangeWritter {
   constructor(
     protected readonly table: Table,
     protected readonly change: LineDimensionChange
-  ) { }
+  ) {}
 
   protected abstract updateDimension(
     lineId: number,
@@ -32,11 +32,11 @@ abstract class LineDimensionChangeWritter implements TableChangeWritter {
   }
 
   private updateLines(): void {
-    for (const item of this.change.items) {
-      for (const lineRangeDto of item.lineRanges) {
+    for (const dimensionDto of this.change.dimensions) {
+      for (const lineRangeDto of dimensionDto.lineRanges) {
         createLineRange4Dto(lineRangeDto).forEachLine(
           (lineId: number): void => {
-            this.updateDimension(lineId, item.dimension);
+            this.updateDimension(lineId, dimensionDto.dimension);
           }
         );
       }
@@ -60,7 +60,8 @@ export class RowHeightChangeWritter extends LineDimensionChangeWritter {
 }
 
 export class RowHeightChangeWritterFactory
-  implements TableChangeWritterFactory {
+  implements TableChangeWritterFactory
+{
   public createTableChangeWritter(
     table: Table & TableRows,
     change: RowHeighChange

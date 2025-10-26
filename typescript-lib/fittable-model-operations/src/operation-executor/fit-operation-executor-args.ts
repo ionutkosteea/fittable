@@ -1,7 +1,6 @@
 import { CellCopyChange } from '../table-change-writter/cell/cell-copy-change-writter.js';
 import { CellRemoveChange } from '../table-change-writter/cell/cell-remove-change-writter.js';
 import { CellValueChange } from '../table-change-writter/cell/cell-value-change-writter.js';
-import { CellDataRefArgs } from '../table-changes/cell/cell-data-ref-changes.js';
 import {
   RowHeighChange,
   ColWidthChange,
@@ -42,7 +41,6 @@ import { CellMergeArgs } from '../table-changes/merged-regions/cell-merge-change
 import { CellUnmergeArgs } from '../table-changes/merged-regions/cell-unmerge-changes.js';
 import { CellDataTypeArgs } from '../table-changes/cell/cell-data-type-changes.js';
 import { DataTypeChange } from '../table-change-writter/cell/cell-data-type-change-writter.js';
-import { CellDataRefChange } from '../table-change-writter/cell/cell-data-ref-change-writter.js';
 
 export type FitOperationArgs =
   | CellCutArgs
@@ -50,7 +48,6 @@ export type FitOperationArgs =
   | CellPasteArgs
   | CellRemoveArgs
   | CellValueArgs
-  | CellDataRefArgs
   | CellDataTypeArgs
   | CellMergeArgs
   | CellUnmergeArgs
@@ -65,21 +62,36 @@ export type FitOperationArgs =
   | StyleRemoveArgs
   | StyleUpdateArgs;
 
-export type FitOperationId = FitOperationArgs['id'];
+export type FitOperationId =
+  | CellCutArgs['id']
+  | CellCopyArgs['id']
+  | CellPasteArgs['id']
+  | CellRemoveArgs['id']
+  | CellValueArgs['id']
+  | CellDataTypeArgs['id']
+  | CellMergeArgs['id']
+  | CellUnmergeArgs['id']
+  | RowHeightTableChangesArgs['id']
+  | ColWidthTableChangesArgs['id']
+  | RowInsertTableChangesArgs['id']
+  | ColInsertTableChangesArgs['id']
+  | RowRemoveArgs['id']
+  | ColRemoveArgs['id']
+  | StyleBorderArgs['id']
+  | PaintFormatArgs['id']
+  | StyleRemoveArgs['id']
+  | StyleUpdateArgs['id'];
 
-export type FitTableChange =
-  | CellCopyChange
-  | CellRemoveChange
-  | CellValueChange
-  | CellDataRefChange
-  | DataTypeChange
-  | RowHeighChange
-  | ColWidthChange
-  | RowInsertChange
-  | ColInsertChange
-  | RowRemoveChange
-  | ColRemoveChange
-  | StyleChange
-  | MergedRegionsChange;
-
-export type FitTableChangeId = FitTableChange['id'];
+export type FitTableChangeId =
+  | CellCopyChange['id']
+  | CellRemoveChange['id']
+  | CellValueChange['id']
+  | DataTypeChange['id']
+  | RowHeighChange['id']
+  | ColWidthChange['id']
+  | RowInsertChange['id']
+  | ColInsertChange['id']
+  | RowRemoveChange['id']
+  | ColRemoveChange['id']
+  | StyleChange['id']
+  | MergedRegionsChange['id'];

@@ -10,8 +10,8 @@ import {
   TableStyles,
   Value,
   ColConditionFn,
-  TableColFilters,
-  TableDataTypes,
+  TableColFilter,
+  TableCellDataType,
   createCellNumberFormatter,
   createCellDateFormatter,
   DataType,
@@ -21,7 +21,6 @@ import {
   createDataType4Dto,
   DataTypeName,
   createDataType,
-  TableDataRefs,
 } from 'fittable-core/model';
 
 import {
@@ -42,11 +41,9 @@ export class FitTable
   TableCols,
   TableStyles,
   TableMergedRegions,
-  TableColFilters,
-  TableDataTypes,
-  TableDataRefs {
+  TableColFilter,
+  TableCellDataType {
   private readonly formatedCellValues: TwoDimensionalMap<string> = new TwoDimensionalMap();
-  private showDataRefs = false;
 
   constructor(
     private readonly dto: FitTableDto = {
@@ -97,8 +94,7 @@ export class FitTable
     return (
       this.getCellValue(rowId, colId) !== undefined ||
       this.getCellStyleName(rowId, colId) !== undefined ||
-      this.getCellDataType(rowId, colId) !== undefined ||
-      this.getCellDataRef(rowId, colId) !== undefined
+      this.getCellDataType(rowId, colId) !== undefined
     );
   }
 
@@ -488,38 +484,10 @@ export class FitTable
   }
 
   public getCellType(rowId: number, colId: number): DataTypeName {
-    const dataTypeName: DataTypeName | undefined = this.getCellDataType(rowId, colId)?.getName();
-    if (dataTypeName) {
-      return dataTypeName;
-    } else {
-      const cellValue: Value | undefined = this.getCellValue(rowId, colId);
-      if (cellValue !== undefined) return (typeof cellValue) as DataTypeName;
-    }
-    return 'string';
-  }
-
-  public setShowDataRefs(show: boolean): this {
-    this.showDataRefs = show;
-    return this;
-  }
-
-  public canShowDataRefs(): boolean {
-    return this.showDataRefs;
-  }
-
-  public setCellDataRef(rowId: number, colId: number, dataRef?: string): this {
-    if (dataRef !== undefined) {
-      this.createMatrixCell('cells', rowId, colId);
-      this.getCells()[rowId][colId]['dataRef'] = dataRef;
-    } else if (this.hasMatrixCell('cells', rowId, colId)) {
-      delete this.getCells()[rowId][colId]['dataRef'];
-      !this.hasCell(rowId, colId) && delete this.getCells()[rowId][colId];
-    }
-    return this;
-  }
-
-  public getCellDataRef(rowId: number, colId: number): string | undefined {
-    return this.getCellDto(rowId, colId)?.dataRef;
+    return (
+      this.getCellDataType(rowId, colId)?.getName() ??
+      ((typeof this.getCellValue(rowId, colId) ?? 'string') as DataTypeName)
+    );
   }
 
   private getMergedCellDto(

@@ -12,15 +12,15 @@ import {
   Args,
 } from 'fittable-core/operations';
 
-export type CellStyleNameItem = {
+export type CellStyleNameDto = {
   cellRanges: unknown[];
   styleName?: string;
 };
-export type StyleEntryItem = { styleName: string; style: unknown };
+export type StyleEntryDto = { styleName: string; style: unknown };
 export type StyleChange = Args<'style-update'> & {
-  cellStyleNames: CellStyleNameItem[];
-  createStyles: StyleEntryItem[];
-  updateStyles: StyleEntryItem[];
+  cellStyleNames: CellStyleNameDto[];
+  createStyles: StyleEntryDto[];
+  updateStyles: StyleEntryDto[];
   removeStyles: string[];
 };
 
@@ -28,7 +28,7 @@ export class StyleChangeWritter implements TableChangeWritter {
   constructor(
     private readonly table: Table & TableStyles,
     public readonly change: StyleChange
-  ) { }
+  ) {}
 
   public run(): void {
     this.updateCellStyleNames();

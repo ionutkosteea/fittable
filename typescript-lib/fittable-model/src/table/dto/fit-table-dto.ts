@@ -11,7 +11,6 @@ export type FitDataTypeDto = { name: DataTypeName, format?: string };
 export type FitCellDto = {
   value?: Value;
   dataType?: FitDataTypeDto;
-  dataRef?: string;
   styleName?: string;
 };
 

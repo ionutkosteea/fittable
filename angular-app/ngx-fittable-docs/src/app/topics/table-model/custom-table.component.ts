@@ -39,7 +39,7 @@ export class CustomTableComponent extends ConsoleTopic implements OnInit {
     { image: 'custom-table-ts-03.jpg' },
   ];
   public fit!: TableDesigner;
-  public override fitTableDto: (Value | undefined)[][] = [
+  public fitTableDto: (Value | undefined)[][] = [
     ['A1', 'B1', 'C1', 'D1', 'E1'],
     ['A2', 'B2', 'C2', 'D2', 'E2'],
     ['A3', 'B3', 'C3', 'D3', 'E3'],

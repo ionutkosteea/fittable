@@ -4,8 +4,8 @@ import {
   TableStyles,
   Style,
   createDto4CellRangeList,
-  TableDataTypes,
-  asTableDataTypes,
+  TableCellDataType,
+  asTableCellDataType,
   asTableStyles,
   DataType,
 } from 'fittable-core/model';
@@ -40,7 +40,7 @@ export class PaintFormatChangesBuilder {
   };
   public readonly dataTypeChange: DataTypeChange = {
     id: 'cell-data-type',
-    items: [],
+    dataTypes: [],
   };
   public readonly styleUndoChange: StyleChange = {
     id: 'style-update',
@@ -51,19 +51,19 @@ export class PaintFormatChangesBuilder {
   };
   public readonly dataTypeUndoChange: DataTypeChange = {
     id: 'cell-data-type',
-    items: [],
+    dataTypes: [],
   };
   private readonly changes: TableChanges;
-  private tableStyles?: Table & TableStyles;
-  private tableDataTypes?: Table & TableDataTypes;
+  private styledTable?: Table & TableStyles;
+  private dataTypeTable?: Table & TableCellDataType;
   private oldStyleNames: CellRangeAddressObjects<string | undefined>;
 
   constructor(
     private readonly table: Table,
     private readonly args: PaintFormatArgs
   ) {
-    this.tableStyles = asTableStyles(this.table);
-    this.tableDataTypes = asTableDataTypes(this.table);
+    this.styledTable = asTableStyles(this.table);
+    this.dataTypeTable = asTableCellDataType(this.table);
     this.changes = {
       id: this.args.id,
       changes: [this.styleChange, this.dataTypeChange],
@@ -81,7 +81,7 @@ export class PaintFormatChangesBuilder {
   }
 
   private updateStyles(): void {
-    if (!this.tableStyles) return;
+    if (!this.styledTable) return;
     this.markOldStyleNames();
     this.updateCellStyleNames();
     this.removeStyles();
@@ -91,7 +91,7 @@ export class PaintFormatChangesBuilder {
     for (const cellRange of this.args.selectedCells) {
       cellRange.forEachCell((rowId: number, colId: number): void => {
         const oldStyleName: string | undefined = //
-          this.tableStyles?.getCellStyleName(rowId, colId);
+          this.styledTable?.getCellStyleName(rowId, colId);
         oldStyleName !== this.args.styleName &&
           this.oldStyleNames.set(oldStyleName, rowId, colId);
       });
@@ -115,9 +115,9 @@ export class PaintFormatChangesBuilder {
   }
 
   private removeStyles(): void {
-    if (!this.tableStyles) return;
+    if (!this.styledTable) return;
     const allCellsCnt: Map<string, number> = //
-      countAllCellStyleNames(this.tableStyles);
+      countAllCellStyleNames(this.styledTable);
     for (const styleName of this.oldStyleNames.getAllObjects()) {
       if (!styleName) continue;
       const updatableCells: CellRange[] =
@@ -127,7 +127,7 @@ export class PaintFormatChangesBuilder {
       const numOfAllCells: number | undefined = allCellsCnt.get(styleName);
       if (numOfUndoCells < (numOfAllCells ?? 0)) return;
       this.styleChange.removeStyles.push(styleName);
-      const style: Style | undefined = this.tableStyles.getStyle(styleName);
+      const style: Style | undefined = this.styledTable.getStyle(styleName);
       if (!style) return;
       this.styleUndoChange.createStyles //
         .push({ styleName, style: style.getDto() });
@@ -151,16 +151,17 @@ export class PaintFormatChangesBuilder {
   }
 
   private updateDataTypes(): void {
-    if (!this.tableDataTypes) return;
+    if (!this.dataTypeTable) return;
     const args: CellDataTypeArgs = {
       id: 'cell-data-type',
       selectedCells: this.args.selectedCells,
       dataType: this.args.dataType,
     };
-    const builder: CellDataTypeChangesBuilder = new CellDataTypeChangesBuilder(this.tableDataTypes, args);
+    const builder: CellDataTypeChangesBuilder = //
+      new CellDataTypeChangesBuilder(this.dataTypeTable, args);
     builder.build();
-    this.dataTypeChange.items = builder.dataTypeChange.items;
-    this.dataTypeUndoChange.items = builder.dataTypeUndoChange.items;
+    this.dataTypeChange.dataTypes = builder.dataTypeChange.dataTypes;
+    this.dataTypeUndoChange.dataTypes = builder.dataTypeUndoChange.dataTypes;
   }
 }
 

@@ -8,11 +8,9 @@ import {
   asTableMergedRegions,
   TableMergedRegions,
   Value,
-  TableDataTypes,
-  asTableDataTypes,
+  TableCellDataType,
+  asTableCellDataType,
   DataType,
-  TableDataRefs,
-  asTableDataRefs,
 } from 'fittable-core/model';
 import {
   TableChangeWritter,
@@ -23,19 +21,17 @@ import {
 export type CellCopyChange = Args<'cell-copy'> & { cellRange: unknown };
 
 export class CellCopyChangeWritter implements TableChangeWritter {
-  private readonly tableStyles?: Table & TableStyles;
-  private readonly tableMergedRegions?: Table & TableMergedRegions;
-  private readonly tableDataTypes?: Table & TableDataTypes;
-  private readonly tableDataRefs?: Table & TableDataRefs;
+  private readonly styledTable?: Table & TableStyles;
+  private readonly mergedRegionsTable?: Table & TableMergedRegions;
+  private readonly cellDataTypeTable?: Table & TableCellDataType;
 
   constructor(
     private readonly table: Table,
     private readonly change: CellCopyChange
   ) {
-    this.tableStyles = asTableStyles(table);
-    this.tableMergedRegions = asTableMergedRegions(this.table);
-    this.tableDataTypes = asTableDataTypes(this.table);
-    this.tableDataRefs = asTableDataRefs(this.table);
+    this.styledTable = asTableStyles(table);
+    this.mergedRegionsTable = asTableMergedRegions(this.table);
+    this.cellDataTypeTable = asTableCellDataType(this.table);
   }
 
   public run(): void {
@@ -80,7 +76,6 @@ export class CellCopyChangeWritter implements TableChangeWritter {
       attributes += this.getMergedRegionsAtt(rowId, colId);
       attributes += this.getCssStyleAtt(rowId, colId);
       attributes += this.getCellDataTypeAtt(rowId, colId);
-      attributes += this.getCellDataRefAtt(rowId, colId);
       const value: Value | undefined = this.table.getCellValue(rowId, colId);
       if (value === undefined) {
         return `<td${attributes}></td>`;
@@ -94,15 +89,15 @@ export class CellCopyChangeWritter implements TableChangeWritter {
 
   private isMergedHiddenCell(rowId: number, colId: number): boolean {
     let isHiddenCell = false;
-    if (this.tableMergedRegions) {
-      this.tableMergedRegions.forEachMergedCell(
+    if (this.mergedRegionsTable) {
+      this.mergedRegionsTable.forEachMergedCell(
         (row: number, col: number): void => {
           if (isHiddenCell) return;
           if (row === rowId && col === colId) return;
           const rowSpan: number =
-            this.tableMergedRegions?.getRowSpan(row, col) ?? 0;
+            this.mergedRegionsTable?.getRowSpan(row, col) ?? 0;
           const colSpan: number =
-            this.tableMergedRegions?.getColSpan(row, col) ?? 0;
+            this.mergedRegionsTable?.getColSpan(row, col) ?? 0;
           isHiddenCell =
             rowId >= row &&
             rowId < row + rowSpan &&
@@ -116,9 +111,9 @@ export class CellCopyChangeWritter implements TableChangeWritter {
 
   private getMergedRegionsAtt(rowId: number, colId: number): string {
     const rowSpan: number =
-      this.tableMergedRegions?.getRowSpan(rowId, colId) ?? 0;
+      this.mergedRegionsTable?.getRowSpan(rowId, colId) ?? 0;
     const colSpan: number =
-      this.tableMergedRegions?.getColSpan(rowId, colId) ?? 0;
+      this.mergedRegionsTable?.getColSpan(rowId, colId) ?? 0;
     const rowSpanAtt: string = rowSpan > 1 ? ` rowspan="${rowSpan}"` : '';
     const colSpanAtt: string = colSpan > 1 ? ` colspan="${colSpan}"` : '';
     return rowSpanAtt + colSpanAtt;
@@ -127,7 +122,7 @@ export class CellCopyChangeWritter implements TableChangeWritter {
   private getCellDataTypeAtt(rowId: number, colId: number): string {
     let result = '';
     const dataType: DataType | undefined =
-      this.tableDataTypes?.getCellDataType(rowId, colId);
+      this.cellDataTypeTable?.getCellDataType(rowId, colId);
     if (dataType) {
       result += ` data-data-type-name="${dataType.getName()}"`;
       if (dataType.getFormat()) {
@@ -137,18 +132,12 @@ export class CellCopyChangeWritter implements TableChangeWritter {
     return result;
   }
 
-  private getCellDataRefAtt(rowId: number, colId: number): string {
-    const dataRef: string | undefined = this.tableDataRefs?.getCellDataRef(rowId, colId);
-    if (dataRef) return ` data-cell-data-ref="${dataRef.replaceAll("\"", "&quot;")}"`;
-    return '';
-  }
-
   private getCssStyleAtt(rowId: number, colId: number): string {
-    if (!this.tableStyles) return '';
-    const styleName: string | undefined =
-      this.tableStyles.getCellStyleName(rowId, colId);
+    if (!this.styledTable) return '';
+    const styleName: string | undefined = //
+      this.styledTable.getCellStyleName(rowId, colId);
     const style: Style | undefined = styleName
-      ? this.tableStyles.getStyle(styleName)
+      ? this.styledTable.getStyle(styleName)
       : undefined;
     return style ? ` style="${style.toCssText()}"` : '';
   }

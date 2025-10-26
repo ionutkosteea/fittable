@@ -4,8 +4,6 @@ import { implementsTKeys } from '../../common/core-functions.js';
 import { Value } from '../../model/table/table.js';
 import { CellRange } from '../../model/table/cell-range.js';
 import { OperationExecutor } from '../../operations/operation-core.js';
-import { CellEditor } from './cell-editor.js';
-import { ColFilters } from './col-filters.js';
 
 export interface Control {
   getLabel(): string;
@@ -116,7 +114,5 @@ export function asPopupControl(control?: Control): PopupControl | undefined {
 
 export interface ControlArgs {
   operationExecutor: OperationExecutor;
-  cellEditor?: CellEditor;
-  colFilters?: ColFilters;
   getSelectedCells(): CellRange[];
 }

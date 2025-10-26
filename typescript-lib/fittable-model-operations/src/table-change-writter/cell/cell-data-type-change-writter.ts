@@ -3,7 +3,7 @@ import {
   CellRange,
   createCellRange4Dto,
   DataType,
-  TableDataTypes,
+  TableCellDataType,
   createDataType4Dto,
 } from 'fittable-core/model';
 import {
@@ -12,18 +12,18 @@ import {
   Args,
 } from 'fittable-core/operations';
 
-export type DataTypeItem = {
+export type DataTypeDto = {
   cellRanges: unknown[];
   dataType?: unknown;
 };
 
 export type DataTypeChange = Args<'cell-data-type'> & {
-  items: DataTypeItem[];
+  dataTypes: DataTypeDto[];
 };
 
 export class CellDataTypeChangeWritter implements TableChangeWritter {
   constructor(
-    private readonly table: Table & TableDataTypes,
+    private readonly table: Table & TableCellDataType,
     private readonly change: DataTypeChange
   ) { }
 
@@ -32,8 +32,8 @@ export class CellDataTypeChangeWritter implements TableChangeWritter {
   }
 
   private updateCells(): void {
-    for (const item of this.change.items) {
-      for (const cellRangeDto of item.cellRanges) {
+    for (const dataTypeDto of this.change.dataTypes) {
+      for (const cellRangeDto of dataTypeDto.cellRanges) {
         const cellRange: CellRange = createCellRange4Dto(cellRangeDto);
         const fromRowId: number = cellRange.getFrom().getRowId();
         const toRowId: number = cellRange.getTo().getRowId();
@@ -42,7 +42,7 @@ export class CellDataTypeChangeWritter implements TableChangeWritter {
         for (let rowId: number = fromRowId; rowId <= toRowId; rowId++) {
           for (let colId: number = fromColId; colId <= toColId; colId++) {
             let dataType: DataType | undefined;
-            if (item.dataType) dataType = createDataType4Dto(item.dataType);
+            if (dataTypeDto.dataType) dataType = createDataType4Dto(dataTypeDto.dataType);
             this.table.setCellDataType(rowId, colId, dataType);
           }
           this.removeRowIfEmpty(rowId);
@@ -66,7 +66,7 @@ export class CellDataTypeChangeWritter implements TableChangeWritter {
 export class CellDataTypeChangeWritterFactory
   implements TableChangeWritterFactory {
   public createTableChangeWritter(
-    table: Table & TableDataTypes,
+    table: Table & TableCellDataType,
     change: DataTypeChange
   ): TableChangeWritter {
     return new CellDataTypeChangeWritter(table, change);

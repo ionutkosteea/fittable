@@ -11,12 +11,11 @@ export abstract class ConsoleTopic {
   public abstract title: TopicTitle;
   public abstract htmlCode: CodeSnippet[];
   public abstract typescriptCode: CodeSnippet[];
+  public abstract fitTableDto: unknown;
   public abstract fit: TableDesigner;
   public abstract console: ElementRef;
-  public fitTableDto?: unknown;
-  public isConsoleDisabled = false;
 
-  public getConsoleText(): string {
+  public getDtoText(): string {
     return JSON.stringify(this.fitTableDto, null, 2);
   }
 
@@ -24,7 +23,7 @@ export abstract class ConsoleTopic {
     try {
       return JSON.parse(this.console.nativeElement.value) as FitTableDto;
     } catch (error: unknown) {
-      this.console.nativeElement.value = this.getConsoleText();
+      this.console.nativeElement.value = this.getDtoText();
       alert(error);
       return undefined;
     }

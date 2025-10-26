@@ -20,8 +20,10 @@ export class OperationStackExecutor {
   private activeOperationIndex = -1;
 
   constructor(
-    private readonly createchangeWritter: (change: Args<string>) => TableChangeWritter
-  ) { }
+    private readonly createchangeWritter: (
+      change: Args<string>
+    ) => TableChangeWritter
+  ) {}
 
   public run(changes: TableChanges): this {
     this.beforeRun$.next(changes);

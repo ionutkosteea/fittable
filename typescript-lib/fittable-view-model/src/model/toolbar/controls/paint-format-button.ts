@@ -1,5 +1,5 @@
 import {
-  asTableDataTypes,
+  asTableCellDataType,
   asTableStyles,
   CellCoord,
   DataType,
@@ -71,7 +71,7 @@ class PaintFormatButton extends FitToggleControl implements ControlUpdater {
     const rowId: number = cellCoord.getRowId();
     const colId: number = cellCoord.getColId();
     this.styleName = asTableStyles(table)?.getCellStyleName(rowId, colId);
-    this.dataType = asTableDataTypes(table)?.getCellDataType(rowId, colId);
+    this.dataType = asTableCellDataType(table)?.getCellDataType(rowId, colId);
     this.args.operationExecutor.run({ id: operationId });
   };
 

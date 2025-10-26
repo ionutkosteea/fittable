@@ -98,13 +98,11 @@ export type FitTextKey =
   | '$#.00'
   | '$1,000.00'
   | '$#,#.00'
-  | 'RON 0#.##0'
-  | 'Show cell values'
-  | 'Show cell data references';
+  | 'RON 0#.##0';
 
 export type FitDictionary = { [key in FitTextKey]?: string };
 
 export function getLanguageDictionary(): //
-  LanguageDictionary<FitLocale, FitTextKey> {
+LanguageDictionary<FitLocale, FitTextKey> {
   return getCoreLanguageDictionary<FitLocale, FitTextKey>();
 }

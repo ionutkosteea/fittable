@@ -14,7 +14,7 @@ import {
 
 import { LineRangeAddressObjects } from '../../utils/line/line-range-address-objects.js';
 import {
-  DimensionItem,
+  DimensionDto,
   RowHeighChange,
   ColWidthChange,
 } from '../../table-change-writter/line/line-dimension-change-writter.js';
@@ -25,10 +25,12 @@ export type LineDimensionTableArgs = {
 };
 
 abstract class LineDimensionChangesBuilder {
-  protected readonly dimensionItems: DimensionItem[] = [];
-  protected readonly dimensionUndoItems: DimensionItem[] = [];
+  protected readonly dimensionsDto: DimensionDto[] = [];
+  protected readonly undoDimensionsDto: DimensionDto[] = [];
 
-  private readonly oldLineDimensions: LineRangeAddressObjects<number | undefined>;
+  private readonly oldLineDimensions: LineRangeAddressObjects<
+    number | undefined
+  >;
   private isUndoable = true;
 
   constructor(
@@ -67,7 +69,7 @@ abstract class LineDimensionChangesBuilder {
 
   private updateLineDimensions(): void {
     const lineRanges: LineRange[] = this.oldLineDimensions.getAllAddresses();
-    this.dimensionItems.push({
+    this.dimensionsDto.push({
       lineRanges: createDto4LineRangeList(lineRanges),
       dimension: this.args.dimension,
     });
@@ -77,7 +79,7 @@ abstract class LineDimensionChangesBuilder {
     this.oldLineDimensions.forEach(
       (dimension: number | undefined, lineRanges?: LineRange[]) => {
         lineRanges &&
-          this.dimensionUndoItems.push({
+          this.undoDimensionsDto.push({
             dimension,
             lineRanges: createDto4LineRangeList(lineRanges),
           });
@@ -92,11 +94,11 @@ export type RowHeightTableChangesArgs = Args<'row-height'> &
 export class RowHeightTableChangesBuilder extends LineDimensionChangesBuilder {
   public readonly rowHeightChange: RowHeighChange = {
     id: 'row-height',
-    items: this.dimensionItems,
+    dimensions: this.dimensionsDto,
   };
   public readonly rowHeightUndoChange: RowHeighChange = {
     id: 'row-height',
-    items: this.dimensionUndoItems,
+    dimensions: this.undoDimensionsDto,
   };
 
   constructor(
@@ -135,11 +137,11 @@ export type ColWidthTableChangesArgs = Args<'column-width'> &
 export class ColWidthTableChangesBuilder extends LineDimensionChangesBuilder {
   public readonly colWidthChange: ColWidthChange = {
     id: 'column-width',
-    items: this.dimensionItems,
+    dimensions: this.dimensionsDto,
   };
   public readonly colWidthUndoChange: ColWidthChange = {
     id: 'column-width',
-    items: this.dimensionUndoItems,
+    dimensions: this.undoDimensionsDto,
   };
 
   constructor(

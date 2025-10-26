@@ -5,7 +5,7 @@ import {
   createCellRange4Dto,
   createDto4CellRangeList,
   CellRangeList,
-  TableDataTypes
+  TableCellDataType
 } from 'fittable-core/model';
 import {
   TableChanges,
@@ -24,17 +24,17 @@ export type CellDataTypeArgs = Args<'cell-data-type'> & {
 export class CellDataTypeChangesBuilder {
   public readonly dataTypeChange: DataTypeChange = {
     id: 'cell-data-type',
-    items: [],
+    dataTypes: [],
   };
   public readonly dataTypeUndoChange: DataTypeChange = {
     id: 'cell-data-type',
-    items: [],
+    dataTypes: [],
   };
   private readonly changes: TableChanges;
   private readonly updatableCells: CellRangeList = new CellRangeList();
 
   constructor(
-    private readonly table: Table & TableDataTypes,
+    private readonly table: Table & TableCellDataType,
     private readonly args: CellDataTypeArgs
   ) {
     this.changes = {
@@ -66,7 +66,7 @@ export class CellDataTypeChangesBuilder {
   }
 
   private updateCellDataTypes(): void {
-    this.dataTypeChange.items.push({
+    this.dataTypeChange.dataTypes.push({
       cellRanges: createDto4CellRangeList(this.updatableCells.getRanges()),
       dataType: this.args.dataType?.getDto(),
     });
@@ -75,8 +75,8 @@ export class CellDataTypeChangesBuilder {
   private undoCellDataTypes(): void {
     const undoDataTypes: CellRangeAddressObjects<DataType | undefined> =
       new CellRangeAddressObjects();
-    for (const item of this.dataTypeChange.items) {
-      for (const cellRangeDto of item.cellRanges)
+    for (const dataTypes of this.dataTypeChange.dataTypes) {
+      for (const cellRangeDto of dataTypes.cellRanges)
         createCellRange4Dto(cellRangeDto).forEachCell(
           (rowId: number, colId: number): void => {
             undoDataTypes.set(
@@ -89,7 +89,7 @@ export class CellDataTypeChangesBuilder {
     }
     undoDataTypes.forEach(
       (dataType: DataType | undefined, address: CellRange[]): void => {
-        this.dataTypeUndoChange.items.push({
+        this.dataTypeUndoChange.dataTypes.push({
           cellRanges: createDto4CellRangeList(address),
           dataType: dataType?.getDto(),
         });
@@ -100,7 +100,7 @@ export class CellDataTypeChangesBuilder {
 
 export class CellDataTypeChangesFactory implements TableChangesFactory {
   public createTableChanges(
-    table: Table & TableDataTypes,
+    table: Table & TableCellDataType,
     args: CellDataTypeArgs
   ): TableChanges | Promise<TableChanges> {
     return new CellDataTypeChangesBuilder(table, args).build();

@@ -72,10 +72,11 @@ export class ContextMenuComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const htmlMenu: HTMLElement = this.menuWindowRef.nativeElement;
-    this.model().setSize({
-      getWidth: (): number => htmlMenu.clientWidth,
-      getHeight: (): number => htmlMenu.clientHeight,
-    });
+    this.model() //
+      .setSize({
+        getWidth: (): number => htmlMenu.clientWidth,
+        getHeight: (): number => htmlMenu.clientHeight,
+      });
   }
 
   @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {

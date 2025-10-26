@@ -1,14 +1,14 @@
 import { MissingFactoryError } from 'fittable-core/common';
 import {
-  asTableDataTypes,
-  asTableColFilters,
+  asTableCellDataType,
+  asTableColFilter,
   CellRange,
   createCellCoord,
   LanguageDictionary,
   Table,
   TableBasics,
-  TableDataTypes,
-  TableColFilters,
+  TableCellDataType,
+  TableColFilter,
 } from 'fittable-core/model';
 import { OperationExecutor } from 'fittable-core/operations';
 import {
@@ -168,8 +168,6 @@ export class FitViewModel implements ViewModel {
         this.cellSelection &&
         createContextMenu({
           operationExecutor: this.operationExecutor,
-          cellEditor: this.cellEditor,
-          colFilters: this.colFilters,
           getSelectedCells: this.getSelectedCells,
         })
       );
@@ -189,8 +187,6 @@ export class FitViewModel implements ViewModel {
         this.operationExecutor &&
         createToolbar({
           operationExecutor: this.operationExecutor,
-          cellEditor: this.cellEditor,
-          colFilters: this.colFilters,
           getSelectedCells: this.getSelectedCells,
         });
     } catch (error) {
@@ -225,10 +221,10 @@ export class FitViewModel implements ViewModel {
         const filterScrTable = this.colFilters?.filterExecutor.table;
         const filterDestTable = this.colFilters?.filterExecutor.getFilteredTable();
         if (filterScrTable && filterDestTable) {
-          asTableDataTypes(filterScrTable)?.setLocale(locale);
-          asTableDataTypes(filterDestTable)?.removeFormatedCellValues();
+          asTableCellDataType(filterScrTable)?.setLocale(locale);
+          asTableCellDataType(filterDestTable)?.removeFormatedCellValues();
         } else {
-          asTableDataTypes(this.table)?.setLocale(locale);
+          asTableCellDataType(this.table)?.setLocale(locale);
         }
       });
     } catch (error) {
@@ -239,10 +235,10 @@ export class FitViewModel implements ViewModel {
 
   private createColFilters(): ColFilters | undefined {
     try {
-      const tableColFilters: (TableBasics & TableColFilters) | undefined =
-        asTableColFilters(this.table);
+      const filterTable: (TableBasics & TableColFilter) | undefined =
+        asTableColFilter(this.table);
       return (
-        tableColFilters &&
+        filterTable &&
         this.operationExecutor &&
         createColFilters(this.operationExecutor)
       );
@@ -292,8 +288,8 @@ export class FitViewModel implements ViewModel {
     this.operationExecutor?.clearOperations();
     this.loadTableWithoutFilters(table);
     if (this.colFilters) {
-      const filterTable: (TableBasics & TableColFilters) | undefined =
-        asTableColFilters(table);
+      const filterTable: (TableBasics & TableColFilter) | undefined =
+        asTableColFilter(table);
       if (filterTable) this.colFilters.filterExecutor.table = filterTable;
     }
   }
@@ -311,8 +307,9 @@ export class FitViewModel implements ViewModel {
   private initLocales(): void {
     const dictionary: LanguageDictionary<string, string> =
       getLanguageDictionary().register('en-US', enUS).register('de-DE', deDE);
-    const tableDataTypes: TableDataTypes | undefined = asTableDataTypes(this.table);
-    if (tableDataTypes) dictionary.setLocale(tableDataTypes.getLocale());
+    const dataTypeTable: TableCellDataType | undefined = //
+      asTableCellDataType(this.table);
+    if (dataTypeTable) dictionary.setLocale(dataTypeTable.getLocale());
   }
 
   private selectFirstCell(): void {

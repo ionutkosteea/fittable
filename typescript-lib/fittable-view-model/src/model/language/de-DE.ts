@@ -91,6 +91,4 @@ export const deDE: FitDictionary = {
   '$1,000.00': '1.000,00 €',
   '$#,#.00': '#.#,00 €',
   'RON 0#.##0': 'RON 0#,##0',
-  'Show cell values': 'Zellenwerten anzeigen',
-  'Show cell data references': 'Zelldatenreferenzen anzeigen'
 };

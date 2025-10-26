@@ -8,8 +8,6 @@ import {
   DataType,
   createCellDateFormatter,
   createDataType,
-  TableDataRefs,
-  asTableDataRefs,
 } from 'fittable-core/model';
 import { OperationExecutor } from 'fittable-core/operations';
 import {
@@ -46,47 +44,19 @@ export class FitCellEditor implements CellEditor {
 
   private createCellControl(): InputControl {
     const input: FitInputControl = new FitInputControl();
-    const tableDataRefs: TableDataRefs | undefined = asTableDataRefs(this.operationExecutor.getTable());
     input
       .setLabel(() => 'Cell Editor')
       .setRun((): void => {
-        const inputValue: Value | undefined = input.getValue();
-        if (tableDataRefs?.canShowDataRefs()) this.runCellDataRefOperation(inputValue);
-        else this.runCellValueOperation(inputValue);
+        const value: Value | undefined = input.getValue();
+        const args: FitUIOperationArgs = {
+          id: 'cell-value',
+          selectedCells: [createCellRange(this.cellCoord)],
+          value,
+          dataType: this.getDataType(value),
+        };
+        this.operationExecutor.run(args);
       });
     return input;
-  }
-
-  private runCellValueOperation(value?: Value): void {
-    let cellValue: Value | undefined;
-    if (typeof value === 'object') {
-      try { cellValue = JSON.stringify(value); }
-      catch { console.warn("Invalid object: " + value); }
-    } else {
-      cellValue = value;
-    }
-    const args: FitUIOperationArgs = {
-      id: 'cell-value',
-      selectedCells: [createCellRange(this.cellCoord)],
-      value: cellValue,
-      dataType: this.getDataType(cellValue),
-    };
-    this.operationExecutor.run(args);
-  }
-
-  private runCellDataRefOperation(value?: Value): void {
-    let dataRef: string | undefined = undefined;
-    if (typeof value === 'object') {
-      try { dataRef = JSON.stringify(value); }
-      catch { console.error("Invalid object: " + value); }
-    }
-    if (!dataRef && value) return;
-    const args: FitUIOperationArgs = {
-      id: 'cell-data-ref',
-      selectedCells: [createCellRange(this.cellCoord)],
-      dataRef,
-    };
-    this.operationExecutor.run(args);
   }
 
   private getDataType(value?: Value): DataType | undefined {
@@ -154,7 +124,8 @@ export class FitCellEditor implements CellEditor {
   private getTableCellValue(cellCoord: CellCoord): Value {
     const rowId: number = cellCoord.getRowId();
     const colId: number = cellCoord.getColId();
-    const value: Value | undefined = this.tableViewer.getCellValue(rowId, colId);
+    const value: Value | undefined = //
+      this.tableViewer.getCellValue(rowId, colId);
     return value === undefined ? '' : value;
   }
 

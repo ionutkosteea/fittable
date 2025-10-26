@@ -5,24 +5,25 @@ import {
   TableChangeWritterFactory,
 } from 'fittable-core/operations';
 
-export type RemoveRegionItem = { rowId: number; colId: number };
-export type CreateRegionItem = RemoveRegionItem & {
+export type RemoveRegionDto = { rowId: number; colId: number };
+export type CreateRegionDto = RemoveRegionDto & {
   rowSpan?: number;
   colSpan?: number;
 };
-export type MoveRegionItem = RemoveRegionItem & {
+export type MoveRegionDto = RemoveRegionDto & {
   moveRow: number;
   moveCol: number;
 };
-export type IncreaseRegionItem = RemoveRegionItem & {
+export type IncreaseRegionDto = RemoveRegionDto & {
   increaseRow: number;
   increaseCol: number;
 };
+
 export type MergedRegionsChange = Args<'merged-regions'> & {
-  createRegions?: CreateRegionItem[];
-  removeRegions?: RemoveRegionItem[];
-  moveRegions?: MoveRegionItem[];
-  increaseRegions?: IncreaseRegionItem[];
+  createRegions?: CreateRegionDto[];
+  removeRegions?: RemoveRegionDto[];
+  moveRegions?: MoveRegionDto[];
+  increaseRegions?: IncreaseRegionDto[];
 };
 
 export class MergedRegionsChangeWritter implements TableChangeWritter {
@@ -31,7 +32,7 @@ export class MergedRegionsChangeWritter implements TableChangeWritter {
   constructor(
     private readonly table: Table & TableMergedRegions,
     private readonly change: MergedRegionsChange
-  ) { }
+  ) {}
 
   public run(): void {
     this.removeRegions();
@@ -86,7 +87,8 @@ export class MergedRegionsChangeWritter implements TableChangeWritter {
 }
 
 export class MergedRegionsChangeWritterFactory
-  implements TableChangeWritterFactory {
+  implements TableChangeWritterFactory
+{
   public createTableChangeWritter(
     table: Table & TableMergedRegions,
     change: MergedRegionsChange
