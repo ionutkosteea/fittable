@@ -11,7 +11,6 @@ import { ThemeSwitcher } from './theme-switcher.js';
 import { ColFilters } from './col-filters.js';
 import { Statusbar } from './statusbar.js';
 import { MobileLayout } from './mobile-layout.js';
-import { OperationDialog } from './operation-dialog.js';
 
 export interface ViewModel {
   readonly table: Table;
@@ -29,12 +28,6 @@ export interface ViewModel {
   toolbar?: Container;
   statusbar?: Statusbar;
   colFilters?: ColFilters;
-  rowResizeDialog?: OperationDialog;
-  rowInsertAboveDialog?: OperationDialog;
-  rowInsertBelowDialog?: OperationDialog;
-  colResizeDialog?: OperationDialog;
-  colInsertLeftDialog?: OperationDialog;
-  colInsertRightDialog?: OperationDialog;
   loadTable(table: Table): void;
   destroy(): void;
 }

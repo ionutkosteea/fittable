@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, input } from '@angular/core';
-import {  NgStyle } from '@angular/common';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
 
 import { CssStyle, getModelConfig } from 'fittable-core/model';
 import {
@@ -21,6 +21,8 @@ import {
   standalone: true,
   imports: [
     NgStyle,
+    NgFor,
+    NgIf,
     CellSelectionDirective,
     FilterPopupButtonComponent,
     FilterPopupWindowComponent,

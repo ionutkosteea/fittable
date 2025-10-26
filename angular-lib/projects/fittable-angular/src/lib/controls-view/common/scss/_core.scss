@@ -17,7 +17,7 @@ $padding-map: (
 );
 $gap-map: (
   small: 0.125rem,
-  medium: 0.25rem,
+  // medium: 0.25rem,
   large: 0.5rem
 );
 $size-map: (
@@ -88,32 +88,4 @@ $size-map: (
   color: inherit;
   background-color: inherit;
   box-sizing: border-box;
-}
-
-.title {
-  color: var(--highlight-color);
-  font-size: fit-map-get($font-size-map, large);
-  line-height: fit-map-get($line-height-map, large);
-  padding-left: fit-map-get($padding-map, large);
-  padding-right: fit-map-get($padding-map, large);
-}
-
-.center-aligned-bar {
-  @include bar(center);
-  padding: fit-map-get($padding-map, medium) 0;
-}
-
-.action-button {
-  @include border;
-  padding: fit-map-get($padding-map, small);
-  color: var(--context-menu-background-color);
-  background-color: var(--highlight-color);
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-
-  &-disabled {
-    background-color: var(--context-menu-border-color);
-    cursor: auto;
-  }
 }

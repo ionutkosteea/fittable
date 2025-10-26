@@ -38,9 +38,6 @@ export class TstTableViewer implements TableViewer {
   getRowHeight(rowId: number): number {
     throw new Error('Method not implemented.');
   }
-  isRowAutoHeight(rowId: number): boolean {
-    throw new Error('Method not implemented.');
-  }
   getColWidth(colId: number): number {
     throw new Error('Method not implemented.');
   }

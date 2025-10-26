@@ -24,7 +24,7 @@ export class ResizeColsComponent extends ConsoleTopic {
     const args: FitOperationArgs = {
       id: 'column-width',
       selectedLines: [createLineRange(1, 2)],
-      width: 50,
+      dimension: 50,
     };
     this.fit.operationExecutor?.run(args);
   }

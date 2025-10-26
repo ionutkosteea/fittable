@@ -20,19 +20,6 @@
   }
 }
 
-.row-fixed-height {
-  overflow: hidden;
-  .cell {
-    overflow: scroll;
-    height: inherit;
-  }
-}
-
-.row-auto-height {
-  height: auto;
-  min-height: 21px;
-}
-
 .cell {
   position: relative;
   padding: 0;
@@ -46,8 +33,6 @@
   font-family: var(--font-family);
   color: var(--table-body-color);
   box-sizing: border-box;
-  word-wrap: break-word;
-  white-space: pre-line;
 }
 
 .cell-selection {

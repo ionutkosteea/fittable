@@ -175,12 +175,12 @@ abstract class LineInsertChangesBuilder {
   }
 }
 
-export type RowInsertArgs = Args<'row-insert'> & LineInsertArgs;
+export type RowInsertTableChangesArgs = Args<'row-insert'> & LineInsertArgs;
 
 export class RowInsertTableChangesBuilder extends LineInsertChangesBuilder {
   constructor(
     protected readonly table: Table,
-    protected readonly args: RowInsertArgs
+    protected readonly args: RowInsertTableChangesArgs
   ) {
     super(table, args);
   }
@@ -255,18 +255,18 @@ export class RowInsertTableChangesBuilder extends LineInsertChangesBuilder {
 export class RowInsertChangesFactory implements TableChangesFactory {
   public createTableChanges(
     table: Table,
-    args: RowInsertArgs
+    args: RowInsertTableChangesArgs
   ): TableChanges | Promise<TableChanges> {
     return new RowInsertTableChangesBuilder(table, args).build();
   }
 }
 
-export type ColInsertArgs = Args<'column-insert'> & LineInsertArgs;
+export type ColInsertTableChangesArgs = Args<'column-insert'> & LineInsertArgs;
 
 export class ColInsertTableChangesBuilder extends LineInsertChangesBuilder {
   constructor(
     protected readonly table: Table,
-    protected readonly args: ColInsertArgs
+    protected readonly args: ColInsertTableChangesArgs
   ) {
     super(table, args);
   }
@@ -341,7 +341,7 @@ export class ColInsertTableChangesBuilder extends LineInsertChangesBuilder {
 export class ColInsertChangesFactory implements TableChangesFactory {
   public createTableChanges(
     table: Table,
-    args: ColInsertArgs
+    args: ColInsertTableChangesArgs
   ): TableChanges | Promise<TableChanges> {
     return new ColInsertTableChangesBuilder(table, args).build();
   }

@@ -91,10 +91,6 @@ export class FitTableViewer implements TableViewer {
     return this.tableRows?.getRowHeight(rowId) ?? this.config.rowHeights;
   }
 
-  public isRowAutoHeight(rowId: number): boolean {
-    return this.tableRows?.isRowAutoHeight(rowId) ?? false;
-  }
-
   public getColHeaderHeight(): number {
     return this.config.colHeaderHeight ?? 0;
   }

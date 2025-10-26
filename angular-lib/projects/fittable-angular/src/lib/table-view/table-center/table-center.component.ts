@@ -1,19 +1,15 @@
 import {
   Component,
   DestroyRef,
-  ElementRef,
-  OnDestroy,
   OnInit,
-  effect,
   inject,
   input,
   output,
-  signal,
-  viewChildren
+  signal
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CssStyle, CellRange, DataTypeName, asTableRows } from 'fittable-core/model';
+import { CssStyle, CellRange, DataTypeName } from 'fittable-core/model';
 import {
   ViewModel,
   CellEditorListener,
@@ -47,23 +43,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './table-center.component.html',
   styleUrls: ['../common/scss/table.scss', './table-center.component.scss'],
 })
-export class TableCenterComponent extends TableCommon implements OnInit, OnDestroy {
+export class TableCenterComponent extends TableCommon implements OnInit {
   override viewModel = input.required<ViewModel>();
   cellSelectionListener = input<CellSelectionListener>();
-  onScroll = output<{ scrollLeft: number; scrollTop: number }>();
-
-  protected tableRows = viewChildren<ElementRef<HTMLElement>>('tableRow');
+  onScroll$ = output<{ scrollLeft: number; scrollTop: number }>();
 
   protected readonly cellEditorListener = signal<CellEditorListener | undefined>(undefined);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly resizeObservers: ResizeObserver[] = [];
-
-  constructor() {
-    super();
-    effect(() => {
-      this.calcRowAutoHeights();
-    });
-  }
 
   get scrollContainer(): ScrollContainer {
     return this.viewModel().tableScrollContainer;
@@ -90,13 +76,9 @@ export class TableCenterComponent extends TableCommon implements OnInit, OnDestr
     this.openCellEditorContextMenu();
   }
 
-  ngOnDestroy(): void {
-    this.resetResizeObservers();
-  }
-
-  scroll(event: Event): void {
+  onScroll(event: Event): void {
     const scrollContainer: HTMLElement = event.target as HTMLElement;
-    this.onScroll.emit({
+    this.onScroll$.emit({
       scrollLeft: scrollContainer.scrollLeft,
       scrollTop: scrollContainer.scrollTop,
     });
@@ -134,33 +116,5 @@ export class TableCenterComponent extends TableCommon implements OnInit, OnDestr
         .subscribe((event: FitMouseEvent): void => {
           createWindowListener(contextMenu).onShow(event);
         })
-  }
-
-  private calcRowAutoHeights(): void {
-    this.resetResizeObservers();
-
-    for (const row of this.tableRows()) {
-      const observer = new ResizeObserver(entries => {
-        const table = asTableRows(this.viewModel().table);
-        if (!table) return;
-        for (const entry of entries) {
-          const rowIdAsString = entry.target.getAttribute('rowId');
-          if (!rowIdAsString) return;
-          const rowId = Number(rowIdAsString);
-          if (!table.isRowAutoHeight(rowId)) return;
-          table.setRowHeight(rowId, entry.contentRect.height);
-        }
-        this.viewModel().tableViewer.resetRowProperties();
-        const cellEditor = this.viewModel().cellEditor;
-        cellEditor && cellEditor.setCell(cellEditor.getCell());
-      });
-      observer.observe(row.nativeElement);
-      this.resizeObservers.push(observer);
-    }
-  }
-
-  private resetResizeObservers() {
-    this.resizeObservers.forEach(observer => observer.disconnect());
-    this.resizeObservers.length = 0;
   }
 }

@@ -106,10 +106,6 @@ export abstract class TableCommon {
     return this.viewModel().tableViewer.getRowHeight(rowId);
   }
 
-  isRowAutoHeight(rowId: number): boolean {
-    return this.viewModel().tableViewer.isRowAutoHeight(rowId);
-  }
-
   showContextMenu(event: MouseEvent): void {
     const contextMenu = this.viewModel().contextMenu;
     contextMenu && createWindowListener(contextMenu).onShow(event);

@@ -14,8 +14,8 @@
     [cellSelectionListener]="cellSelectionListener()"
   />
   <fit-table-center
+    (onScroll$)="onScroll($event)"
     [viewModel]="viewModel()"
     [cellSelectionListener]="cellSelectionListener()"
-    (onScroll)="onScroll($event)"
   />
 </div>

@@ -243,7 +243,7 @@ export class TableOperationExecutor {
     const args: FitOperationArgs = {
       id: 'row-height',
       selectedLines: this.getSelectedRows(),
-      height,
+      dimension: height,
     };
     this.executor.run(args);
     return this;
@@ -283,7 +283,7 @@ export class TableOperationExecutor {
     const args: FitOperationArgs = {
       id: 'column-width',
       selectedLines: this.getSelectedCols(),
-      width,
+      dimension: width,
     };
     this.executor.run(args);
     return this;

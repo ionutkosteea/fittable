@@ -20,7 +20,6 @@ import { ToolbarFactory } from './model/toolbar.js';
 import { SettingsBarFactory } from './model/settings-bar.js';
 import { StatusbarFactory } from './model/statusbar.js';
 import { MobileLayoutFactory } from './model/mobile-layout.js';
-import { OperationDialogFactory } from './model/operation-dialog.js';
 import { TableDesignerFactory } from './table-designer.js';
 
 export type Option = { label: string; value?: string };
@@ -53,12 +52,6 @@ export interface ViewModelConfig {
   settingsBarFactory?: SettingsBarFactory;
   statusbarFactory?: StatusbarFactory;
   colFiltersFactory?: ColFiltersFactory;
-  rowResizeDialogFactory?: OperationDialogFactory;
-  rowInsertAboveDialogFactory?: OperationDialogFactory;
-  rowInsertBelowDialogFactory?: OperationDialogFactory;
-  colResizeDialogFactory?: OperationDialogFactory;
-  colInsertLeftDialogFactory?: OperationDialogFactory;
-  colInsertRightDialogFactory?: OperationDialogFactory;
   scrollContainerListenerFactory: ScrollContainerListenerFactory;
   cellEditorListenerFactory?: CellEditorListenerFactory;
   cellSelectionListenerFactory?: CellSelectionListenerFactory;

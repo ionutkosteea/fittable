@@ -35,8 +35,6 @@ export interface TableStyles {
 export interface TableRows {
   getRowHeight(rowId: number): number | undefined;
   setRowHeight(rowId: number, height?: number): this;
-  isRowAutoHeight(rowId: number): boolean;
-  setRowAutoHeight(rowId: number, autoHeight?: boolean): this;
   hasRow(rowId: number): boolean;
   removeRow(rowId: number): this;
   moveRow(rowId: number, move: number): this;

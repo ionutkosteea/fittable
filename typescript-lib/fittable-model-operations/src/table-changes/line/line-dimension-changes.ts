@@ -14,173 +14,159 @@ import {
 
 import { LineRangeAddressObjects } from '../../utils/line/line-range-address-objects.js';
 import {
-  RowHeightChange,
+  DimensionItem,
+  RowHeighChange,
   ColWidthChange,
-  RowHeightItem,
-  ColWidthItem,
 } from '../../table-change-writter/line/line-dimension-change-writter.js';
 
-export type RowHeightArgs = Args<'row-height'> & {
+export type LineDimensionTableArgs = {
   selectedLines: LineRange[];
-  height?: number;
-  isAuto?: boolean;
+  dimension?: number;
 };
 
-export class RowHeightTableChangesBuilder {
-  private readonly rowHeightItems: RowHeightItem[] = [];
-  public readonly rowHeightChange: RowHeightChange = {
-    id: 'row-height', items: this.rowHeightItems
-  };
+abstract class LineDimensionChangesBuilder {
+  protected readonly dimensionItems: DimensionItem[] = [];
+  protected readonly dimensionUndoItems: DimensionItem[] = [];
 
-  private readonly undoRowHeightItems: RowHeightItem[] = [];
-  public readonly undoRowHeightChange: RowHeightChange = {
-    id: 'row-height', items: this.undoRowHeightItems,
-  };
-
-  private readonly oldHeights: LineRangeAddressObjects<{ height?: number, isAuto?: boolean } | undefined>;
+  private readonly oldLineDimensions: LineRangeAddressObjects<number | undefined>;
+  private isUndoable = true;
 
   constructor(
-    protected readonly table: Table & TableRows,
-    protected readonly args: RowHeightArgs
+    protected readonly table: Table,
+    protected readonly args: LineDimensionTableArgs
   ) {
-    this.oldHeights = new LineRangeAddressObjects();
+    this.oldLineDimensions = new LineRangeAddressObjects();
   }
 
+  protected abstract getLineDimension(lineId: number): number | undefined;
 
-  public build(): TableChanges {
-    if (this.args.height && this.args.height <= 0) {
-      throw new Error('Height must be greater than 0!');
+  public setUndoable(isUndoable: boolean): this {
+    this.isUndoable = isUndoable;
+    return this;
+  }
+
+  public build(): void {
+    if (this.args.dimension && this.args.dimension <= 0) {
+      throw new Error('Size must be greater than 0!');
     }
-    this.markOldHeights();
-    this.updateHeights();
-    this.undoHeights();
-    return {
-      id: this.args.id,
-      changes: [this.rowHeightChange],
-      undoChanges: { changes: [this.undoRowHeightChange] },
-    };
+    this.markOldLineDimensions();
+    this.updateLineDimensions();
+    this.isUndoable && this.undoLineDimensions();
   }
 
-  private markOldHeights(): void {
+  private markOldLineDimensions(): void {
     for (const lineRange of this.args.selectedLines) {
-      lineRange.forEachLine((rowId: number) => {
-        const height: number | undefined = this.table.getRowHeight(rowId);
-        const isAuto: boolean | undefined = this.table.isRowAutoHeight(rowId);
-        if (height !== this.args.height || isAuto !== this.args.isAuto) {
-          this.oldHeights.set({ height, isAuto }, createLineRange(rowId));
+      lineRange.forEachLine((lineId: number) => {
+        const lineDimension: number | undefined = this.getLineDimension(lineId);
+        if (lineDimension !== this.args.dimension) {
+          this.oldLineDimensions.set(lineDimension, createLineRange(lineId));
         }
       });
     }
   }
 
-  private updateHeights(): void {
-    const lineRanges: LineRange[] = this.oldHeights.getAllAddresses();
-    this.rowHeightItems.push({
+  private updateLineDimensions(): void {
+    const lineRanges: LineRange[] = this.oldLineDimensions.getAllAddresses();
+    this.dimensionItems.push({
       lineRanges: createDto4LineRangeList(lineRanges),
-      height: this.args.height,
-      isAuto: this.args.isAuto,
+      dimension: this.args.dimension,
     });
   }
 
-  private undoHeights(): void {
-    this.oldHeights.forEach(
-      (row, lineRanges?: LineRange[]) => {
+  private undoLineDimensions(): void {
+    this.oldLineDimensions.forEach(
+      (dimension: number | undefined, lineRanges?: LineRange[]) => {
         lineRanges &&
-          this.undoRowHeightItems.push({
+          this.dimensionUndoItems.push({
+            dimension,
             lineRanges: createDto4LineRangeList(lineRanges),
-            height: row?.height,
-            isAuto: row?.isAuto,
           });
       }
     );
+  }
+}
+
+export type RowHeightTableChangesArgs = Args<'row-height'> &
+  LineDimensionTableArgs;
+
+export class RowHeightTableChangesBuilder extends LineDimensionChangesBuilder {
+  public readonly rowHeightChange: RowHeighChange = {
+    id: 'row-height',
+    items: this.dimensionItems,
+  };
+  public readonly rowHeightUndoChange: RowHeighChange = {
+    id: 'row-height',
+    items: this.dimensionUndoItems,
+  };
+
+  constructor(
+    protected readonly table: Table & TableRows,
+    protected readonly args: RowHeightTableChangesArgs
+  ) {
+    super(table, args);
+  }
+
+  protected getLineDimension(rowId: number): number | undefined {
+    return this.table.getRowHeight(rowId);
+  }
+
+  public build(): TableChanges {
+    super.build();
+    return {
+      id: this.args.id,
+      changes: [this.rowHeightChange],
+      undoChanges: { changes: [this.rowHeightUndoChange] },
+    };
   }
 }
 
 export class RowHeightChangesFactory implements TableChangesFactory {
   public createTableChanges(
     table: Table & TableRows,
-    args: RowHeightArgs
+    args: RowHeightTableChangesArgs
   ): TableChanges | Promise<TableChanges> {
     return new RowHeightTableChangesBuilder(table, args).build();
   }
 }
 
-export type ColWidthArgs = Args<'column-width'> & {
-  selectedLines: LineRange[];
-  width?: number;
-};
+export type ColWidthTableChangesArgs = Args<'column-width'> &
+  LineDimensionTableArgs;
 
-export class ColWidthTableChangesBuilder {
-  private readonly colWidthItems: ColWidthItem[] = [];
+export class ColWidthTableChangesBuilder extends LineDimensionChangesBuilder {
   public readonly colWidthChange: ColWidthChange = {
-    id: 'column-width', items: this.colWidthItems
+    id: 'column-width',
+    items: this.dimensionItems,
   };
-
-  private readonly undoColWidthItems: ColWidthItem[] = [];
-  public readonly undoColWidthChange: ColWidthChange = {
-    id: 'column-width', items: this.undoColWidthItems,
+  public readonly colWidthUndoChange: ColWidthChange = {
+    id: 'column-width',
+    items: this.dimensionUndoItems,
   };
-
-  private readonly oldWidths: LineRangeAddressObjects<number | undefined>;
 
   constructor(
-    protected readonly table: Table & TableCols,
-    protected readonly args: ColWidthArgs
+    protected table: Table & TableCols,
+    protected args: ColWidthTableChangesArgs
   ) {
-    this.oldWidths = new LineRangeAddressObjects();
+    super(table, args);
   }
 
+  protected getLineDimension(colId: number): number | undefined {
+    return this.table.getColWidth(colId);
+  }
 
   public build(): TableChanges {
-    if (this.args.width && this.args.width <= 0) {
-      throw new Error('Width must be greater than 0!');
-    }
-    this.markOldWidths();
-    this.updateWidths();
-    this.undoWidths();
+    super.build();
     return {
       id: this.args.id,
       changes: [this.colWidthChange],
-      undoChanges: { changes: [this.undoColWidthChange] },
+      undoChanges: { changes: [this.colWidthUndoChange] },
     };
-  }
-
-  private markOldWidths(): void {
-    for (const lineRange of this.args.selectedLines) {
-      lineRange.forEachLine((colId: number) => {
-        const height: number | undefined = this.table.getColWidth(colId);
-        if (height !== this.args.width) {
-          this.oldWidths.set(height, createLineRange(colId));
-        }
-      });
-    }
-  }
-
-  private updateWidths(): void {
-    const lineRanges: LineRange[] = this.oldWidths.getAllAddresses();
-    this.colWidthItems.push({
-      lineRanges: createDto4LineRangeList(lineRanges),
-      width: this.args.width,
-    });
-  }
-
-  private undoWidths(): void {
-    this.oldWidths.forEach(
-      (width, lineRanges?: LineRange[]) => {
-        lineRanges &&
-          this.undoColWidthItems.push({
-            lineRanges: createDto4LineRangeList(lineRanges),
-            width
-          });
-      }
-    );
   }
 }
 
 export class ColWidthChangesFactory implements TableChangesFactory {
   public createTableChanges(
     table: Table & TableCols,
-    args: ColWidthArgs
+    args: ColWidthTableChangesArgs
   ): TableChanges | Promise<TableChanges> {
     return new ColWidthTableChangesBuilder(table, args).build();
   }

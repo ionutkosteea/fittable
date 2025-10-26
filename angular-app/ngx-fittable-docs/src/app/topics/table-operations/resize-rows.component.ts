@@ -24,7 +24,7 @@ export class ResizeRowsComponent extends ConsoleTopic {
     const args: FitOperationArgs = {
       id: 'row-height',
       selectedLines: [createLineRange(1, 2)],
-      height: 60,
+      dimension: 60,
     };
     this.fit.operationExecutor?.run(args);
   }
